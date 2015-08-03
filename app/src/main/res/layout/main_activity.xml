@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/ma_game_screen_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ma_create_mob_button"
+        android:layout_alignLeft="@+id/ma_create_mob_button"
+        android:layout_alignRight="@+id/ma_create_mob_button"
+        android:text="open mob test screen" />
+
+    <Button
+        android:id="@+id/ma_create_mob_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="open mob creation screen" />
+
+    <Button
+        android:id="@+id/ma_Load_all_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ma_create_mob_button"
+        android:layout_alignRight="@+id/ma_create_mob_button"
+        android:layout_below="@+id/ma_create_mob_button"
+        android:text="Load Mobs from Db" />
+
+    <Button
+        android:id="@+id/ma_flush_all_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ma_create_mob_button"
+        android:layout_alignRight="@+id/ma_create_mob_button"
+        android:layout_below="@+id/ma_Load_all_button"
+        android:text="Flush all caches" />
+
+</RelativeLayout>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp">
+
+
+
+    <EditText
+        android:id="@+id/mca_nameEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:hint="mob name"
+        android:layout_toLeftOf="@+id/mca_marginCenter"
+        android:ems="10"
+        android:layout_above="@+id/mca_skinSelectionButton" />
+    <Spinner
+        android:id="@+id/mca_speMoveSpinner"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/mca_marginCenter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <View
+        android:id="@+id/mca_marginCenter"
+        android:layout_width="15dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/mca_positionxEdit"
+        android:layout_below="@+id/mca_speMoveSpinner"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/mca_skinSelectionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/mca_speMoveSpinner"
+        android:layout_toLeftOf="@+id/mca_marginCenter"
+        android:text="select a spriteSheet" />
+
+    <fr.giusti.onetapadventure.UI.CustomView.spriteView
+        android:id="@+id/mca_mobSkinImage"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_alignBottom="@+id/mca_healthEdit"
+        android:layout_alignTop="@+id/positionyText"
+        android:layout_toLeftOf="@+id/mca_marginCenter"
+        android:background="@drawable/background_sprite_view"
+        android:scaleType="centerInside"
+        android:src="@android:drawable/ic_menu_help" />
+
+    <TextView
+        android:id="@+id/positionxText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/mca_speMoveSpinner"
+        android:layout_toRightOf="@+id/mca_marginCenter"
+        android:text="positionx" />
+
+    <EditText
+        android:id="@+id/mca_positionxEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/positionxText"
+        android:layout_toRightOf="@+id/mca_marginCenter"
+        android:ems="10"
+        android:inputType="number">
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/positionyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mca_skinSelectionButton"
+        android:layout_toRightOf="@+id/mca_marginCenter"
+        android:text="positiony" />
+
+    <EditText
+        android:id="@+id/mca_positionyEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/positionyText"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/positionyText"
+        android:ems="10"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/mca_healthText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mca_positionyEdit"
+        android:layout_toRightOf="@+id/mca_marginCenter"
+        android:text="Health" />
+
+    <EditText
+        android:id="@+id/mca_healthEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/mca_marginCenter"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/mca_healthText"
+        android:ems="10"
+        android:inputType="number" />
+
+    <fr.giusti.onetapadventure.UI.CustomView.PathDrawingView
+        android:id="@+id/mca_mobPatternSurface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/mca_mobSkinImage"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/mca_positionyEdit"
+        android:layout_below="@+id/mobPatternText" />
+
+    <TextView
+        android:id="@+id/mobPatternText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/mca_mobSkinImage"
+        android:layout_below="@+id/mca_mobSkinImage"
+        android:layout_marginTop="15dp"
+        android:text="move pattern" />
+
+
+</RelativeLayout>
