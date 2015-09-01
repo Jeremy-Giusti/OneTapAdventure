@@ -1,0 +1,35 @@
+
+====================FEATURES==============
+
+- displayable board with scrolling background
+- displayable Mob with
+    - 4 possibles automatically calculated orientation
+    - complex defined path
+    - board limit detection
+    - health
+    - 1 special move defined by the special move predefined list
+    - 1 touched move defined by the touched move predefined list
+    - 8 animations of 3 frames :
+        - 4 for moving (1 for each orientation)
+        - 1 for touched
+        - 1 special move
+        - 1 dying
+        - 1 for anything i can think of
+
+- Displayable particles
+    - 6 frames animations
+    - reversible animation
+    - same possible path as mobs
+
+- Board and mob scalable depending on the display surface
+- Touch detection on board and mob
+- Mob creation screen
+- Persisting created Mob
+
+- mob death detection
+- no mob left on board detection
+- End of board Scroll detection
+
+-Everything displayed at 50fps with skippable frame if necessary
+
+-Run smoothly until 150 mobs displayed (27/03/2015)
