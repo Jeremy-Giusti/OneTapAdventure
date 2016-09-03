@@ -14,7 +14,6 @@ import android.view.View;
 import fr.giusti.onetapadventure.GameObject.GameBoard;
 
 public class DrawingView extends SurfaceView implements SurfaceHolder.Callback {
-    private static final int REFRESH_RATE = 35;
     private Context mContext;
     private DrawingThread mDrawThread;
     private Paint mBrush = new Paint();
@@ -69,7 +68,7 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void startGame(GameBoard map) {
         
-        mDrawThread=new DrawingThread(getHolder(), mContext, this);
+        mDrawThread=new DrawingThread(getHolder(), this);
         mMap = map;
 //        mMapRatioX = this.getWidth() / mMap.mBoardWidth;
 //        mMapRatioY = this.getHeight() / mMap.mBoardHeight;
@@ -91,7 +90,7 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback {
         if (mMap != null) {
             // restart after being destroyed
             if (mDrawThread.getState() == Thread.State.TERMINATED) {
-                mDrawThread = new DrawingThread(getHolder(), mContext, this);
+                mDrawThread = new DrawingThread(getHolder(), this);
                 mDrawThread.setRunning(true);
                 mDrawThread.start();
             }
@@ -101,7 +100,7 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        // TODO Auto-generated method stub
+        //Auto-generated method stub
 
     }
 
@@ -116,6 +115,9 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback {
 
     }
 
+    /**
+     *
+     */
     public void update() {
         mMap.update();
 

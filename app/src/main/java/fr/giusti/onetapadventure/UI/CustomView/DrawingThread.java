@@ -23,19 +23,14 @@ public class DrawingThread extends Thread {
     private boolean running = false;
     private boolean pause = false;
 
-    private Canvas mCanvas;
-
     private SurfaceHolder mSurfaceHolder;
 
-    private Context mContext;
 
     private Object mPauseLock = new Object();
 
-    public DrawingThread(SurfaceHolder sholder, Context ctx, DrawingView spanel) {
+    public DrawingThread(SurfaceHolder sholder, DrawingView spanel) {
 
         mSurfaceHolder = sholder;
-
-        mContext = ctx;
 
         mSurfacePanel = spanel;
 
