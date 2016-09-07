@@ -32,16 +32,13 @@ public class ParticuleRepo {
 
 
     private Context mContext;
-    private Double mRatio = 1.0;
 
     /**
      * populate the cache with the default particules
      *
      * @param context
-     * @param ratio
      */
-    public void initCache(Context context, double ratio) {
-        this.mRatio = ratio;
+    public void initCache(Context context) {
         this.mContext = context;
 
         if (mParticuleList.isEmpty()) {
@@ -72,9 +69,9 @@ public class ParticuleRepo {
         int particuleWidth = bm.getWidth() / Constants.PARTICULE_NB_FRAME_ON_ANIMATION;
         int particuleHeight = bm.getHeight();
 
-        new SpriteRepo().addIfDoesntExist(id, bm, Constants.PARTICULE_NB_FRAME_ON_ANIMATION, 1);
+       SpriteRepo.addSpritesheetIfDoesntExist(id, bm, Constants.PARTICULE_NB_FRAME_ON_ANIMATION, 1);
 
-        return new Particule(id, 0, 0, (int) (particuleWidth * mRatio), (int) (particuleHeight * mRatio), new Point[]{new Point(0, 0)}, id, false,false);
+        return new Particule(id, 0, 0, particuleWidth, particuleHeight, new Point[]{new Point(0, 0)}, id, false,false);
     }
 
     public Particule getParticuleById(String id) {

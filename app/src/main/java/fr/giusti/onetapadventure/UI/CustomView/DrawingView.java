@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -15,6 +16,7 @@ import android.view.View;
 import fr.giusti.onetapadventure.GameObject.GameBoard;
 
 public class DrawingView extends SurfaceView implements SurfaceHolder.Callback, TickingThread.OnTickListener {
+    private static final String TAG = DrawingView.class.getSimpleName();
     private Context mContext;
     private TickingThread mDrawThread;
     private Paint mBrush = new Paint();
@@ -71,10 +73,18 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback, 
 
         mDrawThread = new TickingThread(this);
         mMap = map;
+        this.resize();
 //        mMapRatioX = this.getWidth() / mMap.mBoardWidth;
 //        mMapRatioY = this.getHeight() / mMap.mBoardHeight;
         mDrawThread.setRunning(true);
+        Log.d(TAG,"Drawing view ready, starting drawing thread");
+
         mDrawThread.start();
+    }
+
+    private void resize() {
+        getLayoutParams().width = mMap.getmCameraBound().width();
+        getLayoutParams().height = mMap.getmCameraBound().height();
     }
 
     /**

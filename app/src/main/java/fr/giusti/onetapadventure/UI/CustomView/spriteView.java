@@ -11,21 +11,21 @@ import fr.giusti.onetapadventure.commons.Constants;
 /**
  * Created by giusti on 31/03/2015.
  */
-public class spriteView extends ImageView {
+public class SpriteView extends ImageView {
 
     private int row = 0;
     private int column = 0;
     private int timeShowed = 0;
 
-    public spriteView(Context context) {
+    public SpriteView(Context context) {
         super(context);
     }
 
-    public spriteView(Context context, AttributeSet attrs) {
+    public SpriteView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public spriteView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SpriteView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

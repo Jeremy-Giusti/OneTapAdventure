@@ -52,7 +52,7 @@ public class MainActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-
+                Log.d(TAG,"test area clicked");
                 Intent myIntent = new Intent(MainActivity.this, GameActivity.class);
                 MainActivity.this.startActivity(myIntent);
 
@@ -69,27 +69,25 @@ public class MainActivity extends Activity {
             }
         });
 
-        mLoadAllButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO charger tout les mob dans le cache static
-                int mobsLoaded = 0;
-                try {
-                    mobsLoaded = new MobRepo(1, Constants.DEFAULT_GAME_WIDTH, Constants.DEFAULT_GAME_HEIGHT).LoadMobsFromDb(MainActivity.this);
-                    Toast.makeText(MainActivity.this, "" + mobsLoaded + " Mobs loaded", Toast.LENGTH_SHORT).show();
-
-                } catch (IOException e) {
-                    Log.e(TAG, "error while charging Db Mobs to cache" + e);
-                    Toast.makeText(MainActivity.this, "erreur au chargement des mobs",Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+//        mLoadAllButton.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                int mobsLoaded = 0;
+//                try {
+//                    mobsLoaded = MobRepo.LoadMobsFromDb(MainActivity.this);
+//                    Toast.makeText(MainActivity.this, "" + mobsLoaded + " Mobs loaded", Toast.LENGTH_SHORT).show();
+//
+//                } catch (IOException e) {
+//                    Log.e(TAG, "error while charging Db Mobs to cache" + e);
+//                    Toast.makeText(MainActivity.this, "erreur au chargement des mobs",Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
 
         mFlushAllButton.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                MobRepo.fluchScaledMobCache();
                 SpriteRepo.flushCache();
             }
         });

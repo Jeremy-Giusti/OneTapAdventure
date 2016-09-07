@@ -28,10 +28,10 @@ public class TouchedMoveRepo {
             if (mobHealth > 1) {
                 mobHealth--;
                 currentMob.setHealth(mobHealth);
-                currentMob.setState(GameMob.STATE_HURT);
+                currentMob.setState(GameMob.eMobState.HURT);
             } else {
                 currentMob.setHealth(0);
-                currentMob.setState(GameMob.STATE_DYING);
+                currentMob.setState(GameMob.eMobState.DYING);
             }
             currentMob.setAnimationState(0);
         }
@@ -48,13 +48,13 @@ public class TouchedMoveRepo {
             if (mobHealth > 1) {
                 mobHealth--;
                 currentMob.setHealth(mobHealth);
-                currentMob.setState(GameMob.STATE_HURT);
+                currentMob.setState(GameMob.eMobState.HURT);
             } else {
                 currentMob.setHealth(0);
-                currentMob.setState(GameMob.STATE_DYING);
+                currentMob.setState(GameMob.eMobState.DYING);
             }
             currentMob.setAnimationState(0);
-            board.getmParticules().add(new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.BLOOD_PARTICULE, touchPoint.x, touchPoint.y, currentMob.getWidth(), currentMob.getHeight(), false, new Point[]{currentMob.getCurrentMove()}));
+            board.getmParticules().add(new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.BLOOD_PARTICULE, touchPoint.x, touchPoint.y,(int) currentMob.getWidth(),(int) currentMob.getHeight(), false, new Point[]{currentMob.getCurrentMove()}));
 
         }
 
@@ -70,7 +70,7 @@ public class TouchedMoveRepo {
             if (mobHealth < 9) {//9 de vie max
                 currentMob.setHealth(mobHealth + 1);
             }
-            currentMob.setState(GameMob.STATE_SPEMOVE1);
+            currentMob.setState(GameMob.eMobState.SPE1);
             currentMob.setAnimationState(0);
         }
 
@@ -87,10 +87,10 @@ public class TouchedMoveRepo {
             if (mobHealth > 1) {
                 mobHealth--;
                 currentMob.setHealth(mobHealth);
-                currentMob.setState(GameMob.STATE_HURT);
+                currentMob.setState(GameMob.eMobState.HURT);
                 //creer des leurres
-                int particuleWidth = currentMob.getWidth() * 2;
-                int particuleHeight = currentMob.getHeight() * 2;
+                int particuleWidth =(int) currentMob.getWidth() * 2;
+                int particuleHeight =(int) currentMob.getHeight() * 2;
                 int particuleX = currentMob.getPositionX();
                 int particuleY = currentMob.getPositionY();
 
@@ -129,7 +129,7 @@ public class TouchedMoveRepo {
 
             } else {
                 currentMob.setHealth(0);
-                currentMob.setState(GameMob.STATE_DYING);
+                currentMob.setState(GameMob.eMobState.DYING);
             }
             currentMob.setAnimationState(0);
         }

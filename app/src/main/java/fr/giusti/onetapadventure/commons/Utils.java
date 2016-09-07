@@ -3,7 +3,7 @@ package fr.giusti.onetapadventure.commons;
 public class Utils {
 
     /**
-     * exemple: notre inverse de diviseur est 0.4 on voudrais trouver le chiffre le plus proche de 0.4 pour que lorsqu'on fasse 8*chiffreproche on obtienne un resultat entier divisible par 2 
+     * exemple: notre inverse de diviseur est 0.4 on voudrait trouver le chiffre le plus proche de 0.4 pour que lorsqu'on fasse 8*chiffreproche on obtienne un resultat entier divisible par 2
      * @param numberToDivide 8 dans l'exemple
      * @param dividerGoal 2 dans l'exemple
      * @param nearInversDivider 0.4 dans l'exemple

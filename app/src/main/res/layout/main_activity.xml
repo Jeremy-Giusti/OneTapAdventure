@@ -27,7 +27,8 @@
         android:layout_alignLeft="@+id/ma_create_mob_button"
         android:layout_alignRight="@+id/ma_create_mob_button"
         android:layout_below="@+id/ma_create_mob_button"
-        android:text="Load Mobs from Db" />
+        android:text="Load Mobs from Db"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/ma_flush_all_button"

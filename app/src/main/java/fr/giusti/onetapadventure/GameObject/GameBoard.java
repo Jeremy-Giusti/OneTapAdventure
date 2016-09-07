@@ -1,9 +1,5 @@
 package fr.giusti.onetapadventure.GameObject;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -12,11 +8,13 @@ import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import fr.giusti.onetapadventure.callback.OnAllMobDeadListener;
-import fr.giusti.onetapadventure.callback.OnMobDeathListener;
-import fr.giusti.onetapadventure.callback.OnScrollingEndListener;
-import fr.giusti.onetapadventure.commons.Constants;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import fr.giusti.onetapadventure.Repository.SpriteRepo;
+import fr.giusti.onetapadventure.callback.OnBoardEventListener;
+import fr.giusti.onetapadventure.commons.Constants;
 
 /**
  * represente la carte du jeu avec une taille limite, des mobs
@@ -26,38 +24,41 @@ public class GameBoard {
     private CopyOnWriteArrayList<GameMob> mMobs = new CopyOnWriteArrayList<GameMob>();
     private CopyOnWriteArrayList<Particule> mParticules = new CopyOnWriteArrayList<Particule>();
     private CopyOnWriteArrayList<TouchPoint> mTouchPoints = new CopyOnWriteArrayList<TouchPoint>();
-    /**
-     * la partie de l'image qui va etre dessinée en fond)
-     */
-    private Rect mDrawedBackgroundPortionBounds;
+
+
     /**
      * les limite du board
      */
     public Rect mBoardBounds;
+    public Rect mCameraBound;
+    public Rect mCameraBoundOnScreen;
 
     private String mBackgroundBitmapId;
-    private int mBackgroundBitmapWidth;
-    private int mBackgroundBitmapHeight;
 
-    private OnMobDeathListener mMobDeathListener = null;
-    private OnAllMobDeadListener mAllMobDeadListener = null;
-    private OnScrollingEndListener mScrollingEndListener = null;
+    private OnBoardEventListener mEventListenerListener = null;
+    /**
+     * empty border around camera (left and right)
+     */
+    private int borderHorz;
+    /**
+     * empty border around camera (above and under)
+     */
+    private int borderVert;
 
 
     /**
      * @param mobs               les entité mobile qui seront presente sur la carte
      * @param backgroundBitmapId l'image de fond
      */
-    public GameBoard(CopyOnWriteArrayList<GameMob> mobs, String backgroundBitmapId, int boardWidth, int boardHeight) {
+    public GameBoard(CopyOnWriteArrayList<GameMob> mobs, String backgroundBitmapId, int boardWidth, int boardHeight, Rect drawedBounds) {
         super();
         this.mMobs = mobs;
         this.mBackgroundBitmapId = backgroundBitmapId;
-        Point backgroundDimens = new SpriteRepo().getDimensionSpriteSheet(backgroundBitmapId);
-        mBackgroundBitmapWidth = backgroundDimens.x;
-        mBackgroundBitmapHeight = backgroundDimens.y;
-        mDrawedBackgroundPortionBounds = new Rect(0, 0, boardWidth, boardHeight);
+        mCameraBound = drawedBounds;
         mBoardBounds = new Rect(0, 0, boardWidth, boardHeight);
     }
+
+
 
     /**
      * @return la liste de mob de ce plateau
@@ -102,37 +103,42 @@ public class GameBoard {
         this.mBackgroundBitmapId = backgroundBitmapId;
     }
 
-    /**
-     * @param mMobDeathListener called when a mob die
-     */
-    public void setMobDeathListener(OnMobDeathListener mMobDeathListener) {
-        this.mMobDeathListener = mMobDeathListener;
+    public int getHeight() {
+        return this.mBoardBounds.height();
+    }
+
+    public int getWidth() {
+        return this.mBoardBounds.width();
+    }
+
+    public Rect getmCameraBound() {
+        return mCameraBound;
+    }
+
+    public void setmCameraBound(Rect mCameraBound) {
+        this.mCameraBound = mCameraBound;
     }
 
     /**
-     * @param mAllMobDeadListener called when all mob are dead
+     * @param eventListener called when a mob die
      */
-    public void setAllMobDeadListener(OnAllMobDeadListener mAllMobDeadListener) {
-        this.mAllMobDeadListener = mAllMobDeadListener;
+    public void setBoardEventListener(OnBoardEventListener eventListener) {
+        this.mEventListenerListener = eventListener;
     }
 
-    /**
-     * @param mScrollingEndListener called when the scroll reach the background end
-     */
-    public void setScrollingEndListener(OnScrollingEndListener mScrollingEndListener) {
-        this.mScrollingEndListener = mScrollingEndListener;
-    }
 
     /**
      * met a jour la carte après un tick
      */
     public void update() {
+        this.updateCameraPosition();
+
         for (GameMob mob : Collections.synchronizedList(mMobs)) {
             if (mob.isDead()) {
-                if (mMobs.size() < 2 && mAllMobDeadListener != null) {
-                    mAllMobDeadListener.OnAllMobDead(mob.clone());
-                } else if (mMobDeathListener != null) {
-                    mMobDeathListener.OnMobDeath(mob.clone());
+                if (mMobs.size() < 2 && mEventListenerListener != null) {
+                    mEventListenerListener.OnAllMobDead(mob.clone());
+                } else {
+                    mEventListenerListener.OnMobDeath(mob.clone());
                 }
                 mMobs.remove(mob);
             } else {
@@ -155,15 +161,10 @@ public class GameBoard {
             }
 
         }
+    }
 
-        // TODO gerer les depassement dans les deux sens (sortie de la map par la gauche ou par le haut +callback avec limit touché (enum ?)
-        if (mDrawedBackgroundPortionBounds.left > mBackgroundBitmapWidth)
-            this.mDrawedBackgroundPortionBounds.offsetTo(0, mDrawedBackgroundPortionBounds.top);
-        if (mDrawedBackgroundPortionBounds.top > mBackgroundBitmapHeight)
-            this.mDrawedBackgroundPortionBounds.offsetTo(mDrawedBackgroundPortionBounds.left, 0);
-
-        // TODO creer une vitesse de deplacement x et y
-        this.mDrawedBackgroundPortionBounds.offset(1, 0);
+    private void updateCameraPosition() {
+        mCameraBoundOnScreen = new Rect(mCameraBound.left+borderHorz,mCameraBound.top+borderVert,mCameraBound.right+borderHorz,mCameraBound.bottom+borderVert);
     }
 
     /**
@@ -200,31 +201,11 @@ public class GameBoard {
      */
     public void draw(Canvas canvas, Paint mBrush) {
 
-        Bitmap backgroundBitmap = SpriteRepo.getBitmap(mBackgroundBitmapId);
+        Bitmap backgroundBitmap = SpriteRepo.getPicture(mBackgroundBitmapId);
 
-        int diffX = mDrawedBackgroundPortionBounds.right - backgroundBitmap.getWidth();
-        int diffY = mDrawedBackgroundPortionBounds.bottom - backgroundBitmap.getHeight();
 
-        if (diffX > 0) {
-            // partie gauche de l'ecran
-            Rect boardHalf = new Rect(mBoardBounds.left, mBoardBounds.top, mBoardBounds.right - diffX, mBoardBounds.bottom);
-            // partie droite de l'image ("fin" de l'image")
-            Rect backgroundHalf = new Rect(backgroundBitmap.getWidth() - boardHalf.width(), mDrawedBackgroundPortionBounds.top, backgroundBitmap.getWidth(), mDrawedBackgroundPortionBounds.bottom);
-            canvas.drawBitmap(backgroundBitmap, backgroundHalf, boardHalf, mBrush);
+        canvas.drawBitmap(backgroundBitmap, mCameraBound, mCameraBound, mBrush);
 
-            // partie droite de l'ecran
-            boardHalf = new Rect(boardHalf.right, mBoardBounds.top, mBoardBounds.right, mBoardBounds.bottom);
-            // partie gauche de l'image (debut)
-            backgroundHalf = new Rect(0, mDrawedBackgroundPortionBounds.top, diffX, mDrawedBackgroundPortionBounds.bottom);
-
-            canvas.drawBitmap(backgroundBitmap, backgroundHalf, boardHalf, mBrush);
-
-        } else if (diffY > 0) {
-            // TODO scrolling vertical
-        } else {
-            canvas.drawBitmap(backgroundBitmap, mDrawedBackgroundPortionBounds, mBoardBounds, mBrush);
-
-        }
         Log.d("GAMEBOARD", "Number of mob to draw : " + mMobs.size());
         mBrush = GameMob.GetPaint(mBrush);
         for (GameMob mob : mMobs) {
@@ -241,12 +222,59 @@ public class GameBoard {
         mBrush.setAlpha(255);
     }
 
-    public int getHeight() {
-        return this.mBoardBounds.height();
-    }
 
-    public int getWidth() {
-        return this.mBoardBounds.width();
+
+
+
+    /**
+     * first calculate how to adapt the camera bound to the screen size (border are the empty border that will result)<br>
+     * then calculate a ratio wich correspond to a scalling of everything to have a correct size on screen
+     *
+     * @param screenWidth
+     * @param screenHeight
+     */
+    public void resize(int screenWidth, int screenHeight) {
+        float screanHWRatio = screenHeight / (float) screenWidth;
+        float camHWRatio = mCameraBound.height() / (float) mCameraBound.width();
+
+        float ratio = 0;
+        borderHorz = 0;
+        borderVert = 0;
+        int cameraWidth = 0;
+        int cameraHeight = 0;
+
+
+        /**
+         * updating camera scale and borders depending on screen dimens
+         */
+        if (screanHWRatio < camHWRatio) {
+            //screen more wide than hight compared to camera so we change camera height to match screen and add border on left and right
+            ratio = screenHeight / (float) mCameraBound.height();
+            cameraWidth = (int) (mCameraBound.width() * ratio);
+            cameraHeight = (int) (mCameraBound.height() * ratio);
+            borderHorz = (screenWidth - cameraWidth) / 2;
+        } else {
+            //screen more hight than wide compared to camera so we change camera width to match screen and add border on top and bottom
+            ratio = screenWidth / (float) mCameraBound.width();
+            cameraWidth = (int) (mCameraBound.width() * ratio);
+            cameraHeight = (int) (mCameraBound.height() * ratio);
+            borderVert = (screenHeight - cameraHeight) / 2;
+        }
+
+        mCameraBound.set(mCameraBound.left, mCameraBound.top, mCameraBound.left + cameraWidth, mCameraBound.top + cameraHeight);
+
+        /**
+         * redimensionning the board
+         */
+        int boardWidth = (int) (mBoardBounds.width() * ratio);
+        int boardHeight = (int) (mBoardBounds.height() * ratio);
+        mBoardBounds.set(mBoardBounds.left, mBoardBounds.top, mBoardBounds.left + boardWidth, mBoardBounds.top + boardHeight);
+        SpriteRepo.resizePicture(mBackgroundBitmapId, ratio);
+
+        for(GameMob mob: mMobs){
+            mob.resize(ratio);
+        }
+
     }
 
 }

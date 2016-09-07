@@ -34,7 +34,7 @@ import fr.giusti.onetapadventure.Repository.SpecialMoveRepo;
 import fr.giusti.onetapadventure.Repository.SpriteRepo;
 import fr.giusti.onetapadventure.Repository.TouchedMoveRepo;
 import fr.giusti.onetapadventure.UI.CustomView.PathDrawingView;
-import fr.giusti.onetapadventure.UI.CustomView.spriteView;
+import fr.giusti.onetapadventure.UI.CustomView.SpriteView;
 import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.commons.FileUtils;
 
@@ -175,12 +175,11 @@ public class MobCreationActivity extends Activity {
             int mobHeight = Integer.parseInt(mHeightEdit.getText().toString());
 
             mobHealth = Integer.parseInt(mHealthEdit.getText().toString());
-            mMobCreating.setName(mMobNameEdit.getText().toString());
+            mMobCreating.setIdName(mMobNameEdit.getText().toString());
             mMobCreating.setPosition(new RectF(mobXposition, mobYposition, mobXposition + mobWidth, mobYposition + mobHeight));
             mMobCreating.setHealth(mobHealth);
 
-            new MobRepo(0d, 0, 0).addMobToUnscaledStaticList(mMobCreating);
-            new MobRepo(0d, 0, 0).saveGameMob(this, mMobCreating, null);
+            MobRepo.saveGameMob(this, mMobCreating, null);
 
             Toast.makeText(this, "Mob créer:\n path lenght: " + mMobCreating.getMovePattern().length + "\n skin id: " + mMobCreating.getBitmapId(), Toast.LENGTH_LONG).show();
             resetMobCreating();
@@ -210,26 +209,25 @@ public class MobCreationActivity extends Activity {
     }
 
     /**
-     * recence le spriteSheet dans le repo dedié et genere les proportion du mob en fonction de la taille de l'image
+     * recense le spriteSheet dans le repo dedié et genere les proportion du mob en fonction de la taille de l'image
      *
      * @param spriteSheetUrl
      */
     private void manageSpriteSheetImport(String spriteSheetUrl) {
         try {
-            SpriteRepo spriteRepo = new SpriteRepo();
             File spriteSheetFile = new File(spriteSheetUrl);
             String spriteSheetId = spriteSheetFile.getName();
-            Point singleSpriteDimens = spriteRepo.saveAndLoadFile(this, spriteSheetUrl, spriteSheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+            Point singleSpriteDimens = SpriteRepo.saveAndLoadFile(this, spriteSheetUrl, spriteSheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT,true);
 
             mMobCreating.setBitmapId(spriteSheetId);
 
             // generation de l'epaisseur/hauteur du mob selon son skin
             this.mWidthEdit.setText("" + singleSpriteDimens.x);
             this.mHeightEdit.setText("" + singleSpriteDimens.y);
-            if (mSkinImage instanceof spriteView) {
-                ((spriteView) mSkinImage).setSpriteSheet(spriteSheetId);
+            if (mSkinImage instanceof SpriteView) {
+                ((SpriteView) mSkinImage).setSpriteSheet(spriteSheetId);
             } else {
-                mSkinImage.setImageBitmap(SpriteRepo.getBitmap(spriteSheetId));
+                mSkinImage.setImageBitmap(SpriteRepo.getPicture(spriteSheetId));
             }
         } catch (IOException e) {
             Log.e(TAG, "error while loading spritesheet: " + e);

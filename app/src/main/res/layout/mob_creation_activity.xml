@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:hint="mob name"
+        android:hint="mob idName"
         android:layout_toLeftOf="@+id/mca_marginCenter"
         android:ems="10"
         android:layout_above="@+id/mca_skinSelectionButton" />
@@ -40,7 +40,7 @@
         android:layout_toLeftOf="@+id/mca_marginCenter"
         android:text="select a spriteSheet" />
 
-    <fr.giusti.onetapadventure.UI.CustomView.spriteView
+    <fr.giusti.onetapadventure.UI.CustomView.SpriteView
         android:id="@+id/mca_mobSkinImage"
         android:layout_width="match_parent"
         android:layout_height="64dp"

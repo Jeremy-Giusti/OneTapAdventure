@@ -5,13 +5,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.RectF;
-import android.util.Log;
-import android.view.MotionEvent;
 
 import fr.giusti.onetapadventure.GameObject.moves.SpecialMove;
 import fr.giusti.onetapadventure.GameObject.moves.TouchedMove;
-import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.Repository.SpriteRepo;
+import fr.giusti.onetapadventure.commons.Constants;
 
 public class GameMob implements Cloneable {
     private static final String TAG = GameMob.class.getName();
@@ -19,14 +17,14 @@ public class GameMob implements Cloneable {
     public RectF mPosition = new RectF();
 
     private int mSpriteCurrentColumn = 0;
-    private int mSpriteCurrentLine = 0;
+ //   private int mSpriteCurrentLine = 0;
 
     protected Point[] movePattern;
 
     /**
      * unique mob id
      */
-    private String name;
+    private String idName;
 
     /**
      * alignement of the mob, used to differenciate teams
@@ -68,27 +66,15 @@ public class GameMob implements Cloneable {
 
     /**
      * stat<4 = normal,
-     * 0=bas, 1 haut, 2 droite, 3 gauche
+     * 0=left, 1 haut, 2 bas, 3 droite
      * 4= touché, 5 mourant, 6 spe1, 7 spe2
      */
-    protected int mState = 3;
+    protected eMobState mState = eMobState.MOVING_UP;
 
-    public final static int STATE_ORIENTATION_LEFT = 0;
-    public final static int STATE_ORIENTATION_UP = 1;
-    public final static int STATE_ORIENTATION_RIGHT = 2;
-    public final static int STATE_ORIENTATION_DOWN = 3;
-    public final static int STATE_HURT = 4;
-    public final static int STATE_DYING = 5;
-    public final static int STATE_SPEMOVE1 = 6;
-    public final static int STATE_SPEMOVE2 = 7;
+
 
     /**
-     *
-     */
-//    private int mOrientation = 0;
-
-    /**
-     * 0-10,10-20,20-30 utilisé pour selectioner les sprite en sequance (joue l'animation)
+     * 0-10,10-20,20-30 utilisé pour selectioner les sprite en sequence (joue l'animation)
      */
     private int mAnimationState = 0;
 
@@ -101,9 +87,21 @@ public class GameMob implements Cloneable {
      * @param mBitmapId   un string qui sert d'id pour aller piocher le skin du mob dans le bitmapRepo (cache bitmap)
      * @param state       l'etat du mob (inutilisé pour le moment)
      */
-    public GameMob(String name, int x, int y, int width, int height, Point[] movePattern, SpecialMove specialMove1, TouchedMove touchedmove, String mBitmapId, int health, int state) {
+    public GameMob(String idName, int x, int y, int width, int height, Point[] movePattern, SpecialMove specialMove1, TouchedMove touchedmove, String mBitmapId, int health, int state) {
         super();
-        this.name = name;
+        this.idName = idName;
+        mPosition.set(x, y, x + width, y + height);
+        this.movePattern = movePattern;
+        this.mSpecialMove1 = specialMove1;
+        this.mTouchedMove = touchedmove;
+        this.mBitmapId = mBitmapId;
+        this.mHealth = health;
+        this.mState = eMobState.values()[state];
+    }
+
+    public GameMob(String idName, int x, int y, int width, int height, Point[] movePattern, SpecialMove specialMove1, TouchedMove touchedmove, String mBitmapId, int health, eMobState state) {
+        super();
+        this.idName = idName;
         mPosition.set(x, y, x + width, y + height);
         this.movePattern = movePattern;
         this.mSpecialMove1 = specialMove1;
@@ -114,12 +112,14 @@ public class GameMob implements Cloneable {
     }
 
 
-    public String getName() {
-        return name;
+
+
+    public String getIdName() {
+        return idName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setIdName(String idName) {
+        this.idName = idName;
     }
 
     public int getAlignement() {
@@ -153,7 +153,7 @@ public class GameMob implements Cloneable {
         int futureY = (int) mPosition.centerY();
         int futureMove = currentMove;
         for (int i = 0; i < tickInFuture; i++) {
-
+        //TODO optimizable
             futureX += movePattern[futureMove].x * xAlteration;
             futureY += movePattern[futureMove].y * yAlteration;
             if (futureMove < (movePattern.length - 1)) {
@@ -166,12 +166,12 @@ public class GameMob implements Cloneable {
         return new Point(futureX, futureY);
     }
 
-    public int getWidth() {
-        return (int) mPosition.width();
+    public float getWidth() {
+        return mPosition.width();
     }
 
-    public int getHeight() {
-        return (int) mPosition.height();
+    public float getHeight() {
+        return  mPosition.height();
     }
 
 
@@ -237,12 +237,12 @@ public class GameMob implements Cloneable {
         this.mHealth = mHealth;
     }
 
-    public int getState() {
+    public eMobState getState() {
         return mState;
     }
 
-    public void setState(int state) {
-        this.mState = state;
+    public void setState(eMobState mState) {
+        this.mState = mState;
     }
 
     public int getAnimationState() {
@@ -282,7 +282,7 @@ public class GameMob implements Cloneable {
 
         move(deplacementX, deplacementY);
         manageMapLimitCollision(board);
-        if (mState < STATE_HURT) {
+        if (isJustMoving()) {
             updateOrientation(deplacementX, deplacementY);
         }
 
@@ -299,7 +299,7 @@ public class GameMob implements Cloneable {
      */
     protected void move(int deplacementX, int deplacementY) {
         this.mPosition.offset(deplacementX, deplacementY);
-        if (mState != STATE_DYING) {//si il est mort il ne change plus de direction
+        if (mState != eMobState.DYING) {//si il est mort il ne change plus de direction
             if (currentMove < (movePattern.length - 1)) {
                 currentMove++;
             } else {
@@ -342,16 +342,16 @@ public class GameMob implements Cloneable {
         if (deplacementX * deplacementX > deplacementY * deplacementY) {
             //on se deplace principalement de facon horizontale
             if (deplacementX > 0) {
-                mState = STATE_ORIENTATION_RIGHT;
+                mState = eMobState.MOVING_RIGHT;
             } else {
-                mState = STATE_ORIENTATION_LEFT;
+                mState = eMobState.MOVING_LEFT;
             }
 
         } else {
             if (deplacementY > 0) {
-                mState = STATE_ORIENTATION_DOWN;
+                mState = eMobState.MOVING_DOWN;
             } else {
-                mState = STATE_ORIENTATION_UP;
+                mState = eMobState.MOVING_UP;
             }
         }
     }
@@ -362,17 +362,17 @@ public class GameMob implements Cloneable {
     protected void updateSprite() {
         // check l'etat du mob et son stade dans l'animation
         if (mAnimationState == Constants.COMPLETE_ANIMATION_DURATION) {
-            if (mState != STATE_DYING) {
+            if (mState != eMobState.DYING) {
                 mAnimationState = 0;
-                if (mState >= STATE_HURT) {
-                    mState = 3;
+                if (!isJustMoving()) {
+                    mState = eMobState.MOVING_DOWN;
                 }
             }
         } else {
             mAnimationState++;
         }
         this.mSpriteCurrentColumn = (int) (mAnimationState / Constants.FRAME_DURATION);
-        this.mSpriteCurrentLine = mState;
+//        this.mSpriteCurrentLine = mState;
 
     }
 
@@ -391,20 +391,11 @@ public class GameMob implements Cloneable {
      * @param mBrush
      */
     public void draw(Canvas canvas, Paint mBrush) {
-        if (mBitmapId == null) {
-
-            if (mState == STATE_DYING) {
-                canvas.drawCircle(mPosition.left, mPosition.top, 6, mBrush);
-            } else {
-                canvas.drawCircle(mPosition.left, mPosition.top, 3, mBrush);
-            }
-        } else {
+        if (mBitmapId != null) {
 
             RectF rectPositionOnScreen = new RectF(mPosition);
             rectPositionOnScreen.offsetTo(mPosition.left, mPosition.top);
-            canvas.drawBitmap(SpriteRepo.getSpriteBitmap(mBitmapId, mSpriteCurrentColumn, mSpriteCurrentLine), null, mPosition, mBrush);
-
-            //canvas.drawBitmap(SpriteRepo.getBitmap(mBitmapId), mMobSprite, rectPositionOnScreen, mBrush);
+            canvas.drawBitmap(SpriteRepo.getSpriteBitmap(mBitmapId, mSpriteCurrentColumn, mState.index), null, mPosition, mBrush);
 
         }
 
@@ -435,10 +426,10 @@ public class GameMob implements Cloneable {
                 this.mTouchedMove.doTouchedMove(board, this, new Point((int) eventX, (int) eventY));
             } else if (mHealth > 1) {
                 mHealth--;
-                mState = STATE_HURT;
+                mState = eMobState.HURT;
             } else {
                 mHealth = 0;
-                mState = STATE_DYING;
+                mState = eMobState.DYING;
             }
             mAnimationState = 0;
 
@@ -451,7 +442,7 @@ public class GameMob implements Cloneable {
      * @return
      */
     public boolean isDead() {
-        return (mState == STATE_DYING && mAnimationState == Constants.COMPLETE_ANIMATION_DURATION) ? true : false;
+        return (mState == eMobState.DYING && mAnimationState == Constants.COMPLETE_ANIMATION_DURATION) ? true : false;
     }
 
     @Override
@@ -462,7 +453,7 @@ public class GameMob implements Cloneable {
             cloneMovePattern[i] = new Point(movePattern[i].x, movePattern[i].y);
         }
         clone = new GameMob(
-                name,
+                idName,
                 (int) mPosition.left,
                 (int) mPosition.top,
                 (int) mPosition.width(),
@@ -475,12 +466,42 @@ public class GameMob implements Cloneable {
                 mState);
 
         return clone;
-//        try {
-//            return (GameMob) super.clone();
-//        } catch (CloneNotSupportedException e) {
-//            Log.e(TAG, "cloneNotSupported: " + e);
-//        }
-//        return null;
 
     }
+
+    public void resize(float ratio) {
+        float oldWidth = getWidth();
+        float newWidth = oldWidth*ratio;
+        float oldHeight = getHeight();
+        float newHeight = oldHeight*ratio;
+        float diffHeight = (newHeight-oldHeight)/2;
+        float diffWidth = (newWidth-oldWidth)/2;
+
+        mPosition = new RectF(mPosition.left-diffWidth,mPosition.top-diffHeight,mPosition.right+diffWidth,mPosition.bottom+diffHeight);
+
+        SpriteRepo.resizeSprites(mBitmapId,(int)getWidth(),(int)getHeight());
+    }
+
+    public boolean isJustMoving() {
+        return mState == eMobState.MOVING_LEFT || mState == eMobState.MOVING_UP || mState == eMobState.MOVING_RIGHT || mState == eMobState.MOVING_DOWN;
+    }
+
+    public enum eMobState {
+
+        MOVING_LEFT(0),
+        MOVING_UP(1),
+        MOVING_RIGHT(2),
+        MOVING_DOWN(3),
+        HURT(4),
+        DYING(5),
+        SPE1(6),
+        SPE2(7);
+
+       public final int index;
+
+        eMobState(int index) {
+            this.index = index;
+        }
+    }
+
 }

@@ -46,9 +46,9 @@ public class SpecialMoveRepo {
         @Override
         public void doSpecialMove(GameBoard board, GameMob currentMob) {
             int currentHealth = currentMob.getHealth();
-            if (currentMob.getState() < 4 && this.lastUse > 180 && currentHealth < 5) {
+            if (currentMob.isJustMoving() && this.lastUse > 180 && currentHealth < 5) {
                 lastUse = 0;
-                currentMob.setState(GameMob.STATE_SPEMOVE1);
+                currentMob.setState(GameMob.eMobState.SPE1);
                 currentMob.setHealth(currentHealth + 1);
                 currentMob.setAnimationState(0);
             } else {
@@ -67,7 +67,7 @@ public class SpecialMoveRepo {
         private int lastUse=0;
         @Override
         public void doSpecialMove(GameBoard board, GameMob currentMob) {
-            if (currentMob.getState() < 4 && lastUse > 5) {
+            if (currentMob.isJustMoving() && lastUse > 5) {
                 lastUse=0;
                 Particule trailParicule = new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.SMOKE_PARTICULE, (int) currentMob.getPosition().centerX(), (int) currentMob.getPosition().centerY(), 16, 16, false, null);
                 board.addParticule(trailParicule);
@@ -94,7 +94,7 @@ public class SpecialMoveRepo {
                 if (mobHealth > 1) {
                     mobHealth--;
                     currentMob.setHealth(mobHealth);
-                    currentMob.setState(GameMob.STATE_HURT);
+                    currentMob.setState(GameMob.eMobState.HURT);
                     switch (mobHealth) {
                         case 3:
                             break;
@@ -115,10 +115,10 @@ public class SpecialMoveRepo {
                     }
                 } else {
                     //EXPLOSION !
-                    int particuleWidth = currentMob.getWidth() * 4;
-                    int particuleHeight = currentMob.getHeight() * 4;
-                    int particuleX = currentMob.getPositionX();
-                    int particuleY = currentMob.getPositionY();
+                    int particuleWidth = (int)currentMob.getWidth() * 4;
+                    int particuleHeight =(int) currentMob.getHeight() * 4;
+                    int particuleX = (int)currentMob.getPositionX();
+                    int particuleY = (int)currentMob.getPositionY();
 
                     Particule explosionParticule = new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.EXPLOSION_PARTICULE, particuleX, particuleY, particuleWidth, particuleHeight, false, null);
                     for (GameMob mob : board.getMobs()) {
@@ -127,7 +127,7 @@ public class SpecialMoveRepo {
 
                     board.addParticule(explosionParticule);
                     currentMob.setHealth(-1);
-                    currentMob.setState(GameMob.STATE_DYING);
+                    currentMob.setState(GameMob.eMobState.DYING);
                 }
                 currentMob.setAnimationState(0);
             } else {
@@ -147,9 +147,9 @@ public class SpecialMoveRepo {
 
         @Override
         public void doSpecialMove(GameBoard board, GameMob currentMob) {
-            if (currentMob.getState() < 4 && this.lastUse > 450) {
+            if (currentMob.isJustMoving()&& this.lastUse > 450) {
                 lastUse = 0;
-                currentMob.setState(GameMob.STATE_SPEMOVE1);
+                currentMob.setState(GameMob.eMobState.SPE1);
                 currentMob.setAnimationState(0);
                 board.addMob(currentMob.clone());
                 currentMob.setxAlteration(-currentMob.getxAlteration());
@@ -170,17 +170,17 @@ public class SpecialMoveRepo {
 
         @Override
         public void doSpecialMove(GameBoard board, GameMob currentMob) {
-            if (currentMob.getState() < 4 && this.lastUse > 120) {
+            if (currentMob.isJustMoving() && this.lastUse > 120) {
                 lastUse = 0;
                 ParticuleRepo particuleRepo = new ParticuleRepo();
-                currentMob.setState(GameMob.STATE_SPEMOVE1);
+                currentMob.setState(GameMob.eMobState.SPE1);
                 currentMob.setAnimationState(0);
 
                 int newX = (int) (Math.random() * board.getWidth());
                 int newY = (int) (Math.random() * board.getHeight());
 
-                int width = currentMob.getWidth() * 2;
-                int height = currentMob.getHeight() * 2;
+                int width = (int)currentMob.getWidth() * 2;
+                int height =(int) currentMob.getHeight() * 2;
 
                 Particule firstParticule = particuleRepo.generateOrGetCustomParticule(ParticuleRepo.TP_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), width, height, false, null);
                 Particule secondParticule = particuleRepo.generateOrGetCustomParticule(ParticuleRepo.TP_PARTICULE, newX, newY, width, height, true, null);
@@ -211,11 +211,11 @@ public class SpecialMoveRepo {
 
         @Override
         public void doSpecialMove(GameBoard board, GameMob currentMob) {
-            if (currentMob.getState() < 4 && this.lastUse > 120) {
+            if (currentMob.isJustMoving() && this.lastUse > 120) {
                 List<GameMob> mobList = board.getMobs();
                 lastUse = 0;
                 ParticuleRepo particuleRepo = new ParticuleRepo();
-                currentMob.setState(GameMob.STATE_SPEMOVE1);
+                currentMob.setState(GameMob.eMobState.SPE1);
                 currentMob.setAnimationState(0);
 
                 swapingMob = (int) (Math.random() * board.getMobs().size());

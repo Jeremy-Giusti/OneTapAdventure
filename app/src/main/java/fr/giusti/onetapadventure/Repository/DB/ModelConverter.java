@@ -21,7 +21,7 @@ public class ModelConverter {
     public static MobDB mobToMobDB(GameMob mob, String boardId) {
         MobDB mobDb = new MobDB();
 
-        mobDb.setId(mob.getName());
+        mobDb.setId(mob.getIdName());
         mobDb.setBoardId(boardId);
         if(mob.getmSpecialMove1()!=null) {
             mobDb.setSpecialMoveId(mob.getmSpecialMove1().getId());
@@ -91,7 +91,7 @@ public class ModelConverter {
 
     public static PathDB mobToPathDB(GameMob mob) {
 
-        return pathToPathDB(mob.getMovePattern(), mob.getName(), mob.getName());
+        return pathToPathDB(mob.getMovePattern(), mob.getIdName(), mob.getIdName());
 
     }
 
@@ -99,11 +99,11 @@ public class ModelConverter {
     ///////////////////////////////////////////////////////////////////////
 
     public static GameBoard boardDbToBoard(BoardDB boardDB) {
-        return new GameBoard(null, boardDB.getBackgroundUrl(), boardDB.getWidth(), boardDB.getHeight());
+        return new GameBoard(null, boardDB.getBackgroundUrl(), boardDB.getWidth(), boardDB.getHeight(),boardDB.getCamRect());
     }
 
     public static BoardDB boardDbToBoard(GameBoard board, String boardId) {
-        return new BoardDB(boardId, board.getBackgroundBitmapId(), board.getHeight(), board.getWidth());
+        return new BoardDB(boardId, board.getBackgroundBitmapId(), board.getHeight(), board.getWidth(),board.getmCameraBound());
     }
 
 }
