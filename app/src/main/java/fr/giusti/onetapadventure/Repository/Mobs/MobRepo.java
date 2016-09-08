@@ -1,4 +1,4 @@
-package fr.giusti.onetapadventure.Repository;
+package fr.giusti.onetapadventure.Repository.Mobs;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -16,6 +16,10 @@ import fr.giusti.onetapadventure.Repository.DB.model.MobDB;
 import fr.giusti.onetapadventure.Repository.DB.model.PathDB;
 import fr.giusti.onetapadventure.Repository.DB.persister.MobPersister;
 import fr.giusti.onetapadventure.Repository.DB.persister.PathPersister;
+import fr.giusti.onetapadventure.Repository.PathRepo;
+import fr.giusti.onetapadventure.Repository.SpecialMoveRepo;
+import fr.giusti.onetapadventure.Repository.SpriteRepo;
+import fr.giusti.onetapadventure.Repository.TouchedMoveRepo;
 import fr.giusti.onetapadventure.commons.Constants;
 
 public class MobRepo {

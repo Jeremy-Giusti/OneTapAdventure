@@ -1,7 +1,7 @@
 
 ====================FEATURES==============
 
-- displayable board with scrolling background
+- displayable board with camera
 - displayable Mob with
     - 4 possibles automatically calculated orientation
     - complex defined path
@@ -21,7 +21,7 @@
     - reversible animation
     - same possible path as mobs
 
-- Board and mob scalable depending on the display surface
+- Board,camera and mob scalable depending on the display surface
 - Touch detection on board and mob
 - Mob creation screen
 - Persisting created Mob

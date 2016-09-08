@@ -13,9 +13,7 @@ import fr.giusti.onetapadventure.GameObject.GameMob;
 import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapadventure.Repository.GameRepo;
 import fr.giusti.onetapadventure.UI.CustomView.DrawingView;
-import fr.giusti.onetapadventure.callback.OnAllMobDeadListener;
 import fr.giusti.onetapadventure.callback.OnBoardEventListener;
-import fr.giusti.onetapadventure.callback.OnScrollingEndListener;
 
 /**
  * classe qui contient tout une "partie"
@@ -157,7 +155,7 @@ public class GameActivity extends Activity implements OnAllMobDeadListener, OnBo
     }
 
     @Override
-    public void OnMobDeath(final GameMob deadMob) {
+    public void onMobDeath(final GameMob deadMob) {
         this.runOnUiThread(new Runnable() {
             public void run() {
                 Toast.makeText(GameActivity.this, "mob dead at "+deadMob.mPosition.centerX()+":"+deadMob.mPosition.centerY(), Toast.LENGTH_SHORT).show();
@@ -168,7 +166,7 @@ public class GameActivity extends Activity implements OnAllMobDeadListener, OnBo
     }
 
     @Override
-    public void OnAllMobDead(final GameMob lastMobKilled) {
+    public void onAllMobDead(final GameMob lastMobKilled) {
         this.runOnUiThread(new Runnable() {
             public void run() {
                 Toast.makeText(GameActivity.this, "Last mob killed at "+lastMobKilled.mPosition.centerX()+":"+lastMobKilled.mPosition.centerY(), Toast.LENGTH_SHORT).show();

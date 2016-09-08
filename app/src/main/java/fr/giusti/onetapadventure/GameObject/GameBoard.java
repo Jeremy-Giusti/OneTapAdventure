@@ -136,9 +136,9 @@ public class GameBoard {
         for (GameMob mob : Collections.synchronizedList(mMobs)) {
             if (mob.isDead()) {
                 if (mMobs.size() < 2 && mEventListenerListener != null) {
-                    mEventListenerListener.OnAllMobDead(mob.clone());
+                    mEventListenerListener.onAllMobDead(mob.clone());
                 } else {
-                    mEventListenerListener.OnMobDeath(mob.clone());
+                    mEventListenerListener.onMobDeath(mob.clone());
                 }
                 mMobs.remove(mob);
             } else {

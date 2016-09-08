@@ -16,7 +16,6 @@
 
 
     Low priority:
- 	 - organiser par "étape" (creation/mise a l'echelle/jeu/flush/...)
  	 - transformer le projet en librairie => refractoring pour avoir une logique de librairie
  	 - bug reprise app apres avoir changé d'orientation+veille
      - sounds

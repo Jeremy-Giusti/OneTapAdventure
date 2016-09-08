@@ -14,6 +14,8 @@ public class GameMobSpriteHolder {
     public float frameHeight;
 
     public void resizeAllFrame(int frameWidth, int frameHeight) {
+        if(frameWidth>this.frameWidth && frameHeight>this.frameHeight) return;//don't scale up, it will only increase memory consumption
+
         for (int x = 0; x < sprites.length; x++) {
             for (int y = 0; y < sprites[0].length; y++) {
                 sprites[x][y] = Bitmap.createScaledBitmap(sprites[x][y], frameWidth, frameHeight, false);

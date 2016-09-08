@@ -29,7 +29,7 @@ import fr.giusti.onetapadventure.GameObject.moves.SpecialMove;
 import fr.giusti.onetapadventure.GameObject.moves.TouchedMove;
 import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapadventure.GameObject.GameMob;
-import fr.giusti.onetapadventure.Repository.MobRepo;
+import fr.giusti.onetapadventure.Repository.Mobs.MobRepo;
 import fr.giusti.onetapadventure.Repository.SpecialMoveRepo;
 import fr.giusti.onetapadventure.Repository.SpriteRepo;
 import fr.giusti.onetapadventure.Repository.TouchedMoveRepo;

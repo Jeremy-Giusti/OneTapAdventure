@@ -7,14 +7,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
-
-import java.io.IOException;
 
 import fr.giusti.onetapadventure.R;
-import fr.giusti.onetapadventure.Repository.MobRepo;
 import fr.giusti.onetapadventure.Repository.SpriteRepo;
-import fr.giusti.onetapadventure.commons.Constants;
 
 /**
  * ecran menu
