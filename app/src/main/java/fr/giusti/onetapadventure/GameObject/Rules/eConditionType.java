@@ -6,5 +6,6 @@ package fr.giusti.onetapadventure.GameObject.Rules;
 public enum eConditionType {
     VICTORY,
     NULL,
-    DEFEAT, eConditionType;
+    DEFEAT,
+    END;
 }

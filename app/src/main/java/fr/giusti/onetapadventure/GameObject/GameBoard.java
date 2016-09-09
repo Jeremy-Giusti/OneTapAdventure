@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import fr.giusti.onetapadventure.GameObject.Rules.eConditions;
 import fr.giusti.onetapadventure.Repository.SpriteRepo;
 import fr.giusti.onetapadventure.callback.OnBoardEventListener;
 import fr.giusti.onetapadventure.commons.Constants;
@@ -35,7 +36,7 @@ public class GameBoard {
 
     private String mBackgroundBitmapId;
 
-    private OnBoardEventListener mEventListenerListener = null;
+    private OnBoardEventListener mEventListener = null;
     /**
      * empty border around camera (left and right)
      */
@@ -44,6 +45,7 @@ public class GameBoard {
      * empty border around camera (above and under)
      */
     private int borderVert;
+    private boolean started =false;
 
 
     /**
@@ -123,7 +125,7 @@ public class GameBoard {
      * @param eventListener called when a mob die
      */
     public void setBoardEventListener(OnBoardEventListener eventListener) {
-        this.mEventListenerListener = eventListener;
+        this.mEventListener = eventListener;
     }
 
 
@@ -131,19 +133,15 @@ public class GameBoard {
      * met a jour la carte après un tick
      */
     public void update() {
+        if(!started){
+            mEventListener.firstUpdate();
+            started =true;
+        }
+
         this.updateCameraPosition();
 
         for (GameMob mob : Collections.synchronizedList(mMobs)) {
-            if (mob.isDead()) {
-                if (mMobs.size() < 2 && mEventListenerListener != null) {
-                    mEventListenerListener.onAllMobDead(mob.clone());
-                } else {
-                    mEventListenerListener.onMobDeath(mob.clone());
-                }
-                mMobs.remove(mob);
-            } else {
                 mob.update(this);
-            }
         }
         for (Particule particule : Collections.synchronizedList(mParticules)) {
             if (particule.getmAnimationState() < 0) {
@@ -190,6 +188,37 @@ public class GameBoard {
             default:
                 break;
 
+        }
+    }
+
+    public void onMobDeath(GameMob mob){
+        if (mEventListener != null) {
+            mEventListener.onMobCountChange(mMobs.size()-1, eConditions.MOB_DEATH,mob.clone());//FIXME mob.clone ?
+        }
+        mMobs.remove(mob);
+    }
+
+    public void onMobAway(GameMob mob){
+        if (mEventListener != null) {
+            mEventListener.onMobCountChange(mMobs.size()-1, eConditions.MOB_AWAY,mob.clone());
+        }
+        mMobs.remove(mob);
+    }
+
+    public void onNewMob(GameMob mob){
+        if (mEventListener != null) {
+            mEventListener.onMobCountChange(mMobs.size()+1, eConditions.NEW_MOB,mob.clone());
+        }
+        mMobs.add(mob);
+    }
+
+    public void onScore(int score){//FIXME improve score events
+        if (mEventListener != null) {
+            if(score<0) {
+                mEventListener.onScoreMinus(-score);
+            }else{
+                mEventListener.onScorePlus(score);
+            }
         }
     }
 

@@ -25,5 +25,9 @@ public class Constants {
         return new File(context.getFilesDir(), SPRITE_REPO_FOLDER_NAME).getAbsolutePath();
     }
 
+    public static String getLevelId(int world,int lvl){
+        return ""+world+"x"+lvl;
+    }
+
 
 }

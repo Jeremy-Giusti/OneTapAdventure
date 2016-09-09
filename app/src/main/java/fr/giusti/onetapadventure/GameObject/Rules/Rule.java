@@ -5,7 +5,7 @@ package fr.giusti.onetapadventure.GameObject.Rules;
  */
 public class Rule {
     public static final String BOARD_EMPTY_RULE_KEY = "boardEmpty";
-    private eConditionType type;
+    public eConditionType type;
     public eConditions condition;
     private int valueInt = 0;
     private int goalInt = 0;

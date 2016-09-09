@@ -17,7 +17,7 @@ public class GameMob implements Cloneable {
     public RectF mPosition = new RectF();
 
     private int mSpriteCurrentColumn = 0;
- //   private int mSpriteCurrentLine = 0;
+    //   private int mSpriteCurrentLine = 0;
 
     protected Point[] movePattern;
 
@@ -72,7 +72,6 @@ public class GameMob implements Cloneable {
     protected eMobState mState = eMobState.MOVING_UP;
 
 
-
     /**
      * 0-10,10-20,20-30 utilisé pour selectioner les sprite en sequence (joue l'animation)
      */
@@ -110,8 +109,6 @@ public class GameMob implements Cloneable {
         this.mHealth = health;
         this.mState = state;
     }
-
-
 
 
     public String getIdName() {
@@ -153,7 +150,7 @@ public class GameMob implements Cloneable {
         int futureY = (int) mPosition.centerY();
         int futureMove = currentMove;
         for (int i = 0; i < tickInFuture; i++) {
-        //TODO optimizable
+            //TODO optimizable
             futureX += movePattern[futureMove].x * xAlteration;
             futureY += movePattern[futureMove].y * yAlteration;
             if (futureMove < (movePattern.length - 1)) {
@@ -171,7 +168,7 @@ public class GameMob implements Cloneable {
     }
 
     public float getHeight() {
-        return  mPosition.height();
+        return mPosition.height();
     }
 
 
@@ -276,6 +273,11 @@ public class GameMob implements Cloneable {
      * met a jour le mob au terme d'un tick (orientation, position, animation)
      */
     public void update(GameBoard board) {
+
+        if (isDead()) {
+            board.onMobDeath(this);
+            return;
+        }
 
         int deplacementX = (int) (movePattern[currentMove].x * xAlteration);
         int deplacementY = (int) (movePattern[currentMove].y * yAlteration);
@@ -471,15 +473,15 @@ public class GameMob implements Cloneable {
 
     public void resize(float ratio) {
         float oldWidth = getWidth();
-        float newWidth = oldWidth*ratio;
+        float newWidth = oldWidth * ratio;
         float oldHeight = getHeight();
-        float newHeight = oldHeight*ratio;
-        float diffHeight = (newHeight-oldHeight)/2;
-        float diffWidth = (newWidth-oldWidth)/2;
+        float newHeight = oldHeight * ratio;
+        float diffHeight = (newHeight - oldHeight) / 2;
+        float diffWidth = (newWidth - oldWidth) / 2;
 
-        mPosition = new RectF(mPosition.left-diffWidth,mPosition.top-diffHeight,mPosition.right+diffWidth,mPosition.bottom+diffHeight);
+        mPosition = new RectF(mPosition.left - diffWidth, mPosition.top - diffHeight, mPosition.right + diffWidth, mPosition.bottom + diffHeight);
 
-        SpriteRepo.resizeSprites(mBitmapId,(int)getWidth(),(int)getHeight());
+        SpriteRepo.resizeSprites(mBitmapId, (int) getWidth(), (int) getHeight());
     }
 
     public boolean isJustMoving() {
@@ -497,7 +499,7 @@ public class GameMob implements Cloneable {
         SPE1(6),
         SPE2(7);
 
-       public final int index;
+        public final int index;
 
         eMobState(int index) {
             this.index = index;

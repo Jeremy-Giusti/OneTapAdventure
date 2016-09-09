@@ -7,7 +7,11 @@ import android.graphics.Rect;
 import android.util.Pair;
 
 import fr.giusti.onetapadventure.GameObject.GameBoard;
+import fr.giusti.onetapadventure.GameObject.Rules.OnGameEndListener;
+import fr.giusti.onetapadventure.GameObject.Rules.Rule;
 import fr.giusti.onetapadventure.GameObject.Rules.Rules;
+import fr.giusti.onetapadventure.GameObject.Rules.eConditionType;
+import fr.giusti.onetapadventure.GameObject.Rules.eConditions;
 import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapadventure.Repository.Mobs.MobRepo;
 
@@ -44,7 +48,7 @@ public class GameRepo {
         return board;
     }
 
-    public Pair<Rules,GameBoard> generateLvl_1x1(Context context) throws CloneNotSupportedException {
+    public GameBoard generateLvl_1x1(Context context, OnGameEndListener gameListener) throws CloneNotSupportedException {
         new ParticuleRepo().initCache(context);
         String backGameBoard = "background1x1";
         Bitmap fullSizedBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.grid512);//FIXME add true background
@@ -53,14 +57,14 @@ public class GameRepo {
         int boardWidth = fullSizedBackground.getWidth();
         SpriteRepo.addPicture(backGameBoard,fullSizedBackground);
 
-        Rules rules = null;
-        //TODO create Rules and set it as board listener
+        //TODO create mob dispenser and add it to board
         //create mob dispenser
         //add hole to board as immobile neutral mob with collision
-
+        Rules rules = RuleRepo.getLvl_1x1_Rules(gameListener);
         GameBoard board = new GameBoard(MobRepo.getSampleMobList(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight));
         board.resize(mScreenWidth,mScreenHeight);
-        return new Pair<>(rules,board);
+        board.setBoardEventListener(rules);
+        return board;
     }
 
     public GameBoard generateBoardFromBd(String boardId) {

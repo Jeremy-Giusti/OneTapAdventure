@@ -21,9 +21,9 @@ public class Rules implements OnBoardEventListener {
     private OnRuleAccomplishedListener listener;
 
 
-    public Rules(OnRuleAccomplishedListener listener, Rule masterRule, Rule... ruleList) {
-        this.listener = listener;
+    public Rules(Rule masterRule,OnRuleAccomplishedListener ruleAchievedBehavior, Rule... ruleList) {
         this.masterRule = masterRule;
+        this.listener=ruleAchievedBehavior;
         for (eConditions condition : eConditions.values()) {
             indexedRuleList.put(condition, new ArrayList<Rule>());
         }
@@ -43,11 +43,23 @@ public class Rules implements OnBoardEventListener {
         }
     }
 
+    public OnRuleAccomplishedListener getListener() {
+        return listener;
+    }
+
+    public void setListener(OnRuleAccomplishedListener listener) {
+        this.listener = listener;
+    }
+
     private void onRuleAccomplished(Rule rule) {
-        if (rule.equals(masterRule) ) {
-            listener.onRuleAccomplished(rule,timerRule,results);
-        } if (rule.equals(timerRule)){
-            listener.onTimerEnded(rule,timerRule,results);
+        if (rule.equals(masterRule)) {
+            listener.onMasterRuleAccomplished(rule, timerRule, results);
+        }
+        if (rule.equals(timerRule)) {
+            listener.onTimerEnded(rule, timerRule, results);
+        } else if (rule.type == eConditionType.END) {
+            results.add(rule);
+            listener.onGameEnded(rule, timerRule, results);
         } else {
             results.add(rule);
         }
@@ -151,6 +163,21 @@ public class Rules implements OnBoardEventListener {
             rule = conditionRule.get(i);
             if (rule.intCondition) result = rule.checkCondition(1, true);
             else result = rule.checkCondition(mobAway.getIdName());
+            if (result != eConditionType.NULL) {
+                conditionRule.remove(rule);
+                i--;
+                onRuleAccomplished(rule);
+            }
+        }
+    }
+
+    public void onMobCountDown(GameMob mob) {
+        ArrayList<Rule> conditionRule = indexedRuleList.get(eConditions.MOB_COUNTDOWN);
+        Rule rule;
+        eConditionType result;
+        for (int i = 0; i < conditionRule.size(); i++) {
+            rule = conditionRule.get(i);
+            result = rule.checkCondition(1, true);
             if (result != eConditionType.NULL) {
                 conditionRule.remove(rule);
                 i--;

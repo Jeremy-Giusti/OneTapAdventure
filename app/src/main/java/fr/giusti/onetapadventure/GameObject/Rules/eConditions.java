@@ -9,6 +9,7 @@ public enum eConditions {
     SCORE,
     NEW_MOB,
     MOB_COUNT,
+    MOB_COUNTDOWN,
     TIMER;
 
 }
