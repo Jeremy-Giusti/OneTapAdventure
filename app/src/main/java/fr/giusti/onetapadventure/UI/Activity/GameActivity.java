@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import fr.giusti.onetapadventure.GameObject.GameBoard;
-import fr.giusti.onetapadventure.GameObject.GameMob;
+import fr.giusti.onetapadventure.GameObject.Entities.GameMob;
 import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapadventure.Repository.GameRepo;
 import fr.giusti.onetapadventure.UI.CustomView.DrawingView;

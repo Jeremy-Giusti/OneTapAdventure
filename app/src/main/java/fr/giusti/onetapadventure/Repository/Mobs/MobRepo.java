@@ -4,12 +4,13 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.util.Log;
+import android.util.Pair;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import fr.giusti.onetapadventure.GameObject.GameMob;
+import fr.giusti.onetapadventure.GameObject.Entities.GameMob;
 import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapadventure.Repository.DB.ModelConverter;
 import fr.giusti.onetapadventure.Repository.DB.model.MobDB;
@@ -147,4 +148,11 @@ public class MobRepo {
     }
 
 
+    public static CopyOnWriteArrayList<GameMob> getLvl1x1InitList() {
+        return null;
+    }
+
+    public static Pair<Integer, GameMob> getLvl1x1BackupList() {
+        return null;
+    }
 }

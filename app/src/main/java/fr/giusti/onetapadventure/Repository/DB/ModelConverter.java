@@ -3,7 +3,7 @@ package fr.giusti.onetapadventure.Repository.DB;
 import android.graphics.Point;
 
 import fr.giusti.onetapadventure.GameObject.GameBoard;
-import fr.giusti.onetapadventure.GameObject.GameMob;
+import fr.giusti.onetapadventure.GameObject.Entities.GameMob;
 import fr.giusti.onetapadventure.Repository.DB.model.BoardDB;
 import fr.giusti.onetapadventure.Repository.DB.model.MobDB;
 import fr.giusti.onetapadventure.Repository.DB.model.PathDB;

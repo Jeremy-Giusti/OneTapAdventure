@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import fr.giusti.onetapadventure.GameObject.GameBoard;
-import fr.giusti.onetapadventure.GameObject.GameMob;
-import fr.giusti.onetapadventure.GameObject.Particule;
+import fr.giusti.onetapadventure.GameObject.Entities.GameMob;
+import fr.giusti.onetapadventure.GameObject.Entities.Particule;
 import fr.giusti.onetapadventure.GameObject.moves.TouchedMove;
 
 /**
@@ -19,6 +19,7 @@ public class TouchedMoveRepo {
     public static final String BLEED = "bleed";
     public static final String HEAL = "heal";
     public static final String BAIT = "bait";
+    public static final String MOB_AWAY_MOVE = "mob_away";
 
 
     public static TouchedMove default_touched_move = new TouchedMove() {
@@ -139,6 +140,20 @@ public class TouchedMoveRepo {
             return BAIT;
         }
     };
+
+
+    public static TouchedMove mobAwayMove = new TouchedMove() {
+        @Override
+        public void doTouchedMove(GameBoard board, GameMob currentMob, Point touchPoint) {
+           board.onMobAway(currentMob);
+        }
+
+        @Override
+        public String getId() {
+            return MOB_AWAY_MOVE;
+        }
+    };
+
 
     private final static HashMap<String, TouchedMove> touchedMoveList;
 

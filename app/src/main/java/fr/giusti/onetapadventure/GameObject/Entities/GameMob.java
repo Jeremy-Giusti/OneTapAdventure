@@ -1,4 +1,4 @@
-package fr.giusti.onetapadventure.GameObject;
+package fr.giusti.onetapadventure.GameObject.Entities;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -6,25 +6,20 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.RectF;
 
+import fr.giusti.onetapadventure.GameObject.GameBoard;
 import fr.giusti.onetapadventure.GameObject.moves.SpecialMove;
 import fr.giusti.onetapadventure.GameObject.moves.TouchedMove;
 import fr.giusti.onetapadventure.Repository.SpriteRepo;
 import fr.giusti.onetapadventure.commons.Constants;
 
-public class GameMob implements Cloneable {
+public class GameMob extends GameBoardEntity {
     private static final String TAG = GameMob.class.getName();
 
-    public RectF mPosition = new RectF();
 
     private int mSpriteCurrentColumn = 0;
     //   private int mSpriteCurrentLine = 0;
 
     protected Point[] movePattern;
-
-    /**
-     * unique mob id
-     */
-    private String idName;
 
     /**
      * alignement of the mob, used to differenciate teams
@@ -55,11 +50,6 @@ public class GameMob implements Cloneable {
     protected int currentMove = 0;
 
     /**
-     * id de la spriteSheet dans le repo
-     */
-    private String mBitmapId;
-
-    /**
      * mob life
      */
     private int mHealth = 1;
@@ -87,37 +77,23 @@ public class GameMob implements Cloneable {
      * @param state       l'etat du mob (inutilisé pour le moment)
      */
     public GameMob(String idName, int x, int y, int width, int height, Point[] movePattern, SpecialMove specialMove1, TouchedMove touchedmove, String mBitmapId, int health, int state) {
-        super();
-        this.idName = idName;
-        mPosition.set(x, y, x + width, y + height);
+        super(idName,x,y,width,height,mBitmapId);
         this.movePattern = movePattern;
         this.mSpecialMove1 = specialMove1;
         this.mTouchedMove = touchedmove;
-        this.mBitmapId = mBitmapId;
         this.mHealth = health;
         this.mState = eMobState.values()[state];
     }
 
     public GameMob(String idName, int x, int y, int width, int height, Point[] movePattern, SpecialMove specialMove1, TouchedMove touchedmove, String mBitmapId, int health, eMobState state) {
-        super();
-        this.idName = idName;
-        mPosition.set(x, y, x + width, y + height);
+        super(idName,x,y,width,height,mBitmapId);
         this.movePattern = movePattern;
         this.mSpecialMove1 = specialMove1;
         this.mTouchedMove = touchedmove;
-        this.mBitmapId = mBitmapId;
         this.mHealth = health;
         this.mState = state;
     }
 
-
-    public String getIdName() {
-        return idName;
-    }
-
-    public void setIdName(String idName) {
-        this.idName = idName;
-    }
 
     public int getAlignement() {
         return alignement;
@@ -127,17 +103,6 @@ public class GameMob implements Cloneable {
         this.alignement = alignement;
     }
 
-    public RectF getPosition() {
-        return mPosition;
-    }
-
-    public int getPositionX() {
-        return (int) (mPosition.left);
-    }
-
-    public int getPositionY() {
-        return (int) (mPosition.top);
-    }
 
     /**
      * methode potentielement lourde
@@ -163,22 +128,6 @@ public class GameMob implements Cloneable {
         return new Point(futureX, futureY);
     }
 
-    public float getWidth() {
-        return mPosition.width();
-    }
-
-    public float getHeight() {
-        return mPosition.height();
-    }
-
-
-    public void setPosition(RectF position) {
-        this.mPosition = position;
-    }
-
-    public void setPositionFromXY(int x, int y) {
-        mPosition.offsetTo(x, y);
-    }
 
     public SpecialMove getmSpecialMove1() {
         return mSpecialMove1;
@@ -210,20 +159,6 @@ public class GameMob implements Cloneable {
 
     public void setyAlteration(double yAlteration) {
         this.yAlteration = yAlteration;
-    }
-
-    /**
-     * @return id du skin du mob (voir {@link SpriteRepo})
-     */
-    public String getBitmapId() {
-        return mBitmapId;
-    }
-
-    /**
-     * @param mBitmapId id du skin du mob (voir {@link SpriteRepo})
-     */
-    public void setBitmapId(String mBitmapId) {
-        this.mBitmapId = mBitmapId;
     }
 
     public int getHealth() {
@@ -272,6 +207,7 @@ public class GameMob implements Cloneable {
     /**
      * met a jour le mob au terme d'un tick (orientation, position, animation)
      */
+    @Override
     public void update(GameBoard board) {
 
         if (isDead()) {
@@ -392,11 +328,12 @@ public class GameMob implements Cloneable {
      * @param canvas
      * @param mBrush
      */
+    @Override
     public void draw(Canvas canvas, Paint mBrush) {
         if (mBitmapId != null) {
 
-            RectF rectPositionOnScreen = new RectF(mPosition);
-            rectPositionOnScreen.offsetTo(mPosition.left, mPosition.top);
+            //RectF rectPositionOnScreen = new RectF(mPosition);
+//            rectPositionOnScreen.offsetTo(mPosition.left, mPosition.top);
             canvas.drawBitmap(SpriteRepo.getSpriteBitmap(mBitmapId, mSpriteCurrentColumn, mState.index), null, mPosition, mBrush);
 
         }
@@ -471,6 +408,7 @@ public class GameMob implements Cloneable {
 
     }
 
+    @Override
     public void resize(float ratio) {
         float oldWidth = getWidth();
         float newWidth = oldWidth * ratio;

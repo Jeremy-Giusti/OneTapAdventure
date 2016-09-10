@@ -3,7 +3,7 @@ package fr.giusti.onetapadventure.GameObject.moves;
 import android.graphics.Point;
 
 import fr.giusti.onetapadventure.GameObject.GameBoard;
-import fr.giusti.onetapadventure.GameObject.GameMob;
+import fr.giusti.onetapadventure.GameObject.Entities.GameMob;
 
 /**
  * Created by giusti on 30/03/2015.

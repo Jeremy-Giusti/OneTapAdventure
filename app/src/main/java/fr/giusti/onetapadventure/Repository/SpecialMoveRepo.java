@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import fr.giusti.onetapadventure.GameObject.GameBoard;
-import fr.giusti.onetapadventure.GameObject.GameMob;
-import fr.giusti.onetapadventure.GameObject.Particule;
+import fr.giusti.onetapadventure.GameObject.Entities.GameMob;
+import fr.giusti.onetapadventure.GameObject.Entities.Particule;
 import fr.giusti.onetapadventure.GameObject.moves.SpecialMove;
 import fr.giusti.onetapadventure.commons.Constants;
 

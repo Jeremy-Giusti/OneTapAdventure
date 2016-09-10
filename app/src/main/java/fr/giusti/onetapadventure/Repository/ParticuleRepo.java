@@ -8,7 +8,7 @@ import android.graphics.RectF;
 
 import java.util.HashMap;
 
-import fr.giusti.onetapadventure.GameObject.Particule;
+import fr.giusti.onetapadventure.GameObject.Entities.Particule;
 import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapadventure.commons.Constants;
 

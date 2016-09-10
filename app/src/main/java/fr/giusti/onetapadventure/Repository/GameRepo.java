@@ -13,6 +13,7 @@ import fr.giusti.onetapadventure.GameObject.Rules.Rules;
 import fr.giusti.onetapadventure.GameObject.Rules.eConditionType;
 import fr.giusti.onetapadventure.GameObject.Rules.eConditions;
 import fr.giusti.onetapadventure.R;
+import fr.giusti.onetapadventure.Repository.Mobs.MobDispenserRepo;
 import fr.giusti.onetapadventure.Repository.Mobs.MobRepo;
 
 public class GameRepo {
@@ -61,7 +62,7 @@ public class GameRepo {
         //create mob dispenser
         //add hole to board as immobile neutral mob with collision
         Rules rules = RuleRepo.getLvl_1x1_Rules(gameListener);
-        GameBoard board = new GameBoard(MobRepo.getSampleMobList(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight));
+        GameBoard board = new GameBoard(MobDispenserRepo.getLvl1_1MobDispenser(), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight));
         board.resize(mScreenWidth,mScreenHeight);
         board.setBoardEventListener(rules);
         return board;

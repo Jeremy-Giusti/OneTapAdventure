@@ -1,6 +1,6 @@
 package fr.giusti.onetapadventure.callback;
 
-import fr.giusti.onetapadventure.GameObject.GameMob;
+import fr.giusti.onetapadventure.GameObject.Entities.GameMob;
 import fr.giusti.onetapadventure.GameObject.Rules.eConditions;
 
 public interface OnBoardEventListener {

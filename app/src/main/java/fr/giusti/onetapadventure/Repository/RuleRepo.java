@@ -48,21 +48,22 @@ public class RuleRepo {
      * @param gameEndListener
      * @return
      */
+    //TODO
     private static OnRuleAccomplishedListener getDefaultBehavior(OnGameEndListener gameEndListener){
         return new OnRuleAccomplishedListener() {
             @Override
             public void onMasterRuleAccomplished(Rule masterRule, Rule timerRule, ArrayList<Rule> secondaries) {
-                //TODO
+                //to implement
             }
 
             @Override
             public void onTimerEnded(Rule masterRule, Rule timerRule, ArrayList<Rule> secondaries) {
-                //TODO
+                //to implement
             }
 
             @Override
             public void onGameEnded(Rule masterRule, Rule timerRule, ArrayList<Rule> secondaries) {
-                //TODO
+                //to implement
             }
         };
 

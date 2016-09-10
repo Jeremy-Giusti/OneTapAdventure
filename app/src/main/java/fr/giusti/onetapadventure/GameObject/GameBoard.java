@@ -12,7 +12,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import fr.giusti.onetapadventure.GameObject.Entities.GameMob;
+import fr.giusti.onetapadventure.GameObject.Entities.Particule;
 import fr.giusti.onetapadventure.GameObject.Rules.eConditions;
+import fr.giusti.onetapadventure.Repository.Mobs.MobDispenser;
 import fr.giusti.onetapadventure.Repository.SpriteRepo;
 import fr.giusti.onetapadventure.callback.OnBoardEventListener;
 import fr.giusti.onetapadventure.commons.Constants;
@@ -22,6 +25,7 @@ import fr.giusti.onetapadventure.commons.Constants;
  * gere les evenement lié au jeu (update on tick/on touch/...)
  */
 public class GameBoard {
+    private MobDispenser mMobDisp;
     private CopyOnWriteArrayList<GameMob> mMobs = new CopyOnWriteArrayList<GameMob>();
     private CopyOnWriteArrayList<Particule> mParticules = new CopyOnWriteArrayList<Particule>();
     private CopyOnWriteArrayList<TouchPoint> mTouchPoints = new CopyOnWriteArrayList<TouchPoint>();
@@ -55,6 +59,19 @@ public class GameBoard {
     public GameBoard(CopyOnWriteArrayList<GameMob> mobs, String backgroundBitmapId, int boardWidth, int boardHeight, Rect drawedBounds) {
         super();
         this.mMobs = mobs;
+        this.mBackgroundBitmapId = backgroundBitmapId;
+        mCameraBound = drawedBounds;
+        mBoardBounds = new Rect(0, 0, boardWidth, boardHeight);
+    }
+
+    /**
+     * @param mobsDisp               les entité mobile qui seront presente sur la carte
+     * @param backgroundBitmapId l'image de fond
+     */
+    public GameBoard(MobDispenser mobsDisp, String backgroundBitmapId, int boardWidth, int boardHeight, Rect drawedBounds) {
+        super();
+        this.mMobDisp = mobsDisp;
+        this.mMobs = mobsDisp.getInitialList();
         this.mBackgroundBitmapId = backgroundBitmapId;
         mCameraBound = drawedBounds;
         mBoardBounds = new Rect(0, 0, boardWidth, boardHeight);
@@ -158,6 +175,10 @@ public class GameBoard {
                 touch.update();
             }
 
+        }
+
+        if(mMobDisp!=null){
+            mMobDisp.onTick(this);
         }
     }
 

@@ -1,12 +1,11 @@
-package fr.giusti.onetapadventure.GameObject;
+package fr.giusti.onetapadventure.GameObject.Entities;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.graphics.RectF;
-import android.util.Log;
 
+import fr.giusti.onetapadventure.GameObject.GameBoard;
 import fr.giusti.onetapadventure.Repository.SpriteRepo;
 import fr.giusti.onetapadventure.commons.Constants;
 
@@ -14,19 +13,14 @@ import fr.giusti.onetapadventure.commons.Constants;
  * Particule are only graphicale element, they cannot interact with anything (they are result of actions, and can't be a cause)
  * Created by giusti on 20/03/2015.
  */
-public class Particule implements Cloneable {
+public class Particule extends GameBoardEntity {
 
     private static final String TAG = Particule.class.getName();
-    /**
-     * unique Particule id
-     */
-    protected String name;
 
     /**
      * portion of sprite to use
      */
     protected int mSpirteColumn = 0;
-    public RectF mPosition = new RectF();
     /**
      * path if the particule move
      */
@@ -38,44 +32,22 @@ public class Particule implements Cloneable {
      */
     protected int currentMove = 0;
 
-    /**
-     * id de la spriteSheet dans le repo
-     */
-    protected String mBitmapId;
-
     protected boolean animationReversed = false;
 
-    protected boolean infinite=false;
-
+    protected boolean infinite = false;
 
 
     public Particule(String name, int x, int y, int width, int height, Point[] movePattern, String mBitmapId, boolean reverseAnimation, boolean infinite) {
-        this.name = name;
-        this.mPosition.set(x, y, x + width, y + height);
+
+        super(name, x, y, width, height, mBitmapId);
         this.movePattern = movePattern;
-        this.mBitmapId = mBitmapId;
         this.animationReversed = reverseAnimation;
-        this.infinite=infinite;
+        this.infinite = infinite;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public RectF getmPosition() {
         return mPosition;
-    }
-
-    public float getPositionX(){
-        return mPosition.centerX();
-    }
-
-    public float getPositionY(){
-        return mPosition.centerY();
     }
 
     public void setmPosition(RectF mPosition) {
@@ -110,14 +82,6 @@ public class Particule implements Cloneable {
         this.currentMove = currentMove;
     }
 
-    public String getmBitmapId() {
-        return mBitmapId;
-    }
-
-    public void setmBitmapId(String mBitmapId) {
-        this.mBitmapId = mBitmapId;
-    }
-
     public boolean isAnimationReversed() {
         return animationReversed;
     }
@@ -129,7 +93,8 @@ public class Particule implements Cloneable {
     /**
      * met a jour le mob au terme d'un tick (orientation, position, animation)
      */
-    public void update() {
+    @Override
+    public void update(GameBoard board) {
         move();
         //TODO map collision ?
         updateSprite();
@@ -151,7 +116,7 @@ public class Particule implements Cloneable {
     private void updateSprite() {
         // check l'etat du mob et son stade dans l'animation
         if (mAnimationState >= Constants.PARTICULE_COMPLETE_ANIMATION_DURATION || mAnimationState == -1) {
-            mAnimationState = (infinite) ?  0 : -1;
+            mAnimationState = (infinite) ? 0 : -1;
         } else {
             if (animationReversed) {
                 this.mSpirteColumn = (int) (((Constants.PARTICULE_COMPLETE_ANIMATION_DURATION - 1) - mAnimationState) / Constants.FRAME_DURATION);
@@ -169,12 +134,16 @@ public class Particule implements Cloneable {
      * @param canvas
      * @param mBrush
      */
+    @Override
     public void draw(Canvas canvas, Paint mBrush) {
-        //RectF rectPositionOnScreen = new RectF(mPosition);
-        //da fuck
-       // rectPositionOnScreen.offsetTo(mPosition.left, mPosition.top);
+
         canvas.drawBitmap(SpriteRepo.getSpriteBitmap(mBitmapId, mSpirteColumn, 0), null, mPosition, mBrush);
 
+    }
+
+    @Override
+    public void resize(float ratio) {
+        //? no need ?
     }
 
     @Override
@@ -185,7 +154,7 @@ public class Particule implements Cloneable {
             cloneMovePattern[i] = new Point(movePattern[i].x, movePattern[i].y);
         }
         clone = new Particule(
-                name,
+                idName,
                 (int) mPosition.left,
                 (int) mPosition.top,
                 (int) mPosition.width(),
@@ -196,13 +165,6 @@ public class Particule implements Cloneable {
                 infinite);
         return clone;
 
-
-//        try {
-//            return (Particule) super.clone();
-//        } catch (CloneNotSupportedException e) {
-//           Log.e(TAG, "cloneNotSupported: " + e);
-//        }
-//        return null;
     }
 
 

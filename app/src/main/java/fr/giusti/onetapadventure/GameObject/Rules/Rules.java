@@ -5,7 +5,7 @@ import android.os.Handler;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import fr.giusti.onetapadventure.GameObject.GameMob;
+import fr.giusti.onetapadventure.GameObject.Entities.GameMob;
 import fr.giusti.onetapadventure.callback.OnBoardEventListener;
 import fr.giusti.onetapadventure.callback.OnRuleAccomplishedListener;
 
