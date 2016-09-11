@@ -3,6 +3,8 @@ package fr.giusti.onetapadventure.Repository.Mobs;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Log;
 import android.util.Pair;
 
@@ -10,7 +12,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import fr.giusti.onetapadventure.GameObject.Entities.GameBoardEntity;
 import fr.giusti.onetapadventure.GameObject.Entities.GameMob;
+import fr.giusti.onetapadventure.GameObject.Entities.Scenery;
 import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapadventure.Repository.DB.ModelConverter;
 import fr.giusti.onetapadventure.Repository.DB.model.MobDB;
@@ -148,7 +152,14 @@ public class MobRepo {
     }
 
 
-    public static CopyOnWriteArrayList<GameMob> getLvl1x1InitList() {
+    public static CopyOnWriteArrayList<GameBoardEntity> getLvl1x1InitList(Context context) {
+        String bitmapId = "hole1pict";
+        SpriteRepo.addPicture(bitmapId,BitmapFactory.decodeResource(context.getResources(), R.drawable.brokenglass_front));
+        TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
+        RectF hitbox = new RectF(326,132,392,272);
+        Scenery hole1 = new Scenery("holes1",263,64,266,263,hitbox,touchedMoveRepo.getMoveById(TouchedMoveRepo.MOB_AWAY_MOVE),bitmapId);
+
+        
         return null;
     }
 
