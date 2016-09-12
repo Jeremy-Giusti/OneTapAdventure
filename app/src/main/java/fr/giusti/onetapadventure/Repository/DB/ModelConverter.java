@@ -1,14 +1,14 @@
-package fr.giusti.onetapadventure.Repository.DB;
+package fr.giusti.onetapadventure.repository.DB;
 
 import android.graphics.Point;
 
-import fr.giusti.onetapadventure.GameObject.GameBoard;
-import fr.giusti.onetapadventure.GameObject.Entities.GameMob;
-import fr.giusti.onetapadventure.Repository.DB.model.BoardDB;
-import fr.giusti.onetapadventure.Repository.DB.model.MobDB;
-import fr.giusti.onetapadventure.Repository.DB.model.PathDB;
-import fr.giusti.onetapadventure.Repository.SpecialMoveRepo;
-import fr.giusti.onetapadventure.Repository.TouchedMoveRepo;
+import fr.giusti.onetapadventure.gameObject.GameBoard;
+import fr.giusti.onetapadventure.gameObject.entities.GameMob;
+import fr.giusti.onetapadventure.repository.DB.model.BoardDB;
+import fr.giusti.onetapadventure.repository.DB.model.MobDB;
+import fr.giusti.onetapadventure.repository.DB.model.PathDB;
+import fr.giusti.onetapadventure.repository.SpecialMoveRepo;
+import fr.giusti.onetapadventure.repository.TouchedMoveRepo;
 
 /**
  * Created by giusti on 17/03/2015.

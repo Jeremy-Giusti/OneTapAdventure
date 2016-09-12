@@ -1,9 +1,9 @@
-package fr.giusti.onetapadventure.GameObject.moves;
+package fr.giusti.onetapadventure.gameObject.moves;
 
 import android.graphics.Point;
 
-import fr.giusti.onetapadventure.GameObject.GameBoard;
-import fr.giusti.onetapadventure.GameObject.Entities.GameMob;
+import fr.giusti.onetapadventure.gameObject.GameBoard;
+import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 
 /**
  * Created by giusti on 30/03/2015.

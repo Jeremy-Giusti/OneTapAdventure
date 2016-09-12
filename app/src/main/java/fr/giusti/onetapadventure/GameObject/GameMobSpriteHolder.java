@@ -1,4 +1,4 @@
-package fr.giusti.onetapadventure.GameObject;
+package fr.giusti.onetapadventure.gameObject;
 
 import android.graphics.Bitmap;
 import android.graphics.Point;

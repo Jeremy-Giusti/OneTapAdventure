@@ -1,14 +1,13 @@
-package fr.giusti.onetapadventure.Repository;
+package fr.giusti.onetapadventure.repository;
+
+import android.graphics.Point;
+import android.graphics.PointF;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import android.graphics.Point;
-
 public class PathRepo {
 
-    // TODO methode stairs ?
-    // others ? ameliorer le random ?
 
 
     /**
@@ -19,14 +18,14 @@ public class PathRepo {
      * @param Yalteration  multiplicator for Y move
      * @return a new altered subPath
      */
-    public Point[] generateSubPath(Point[] originalPath, int start, int end, int Xalteration, int Yalteration) {
+    public static PointF[] generateSubPath(PointF[] originalPath, int start, int end, int Xalteration, int Yalteration) {
         if (start < 0) {
             return null;
         }
 
-        Point[] result = (end < originalPath.length) ? new Point[end - start] : new Point[originalPath.length - start];
+        PointF[] result = (end < originalPath.length) ? new PointF[end - start] : new PointF[originalPath.length - start];
         for (int i = start; i < end && i < originalPath.length; i++) {
-            result[i] = new Point(originalPath[i].x * Xalteration, originalPath[i].y * Yalteration);
+            result[i] = new PointF(originalPath[i].x * Xalteration, originalPath[i].y * Yalteration);
         }
         return result;
     }
@@ -39,10 +38,10 @@ public class PathRepo {
      * @param unscaledPath
      * @return
      */
-    public Point[] createScalePath(double definitiveRatio, Point[] unscaledPath) {
-        Point[] scaledPath = new Point[unscaledPath.length];
+    public static PointF[] createScalePath(double definitiveRatio, PointF[] unscaledPath) {
+        PointF[] scaledPath = new PointF[unscaledPath.length];
         for (int i = 0; i < unscaledPath.length; i++) {
-            scaledPath[i] = new Point((int) (unscaledPath[i].x * definitiveRatio), (int) (unscaledPath[i].y * definitiveRatio));
+            scaledPath[i] = new PointF((int) (unscaledPath[i].x * definitiveRatio), (int) (unscaledPath[i].y * definitiveRatio));
         }
         return scaledPath;
     }
@@ -55,12 +54,87 @@ public class PathRepo {
      * @param ySpeed
      * @return
      */
-    public Point[] generateLinePath(int pathLength, int xSpeed, int ySpeed) {
-        Point[] returnPath = new Point[pathLength];
+    public static PointF[] generateLinePath(int pathLength, int xSpeed, int ySpeed) {
+        PointF[] returnPath = new PointF[pathLength];
 
         for (int i = 0; i < pathLength; i++) {
-            returnPath[i] = new Point(xSpeed, ySpeed);
+            returnPath[i] = new PointF(xSpeed, ySpeed);
         }
+
+        return returnPath;
+    }
+
+    /**
+     * generate a line path accelerating linearly over time
+     *
+     * @param pathLength
+     * @param accelerationFactor if below 1 will decelerate, if <0 funny things happens (vibrate ?)
+     * @param xInitialSpeed
+     * @param yInitialSpeed
+     * @return
+     */
+    public static PointF[] generateAcceleratingLinePath(int pathLength, int xInitialSpeed, int yInitialSpeed, float accelerationFactor) {
+        PointF[] returnPath = new PointF[pathLength];
+        float accelerator = 1;
+        for (int i = 0; i < pathLength; i++) {
+            returnPath[i] = new PointF((int)(xInitialSpeed*accelerator),(int)(yInitialSpeed*accelerator));
+            accelerator = (accelerator*accelerationFactor);
+        }
+
+        return returnPath;
+    }
+
+
+    /**
+     * generate a linear path leading to dest
+     * @param startingPosition
+     * @param destination
+     * @param speed will be split between xspeed and yspeed
+     * @return
+     */
+    public static PointF[] generateLineToDest(Point startingPosition,Point destination, int speed) {
+        ArrayList<PointF> returnPath = new ArrayList<>();
+        int xRemaining = destination.x - startingPosition.x;
+        int yRemaining = destination.y - startingPosition.y;
+        float xspeed = speed * xRemaining/(xRemaining+yRemaining);
+        float yspeed =  speed * yRemaining/(xRemaining+yRemaining);
+        Point position = new Point(startingPosition.x,startingPosition.y);
+        while((! position.equals(destination.x,destination.y))){
+
+
+            returnPath.add(new PointF(xspeed,yspeed));
+
+            position.x +=xspeed;
+            position.y +=yspeed;
+
+            xRemaining = destination.x - position.x;
+            yRemaining = destination.y - position.y;
+
+            xspeed = speed * xRemaining/(xRemaining+yRemaining);
+            yspeed =  speed * yRemaining/(xRemaining+yRemaining);
+
+            if(Math.abs(xspeed)<Math.abs(xRemaining) ||Math.abs(yspeed)<Math.abs(yRemaining) ){
+                xspeed=xRemaining;
+                yspeed=yRemaining;
+            }
+
+
+        }
+
+        return returnPath.toArray(new PointF[returnPath.size()]);
+    }
+
+
+    public static Point[] generateRandomPathToDestination(Point startingPosition,Point destination, int speed, int segmentNb) {
+       ArrayList<Point> returnPath = new ArrayList<>();
+        Point position = new Point(startingPosition.x,startingPosition.y);
+       while(! position.equals(destination.x,destination.y)){
+           boolean
+           int xDirection = destination.x - position.x;
+           int yDirection = destination.y - position.y;
+
+
+       }
 
         return returnPath;
     }
@@ -75,7 +149,7 @@ public class PathRepo {
      * @param yCurve
      * @return
      */
-    public Point[] generateCurvedPath(int pathLength, int xSpeed, int ySpeed, int xCurve, int yCurve) {
+    public static Point[] generateCurvedPath(int pathLength, int xSpeed, int ySpeed, int xCurve, int yCurve) {
         Point[] returnPath = new Point[pathLength];
         int xCurrentCurve = 0;
         int yCurrentCurve = 0;
@@ -100,7 +174,7 @@ public class PathRepo {
      * @param yCurve
      * @return
      */
-    public Point[] generateLoopedPath(int pathLength, Point secondHalfSpeedCompensation, Point FirstHalfSpeedXY, int xCurve, int yCurve) {
+    public static Point[] generateLoopedPath(int pathLength, Point secondHalfSpeedCompensation, Point FirstHalfSpeedXY, int xCurve, int yCurve) {
         ArrayList<Point> returnPath = new ArrayList<Point>();
 
         int pathLength1half = pathLength / 2;
@@ -124,7 +198,7 @@ public class PathRepo {
      * @param subPathLengthMax   the max size a of each subPath
      * @return
      */
-    public Point[] generateRandomPath(int pathLength, int variationSpeedXMax, int variationSpeedYMax, int xCurveMax, int yCurveMax, int subPathLengthMax) {
+    public static Point[] generateRandomPath(int pathLength, int variationSpeedXMax, int variationSpeedYMax, int xCurveMax, int yCurveMax, int subPathLengthMax) {
         ArrayList<Point> returnPath = new ArrayList<Point>();
         int filledPath = 0;
         while (filledPath < pathLength) {
@@ -164,7 +238,7 @@ public class PathRepo {
      * @param factorSpeed  how much faster the portion will be (must be an int > 0)
      * @return a shorter/faster path than the original
      */
-    public Point[] speedUpPortionOfPath(Point[] originPath, int startSpeedUp, int endSpeedUp, int factorSpeed) {
+    public static Point[] speedUpPortionOfPath(Point[] originPath, int startSpeedUp, int endSpeedUp, int factorSpeed) {
         ArrayList<Point> returnPath = new ArrayList<Point>();
 
         for (int i = 0; i < originPath.length; i++) {
@@ -193,7 +267,7 @@ public class PathRepo {
      * @param slowingFactor  how much faster the portion will be (must be an int > 0)
      * @return a longer/slower path than the original
      */
-    public Point[] speedDownPortionOfPath(Point[] originPath, int startSpeedDown, int endSpeedDown, int slowingFactor) {
+    public static Point[] speedDownPortionOfPath(Point[] originPath, int startSpeedDown, int endSpeedDown, int slowingFactor) {
         ArrayList<Point> returnPath = new ArrayList<Point>();
 
         for (int i = 0; i < originPath.length; i++) {
@@ -220,7 +294,7 @@ public class PathRepo {
      * @param pathsToMerge
      * @return
      */
-    public Point[] mergePaths(Point[]... pathsToMerge) {
+    public static Point[] mergePaths(Point[]... pathsToMerge) {
         ArrayList<Point> returnPath = new ArrayList<Point>();
         for (Point[] singlePath : pathsToMerge) {
             for (Point point : singlePath) {

@@ -1,9 +1,8 @@
-package fr.giusti.onetapadventure.Repository.Mobs;
+package fr.giusti.onetapadventure.repository.entities;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
 import android.util.Pair;
@@ -12,19 +11,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import fr.giusti.onetapadventure.GameObject.Entities.GameBoardEntity;
-import fr.giusti.onetapadventure.GameObject.Entities.GameMob;
-import fr.giusti.onetapadventure.GameObject.Entities.Scenery;
+import fr.giusti.onetapadventure.gameObject.entities.Entity;
+import fr.giusti.onetapadventure.gameObject.entities.GameMob;
+import fr.giusti.onetapadventure.gameObject.entities.Scenery;
 import fr.giusti.onetapadventure.R;
-import fr.giusti.onetapadventure.Repository.DB.ModelConverter;
-import fr.giusti.onetapadventure.Repository.DB.model.MobDB;
-import fr.giusti.onetapadventure.Repository.DB.model.PathDB;
-import fr.giusti.onetapadventure.Repository.DB.persister.MobPersister;
-import fr.giusti.onetapadventure.Repository.DB.persister.PathPersister;
-import fr.giusti.onetapadventure.Repository.PathRepo;
-import fr.giusti.onetapadventure.Repository.SpecialMoveRepo;
-import fr.giusti.onetapadventure.Repository.SpriteRepo;
-import fr.giusti.onetapadventure.Repository.TouchedMoveRepo;
+import fr.giusti.onetapadventure.repository.DB.ModelConverter;
+import fr.giusti.onetapadventure.repository.DB.model.MobDB;
+import fr.giusti.onetapadventure.repository.DB.model.PathDB;
+import fr.giusti.onetapadventure.repository.DB.persister.MobPersister;
+import fr.giusti.onetapadventure.repository.DB.persister.PathPersister;
+import fr.giusti.onetapadventure.repository.PathRepo;
+import fr.giusti.onetapadventure.repository.SpecialMoveRepo;
+import fr.giusti.onetapadventure.repository.SpriteRepo;
+import fr.giusti.onetapadventure.repository.TouchedMoveRepo;
 import fr.giusti.onetapadventure.commons.Constants;
 
 public class MobRepo {
@@ -42,8 +41,6 @@ public class MobRepo {
 
         CopyOnWriteArrayList<GameMob> returnList = new CopyOnWriteArrayList<GameMob>();
 
-        PathRepo pathRepo = new PathRepo();
-
         String bitmapId = "spritesheetTest";
         SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.fly_spritesheet), bitmapId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
         String bitmapId2 = "spritesheetTest2";
@@ -53,16 +50,16 @@ public class MobRepo {
         String bitmapId4 = "spritesheetTest4";
         SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.fly_spritesheet4), bitmapId4, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
         //work
-        Point[] mob1Pattern = pathRepo.mergePaths(pathRepo.generateCurvedPath(20, 7, 0, 0, 5), pathRepo.generateCurvedPath(20, 7, 0, 0, -5));
+        Point[] mob1Pattern = PathRepo.mergePaths(PathRepo.generateCurvedPath(20, 7, 0, 0, 5), PathRepo.generateCurvedPath(20, 7, 0, 0, -5));
         //work
-        Point[] mob2Pattern = pathRepo.generateLinePath(20, 5, 3);
+        Point[] mob2Pattern = PathRepo.generateLinePath(20, 5, 3);
         //work
-        Point[] mob3Pattern = pathRepo.speedDownPortionOfPath(pathRepo.generateLinePath(20, 5, 7), 6, 15, 2);
+        Point[] mob3Pattern = PathRepo.speedDownPortionOfPath(PathRepo.generateLinePath(20, 5, 7), 6, 15, 2);
         //work
         //work (not perfectly but still)
-        Point[] mob5Pattern = pathRepo.generateLoopedPath(Constants.FRAME_PER_SEC, new Point(0, 0), new Point(0, 5), 7, 0);//un tour a la seconde
+        Point[] mob5Pattern = PathRepo.generateLoopedPath(Constants.FRAME_PER_SEC, new Point(0, 0), new Point(0, 5), 7, 0);//un tour a la seconde
         //seems to work
-        Point[] mob6Pattern = pathRepo.generateRandomPath(100, 5, 5, 15, 15, 25);
+        Point[] mob6Pattern = PathRepo.generateRandomPath(100, 5, 5, 15, 15, 25);
 
         SpecialMoveRepo moveRepo = new SpecialMoveRepo();
         TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
@@ -152,14 +149,21 @@ public class MobRepo {
     }
 
 
-    public static CopyOnWriteArrayList<GameBoardEntity> getLvl1x1InitList(Context context) {
+    public static ArrayList<Entity> getLvl1x1InitList(Context context) {
+        ArrayList<Entity> entityList = new ArrayList<>();
+
         String bitmapId = "hole1pict";
         SpriteRepo.addPicture(bitmapId,BitmapFactory.decodeResource(context.getResources(), R.drawable.brokenglass_front));
         TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
         RectF hitbox = new RectF(326,132,392,272);
         Scenery hole1 = new Scenery("holes1",263,64,266,263,hitbox,touchedMoveRepo.getMoveById(TouchedMoveRepo.MOB_AWAY_MOVE),bitmapId);
+        entityList.add(hole1);
 
-        
+        String mob1sptsheetId = "mob1";
+        SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet), mob1sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+
+
+
         return null;
     }
 

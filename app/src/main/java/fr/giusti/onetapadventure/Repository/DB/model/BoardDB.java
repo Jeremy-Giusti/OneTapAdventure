@@ -1,4 +1,4 @@
-package fr.giusti.onetapadventure.Repository.DB.model;
+package fr.giusti.onetapadventure.repository.DB.model;
 
 import android.graphics.Rect;
 import android.provider.BaseColumns;

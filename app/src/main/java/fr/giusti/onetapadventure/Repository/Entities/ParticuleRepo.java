@@ -1,4 +1,4 @@
-package fr.giusti.onetapadventure.Repository;
+package fr.giusti.onetapadventure.repository.entities;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,9 +8,10 @@ import android.graphics.RectF;
 
 import java.util.HashMap;
 
-import fr.giusti.onetapadventure.GameObject.Entities.Particule;
+import fr.giusti.onetapadventure.gameObject.entities.Particule;
 import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapadventure.commons.Constants;
+import fr.giusti.onetapadventure.repository.SpriteRepo;
 
 /**
  * Created by giusti on 25/03/2015.

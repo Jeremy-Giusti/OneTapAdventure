@@ -1,25 +1,26 @@
-package fr.giusti.onetapadventure.GameObject.Entities;
+package fr.giusti.onetapadventure.gameObject.entities;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.RectF;
 
-import fr.giusti.onetapadventure.GameObject.GameBoard;
-import fr.giusti.onetapadventure.GameObject.moves.SpecialMove;
-import fr.giusti.onetapadventure.GameObject.moves.TouchedMove;
-import fr.giusti.onetapadventure.Repository.SpriteRepo;
+import fr.giusti.onetapadventure.gameObject.GameBoard;
+import fr.giusti.onetapadventure.gameObject.moves.SpecialMove;
+import fr.giusti.onetapadventure.gameObject.moves.TouchedMove;
+import fr.giusti.onetapadventure.repository.SpriteRepo;
 import fr.giusti.onetapadventure.commons.Constants;
 
-public class GameMob extends GameBoardEntity {
+public class GameMob extends Entity {
     private static final String TAG = GameMob.class.getName();
 
 
     private int mSpriteCurrentColumn = 0;
     //   private int mSpriteCurrentLine = 0;
 
-    protected Point[] movePattern;
+    protected PointF[] movePattern;
 
     /**
      * alignement of the mob, used to differenciate teams
@@ -76,7 +77,7 @@ public class GameMob extends GameBoardEntity {
      * @param mBitmapId   un string qui sert d'id pour aller piocher le skin du mob dans le bitmapRepo (cache bitmap)
      * @param state       l'etat du mob (inutilisé pour le moment)
      */
-    public GameMob(String idName, int x, int y, int width, int height, Point[] movePattern, SpecialMove specialMove1, TouchedMove touchedmove, String mBitmapId, int health, int state) {
+    public GameMob(String idName, int x, int y, int width, int height, PointF[] movePattern, SpecialMove specialMove1, TouchedMove touchedmove, String mBitmapId, int health, int state) {
         super(idName,x,y,width,height,mBitmapId);
         this.movePattern = movePattern;
         this.mSpecialMove1 = specialMove1;
@@ -85,7 +86,7 @@ public class GameMob extends GameBoardEntity {
         this.mState = eMobState.values()[state];
     }
 
-    public GameMob(String idName, int x, int y, int width, int height, Point[] movePattern, SpecialMove specialMove1, TouchedMove touchedmove, String mBitmapId, int health, eMobState state) {
+    public GameMob(String idName, int x, int y, int width, int height, PointF[] movePattern, SpecialMove specialMove1, TouchedMove touchedmove, String mBitmapId, int health, eMobState state) {
         super(idName,x,y,width,height,mBitmapId);
         this.movePattern = movePattern;
         this.mSpecialMove1 = specialMove1;
@@ -185,11 +186,11 @@ public class GameMob extends GameBoardEntity {
         this.mAnimationState = mAnimationState;
     }
 
-    public Point[] getMovePattern() {
+    public PointF[] getMovePattern() {
         return movePattern;
     }
 
-    public Point getCurrentMove() {
+    public PointF getCurrentMove() {
         return movePattern[currentMove];
     }
 
@@ -198,7 +199,7 @@ public class GameMob extends GameBoardEntity {
     }
 
 
-    public void setMovePattern(Point[] movePattern) {
+    public void setMovePattern(PointF[] movePattern) {
         this.movePattern = movePattern;
     }
 
@@ -387,9 +388,9 @@ public class GameMob extends GameBoardEntity {
     @Override
     public GameMob clone() {
         GameMob clone;
-        Point[] cloneMovePattern = new Point[movePattern.length];
+        PointF[] cloneMovePattern = new PointF[movePattern.length];
         for (int i = 0; i < movePattern.length; i++) {
-            cloneMovePattern[i] = new Point(movePattern[i].x, movePattern[i].y);
+            cloneMovePattern[i] = new PointF(movePattern[i].x, movePattern[i].y);
         }
         clone = new GameMob(
                 idName,

@@ -1,19 +1,19 @@
-package fr.giusti.onetapadventure.GameObject.Entities;
+package fr.giusti.onetapadventure.gameObject.entities;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.RectF;
 
-import fr.giusti.onetapadventure.GameObject.GameBoard;
-import fr.giusti.onetapadventure.Repository.SpriteRepo;
+import fr.giusti.onetapadventure.gameObject.GameBoard;
+import fr.giusti.onetapadventure.repository.SpriteRepo;
 import fr.giusti.onetapadventure.commons.Constants;
 
 /**
  * Particule are only graphicale element, they cannot interact with anything (they are result of actions, and can't be a cause)
  * Created by giusti on 20/03/2015.
  */
-public class Particule extends GameBoardEntity {
+public class Particule extends Entity {
 
     private static final String TAG = Particule.class.getName();
 

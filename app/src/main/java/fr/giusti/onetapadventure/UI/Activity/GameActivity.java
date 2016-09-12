@@ -8,10 +8,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-import fr.giusti.onetapadventure.GameObject.GameBoard;
-import fr.giusti.onetapadventure.GameObject.Entities.GameMob;
+import fr.giusti.onetapadventure.gameObject.GameBoard;
+import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.R;
-import fr.giusti.onetapadventure.Repository.GameRepo;
+import fr.giusti.onetapadventure.repository.GameRepo;
 import fr.giusti.onetapadventure.UI.CustomView.DrawingView;
 import fr.giusti.onetapadventure.callback.OnBoardEventListener;
 

@@ -1,4 +1,4 @@
-package fr.giusti.onetapadventure.GameObject;
+package fr.giusti.onetapadventure.gameObject;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -8,15 +8,18 @@ import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import fr.giusti.onetapadventure.GameObject.Entities.GameMob;
-import fr.giusti.onetapadventure.GameObject.Entities.Particule;
-import fr.giusti.onetapadventure.GameObject.Rules.eConditions;
-import fr.giusti.onetapadventure.Repository.Mobs.MobDispenser;
-import fr.giusti.onetapadventure.Repository.SpriteRepo;
+import fr.giusti.onetapadventure.gameObject.entities.Entity;
+import fr.giusti.onetapadventure.gameObject.entities.GameMob;
+import fr.giusti.onetapadventure.gameObject.entities.Particule;
+import fr.giusti.onetapadventure.gameObject.entities.Scenery;
+import fr.giusti.onetapadventure.gameObject.rules.eConditions;
+import fr.giusti.onetapadventure.repository.entities.EntityDispenser;
+import fr.giusti.onetapadventure.repository.SpriteRepo;
 import fr.giusti.onetapadventure.callback.OnBoardEventListener;
 import fr.giusti.onetapadventure.commons.Constants;
 
@@ -25,9 +28,10 @@ import fr.giusti.onetapadventure.commons.Constants;
  * gere les evenement lié au jeu (update on tick/on touch/...)
  */
 public class GameBoard {
-    private MobDispenser mMobDisp;
+    private EntityDispenser mMobDisp;
     private CopyOnWriteArrayList<GameMob> mMobs = new CopyOnWriteArrayList<GameMob>();
     private CopyOnWriteArrayList<Particule> mParticules = new CopyOnWriteArrayList<Particule>();
+    private CopyOnWriteArrayList<Scenery> mSceneries = new CopyOnWriteArrayList<Scenery>();
     private CopyOnWriteArrayList<TouchPoint> mTouchPoints = new CopyOnWriteArrayList<TouchPoint>();
 
 
@@ -68,15 +72,26 @@ public class GameBoard {
      * @param mobsDisp               les entité mobile qui seront presente sur la carte
      * @param backgroundBitmapId l'image de fond
      */
-    public GameBoard(MobDispenser mobsDisp, String backgroundBitmapId, int boardWidth, int boardHeight, Rect drawedBounds) {
+    public GameBoard(EntityDispenser mobsDisp, String backgroundBitmapId, int boardWidth, int boardHeight, Rect drawedBounds) {
         super();
         this.mMobDisp = mobsDisp;
-        this.mMobs = mobsDisp.getInitialList();
+        initEntityLists(mobsDisp.getInitialList());
         this.mBackgroundBitmapId = backgroundBitmapId;
         mCameraBound = drawedBounds;
         mBoardBounds = new Rect(0, 0, boardWidth, boardHeight);
     }
 
+    private void initEntityLists(ArrayList<Entity> initialList) {
+        for(Entity entity:initialList){
+            if(entity instanceof GameMob){
+                mMobs.add((GameMob)entity);
+            } else if(entity instanceof Particule){
+                mParticules.add((Particule)entity);
+            }else if(entity instanceof Scenery){
+                mSceneries.add((Scenery)entity);
+            }
+        }
+    }
 
 
     /**
@@ -164,9 +179,10 @@ public class GameBoard {
             if (particule.getmAnimationState() < 0) {
                 mParticules.remove(particule);
             } else {
-                particule.update();
+                particule.update(this);
             }
         }
+
 
         for (TouchPoint touch : mTouchPoints) {
             if (touch.isEnded()) {
@@ -174,6 +190,10 @@ public class GameBoard {
             } else {
                 touch.update();
             }
+        }
+
+        for (Scenery scenery : mSceneries) {
+            scenery.update(this);
 
         }
 
@@ -257,18 +277,24 @@ public class GameBoard {
         canvas.drawBitmap(backgroundBitmap, mCameraBound, mCameraBound, mBrush);
 
         Log.d("GAMEBOARD", "Number of mob to draw : " + mMobs.size());
-        mBrush = GameMob.GetPaint(mBrush);
+        //mBrush = GameMob.GetPaint(mBrush);
+
+        for (Scenery scenery : mSceneries) {
+            scenery.update(this);
+        }
+
         for (GameMob mob : mMobs) {
             mob.draw(canvas, mBrush);
         }
         for (Particule particule : mParticules) {
             particule.draw(canvas, mBrush);
         }
+
         mBrush = TouchPoint.GetPaint(mBrush);
         for (TouchPoint touch : mTouchPoints) {
             touch.draw(canvas, mBrush);
         }
-        // restore default brush ?
+
         mBrush.setAlpha(255);
     }
 

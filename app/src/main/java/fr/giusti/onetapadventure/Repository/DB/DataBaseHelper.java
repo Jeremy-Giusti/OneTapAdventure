@@ -1,12 +1,12 @@
-package fr.giusti.onetapadventure.Repository.DB;
+package fr.giusti.onetapadventure.repository.DB;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import fr.giusti.onetapadventure.Repository.DB.model.BoardDB;
-import fr.giusti.onetapadventure.Repository.DB.model.MobDB;
-import fr.giusti.onetapadventure.Repository.DB.model.PathDB;
+import fr.giusti.onetapadventure.repository.DB.model.BoardDB;
+import fr.giusti.onetapadventure.repository.DB.model.MobDB;
+import fr.giusti.onetapadventure.repository.DB.model.PathDB;
 
 /**
  * Created by giusti on 17/03/2015.

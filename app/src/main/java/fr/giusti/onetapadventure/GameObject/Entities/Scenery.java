@@ -1,17 +1,17 @@
-package fr.giusti.onetapadventure.GameObject.Entities;
+package fr.giusti.onetapadventure.gameObject.entities;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
-import fr.giusti.onetapadventure.GameObject.GameBoard;
-import fr.giusti.onetapadventure.GameObject.moves.TouchedMove;
-import fr.giusti.onetapadventure.Repository.SpriteRepo;
+import fr.giusti.onetapadventure.gameObject.GameBoard;
+import fr.giusti.onetapadventure.gameObject.moves.TouchedMove;
+import fr.giusti.onetapadventure.repository.SpriteRepo;
 
 /**
  * Created by jérémy on 10/09/2016.
  */
-public class Scenery extends GameBoardEntity {
+public class Scenery extends Entity {
 
     private RectF hitbox;
     private TouchedMove touchedByMob;

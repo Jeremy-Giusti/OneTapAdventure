@@ -1,17 +1,17 @@
-package fr.giusti.onetapadventure.GameObject.Entities;
+package fr.giusti.onetapadventure.gameObject.entities;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
-import fr.giusti.onetapadventure.GameObject.GameBoard;
-import fr.giusti.onetapadventure.Repository.SpriteRepo;
+import fr.giusti.onetapadventure.gameObject.GameBoard;
+import fr.giusti.onetapadventure.repository.SpriteRepo;
 
 /**
  * Created by jérémy on 10/09/2016.
  */
-public abstract class GameBoardEntity implements Cloneable {
-    private static final String TAG = GameBoardEntity.class.getName();
+public abstract class Entity implements Cloneable {
+    private static final String TAG = Entity.class.getName();
 
     public RectF mPosition = new RectF();
 
@@ -32,7 +32,7 @@ public abstract class GameBoardEntity implements Cloneable {
      * @param y         position verticale initial
      * @param mBitmapId un string qui sert d'id pour aller piocher le skin de l'entity dans le bitmapRepo (cache bitmap)
      */
-    public GameBoardEntity(String idName, int x, int y, int width, int height, String mBitmapId) {
+    public Entity(String idName, int x, int y, int width, int height, String mBitmapId) {
         super();
         this.idName = idName;
         mPosition.set(x, y, x + width, y + height);

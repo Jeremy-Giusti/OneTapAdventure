@@ -1,11 +1,8 @@
 package fr.giusti.onetapadventure.callback;
 
-import android.util.Pair;
-
 import java.util.ArrayList;
 
-import fr.giusti.onetapadventure.GameObject.Rules.Rule;
-import fr.giusti.onetapadventure.GameObject.Rules.eConditionType;
+import fr.giusti.onetapadventure.gameObject.rules.Rule;
 
 /**
  * Created by jérémy on 08/09/2016.

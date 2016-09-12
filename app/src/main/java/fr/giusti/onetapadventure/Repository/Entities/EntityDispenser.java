@@ -1,30 +1,31 @@
-package fr.giusti.onetapadventure.Repository.Mobs;
+package fr.giusti.onetapadventure.repository.entities;
 
 import android.util.Pair;
 
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.ArrayList;
 
-import fr.giusti.onetapadventure.GameObject.GameBoard;
-import fr.giusti.onetapadventure.GameObject.Entities.GameMob;
+import fr.giusti.onetapadventure.gameObject.GameBoard;
+import fr.giusti.onetapadventure.gameObject.entities.Entity;
+import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.commons.Constants;
 
 /**
  * Created by jérémy on 08/09/2016.
  */
-public abstract class MobDispenser {
+public abstract class EntityDispenser {
     protected static final int UPDATE_FREQUENCY = Constants.FRAME_PER_SEC/2;
     private int tickCount = 0;
-    protected CopyOnWriteArrayList<GameMob> initList = new CopyOnWriteArrayList<>();
+    protected ArrayList<Entity> initList = new ArrayList<>();
 
 
-    public MobDispenser(CopyOnWriteArrayList<GameMob> initList, Pair<Integer, GameMob>... mobs) {
+    public EntityDispenser(ArrayList<Entity> initList, Pair<Integer, GameMob>... mobs) {
         this.initList = initList;
         for (Pair<Integer, GameMob> indexedMob : mobs) {
             addMobToList(indexedMob.second, indexedMob.first);
         }
     }
 
-    public CopyOnWriteArrayList<GameMob> getInitialList() {
+    public ArrayList<Entity> getInitialList() {
         return initList;
     }
 

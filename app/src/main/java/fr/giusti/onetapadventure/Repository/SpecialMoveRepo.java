@@ -1,4 +1,4 @@
-package fr.giusti.onetapadventure.Repository;
+package fr.giusti.onetapadventure.repository;
 
 import android.graphics.Point;
 
@@ -6,11 +6,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import fr.giusti.onetapadventure.GameObject.GameBoard;
-import fr.giusti.onetapadventure.GameObject.Entities.GameMob;
-import fr.giusti.onetapadventure.GameObject.Entities.Particule;
-import fr.giusti.onetapadventure.GameObject.moves.SpecialMove;
+import fr.giusti.onetapadventure.gameObject.GameBoard;
+import fr.giusti.onetapadventure.gameObject.entities.GameMob;
+import fr.giusti.onetapadventure.gameObject.entities.Particule;
+import fr.giusti.onetapadventure.gameObject.moves.SpecialMove;
 import fr.giusti.onetapadventure.commons.Constants;
+import fr.giusti.onetapadventure.repository.entities.ParticuleRepo;
 
 /**
  * Created by giusti on 20/03/2015.

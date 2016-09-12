@@ -5,7 +5,7 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-import fr.giusti.onetapadventure.Repository.SpriteRepo;
+import fr.giusti.onetapadventure.repository.SpriteRepo;
 import fr.giusti.onetapadventure.commons.Constants;
 
 /**

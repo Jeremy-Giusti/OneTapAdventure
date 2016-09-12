@@ -1,20 +1,17 @@
-package fr.giusti.onetapadventure.Repository;
+package fr.giusti.onetapadventure.repository;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
-import android.util.Pair;
 
-import fr.giusti.onetapadventure.GameObject.GameBoard;
-import fr.giusti.onetapadventure.GameObject.Rules.OnGameEndListener;
-import fr.giusti.onetapadventure.GameObject.Rules.Rule;
-import fr.giusti.onetapadventure.GameObject.Rules.Rules;
-import fr.giusti.onetapadventure.GameObject.Rules.eConditionType;
-import fr.giusti.onetapadventure.GameObject.Rules.eConditions;
+import fr.giusti.onetapadventure.gameObject.GameBoard;
+import fr.giusti.onetapadventure.gameObject.rules.OnGameEndListener;
+import fr.giusti.onetapadventure.gameObject.rules.Rules;
 import fr.giusti.onetapadventure.R;
-import fr.giusti.onetapadventure.Repository.Mobs.MobDispenserRepo;
-import fr.giusti.onetapadventure.Repository.Mobs.MobRepo;
+import fr.giusti.onetapadventure.repository.entities.EntityDispenserRepo;
+import fr.giusti.onetapadventure.repository.entities.MobRepo;
+import fr.giusti.onetapadventure.repository.entities.ParticuleRepo;
 
 public class GameRepo {
 //    /** the variable used to scale every game element to the screen height (implying the width will be scaled by the same variable but everything too long will be cropped on display)  */
@@ -62,7 +59,7 @@ public class GameRepo {
         //create mob dispenser
         //add hole to board as immobile neutral mob with collision
         Rules rules = RuleRepo.getLvl_1x1_Rules(gameListener);
-        GameBoard board = new GameBoard(MobDispenserRepo.getLvl1_1MobDispenser(), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight));
+        GameBoard board = new GameBoard(EntityDispenserRepo.getLvl1_1MobDispenser(), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight));
         board.resize(mScreenWidth,mScreenHeight);
         board.setBoardEventListener(rules);
         return board;

@@ -1,4 +1,4 @@
-package fr.giusti.onetapadventure.Repository;
+package fr.giusti.onetapadventure.repository;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,10 +9,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import fr.giusti.onetapadventure.GameObject.GameMobSpriteHolder;
+import fr.giusti.onetapadventure.gameObject.GameMobSpriteHolder;
 import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.commons.FileUtils;
-import fr.giusti.onetapadventure.commons.Utils;
 
 public class SpriteRepo {
     private static HashMap<String, GameMobSpriteHolder> mMobSpriteList = new HashMap<>();

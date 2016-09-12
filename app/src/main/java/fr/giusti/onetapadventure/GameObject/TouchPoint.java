@@ -1,4 +1,4 @@
-package fr.giusti.onetapadventure.GameObject;
+package fr.giusti.onetapadventure.gameObject;
 
 import fr.giusti.onetapadventure.commons.Constants;
 import android.graphics.Canvas;

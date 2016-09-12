@@ -1,14 +1,12 @@
-package fr.giusti.onetapadventure.Repository;
-
-import android.util.Pair;
+package fr.giusti.onetapadventure.repository;
 
 import java.util.ArrayList;
 
-import fr.giusti.onetapadventure.GameObject.Rules.OnGameEndListener;
-import fr.giusti.onetapadventure.GameObject.Rules.Rule;
-import fr.giusti.onetapadventure.GameObject.Rules.Rules;
-import fr.giusti.onetapadventure.GameObject.Rules.eConditionType;
-import fr.giusti.onetapadventure.GameObject.Rules.eConditions;
+import fr.giusti.onetapadventure.gameObject.rules.OnGameEndListener;
+import fr.giusti.onetapadventure.gameObject.rules.Rule;
+import fr.giusti.onetapadventure.gameObject.rules.Rules;
+import fr.giusti.onetapadventure.gameObject.rules.eConditionType;
+import fr.giusti.onetapadventure.gameObject.rules.eConditions;
 import fr.giusti.onetapadventure.callback.OnRuleAccomplishedListener;
 import fr.giusti.onetapadventure.commons.Constants;
 

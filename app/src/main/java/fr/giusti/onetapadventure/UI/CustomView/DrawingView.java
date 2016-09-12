@@ -13,7 +13,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
-import fr.giusti.onetapadventure.GameObject.GameBoard;
+import fr.giusti.onetapadventure.gameObject.GameBoard;
 
 public class DrawingView extends SurfaceView implements SurfaceHolder.Callback, TickingThread.OnTickListener {
     private static final String TAG = DrawingView.class.getSimpleName();

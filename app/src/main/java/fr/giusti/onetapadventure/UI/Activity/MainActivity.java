@@ -9,7 +9,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import fr.giusti.onetapadventure.R;
-import fr.giusti.onetapadventure.Repository.SpriteRepo;
+import fr.giusti.onetapadventure.repository.SpriteRepo;
 
 /**
  * ecran menu

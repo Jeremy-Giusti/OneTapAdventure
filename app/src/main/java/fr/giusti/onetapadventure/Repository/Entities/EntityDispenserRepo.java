@@ -1,19 +1,21 @@
-package fr.giusti.onetapadventure.Repository.Mobs;
+package fr.giusti.onetapadventure.repository.entities;
+
+import android.content.Context;
 
 import java.util.ArrayList;
 
-import fr.giusti.onetapadventure.GameObject.GameBoard;
-import fr.giusti.onetapadventure.GameObject.Entities.GameMob;
+import fr.giusti.onetapadventure.gameObject.GameBoard;
+import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.commons.Constants;
 
 /**
  * Created by jérémy on 10/09/2016.
  */
-public class MobDispenserRepo {
+public class EntityDispenserRepo {
 
-    public static MobDispenser getLvl1_1MobDispenser() {
+    public static EntityDispenser getLvl1_1MobDispenser(Context context) {
 
-        return new MobDispenser(MobRepo.getLvl1x1InitList(),MobRepo.getLvl1x1BackupList()) {
+        return new EntityDispenser(MobRepo.getLvl1x1InitList(context),MobRepo.getLvl1x1BackupList()) {
 
             private final int mobPopTickFrequency = Constants.FRAME_PER_SEC * 2;
             private final int minMobOnBoard = 2;
