@@ -25,6 +25,13 @@ public abstract class EntityDispenser {
         }
     }
 
+    public EntityDispenser(ArrayList<Entity> initList, ArrayList<Pair<Integer, GameMob>> mobs) {
+        this.initList = initList;
+        for (Pair<Integer, GameMob> indexedMob : mobs) {
+            addMobToList(indexedMob.second, indexedMob.first);
+        }
+    }
+
     public ArrayList<Entity> getInitialList() {
         return initList;
     }

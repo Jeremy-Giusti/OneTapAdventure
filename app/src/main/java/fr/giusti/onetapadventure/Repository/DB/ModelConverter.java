@@ -1,6 +1,9 @@
 package fr.giusti.onetapadventure.repository.DB;
 
 import android.graphics.Point;
+import android.graphics.PointF;
+
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
@@ -64,18 +67,18 @@ public class ModelConverter {
     //////////////////////////////////////////////////////////////////
 
 
-    public static Point[] pathDBtoPath(PathDB pathDb) {
+    public static PointF[] pathDBtoPath(PathDB pathDb) {
         PathDB.PointDB[] pointListDB = pathDb.getPath();
-        Point[] path = new Point[pointListDB.length];
+        PointF[] path = new PointF[pointListDB.length];
 
         for (int i = 0; i < pointListDB.length; i++) {
-            path[i] = new Point(pointListDB[i].x, pointListDB[i].y);
+            path[i] = new PointF(pointListDB[i].x, pointListDB[i].y);
         }
 
         return path;
     }
 
-    public static PathDB pathToPathDB(Point[] path, String pathDbId, String mobId) {
+    public static PathDB pathToPathDB(PointF[] path, String pathDbId, String mobId) {
         PathDB.PointDB[] pointListDb = new PathDB.PointDB[path.length];
         PathDB pathDb = new PathDB();
 
@@ -99,7 +102,7 @@ public class ModelConverter {
     ///////////////////////////////////////////////////////////////////////
 
     public static GameBoard boardDbToBoard(BoardDB boardDB) {
-        return new GameBoard(null, boardDB.getBackgroundUrl(), boardDB.getWidth(), boardDB.getHeight(),boardDB.getCamRect());
+        return new GameBoard((CopyOnWriteArrayList)null, boardDB.getBackgroundUrl(), boardDB.getWidth(), boardDB.getHeight(),boardDB.getCamRect());
     }
 
     public static BoardDB boardDbToBoard(GameBoard board, String boardId) {

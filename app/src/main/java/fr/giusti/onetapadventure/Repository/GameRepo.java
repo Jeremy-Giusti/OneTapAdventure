@@ -49,7 +49,7 @@ public class GameRepo {
     public GameBoard generateLvl_1x1(Context context, OnGameEndListener gameListener) throws CloneNotSupportedException {
         new ParticuleRepo().initCache(context);
         String backGameBoard = "background1x1";
-        Bitmap fullSizedBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.grid512);//FIXME add true background
+        Bitmap fullSizedBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.lvl1x1_back);//FIXME add true background
 
         int boardHeight = fullSizedBackground.getHeight();
         int boardWidth = fullSizedBackground.getWidth();
@@ -59,7 +59,7 @@ public class GameRepo {
         //create mob dispenser
         //add hole to board as immobile neutral mob with collision
         Rules rules = RuleRepo.getLvl_1x1_Rules(gameListener);
-        GameBoard board = new GameBoard(EntityDispenserRepo.getLvl1_1MobDispenser(), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight));
+        GameBoard board = new GameBoard(EntityDispenserRepo.getLvl1_1MobDispenser(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight));
         board.resize(mScreenWidth,mScreenHeight);
         board.setBoardEventListener(rules);
         return board;

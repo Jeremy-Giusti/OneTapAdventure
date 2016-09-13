@@ -3,6 +3,7 @@ package fr.giusti.onetapadventure.repository.entities;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.Log;
 import android.util.Pair;
@@ -11,10 +12,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import fr.giusti.onetapadventure.R;
+import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.gameObject.entities.Entity;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.gameObject.entities.Scenery;
-import fr.giusti.onetapadventure.R;
+import fr.giusti.onetapadventure.gameObject.moves.TouchedMove;
 import fr.giusti.onetapadventure.repository.DB.ModelConverter;
 import fr.giusti.onetapadventure.repository.DB.model.MobDB;
 import fr.giusti.onetapadventure.repository.DB.model.PathDB;
@@ -24,7 +27,6 @@ import fr.giusti.onetapadventure.repository.PathRepo;
 import fr.giusti.onetapadventure.repository.SpecialMoveRepo;
 import fr.giusti.onetapadventure.repository.SpriteRepo;
 import fr.giusti.onetapadventure.repository.TouchedMoveRepo;
-import fr.giusti.onetapadventure.commons.Constants;
 
 public class MobRepo {
 
@@ -50,16 +52,16 @@ public class MobRepo {
         String bitmapId4 = "spritesheetTest4";
         SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.fly_spritesheet4), bitmapId4, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
         //work
-        Point[] mob1Pattern = PathRepo.mergePaths(PathRepo.generateCurvedPath(20, 7, 0, 0, 5), PathRepo.generateCurvedPath(20, 7, 0, 0, -5));
+        PointF[] mob1Pattern = PathRepo.mergePaths(PathRepo.generateCurvedPath(20, 7, 0, 0, 5), PathRepo.generateCurvedPath(20, 7, 0, 0, -5));
         //work
-        Point[] mob2Pattern = PathRepo.generateLinePath(20, 5, 3);
+        PointF[] mob2Pattern = PathRepo.generateLinePath(20, 5, 3);
         //work
-        Point[] mob3Pattern = PathRepo.speedDownPortionOfPath(PathRepo.generateLinePath(20, 5, 7), 6, 15, 2);
+        PointF[] mob3Pattern = PathRepo.speedDownPortionOfPath(PathRepo.generateLinePath(20, 5, 7), 6, 15, 2);
         //work
         //work (not perfectly but still)
-        Point[] mob5Pattern = PathRepo.generateLoopedPath(Constants.FRAME_PER_SEC, new Point(0, 0), new Point(0, 5), 7, 0);//un tour a la seconde
+        PointF[] mob5Pattern = PathRepo.generateLoopedPath(Constants.FRAME_PER_SEC, new Point(0, 0), new Point(0, 5), 7, 0);//un tour a la seconde
         //seems to work
-        Point[] mob6Pattern = PathRepo.generateRandomPath(100, 5, 5, 15, 15, 25);
+        PointF[] mob6Pattern = PathRepo.generateRandomPath(100, 5, 5, 15, 15, 25);
 
         SpecialMoveRepo moveRepo = new SpecialMoveRepo();
         TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
@@ -152,22 +154,64 @@ public class MobRepo {
     public static ArrayList<Entity> getLvl1x1InitList(Context context) {
         ArrayList<Entity> entityList = new ArrayList<>();
 
-        String bitmapId = "hole1pict";
-        SpriteRepo.addPicture(bitmapId,BitmapFactory.decodeResource(context.getResources(), R.drawable.brokenglass_front));
+        SpecialMoveRepo moveRepo = new SpecialMoveRepo();
         TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
-        RectF hitbox = new RectF(326,132,392,272);
-        Scenery hole1 = new Scenery("holes1",263,64,266,263,hitbox,touchedMoveRepo.getMoveById(TouchedMoveRepo.MOB_AWAY_MOVE),bitmapId);
+
+        String bitmapId = "hole1pict";
+        SpriteRepo.addPicture(bitmapId, BitmapFactory.decodeResource(context.getResources(), R.drawable.brokenglass_front));
+        PointF posDest = new PointF(350, 200);
+        PointF startPos = new PointF(1020, 256);
+        RectF hitbox = new RectF(326, 132, 392, 272);
+        Scenery hole1 = new Scenery("holes1", 263, 64, 266, 263, hitbox, touchedMoveRepo.getMoveById(TouchedMoveRepo.MOB_AWAY_MOVE), bitmapId);
         entityList.add(hole1);
 
-        String mob1sptsheetId = "mob1";
+        String mob1sptsheetId = "firstMob";
         SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet), mob1sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+        PointF[] mob1Pattern = PathRepo.generateLineToDest(startPos, posDest, Constants.FRAME_DURATION * 3);
 
+        GameMob mob1 = new GameMob("firstMob", 1, 250, 64, 64, mob1Pattern, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mob1sptsheetId, 1, 1);
+        entityList.add(mob1);
 
-
-        return null;
+        //TODO brocken glass particule
+        return entityList;
     }
 
-    public static Pair<Integer, GameMob> getLvl1x1BackupList() {
-        return null;
+    public static ArrayList<Pair<Integer, GameMob>> getLvl1x1BackupList() {
+        ArrayList<Pair<Integer, GameMob>> backupList = new ArrayList<Pair<Integer, GameMob>>();
+        int mobNb = 19;
+
+        int startPosx = 1020;
+        String mobaseNameID = "mob";
+        int currentTier = 1;
+        int maxSeed = 505;
+        PointF posDest = new PointF(350, 200);
+        for (int i = 0; i < mobNb; i++) {
+            currentTier = i + 1 / (mobNb / 3);
+            int seed = (int) Math.random() * maxSeed;
+            GameMob mob = getMobFromSeed(currentTier, seed, posDest, mobaseNameID + i, startPosx, seed, 64, 64);
+            backupList.add(new Pair<>(currentTier, mob));
+        }
+
+        return backupList;
+    }
+
+    public static GameMob getMobFromSeed(int difficulty, int seed, PointF posDest, String id, int x, int y, int width, int height) {
+        SpecialMoveRepo moveRepo = new SpecialMoveRepo();
+        TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
+        TouchedMove touchedMove = touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE);
+        PointF[] path;
+        if (difficulty < 2) {
+            path = PathRepo.generateLineToDest(new PointF(x, y), posDest, Constants.FRAME_DURATION * 3);
+        } else {
+            if (seed % 4 > 2) {
+                path = PathRepo.generateLineToDest(new PointF(x, y), posDest, Constants.FRAME_DURATION * 3);
+                touchedMove = touchedMoveRepo.getMoveById(TouchedMoveRepo.BAIT);
+            } else {
+                path = PathRepo.generateCurvedPath(new PointF(x, y), posDest, 10, (seed % 2 == 1), Constants.FRAME_DURATION * 3);
+            }
+
+        }
+        return new GameMob(id, x, y, width, height, path, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMove, id, difficulty, 1);
+
     }
 }
