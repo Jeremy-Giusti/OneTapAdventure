@@ -24,15 +24,15 @@ public class Scenery extends Entity {
      * @param height
      * @param mBitmapId un string qui sert d'id pour aller piocher le skin de l'entity dans le bitmapRepo (cache bitmap)
      */
-    public Scenery(String idName, int x, int y, int width, int height, RectF hitbox, TouchedMove onColiision, String mBitmapId) {
+    public Scenery(String idName, int x, int y, int width, int height, RectF hitbox, TouchedMove onCollision, String mBitmapId) {
         super(idName, x, y, width, height, mBitmapId);
-        touchedByMob = onColiision;
+        touchedByMob = onCollision;
         this.hitbox = hitbox;
     }
 
-    public Scenery(String idName, int x, int y, int width, int height, float hitboxRatio, TouchedMove onColiision, String mBitmapId) {
+    public Scenery(String idName, int x, int y, int width, int height, float hitboxRatio, TouchedMove onCollision, String mBitmapId) {
         super(idName, x, y, width, height, mBitmapId);
-        touchedByMob = onColiision;
+        touchedByMob = onCollision;
 
         float widthHB = width * hitboxRatio;
         float heightHB = height * hitboxRatio;
@@ -62,25 +62,25 @@ public class Scenery extends Entity {
 
     @Override
     public void resize(float ratio) {
-        float oldWidth = getWidth();
-        float newWidth = oldWidth * ratio;
-        float oldHeight = getHeight();
-        float newHeight = oldHeight * ratio;
-        float diffHeight = (newHeight - oldHeight) / 2;
-        float diffWidth = (newWidth - oldWidth) / 2;
+//        float oldWidth = getWidth();
+//        float newWidth = oldWidth * ratio;
+//        float oldHeight = getHeight();
+//        float newHeight = oldHeight * ratio;
+//        float diffHeight = (newHeight - oldHeight) / 2;
+//        float diffWidth = (newWidth - oldWidth) / 2;
 
-        mPosition = new RectF(mPosition.left - diffWidth, mPosition.top - diffHeight, mPosition.right + diffWidth, mPosition.bottom + diffHeight);
+        mPosition = new RectF(mPosition.left *ratio, mPosition.top*ratio, mPosition.right *ratio, mPosition.bottom *ratio);
 
         SpriteRepo.resizePicture(mBitmapId, ratio);
 
-        float oldWidthHB = hitbox.width();
-        float newWidthHB = oldWidthHB * ratio;
-        float oldHeightHB = hitbox.height();
-        float newHeightHB = oldHeightHB * ratio;
-        float diffHeightHB = (newHeightHB - oldHeightHB) / 2;
-        float diffWidthHB = (newWidthHB - oldWidthHB) / 2;
+//        float oldWidthHB = hitbox.width();
+//        float newWidthHB = oldWidthHB * ratio;
+//        float oldHeightHB = hitbox.height();
+//        float newHeightHB = oldHeightHB * ratio;
+//        float diffHeightHB = (newHeightHB - oldHeightHB) / 2;
+//        float diffWidthHB = (newWidthHB - oldWidthHB) / 2;
 
-        hitbox = new RectF(hitbox.left - diffWidthHB, hitbox.top - diffHeightHB, hitbox.right + diffWidthHB, hitbox.bottom + diffHeightHB);
+        hitbox = new RectF(hitbox.left *ratio, hitbox.top *ratio, hitbox.right *ratio, hitbox.bottom *ratio);
 
     }
 }

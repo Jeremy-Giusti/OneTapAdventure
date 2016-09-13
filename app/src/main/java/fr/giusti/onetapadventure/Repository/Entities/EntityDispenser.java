@@ -50,4 +50,5 @@ public abstract class EntityDispenser {
     protected abstract void updateMobs(GameBoard board);
 
 
+    public abstract void resize(float ratio);
 }

@@ -13,15 +13,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import fr.giusti.onetapadventure.callback.OnBoardEventListener;
+import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.gameObject.entities.Entity;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.gameObject.entities.Particule;
 import fr.giusti.onetapadventure.gameObject.entities.Scenery;
 import fr.giusti.onetapadventure.gameObject.rules.eConditions;
-import fr.giusti.onetapadventure.repository.entities.EntityDispenser;
 import fr.giusti.onetapadventure.repository.SpriteRepo;
-import fr.giusti.onetapadventure.callback.OnBoardEventListener;
-import fr.giusti.onetapadventure.commons.Constants;
+import fr.giusti.onetapadventure.repository.entities.EntityDispenser;
 
 /**
  * represente la carte du jeu avec une taille limite, des mobs
@@ -53,23 +53,23 @@ public class GameBoard {
      * empty border around camera (above and under)
      */
     private int borderVert;
-    private boolean started =false;
+    private boolean started = false;
 
 
     /**
      * @param mobs               les entité mobile qui seront presente sur la carte
      * @param backgroundBitmapId l'image de fond
      */
-    public GameBoard(CopyOnWriteArrayList<GameMob> mobs, String backgroundBitmapId, int boardWidth, int boardHeight, Rect drawedBounds) {
+    public GameBoard(ArrayList<GameMob> mobs, String backgroundBitmapId, int boardWidth, int boardHeight, Rect drawedBounds) {
         super();
-        this.mMobs = mobs;
+        this.mMobs = new CopyOnWriteArrayList<>(mobs);
         this.mBackgroundBitmapId = backgroundBitmapId;
         mCameraBound = drawedBounds;
         mBoardBounds = new Rect(0, 0, boardWidth, boardHeight);
     }
 
     /**
-     * @param mobsDisp               les entité mobile qui seront presente sur la carte
+     * @param mobsDisp           les entité mobile qui seront presente sur la carte
      * @param backgroundBitmapId l'image de fond
      */
     public GameBoard(EntityDispenser mobsDisp, String backgroundBitmapId, int boardWidth, int boardHeight, Rect drawedBounds) {
@@ -82,13 +82,13 @@ public class GameBoard {
     }
 
     private void initEntityLists(ArrayList<Entity> initialList) {
-        for(Entity entity:initialList){
-            if(entity instanceof GameMob){
-                mMobs.add((GameMob)entity);
-            } else if(entity instanceof Particule){
-                mParticules.add((Particule)entity);
-            }else if(entity instanceof Scenery){
-                mSceneries.add((Scenery)entity);
+        for (Entity entity : initialList) {
+            if (entity instanceof GameMob) {
+                mMobs.add((GameMob) entity);
+            } else if (entity instanceof Particule) {
+                mParticules.add((Particule) entity);
+            } else if (entity instanceof Scenery) {
+                mSceneries.add((Scenery) entity);
             }
         }
     }
@@ -101,10 +101,11 @@ public class GameBoard {
         return mMobs;
     }
 
-    public void setMobs(CopyOnWriteArrayList<GameMob> mobs) {
-        this.mMobs = mobs;
+    public void setMobs(ArrayList<GameMob> mobs) {
+        this.mMobs = new CopyOnWriteArrayList<>(mobs);
     }
 
+    @Deprecated
     public void addMob(GameMob mob) {
         this.mMobs.add(mob);
     }
@@ -165,15 +166,15 @@ public class GameBoard {
      * met a jour la carte après un tick
      */
     public void update() {
-        if(!started){
+        if (!started) {
             mEventListener.firstUpdate();
-            started =true;
+            started = true;
         }
 
         this.updateCameraPosition();
 
         for (GameMob mob : Collections.synchronizedList(mMobs)) {
-                mob.update(this);
+            mob.update(this);
         }
         for (Particule particule : Collections.synchronizedList(mParticules)) {
             if (particule.getmAnimationState() < 0) {
@@ -197,13 +198,13 @@ public class GameBoard {
 
         }
 
-        if(mMobDisp!=null){
+        if (mMobDisp != null) {
             mMobDisp.onTick(this);
         }
     }
 
     private void updateCameraPosition() {
-        mCameraBoundOnScreen = new Rect(mCameraBound.left+borderHorz,mCameraBound.top+borderVert,mCameraBound.right+borderHorz,mCameraBound.bottom+borderVert);
+        mCameraBoundOnScreen = new Rect(mCameraBound.left + borderHorz, mCameraBound.top + borderVert, mCameraBound.right + borderHorz, mCameraBound.bottom + borderVert);
     }
 
     /**
@@ -232,32 +233,32 @@ public class GameBoard {
         }
     }
 
-    public void onMobDeath(GameMob mob){
+    public void onMobDeath(GameMob mob) {
         if (mEventListener != null) {
-            mEventListener.onMobCountChange(mMobs.size()-1, eConditions.MOB_DEATH,mob.clone());//FIXME mob.clone ?
+            mEventListener.onMobCountChange(mMobs.size() - 1, eConditions.MOB_DEATH, mob.clone());//FIXME mob.clone ?
         }
         mMobs.remove(mob);
     }
 
-    public void onMobAway(GameMob mob){
+    public void onMobAway(GameMob mob) {
         if (mEventListener != null) {
-            mEventListener.onMobCountChange(mMobs.size()-1, eConditions.MOB_AWAY,mob.clone());
+            mEventListener.onMobCountChange(mMobs.size() - 1, eConditions.MOB_AWAY, mob.clone());
         }
         mMobs.remove(mob);
     }
 
-    public void onNewMob(GameMob mob){
+    public void onNewMob(GameMob mob) {
         if (mEventListener != null) {
-            mEventListener.onMobCountChange(mMobs.size()+1, eConditions.NEW_MOB,mob.clone());
+            mEventListener.onMobCountChange(mMobs.size() + 1, eConditions.NEW_MOB, mob.clone());
         }
         mMobs.add(mob);
     }
 
-    public void onScore(int score){//FIXME improve score events
+    public void onScore(int score) {//FIXME improve score events
         if (mEventListener != null) {
-            if(score<0) {
+            if (score < 0) {
                 mEventListener.onScoreMinus(-score);
-            }else{
+            } else {
                 mEventListener.onScorePlus(score);
             }
         }
@@ -280,7 +281,7 @@ public class GameBoard {
         //mBrush = GameMob.GetPaint(mBrush);
 
         for (Scenery scenery : mSceneries) {
-            scenery.update(this);
+            scenery.draw(canvas, mBrush);
         }
 
         for (GameMob mob : mMobs) {
@@ -297,9 +298,6 @@ public class GameBoard {
 
         mBrush.setAlpha(255);
     }
-
-
-
 
 
     /**
@@ -347,8 +345,20 @@ public class GameBoard {
         mBoardBounds.set(mBoardBounds.left, mBoardBounds.top, mBoardBounds.left + boardWidth, mBoardBounds.top + boardHeight);
         SpriteRepo.resizePicture(mBackgroundBitmapId, ratio);
 
-        for(GameMob mob: mMobs){
+        for (GameMob mob : mMobs) {
             mob.resize(ratio);
+        }
+
+        for (Scenery scen : mSceneries) {
+            scen.resize(ratio);
+        }
+
+        for (Particule part : mParticules) {
+            part.resize(ratio);
+        }
+
+        if (mMobDisp != null) {
+            mMobDisp.resize(ratio);
         }
 
     }

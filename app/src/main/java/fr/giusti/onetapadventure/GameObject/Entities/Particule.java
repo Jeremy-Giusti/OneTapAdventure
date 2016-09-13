@@ -3,6 +3,7 @@ package fr.giusti.onetapadventure.gameObject.entities;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.RectF;
 
 import fr.giusti.onetapadventure.gameObject.GameBoard;
@@ -24,7 +25,7 @@ public class Particule extends Entity {
     /**
      * path if the particule move
      */
-    protected Point[] movePattern;
+    protected PointF[] movePattern;
     protected int mAnimationState = 0;
 
     /**
@@ -37,7 +38,7 @@ public class Particule extends Entity {
     protected boolean infinite = false;
 
 
-    public Particule(String name, int x, int y, int width, int height, Point[] movePattern, String mBitmapId, boolean reverseAnimation, boolean infinite) {
+    public Particule(String name, int x, int y, int width, int height, PointF[] movePattern, String mBitmapId, boolean reverseAnimation, boolean infinite) {
 
         super(name, x, y, width, height, mBitmapId);
         this.movePattern = movePattern;
@@ -58,11 +59,11 @@ public class Particule extends Entity {
         mPosition.offsetTo(x, y);
     }
 
-    public Point[] getMovePattern() {
+    public PointF[] getMovePattern() {
         return movePattern;
     }
 
-    public void setMovePattern(Point[] movePattern) {
+    public void setMovePattern(PointF[] movePattern) {
         this.movePattern = movePattern;
     }
 
@@ -149,9 +150,9 @@ public class Particule extends Entity {
     @Override
     public Particule clone() {
         Particule clone;
-        Point[] cloneMovePattern = new Point[movePattern.length];
+        PointF[] cloneMovePattern = new PointF[movePattern.length];
         for (int i = 0; i < movePattern.length; i++) {
-            cloneMovePattern[i] = new Point(movePattern[i].x, movePattern[i].y);
+            cloneMovePattern[i] = new PointF(movePattern[i].x, movePattern[i].y);
         }
         clone = new Particule(
                 idName,

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -249,7 +250,7 @@ public class MobCreationActivity extends Activity {
                     break;
 
                 case MotionEvent.ACTION_UP:
-                    Point[] resultPattern = new Point[mMobPattern.size()];
+                    PointF[] resultPattern = new PointF[mMobPattern.size()];
                     mMobCreating.setMovePattern(mMobPattern.toArray(resultPattern));
                     v.performClick();
                     break;

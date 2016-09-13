@@ -1,6 +1,7 @@
 package fr.giusti.onetapadventure.repository;
 
 import android.graphics.Point;
+import android.graphics.PointF;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -105,13 +106,13 @@ public class SpecialMoveRepo {
                             break;
                     }
                     if (mobHealth == 3) {
-                        Particule numberParicule = new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.NUMBER3_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), 0, 0, false, new Point[]{new Point(0, 2)});
+                        Particule numberParicule = new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.NUMBER3_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), 0, 0, false, new PointF[]{new PointF(0, 2)});
                         board.addParticule(numberParicule);
                     } else if (mobHealth == 2) {
-                        Particule numberParicule = new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.NUMBER2_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), 0, 0, false, new Point[]{new Point(0, 2)});
+                        Particule numberParicule = new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.NUMBER2_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), 0, 0, false, new PointF[]{new PointF(0, 2)});
                         board.addParticule(numberParicule);
                     } else if (mobHealth == 1) {
-                        Particule numberParicule = new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.NUMBER1_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), 0, 0, false, new Point[]{new Point(0, 2)});
+                        Particule numberParicule = new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.NUMBER1_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), 0, 0, false, new PointF[]{new PointF(0, 2)});
                         board.addParticule(numberParicule);
                     }
                 } else {

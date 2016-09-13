@@ -2,18 +2,22 @@ package fr.giusti.onetapadventure.UI.Activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-import fr.giusti.onetapadventure.gameObject.GameBoard;
-import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.R;
-import fr.giusti.onetapadventure.repository.GameRepo;
 import fr.giusti.onetapadventure.UI.CustomView.DrawingView;
 import fr.giusti.onetapadventure.callback.OnBoardEventListener;
+import fr.giusti.onetapadventure.gameObject.GameBoard;
+import fr.giusti.onetapadventure.gameObject.entities.GameMob;
+import fr.giusti.onetapadventure.gameObject.rules.OnGameEndListener;
+import fr.giusti.onetapadventure.gameObject.rules.eConditionType;
+import fr.giusti.onetapadventure.gameObject.rules.eConditions;
+import fr.giusti.onetapadventure.repository.GameRepo;
 
 /**
  * classe qui contient tout une "partie"
@@ -22,7 +26,7 @@ import fr.giusti.onetapadventure.callback.OnBoardEventListener;
  *
  * @author giusti
  */
-public class GameActivity extends Activity implements OnAllMobDeadListener, OnBoardEventListener, OnScrollingEndListener {
+public class GameActivity extends Activity implements OnBoardEventListener, OnGameEndListener {
     private static final String TAG = GameActivity.class.getSimpleName();
     private DrawingView mDrawingSurface;
     private Button mPauseButton;
@@ -34,7 +38,7 @@ public class GameActivity extends Activity implements OnAllMobDeadListener, OnBo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG,"GameActivity created");
+        Log.d(TAG, "GameActivity created");
         setContentView(R.layout.activity_game);
 
         getWindow().getDecorView().setSystemUiVisibility(
@@ -65,11 +69,17 @@ public class GameActivity extends Activity implements OnAllMobDeadListener, OnBo
     public void onWindowFocusChanged(boolean hasFocus) {
         if (hasFocus) {
             if (!running) {
-                if(mRepo==null){
-                    mRepo= new GameRepo( mDrawingSurface.getWidth(), mDrawingSurface.getHeight());
+                if (mRepo == null) {
+                    mRepo = new GameRepo(mDrawingSurface.getWidth(), mDrawingSurface.getHeight());
                 }
-                Log.d(TAG,"starting board init");
-                startNewGame();
+                Log.d(TAG, "starting board init");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startNewGame();
+
+                    }
+                },1000);
                 running = true;
             }
         }
@@ -130,50 +140,43 @@ public class GameActivity extends Activity implements OnAllMobDeadListener, OnBo
      */
     private void startNewGame() {
         try {
-            GameBoard board=mRepo.generateSampleBoard(this);
-            Log.d(TAG,"Board created");
+            //GameBoard board=mRepo.generateSampleBoard(this);
+            GameBoard board = mRepo.generateLvl_1x1(this, this);
+            Log.d(TAG, "Board created");
 
             board.setBoardEventListener(this);
             //  board.setScrollingEndListener(this);
 
             mDrawingSurface.startGame(board);
         } catch (CloneNotSupportedException e) {
-            Toast.makeText(this, "error clonning sample mob list",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "error clonning sample mob list", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }
 
-    @Override
-    public void OnScrollingEnd() {
 
-        this.runOnUiThread(new Runnable() {
-            public void run() {
-                Toast.makeText(GameActivity.this, "scolling end", Toast.LENGTH_SHORT).show();
-            }
-        });
+    @Override
+    public void firstUpdate() {
 
     }
 
     @Override
-    public void onMobDeath(final GameMob deadMob) {
-        this.runOnUiThread(new Runnable() {
-            public void run() {
-                Toast.makeText(GameActivity.this, "mob dead at "+deadMob.mPosition.centerX()+":"+deadMob.mPosition.centerY(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
+    public void onMobCountChange(int count, eConditions reason, GameMob mob) {
 
     }
 
     @Override
-    public void onAllMobDead(final GameMob lastMobKilled) {
-        this.runOnUiThread(new Runnable() {
-            public void run() {
-                Toast.makeText(GameActivity.this, "Last mob killed at "+lastMobKilled.mPosition.centerX()+":"+lastMobKilled.mPosition.centerY(), Toast.LENGTH_SHORT).show();
-            }
-        });
+    public void onScorePlus(int add) {
 
     }
 
+    @Override
+    public void onScoreMinus(int remove) {
 
+    }
+
+    @Override
+    public void onGameEnd(eConditionType gameResult, String gameId, int score) {
+        Toast.makeText(this, "end of game, result: " + gameResult + "\n Score: " + score, Toast.LENGTH_LONG).show();
+    }
 }
