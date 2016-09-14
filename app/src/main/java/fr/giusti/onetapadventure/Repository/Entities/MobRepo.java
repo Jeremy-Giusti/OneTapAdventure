@@ -158,11 +158,11 @@ public class MobRepo {
         TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
 
         String bitmapId = "hole1pict";
-        SpriteRepo.addPicture(bitmapId, BitmapFactory.decodeResource(context.getResources(), R.drawable.brokenglass_left_side));
-        PointF posDest = new PointF(350, 200);
+        SpriteRepo.addPicture(bitmapId, BitmapFactory.decodeResource(context.getResources(), R.drawable.brokenglass_front));
+        PointF posDest = new PointF(364, 192);
         PointF startPos = new PointF(1020, 256);
-        RectF hitbox = new RectF(326, 132, 392, 272);
-        Scenery hole1 = new Scenery("holes1", 263, 64, 266, 263, hitbox, touchedMoveRepo.getMoveById(TouchedMoveRepo.MOB_AWAY_MOVE), bitmapId);
+        RectF hitbox = new RectF(312, 140, 416, 244);
+        Scenery hole1 = new Scenery("holes1", 300, 128, 128, 128, hitbox, touchedMoveRepo.getMoveById(TouchedMoveRepo.MOB_AWAY_MOVE), bitmapId);
         entityList.add(hole1);
 
         String mob1sptsheetId = "tier1Mob";

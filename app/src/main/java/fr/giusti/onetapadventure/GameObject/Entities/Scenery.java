@@ -13,7 +13,8 @@ import fr.giusti.onetapadventure.repository.SpriteRepo;
  */
 public class Scenery extends Entity {
 
-    private RectF hitbox;
+    public RectF hitbox;
+    private RectF hitboxTemp;
     private TouchedMove touchedByMob;
 
     /**
@@ -28,6 +29,7 @@ public class Scenery extends Entity {
         super(idName, x, y, width, height, mBitmapId);
         touchedByMob = onCollision;
         this.hitbox = hitbox;
+        hitboxTemp = new RectF(hitbox);
     }
 
     public Scenery(String idName, int x, int y, int width, int height, float hitboxRatio, TouchedMove onCollision, String mBitmapId) {
@@ -48,9 +50,10 @@ public class Scenery extends Entity {
 
     @Override
     public void update(GameBoard board) {
-        for(GameMob mob : board.getMobs()){
-            if(hitbox.intersect(mob.mPosition)){
-                touchedByMob.doTouchedMove(board,mob,null);
+        for (GameMob mob : board.getMobs()) {
+            if (hitboxTemp.intersect(mob.mPosition)) {
+                hitboxTemp = new RectF(hitbox);
+                touchedByMob.doTouchedMove(board, mob, null);
             }
         }
     }
@@ -69,7 +72,7 @@ public class Scenery extends Entity {
 //        float diffHeight = (newHeight - oldHeight) / 2;
 //        float diffWidth = (newWidth - oldWidth) / 2;
 
-        mPosition = new RectF(mPosition.left *ratio, mPosition.top*ratio, mPosition.right *ratio, mPosition.bottom *ratio);
+        mPosition = new RectF(mPosition.left * ratio, mPosition.top * ratio, mPosition.right * ratio, mPosition.bottom * ratio);
 
         SpriteRepo.resizePicture(mBitmapId, ratio);
 
@@ -80,7 +83,7 @@ public class Scenery extends Entity {
 //        float diffHeightHB = (newHeightHB - oldHeightHB) / 2;
 //        float diffWidthHB = (newWidthHB - oldWidthHB) / 2;
 
-        hitbox = new RectF(hitbox.left *ratio, hitbox.top *ratio, hitbox.right *ratio, hitbox.bottom *ratio);
-
+        hitbox = new RectF(hitbox.left * ratio, hitbox.top * ratio, hitbox.right * ratio, hitbox.bottom * ratio);
+        hitboxTemp = new RectF(hitbox);
     }
 }

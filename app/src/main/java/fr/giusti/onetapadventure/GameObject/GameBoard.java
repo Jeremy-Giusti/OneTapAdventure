@@ -282,6 +282,7 @@ public class GameBoard {
 
         for (Scenery scenery : mSceneries) {
             scenery.draw(canvas, mBrush);
+         //   canvas.drawRect(scenery.hitbox,mBrush);
         }
 
         for (GameMob mob : mMobs) {
