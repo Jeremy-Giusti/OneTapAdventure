@@ -132,20 +132,20 @@ public class PathRepo {
      * @param inversed
      * @return
      */
-    public static PointF[] generateCurvedPath( PointF startingPos, PointF destPos, int curve, boolean inversed,int pathLength) {
+    public static PointF[] generateCurvedPath(PointF startingPos, PointF destPos, int curve, boolean inversed, int pathLength) {
         PointF[] returnPath = generateLineToDest(startingPos, destPos, pathLength);
-        float distx = destPos.x - startingPos.x;
-        float disty = destPos.y - startingPos.y;
+        float distx = Math.abs(destPos.x - startingPos.x);
+        float disty = Math.abs(destPos.y - startingPos.y);
         float yCurveRatio = distx / (distx + disty);//les courbes sont perpendiculaire a la droite non courbé
         float xCurveRatio = disty / (distx + disty);
         int inversedInt = (inversed) ? -1 : 1;
 
-        for (int i = 0; i < pathLength; i++) {
-            float avancement = i / pathLength;
-            float curveAvancement = (float) Math.cos(Math.PI / avancement);
+        for (int i = 1; i < pathLength; i++) {
+            float avancement = i /(float) pathLength;
+            float curveAvancement = (float) Math.cos(Math.PI * avancement);
 
-            float xCurrentCurve = inversedInt * curve * xCurveRatio * curveAvancement;
-            float yCurrentCurve = inversedInt * curve * yCurveRatio * curveAvancement;
+            float xCurrentCurve = (inversedInt * curve * xCurveRatio * curveAvancement)/(pathLength/2) ;
+            float yCurrentCurve = (inversedInt * curve * yCurveRatio * curveAvancement)/(pathLength/2) ;
 
             returnPath[i].x += xCurrentCurve;
             returnPath[i].y += yCurrentCurve;
