@@ -1,6 +1,8 @@
 package fr.giusti.onetapadventure.repository.DB;
 
-import android.graphics.Point;
+import android.graphics.PointF;
+
+import java.util.ArrayList;
 
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
@@ -23,10 +25,10 @@ public class ModelConverter {
 
         mobDb.setId(mob.getIdName());
         mobDb.setBoardId(boardId);
-        if(mob.getmSpecialMove1()!=null) {
+        if (mob.getmSpecialMove1() != null) {
             mobDb.setSpecialMoveId(mob.getmSpecialMove1().getId());
         }
-        if(mob.getmTouchedMove()!=null) {
+        if (mob.getmTouchedMove() != null) {
             mobDb.setTouchedMoveId(mob.getmTouchedMove().getId());
         }
         mobDb.setHealth(mob.getHealth());
@@ -64,18 +66,18 @@ public class ModelConverter {
     //////////////////////////////////////////////////////////////////
 
 
-    public static Point[] pathDBtoPath(PathDB pathDb) {
+    public static PointF[] pathDBtoPath(PathDB pathDb) {
         PathDB.PointDB[] pointListDB = pathDb.getPath();
-        Point[] path = new Point[pointListDB.length];
+        PointF[] path = new PointF[pointListDB.length];
 
         for (int i = 0; i < pointListDB.length; i++) {
-            path[i] = new Point(pointListDB[i].x, pointListDB[i].y);
+            path[i] = new PointF(pointListDB[i].x, pointListDB[i].y);
         }
 
         return path;
     }
 
-    public static PathDB pathToPathDB(Point[] path, String pathDbId, String mobId) {
+    public static PathDB pathToPathDB(PointF[] path, String pathDbId, String mobId) {
         PathDB.PointDB[] pointListDb = new PathDB.PointDB[path.length];
         PathDB pathDb = new PathDB();
 
@@ -99,11 +101,11 @@ public class ModelConverter {
     ///////////////////////////////////////////////////////////////////////
 
     public static GameBoard boardDbToBoard(BoardDB boardDB) {
-        return new GameBoard(null, boardDB.getBackgroundUrl(), boardDB.getWidth(), boardDB.getHeight(),boardDB.getCamRect());
+        return new GameBoard(new ArrayList<GameMob>(), boardDB.getBackgroundUrl(), boardDB.getWidth(), boardDB.getHeight(), boardDB.getCamRect());
     }
 
     public static BoardDB boardDbToBoard(GameBoard board, String boardId) {
-        return new BoardDB(boardId, board.getBackgroundBitmapId(), board.getHeight(), board.getWidth(),board.getmCameraBound());
+        return new BoardDB(boardId, board.getBackgroundBitmapId(), board.getHeight(), board.getWidth(), board.getmCameraBound());
     }
 
 }

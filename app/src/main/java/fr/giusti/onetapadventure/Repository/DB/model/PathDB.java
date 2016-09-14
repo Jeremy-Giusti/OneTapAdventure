@@ -118,10 +118,10 @@ public class PathDB {
     }
 
     public static class PointDB implements Serializable {
-        public int x;
-        public int y;
+        public float x;
+        public float y;
 
-        public PointDB(int x, int y) {
+        public PointDB(float x, float y) {
             this.x = x;
             this.y = y;
         }

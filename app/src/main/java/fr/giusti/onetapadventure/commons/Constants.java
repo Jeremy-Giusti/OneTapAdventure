@@ -9,7 +9,7 @@ public class Constants {
 
     public final static int SPRITESHEETWIDTH = 3;
     public final static int SPRITESHEETHEIGHT = 8;
-    public static final int FRAME_PER_SEC = 50;
+    public static final int FRAME_PER_SEC = 30;
     public static final int NB_FRAME_ON_ANIMATION = SPRITESHEETWIDTH;
     public static final int FRAME_DURATION = FRAME_PER_SEC/10;
     public static final int COMPLETE_ANIMATION_DURATION = (NB_FRAME_ON_ANIMATION * FRAME_DURATION) - 1;

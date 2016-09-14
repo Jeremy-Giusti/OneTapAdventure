@@ -1,6 +1,7 @@
 package fr.giusti.onetapadventure.repository;
 
 import android.graphics.Point;
+import android.graphics.PointF;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,7 +57,7 @@ public class TouchedMoveRepo {
                 currentMob.setState(GameMob.eMobState.DYING);
             }
             currentMob.setAnimationState(0);
-            board.getmParticules().add(new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.BLOOD_PARTICULE, touchPoint.x, touchPoint.y,(int) currentMob.getWidth(),(int) currentMob.getHeight(), false, new Point[]{currentMob.getCurrentMove()}));
+            board.getmParticules().add(new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.BLOOD_PARTICULE, touchPoint.x, touchPoint.y,(int) currentMob.getWidth(),(int) currentMob.getHeight(), false, new PointF[]{currentMob.getCurrentMove()}));
 
         }
 
@@ -96,7 +97,7 @@ public class TouchedMoveRepo {
                 int particuleX = currentMob.getPositionX();
                 int particuleY = currentMob.getPositionY();
 
-                Point[] mobMovePatern = currentMob.getMovePattern();
+                PointF[] mobMovePatern = currentMob.getMovePattern();
 
 
 
@@ -163,6 +164,7 @@ public class TouchedMoveRepo {
         touchedMoveList.put(baitMove.getId(), baitMove);
         touchedMoveList.put(bleedMove.getId(), bleedMove);
         touchedMoveList.put(healMove.getId(), healMove);
+        touchedMoveList.put(mobAwayMove.getId(), mobAwayMove);
         touchedMoveList.put(default_touched_move.getId(), default_touched_move);
     }
 

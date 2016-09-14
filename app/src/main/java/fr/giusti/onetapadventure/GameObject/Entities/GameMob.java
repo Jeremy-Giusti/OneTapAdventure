@@ -6,12 +6,14 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.util.Log;
 
+import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.moves.SpecialMove;
 import fr.giusti.onetapadventure.gameObject.moves.TouchedMove;
+import fr.giusti.onetapadventure.repository.PathRepo;
 import fr.giusti.onetapadventure.repository.SpriteRepo;
-import fr.giusti.onetapadventure.commons.Constants;
 
 public class GameMob extends Entity {
     private static final String TAG = GameMob.class.getName();
@@ -78,7 +80,7 @@ public class GameMob extends Entity {
      * @param state       l'etat du mob (inutilisé pour le moment)
      */
     public GameMob(String idName, int x, int y, int width, int height, PointF[] movePattern, SpecialMove specialMove1, TouchedMove touchedmove, String mBitmapId, int health, int state) {
-        super(idName,x,y,width,height,mBitmapId);
+        super(idName, x, y, width, height, mBitmapId);
         this.movePattern = movePattern;
         this.mSpecialMove1 = specialMove1;
         this.mTouchedMove = touchedmove;
@@ -87,7 +89,7 @@ public class GameMob extends Entity {
     }
 
     public GameMob(String idName, int x, int y, int width, int height, PointF[] movePattern, SpecialMove specialMove1, TouchedMove touchedmove, String mBitmapId, int health, eMobState state) {
-        super(idName,x,y,width,height,mBitmapId);
+        super(idName, x, y, width, height, mBitmapId);
         this.movePattern = movePattern;
         this.mSpecialMove1 = specialMove1;
         this.mTouchedMove = touchedmove;
@@ -335,6 +337,7 @@ public class GameMob extends Entity {
 
             //RectF rectPositionOnScreen = new RectF(mPosition);
 //            rectPositionOnScreen.offsetTo(mPosition.left, mPosition.top);
+            Log.i(TAG, "drawing: " + idName + "\n column:" + mSpriteCurrentColumn + " line:" + mState.index);
             canvas.drawBitmap(SpriteRepo.getSpriteBitmap(mBitmapId, mSpriteCurrentColumn, mState.index), null, mPosition, mBrush);
 
         }
@@ -411,15 +414,15 @@ public class GameMob extends Entity {
 
     @Override
     public void resize(float ratio) {
-        float oldWidth = getWidth();
-        float newWidth = oldWidth * ratio;
-        float oldHeight = getHeight();
-        float newHeight = oldHeight * ratio;
-        float diffHeight = (newHeight - oldHeight) / 2;
-        float diffWidth = (newWidth - oldWidth) / 2;
+//        float oldWidth = getWidth();
+//        float newWidth = oldWidth * ratio;
+//        float oldHeight = getHeight();
+//        float newHeight = oldHeight * ratio;
+//        float diffHeight = (oldHeight - newHeight) / 2;
+//        float diffWidth = (oldWidth -newWidth ) / 2;
 
-        mPosition = new RectF(mPosition.left - diffWidth, mPosition.top - diffHeight, mPosition.right + diffWidth, mPosition.bottom + diffHeight);
-
+        mPosition = new RectF(mPosition.left *ratio, mPosition.top*ratio, mPosition.right *ratio, mPosition.bottom *ratio);
+        movePattern = PathRepo.createScalePath(ratio,movePattern);
         SpriteRepo.resizeSprites(mBitmapId, (int) getWidth(), (int) getHeight());
     }
 

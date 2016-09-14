@@ -3,11 +3,13 @@
 *******************************************| TODO |*******************************************
 
     prioritised Functionality:
+    - gestion drawing offset si camera != boardDimens
+    - rendre les rule "observable" (retour d'un string quand les valeur change)
+    - augmenter les pv et degate du toucher pour avoir plus d'amplitude sur la vie des mob (x10 ou x100)
+    - voir pathRepo
     - ameliorer la creation de particule
     - variable alignement pour les mobs
-    - collision mob (methode non appelé a chaque fois)
     - mob cannibale
-    - infinite particule
 	- mettre en pause et reprendre le jeux (?comment?)
 
 

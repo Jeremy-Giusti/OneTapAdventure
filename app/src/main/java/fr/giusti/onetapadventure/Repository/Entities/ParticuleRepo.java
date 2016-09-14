@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.RectF;
 
 import java.util.HashMap;
@@ -72,7 +73,7 @@ public class ParticuleRepo {
 
        SpriteRepo.addSpritesheetIfDoesntExist(id, bm, Constants.PARTICULE_NB_FRAME_ON_ANIMATION, 1);
 
-        return new Particule(id, 0, 0, particuleWidth, particuleHeight, new Point[]{new Point(0, 0)}, id, false,false);
+        return new Particule(id, 0, 0, particuleWidth, particuleHeight, new PointF[]{new PointF(0, 0)}, id, false,false);
     }
 
     public Particule getParticuleById(String id) {
@@ -89,7 +90,7 @@ public class ParticuleRepo {
      * @param path     the new path
      * @return null if not found
      */
-    public Particule generateOrGetCustomParticule(String id, int x, int y, int width, int height, boolean reversed, Point[] path) {
+    public Particule generateOrGetCustomParticule(String id, int x, int y, int width, int height, boolean reversed, PointF[] path) {
         String customParticuleId = id+width+"x"+height+reversed;
         //TODO optimise
         //if(mParticuleList.containsKey(customParticuleId))
