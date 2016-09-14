@@ -2,7 +2,6 @@ package fr.giusti.onetapadventure.UI.Activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -73,13 +72,13 @@ public class GameActivity extends Activity implements OnBoardEventListener, OnGa
                     mRepo = new GameRepo(mDrawingSurface.getWidth(), mDrawingSurface.getHeight());
                 }
                 Log.d(TAG, "starting board init");
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startNewGame();
-
-                    }
-                },1000);
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+                startNewGame();
+//
+//                    }
+//                },1000);
                 running = true;
             }
         }
