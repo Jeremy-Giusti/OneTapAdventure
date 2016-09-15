@@ -8,13 +8,14 @@ import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.entities.Entity;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
+import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 
 /**
  * Created by jérémy on 13/09/2016.
  */
 public class ThreeTierEntityDispenser extends EntityDispenser {
-    private final int mobPopTickFrequency = Constants.FRAME_PER_SEC * 2;
-    private final int minMobOnBoard = 2;
+    private final int mobPopTickFrequency =(int) (Constants.FRAME_PER_SEC * Lvl1Constant.MOB_POP_FREQUENCY_SEC);
+    private final int minMobOnBoard = Lvl1Constant.MIN_MOB_ON_SCREEN;
     private long currentTick = 0;
     private ArrayList<GameMob> tier1Mobs;
     private ArrayList<GameMob> tier2Mobs;

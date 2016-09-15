@@ -7,7 +7,7 @@ import android.graphics.Rect;
 
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.rules.OnGameEndListener;
-import fr.giusti.onetapadventure.gameObject.rules.Rules;
+import fr.giusti.onetapadventure.gameObject.rules.RulesManager;
 import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapadventure.repository.entities.EntityDispenserRepo;
 import fr.giusti.onetapadventure.repository.entities.MobRepo;
@@ -58,10 +58,10 @@ public class GameRepo {
         //TODO create mob dispenser and add it to board
         //create mob dispenser
         //add hole to board as immobile neutral mob with collision
-        Rules rules = RuleRepo.getLvl_1x1_Rules(gameListener);
+        RulesManager rulesManager = RuleRepo.getLvl_1x1_Rules(gameListener);
         GameBoard board = new GameBoard(EntityDispenserRepo.getLvl1_1MobDispenser(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight));
         board.resize(mScreenWidth,mScreenHeight);
-        board.setBoardEventListener(rules);
+        board.setBoardEventListener(rulesManager);
         return board;
     }
 

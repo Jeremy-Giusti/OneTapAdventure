@@ -4,20 +4,21 @@ import java.util.ArrayList;
 
 import fr.giusti.onetapadventure.gameObject.rules.OnGameEndListener;
 import fr.giusti.onetapadventure.gameObject.rules.Rule;
-import fr.giusti.onetapadventure.gameObject.rules.Rules;
+import fr.giusti.onetapadventure.gameObject.rules.RulesManager;
 import fr.giusti.onetapadventure.gameObject.rules.eConditionType;
 import fr.giusti.onetapadventure.gameObject.rules.eConditions;
 import fr.giusti.onetapadventure.callback.OnRuleAccomplishedListener;
 import fr.giusti.onetapadventure.commons.Constants;
+import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 
 /**
  * Created by jérémy on 09/09/2016.
  */
 public class RuleRepo {
 
-    public static Rules getLvl_1x1_Rules(final OnGameEndListener gameEndListener) {
-        Rule masterRule = new Rule(eConditionType.DEFEAT, eConditions.MOB_AWAY, 0, 20);
-        Rule endRule = new Rule(eConditionType.END, eConditions.MOB_COUNTDOWN, 0, 20);
+    public static RulesManager getLvl_1x1_Rules(final OnGameEndListener gameEndListener) {
+        Rule masterRule = new Rule(eConditionType.DEFEAT, eConditions.MOB_AWAY, 0, Lvl1Constant.MOB_NB/4);
+        Rule endRule = new Rule(eConditionType.END, eConditions.MOB_COUNTDOWN, 0, Lvl1Constant.MOB_NB);
 
         OnRuleAccomplishedListener accomplishedBehavior = new OnRuleAccomplishedListener() {
             @Override
@@ -27,6 +28,7 @@ public class RuleRepo {
 
             @Override
             public void onTimerEnded(Rule masterRule, Rule timerRule, ArrayList<Rule> secondaries) {
+                //Should not happen
                 gameEndListener.onGameEnd(eConditionType.NULL, Constants.getLevelId(1,1),0);
             }
 
@@ -37,7 +39,7 @@ public class RuleRepo {
         };
 
 
-        return new Rules(masterRule,accomplishedBehavior,endRule );
+        return new RulesManager(masterRule,accomplishedBehavior,endRule );
     }
 
 

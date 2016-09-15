@@ -29,7 +29,7 @@ public class Rule {
         intCondition = false;
     }
 
-    public eConditionType checkCondition(int value, boolean reduce) {
+    public eConditionType ruleProgress(int value, boolean reduce) {
         if (condition == eConditions.MOB_COUNT)
             return (value == goalInt) ? type : eConditionType.NULL;
 
@@ -38,7 +38,7 @@ public class Rule {
         return (valueInt == goalInt) ? type : eConditionType.NULL;
     }
 
-    public eConditionType checkCondition(String value) {
+    public eConditionType ruleProgress(String value) {
         return (value.equals(goalStr)) ? type : eConditionType.NULL;
     }
 

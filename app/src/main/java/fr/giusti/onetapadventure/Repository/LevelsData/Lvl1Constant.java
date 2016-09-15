@@ -9,7 +9,7 @@ import android.graphics.RectF;
 public class Lvl1Constant {
     public static final int MOB_NB = 51;
     public static final int MIN_MOB_ON_SCREEN = 2;
-    public static final int MOB_POP_FREQUENCY_SEC = 2;
+    public static final float MOB_POP_FREQUENCY_SEC = 2.5f;
     public static final int MOB_SIZE = 48;
     public static final int MOB_POP_X = 950;
     public static final int MOB_POP_Y_MAX_VAlUE = 470;
