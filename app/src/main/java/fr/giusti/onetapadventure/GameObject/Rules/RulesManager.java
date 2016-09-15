@@ -5,9 +5,9 @@ import android.os.Handler;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.callback.OnBoardEventListener;
 import fr.giusti.onetapadventure.callback.OnRuleAccomplishedListener;
+import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 
 /**
  * Created by jérémy on 08/09/2016.
@@ -15,7 +15,7 @@ import fr.giusti.onetapadventure.callback.OnRuleAccomplishedListener;
 public class RulesManager implements OnBoardEventListener {
     public static final int TIME_PROGRESS_FREQUENCY = 1000;
     private HashMap<eConditions, ArrayList<Rule>> indexedRuleList = new HashMap<>();
-    private ArrayList<Rule> results = new ArrayList<>();
+    private ArrayList<Rule> accomplishedRules = new ArrayList<>();
     private Rule masterRule;
     private Rule timerRule = null;
     private OnRuleAccomplishedListener listener;
@@ -23,7 +23,7 @@ public class RulesManager implements OnBoardEventListener {
 
     public RulesManager(Rule masterRule, OnRuleAccomplishedListener ruleAchievedBehavior, Rule... ruleList) {
         this.masterRule = masterRule;
-        this.listener=ruleAchievedBehavior;
+        this.listener = ruleAchievedBehavior;
         for (eConditions condition : eConditions.values()) {
             indexedRuleList.put(condition, new ArrayList<Rule>());
         }
@@ -51,17 +51,30 @@ public class RulesManager implements OnBoardEventListener {
         this.listener = listener;
     }
 
+    public boolean setRuleListener(String ruleName, IRuleProgressListener ruleListener) {
+        for (ArrayList<Rule> ruleList : indexedRuleList.values()) {
+            for (Rule rule : ruleList) {
+                if (ruleName.equals(rule.getIdName())) {
+                    rule.setListener(ruleListener);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
     private void onRuleAccomplished(Rule rule) {
         if (rule.equals(masterRule)) {
-            listener.onMasterRuleAccomplished(rule, timerRule, results);
+            listener.onMasterRuleAccomplished(rule, timerRule, accomplishedRules);
         }
         if (rule.equals(timerRule)) {
-            listener.onTimerEnded(rule, timerRule, results);
+            listener.onTimerEnded(rule, timerRule, accomplishedRules);
         } else if (rule.type == eConditionType.END) {
-            results.add(rule);
-            listener.onGameEnded(rule, timerRule, results);
+            accomplishedRules.add(rule);
+            listener.onGameEnded(rule, timerRule, accomplishedRules);
         } else {
-            results.add(rule);
+            accomplishedRules.add(rule);
         }
     }
 

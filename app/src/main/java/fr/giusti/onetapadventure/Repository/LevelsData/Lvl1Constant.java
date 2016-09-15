@@ -15,6 +15,8 @@ public class Lvl1Constant {
     public static final int MOB_POP_Y_MAX_VAlUE = 470;
     public static final Rect HOLE1_DIMENS = new Rect(300,128,428,256);
     public static final int HOLE_HITBOX_MARGIN = MOB_SIZE/2;
+    public static final String ESCAPING_MOB_RULE ="escapingMob";
+    public static final String LEVEL_END_RULE ="levelEnd1x1";
 
 
 
