@@ -4,6 +4,7 @@
 
     prioritised Functionality:
     - gestion drawing offset si camera != boardDimens
+    - mob Disapear (no moving + no touchable + alpha increase)
     - rendre les rule "observable" (retour d'un string quand les valeur change)
     - augmenter les pv et degate du toucher pour avoir plus d'amplitude sur la vie des mob (x10 ou x100)
     - voir pathRepo

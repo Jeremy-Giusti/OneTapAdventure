@@ -27,6 +27,7 @@ import fr.giusti.onetapadventure.repository.PathRepo;
 import fr.giusti.onetapadventure.repository.SpecialMoveRepo;
 import fr.giusti.onetapadventure.repository.SpriteRepo;
 import fr.giusti.onetapadventure.repository.TouchedMoveRepo;
+import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 
 public class MobRepo {
 
@@ -159,10 +160,17 @@ public class MobRepo {
 
         String bitmapId = "hole1pict";
         SpriteRepo.addPicture(bitmapId, BitmapFactory.decodeResource(context.getResources(), R.drawable.brokenglass_front));
-        PointF posDest = new PointF(364, 192);
-        PointF startPos = new PointF(1020, 256);
-        RectF hitbox = new RectF(312, 140, 416, 244);
-        Scenery hole1 = new Scenery("holes1", 300, 128, 128, 128, hitbox, touchedMoveRepo.getMoveById(TouchedMoveRepo.MOB_AWAY_MOVE), bitmapId);
+
+        PointF posDest = new PointF(Lvl1Constant.HOLE1_DIMENS.left+  Lvl1Constant.HOLE1_DIMENS.width()/2, Lvl1Constant.HOLE1_DIMENS.top + Lvl1Constant.HOLE1_DIMENS.height()/2);
+        PointF startPos = new PointF(Lvl1Constant.MOB_POP_X, Lvl1Constant.MOB_POP_Y_MAX_VAlUE/2);
+
+        int hitboxLeft = Lvl1Constant.HOLE1_DIMENS.left-Lvl1Constant.HOLE_HITBOX_MARGIN;
+        int hitboxTop = Lvl1Constant.HOLE1_DIMENS.top-Lvl1Constant.HOLE_HITBOX_MARGIN;
+        int hitboxRight = Lvl1Constant.HOLE1_DIMENS.right-Lvl1Constant.HOLE_HITBOX_MARGIN;
+        int hitboxBottom = Lvl1Constant.HOLE1_DIMENS.bottom-Lvl1Constant.HOLE_HITBOX_MARGIN;
+        RectF hitbox = new RectF(hitboxLeft, hitboxTop, hitboxRight, hitboxBottom);
+
+        Scenery hole1 = new Scenery("holes1", Lvl1Constant.HOLE1_DIMENS.left, Lvl1Constant.HOLE1_DIMENS.top, Lvl1Constant.HOLE1_DIMENS.width(), Lvl1Constant.HOLE1_DIMENS.height(), hitbox, touchedMoveRepo.getMoveById(TouchedMoveRepo.MOB_AWAY_MOVE), bitmapId);
         entityList.add(hole1);
 
         String mob1sptsheetId = "tier1Mob";
@@ -174,7 +182,7 @@ public class MobRepo {
 
         PointF[] mob1Pattern = PathRepo.generateLineToDest(startPos, posDest, Constants.FRAME_PER_SEC * 3);
 
-        GameMob mob1 = new GameMob("firstMob", 950, 227, 48, 48, mob1Pattern, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mob1sptsheetId, 1, 1);
+        GameMob mob1 = new GameMob("firstMob", (int)startPos.x, (int)startPos.y, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE, mob1Pattern, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mob1sptsheetId, 1, 1);
         entityList.add(mob1);
 
         //TODO brocken glass particule
@@ -183,17 +191,15 @@ public class MobRepo {
 
     public static ArrayList<Pair<Integer, GameMob>> getLvl1x1BackupList(Context context) {
         ArrayList<Pair<Integer, GameMob>> backupList = new ArrayList<Pair<Integer, GameMob>>();
-        int mobNb = 19;
+        int mobNb = Lvl1Constant.MOB_NB-1;
 
-        int startPosx = 950;
         String mobaseNameID = "mob";
         int currentTier = 1;
-        int maxSeed = 470;
-        PointF posDest = new PointF(350, 200);
+        PointF posDest = new PointF(Lvl1Constant.HOLE1_DIMENS.left+  Lvl1Constant.HOLE1_DIMENS.width()/2, Lvl1Constant.HOLE1_DIMENS.top + Lvl1Constant.HOLE1_DIMENS.height()/2);
         for (int i = 0; i < mobNb; i++) {
             currentTier = (i%3)+1;
-            int seed = (int)( Math.random() *(float) maxSeed);
-            GameMob mob = getMobFromSeed(context,currentTier, seed, posDest, mobaseNameID + i, startPosx, seed, 48, 48);
+            int seed = (int)( Math.random() *(float) Lvl1Constant.MOB_POP_Y_MAX_VAlUE);
+            GameMob mob = getMobFromSeed(context,currentTier, seed, posDest, mobaseNameID + i, Lvl1Constant.MOB_POP_X, seed, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE);
             backupList.add(new Pair<>(currentTier, mob));
         }
 
