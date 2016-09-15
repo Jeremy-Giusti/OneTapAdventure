@@ -3,6 +3,7 @@ package fr.giusti.onetapadventure.repository.entities;
 import android.util.Pair;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
@@ -56,17 +57,24 @@ public class ThreeTierEntityDispenser extends EntityDispenser {
     @Override
     protected void updateMobs(GameBoard board) {
         currentTick += UPDATE_FREQUENCY;
+        List<GameMob> mobsOnBoard = board.getMobs();
+        int maxTiersOnBoard = 1;
         if ((/*currentTick % mobPopTickFrequency == 0 ||*/ board.getMobs().size() < minMobOnBoard) && !lastMobPoped) {
-            GameMob concernedMob = getConcernedMob();
+           for(GameMob mob:mobsOnBoard){
+               if(mob.getAlignement()>maxTiersOnBoard);
+               maxTiersOnBoard=mob.getAlignement();
+           }
+
+            GameMob concernedMob = getConcernedMob(maxTiersOnBoard);
             if (concernedMob != null) board.onNewMob(concernedMob);
         }
     }
 
 
-    public GameMob getConcernedMob() {
+    public GameMob getConcernedMob(int mxTierOnBoard) {
         GameMob concernedMob = null;
 
-        if (tier1Mobs.size() > 0) {
+        if (tier1Mobs.size() > 20 || ((mxTierOnBoard>1) && tier1Mobs.size()>0)) {
             concernedMob = tier1Mobs.get(0);
             tier1Mobs.remove(concernedMob);
         } else if (tier2Mobs.size() > 0) {
@@ -96,6 +104,7 @@ public class ThreeTierEntityDispenser extends EntityDispenser {
         for (GameMob mob : tier3Mobs) {
             mob.resize(ratio);
         }
+        lastMob.resize(ratio);
     }
 
 }

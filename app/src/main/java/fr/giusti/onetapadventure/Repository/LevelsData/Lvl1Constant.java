@@ -18,6 +18,8 @@ public class Lvl1Constant {
     public static final String ESCAPING_MOB_RULE ="escapingMob";
     public static final String LEVEL_END_RULE ="levelEnd1x1";
 
-
+    public static final int TIERS1_MOB_OCCURENCE = 35;
+    public static final int TIERS2_MOB_OCCURENCE = 10 ;
+    //
 
 }

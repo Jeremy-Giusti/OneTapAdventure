@@ -10,7 +10,6 @@ import android.util.Pair;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapadventure.commons.Constants;
@@ -161,13 +160,13 @@ public class MobRepo {
         String bitmapId = "hole1pict";
         SpriteRepo.addPicture(bitmapId, BitmapFactory.decodeResource(context.getResources(), R.drawable.brokenglass_front));
 
-        PointF posDest = new PointF(Lvl1Constant.HOLE1_DIMENS.left+  Lvl1Constant.HOLE1_DIMENS.width()/2, Lvl1Constant.HOLE1_DIMENS.top + Lvl1Constant.HOLE1_DIMENS.height()/2);
-        PointF startPos = new PointF(Lvl1Constant.MOB_POP_X, Lvl1Constant.MOB_POP_Y_MAX_VAlUE/2);
+        PointF posDest = new PointF(Lvl1Constant.HOLE1_DIMENS.left + Lvl1Constant.HOLE1_DIMENS.width() / 2, Lvl1Constant.HOLE1_DIMENS.top + Lvl1Constant.HOLE1_DIMENS.height() / 2);
+        PointF startPos = new PointF(Lvl1Constant.MOB_POP_X, Lvl1Constant.MOB_POP_Y_MAX_VAlUE / 2);
 
-        int hitboxLeft = Lvl1Constant.HOLE1_DIMENS.left-Lvl1Constant.HOLE_HITBOX_MARGIN;
-        int hitboxTop = Lvl1Constant.HOLE1_DIMENS.top-Lvl1Constant.HOLE_HITBOX_MARGIN;
-        int hitboxRight = Lvl1Constant.HOLE1_DIMENS.right-Lvl1Constant.HOLE_HITBOX_MARGIN;
-        int hitboxBottom = Lvl1Constant.HOLE1_DIMENS.bottom-Lvl1Constant.HOLE_HITBOX_MARGIN;
+        int hitboxLeft = Lvl1Constant.HOLE1_DIMENS.left - Lvl1Constant.HOLE_HITBOX_MARGIN;
+        int hitboxTop = Lvl1Constant.HOLE1_DIMENS.top - Lvl1Constant.HOLE_HITBOX_MARGIN;
+        int hitboxRight = Lvl1Constant.HOLE1_DIMENS.right - Lvl1Constant.HOLE_HITBOX_MARGIN;
+        int hitboxBottom = Lvl1Constant.HOLE1_DIMENS.bottom - Lvl1Constant.HOLE_HITBOX_MARGIN;
         RectF hitbox = new RectF(hitboxLeft, hitboxTop, hitboxRight, hitboxBottom);
 
         Scenery hole1 = new Scenery("holes1", Lvl1Constant.HOLE1_DIMENS.left, Lvl1Constant.HOLE1_DIMENS.top, Lvl1Constant.HOLE1_DIMENS.width(), Lvl1Constant.HOLE1_DIMENS.height(), hitbox, touchedMoveRepo.getMoveById(TouchedMoveRepo.MOB_AWAY_MOVE), bitmapId);
@@ -179,10 +178,13 @@ public class MobRepo {
         SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet_yellow), mob2sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
         String mob3sptsheetId = "tier3Mob";
         SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet4), mob3sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+        String lastMobsptsheetId = "lastMob";
+        SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet3), lastMobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
 
         PointF[] mob1Pattern = PathRepo.generateLineToDest(startPos, posDest, Constants.FRAME_PER_SEC * 3);
 
-        GameMob mob1 = new GameMob("firstMob", (int)startPos.x, (int)startPos.y, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE, mob1Pattern, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mob1sptsheetId, 1, 1);
+        GameMob mob1 = new GameMob("firstMob", (int) startPos.x, (int) startPos.y, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE, mob1Pattern, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mob1sptsheetId, 1, 1);
+        mob1.setAlignement(1);
         entityList.add(mob1);
 
         //TODO brocken glass particule
@@ -191,22 +193,37 @@ public class MobRepo {
 
     public static ArrayList<Pair<Integer, GameMob>> getLvl1x1BackupList(Context context) {
         ArrayList<Pair<Integer, GameMob>> backupList = new ArrayList<Pair<Integer, GameMob>>();
-        int mobNb = Lvl1Constant.MOB_NB-1;
+        int mobNb = Lvl1Constant.MOB_NB - 1;
 
         String mobaseNameID = "mob";
         int currentTier = 1;
-        PointF posDest = new PointF(Lvl1Constant.HOLE1_DIMENS.left+  Lvl1Constant.HOLE1_DIMENS.width()/2, Lvl1Constant.HOLE1_DIMENS.top + Lvl1Constant.HOLE1_DIMENS.height()/2);
+        PointF posDest = new PointF(Lvl1Constant.HOLE1_DIMENS.left + Lvl1Constant.HOLE1_DIMENS.width() / 2, Lvl1Constant.HOLE1_DIMENS.top + Lvl1Constant.HOLE1_DIMENS.height() / 2);
         for (int i = 0; i < mobNb; i++) {
-            currentTier = (i%3)+1;
-            int seed = (int)( Math.random() *(float) Lvl1Constant.MOB_POP_Y_MAX_VAlUE);
-            GameMob mob = getMobFromSeed(context,currentTier, seed, posDest, mobaseNameID + i, Lvl1Constant.MOB_POP_X, seed, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE);
+            if (i < Lvl1Constant.TIERS1_MOB_OCCURENCE) currentTier = 1;
+            else if (i < Lvl1Constant.TIERS1_MOB_OCCURENCE + Lvl1Constant.TIERS2_MOB_OCCURENCE)
+                currentTier = 2;
+            else currentTier = 3;
+            int seed = (int) (Math.random() * (float) Lvl1Constant.MOB_POP_Y_MAX_VAlUE);
+            GameMob mob = getMobFromSeed(context, currentTier, seed, posDest, mobaseNameID + i, Lvl1Constant.MOB_POP_X, seed, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE);
+            mob.setAlignement(currentTier);
             backupList.add(new Pair<>(currentTier, mob));
         }
+
+        //--------------------Last mob --------------------------
+        PointF startPos = new PointF(Lvl1Constant.MOB_POP_X, Lvl1Constant.MOB_POP_Y_MAX_VAlUE / 2);
+        PointF[] lastMobPattern = PathRepo.generateLineToDest(startPos, posDest, (int) (Constants.FRAME_PER_SEC * 0.5));
+        SpecialMoveRepo moveRepo = new SpecialMoveRepo();
+        TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
+        int lastMobDirection = (Math.random() < 0.5) ? -1 : 1;
+        GameMob lastMob = new GameMob("lastMob", (int) startPos.x, (int) startPos.y, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE, new PointF[]{new PointF(3, 7 * lastMobDirection)}, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), "lastMob", 3, 1);
+        lastMob.setAlignement(4);
+        backupList.add(new Pair<>(0, lastMob));
+        // -----------------------------------------------------
 
         return backupList;
     }
 
-    public static GameMob getMobFromSeed(Context context,int difficulty, int seed, PointF posDest, String id, int x, int y, int width, int height) {
+    public static GameMob getMobFromSeed(Context context, int difficulty, int seed, PointF posDest, String id, int x, int y, int width, int height) {
         SpecialMoveRepo moveRepo = new SpecialMoveRepo();
         TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
         TouchedMove touchedMove = touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE);
@@ -220,9 +237,9 @@ public class MobRepo {
                 path = PathRepo.generateLineToDest(new PointF(x, y), posDest, Constants.FRAME_PER_SEC * 2);
                 touchedMove = touchedMoveRepo.getMoveById(TouchedMoveRepo.BAIT);
             } else {
-                path = PathRepo.generateCurvedPath(new PointF(x, y), posDest, 100, (seed % 2 == 1), Constants.FRAME_PER_SEC * 2);
+                path = PathRepo.generateCurvedPath(new PointF(x, y), posDest, 100, (seed % 2 == 1), (int) (Constants.FRAME_PER_SEC * 2.5));
             }
-            spriteId = (difficulty==2) ? "tier2Mob" : "tier3Mob";
+            spriteId = (difficulty == 2) ? "tier2Mob" : "tier3Mob";
         }
         return new GameMob(id, x, y, width, height, path, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMove, spriteId, difficulty, 1);
 
