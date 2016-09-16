@@ -57,7 +57,7 @@ public class TouchedMoveRepo {
                 currentMob.setState(GameMob.eMobState.DYING);
             }
             currentMob.setAnimationState(0);
-            board.getmParticules().add(new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.BLOOD_PARTICULE, touchPoint.x, touchPoint.y,(int) currentMob.getWidth(),(int) currentMob.getHeight(), false, new PointF[]{currentMob.getCurrentMove()}));
+            board.getmParticules().add(new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.BLOOD_PARTICULE, touchPoint.x, touchPoint.y, (int) currentMob.getWidth(), (int) currentMob.getHeight(), false, new PointF[]{currentMob.getCurrentMove()}));
 
         }
 
@@ -92,13 +92,12 @@ public class TouchedMoveRepo {
                 currentMob.setHealth(mobHealth);
                 currentMob.setState(GameMob.eMobState.HURT);
                 //creer des leurres
-                int particuleWidth =(int) currentMob.getWidth() * 2;
-                int particuleHeight =(int) currentMob.getHeight() * 2;
+                int particuleWidth = (int) currentMob.getWidth() * 2;
+                int particuleHeight = (int) currentMob.getHeight() * 2;
                 int particuleX = currentMob.getPositionX();
                 int particuleY = currentMob.getPositionY();
 
                 PointF[] mobMovePatern = currentMob.getMovePattern();
-
 
 
                 //Change la direction du mob
@@ -147,7 +146,8 @@ public class TouchedMoveRepo {
     public static TouchedMove mobAwayMove = new TouchedMove() {
         @Override
         public void doTouchedMove(GameBoard board, GameMob currentMob, Point touchPoint) {
-           board.onMobAway(currentMob);
+            if (GameMob.eMobState.DYING != currentMob.getState())
+                board.onMobAway(currentMob);
         }
 
         @Override
