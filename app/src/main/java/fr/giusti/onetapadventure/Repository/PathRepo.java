@@ -87,7 +87,7 @@ public class PathRepo {
     public static PointF[] generateLineToDest(PointF startingPosition, PointF destination, int pathLength) {
         PointF[] result = new PointF[pathLength];
         float xSpeed = (destination.x - startingPosition.x) / (float) pathLength;
-        float ySpeed = (destination.y - startingPosition.y) / pathLength;
+        float ySpeed = (destination.y - startingPosition.y) /(float) pathLength;
 
         for (int i = 0; i < pathLength; i++) {
             result[i] = new PointF(xSpeed, ySpeed);

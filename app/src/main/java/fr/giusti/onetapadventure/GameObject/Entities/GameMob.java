@@ -218,8 +218,8 @@ public class GameMob extends Entity {
             return;
         }
 
-        int deplacementX = (int) (movePattern[currentMove].x * xAlteration);
-        int deplacementY = (int) (movePattern[currentMove].y * yAlteration);
+        float deplacementX = (float)(movePattern[currentMove].x * xAlteration);
+        float deplacementY = (float)(movePattern[currentMove].y * yAlteration);
 
         move(deplacementX, deplacementY);
         manageMapLimitCollision(board);
@@ -238,7 +238,7 @@ public class GameMob extends Entity {
      * @param deplacementX
      * @param deplacementY
      */
-    protected void move(int deplacementX, int deplacementY) {
+    protected void move(float deplacementX, float deplacementY) {
         this.mPosition.offset(deplacementX, deplacementY);
         if (mState != eMobState.DYING) {//si il est mort il ne change plus de direction
             if (currentMove < (movePattern.length - 1)) {
@@ -278,7 +278,7 @@ public class GameMob extends Entity {
      * @param deplacementX
      * @param deplacementY
      */
-    protected void updateOrientation(int deplacementX, int deplacementY) {
+    protected void updateOrientation(float deplacementX, float deplacementY) {
         //calcule en valeur absolus
         if (deplacementX * deplacementX > deplacementY * deplacementY) {
             //on se deplace principalement de facon horizontale

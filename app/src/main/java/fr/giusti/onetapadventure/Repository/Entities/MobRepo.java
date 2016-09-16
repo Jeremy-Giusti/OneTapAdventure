@@ -160,7 +160,7 @@ public class MobRepo {
         String bitmapId = "hole1pict";
         SpriteRepo.addPicture(bitmapId, BitmapFactory.decodeResource(context.getResources(), R.drawable.brokenglass_front));
 
-        PointF posDest = new PointF(Lvl1Constant.HOLE1_DIMENS.left + Lvl1Constant.HOLE1_DIMENS.width() / 2, Lvl1Constant.HOLE1_DIMENS.top + Lvl1Constant.HOLE1_DIMENS.height() / 2);
+        PointF posDest = new PointF(Lvl1Constant.HOLE1_DIMENS.left + (Lvl1Constant.HOLE1_DIMENS.width() / 2), Lvl1Constant.HOLE1_DIMENS.top + (Lvl1Constant.HOLE1_DIMENS.height() / 2));
         PointF startPos = new PointF(Lvl1Constant.MOB_POP_X, Lvl1Constant.MOB_POP_Y_MAX_VAlUE / 2);
 
         int hitboxLeft = Lvl1Constant.HOLE1_DIMENS.left - Lvl1Constant.HOLE_HITBOX_MARGIN;
@@ -190,9 +190,15 @@ public class MobRepo {
         return entityList;
     }
 
+    /**
+     * create all non initial mob for lvl 1 (3 difficulty tier and 1 last wich as different behavior)
+     *
+     * @param context
+     * @return
+     */
     public static ArrayList<Pair<Integer, GameMob>> getLvl1x1BackupList(Context context) {
         ArrayList<Pair<Integer, GameMob>> backupList = new ArrayList<Pair<Integer, GameMob>>();
-        int mobNb = Lvl1Constant.MOB_NB - 1;
+        int mobNb = Lvl1Constant.MOB_NB - 2;
 
         String mobaseNameID = "mob";
         int currentTier = 1;
