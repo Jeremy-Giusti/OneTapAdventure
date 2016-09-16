@@ -46,7 +46,6 @@ import fr.giusti.onetapadventure.commons.FileUtils;
  * @author giusti
  */
 public class MobCreationActivity extends Activity {
-    //TODO champs mob size
     protected static final int SELECT_PHOTO = 95070;
     private static final String TAG = MobCreationActivity.class.getName();
     //private Button mValidateButton;

@@ -17,7 +17,6 @@ import android.view.View;
  * @author giusti
  *
  */
-//TODO skinné/faire une grille en background
 public class PathDrawingView extends View {
 
     private static Path mTouchPath = new Path();

@@ -4,17 +4,17 @@ import android.util.Pair;
 
 import java.util.ArrayList;
 
+import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.entities.Entity;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
-import fr.giusti.onetapadventure.commons.Constants;
 
 /**
  * Created by jérémy on 08/09/2016.
  */
 public abstract class EntityDispenser {
-    protected static final int UPDATE_FREQUENCY = Constants.FRAME_PER_SEC/2;
-    private int tickCount = 0;
+    protected static final int UPDATE_FREQUENCY = Constants.FRAME_PER_SEC / 2;
+    protected long tickCount = 0;
     protected ArrayList<Entity> initList = new ArrayList<>();
 
 
@@ -41,10 +41,11 @@ public abstract class EntityDispenser {
 
 
     public void onTick(GameBoard board) {
-        if (tickCount % 10 == 0) {
-            tickCount = 0;
+        tickCount++;
+        if (tickCount % UPDATE_FREQUENCY == 0) {
             updateMobs(board);
         }
+
     }
 
     protected abstract void updateMobs(GameBoard board);

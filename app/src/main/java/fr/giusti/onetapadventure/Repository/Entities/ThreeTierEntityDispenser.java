@@ -15,9 +15,8 @@ import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
  * Created by jérémy on 13/09/2016.
  */
 public class ThreeTierEntityDispenser extends EntityDispenser {
-    private final int mobPopTickFrequency =(int) (Constants.FRAME_PER_SEC * Lvl1Constant.MOB_POP_FREQUENCY_SEC);
+    private final int mobPopTickFrequency = (int) (Constants.FRAME_PER_SEC * Lvl1Constant.MOB_POP_FREQUENCY_SEC);
     private final int minMobOnBoard = Lvl1Constant.MIN_MOB_ON_SCREEN;
-    private long currentTick = 0;
     private ArrayList<GameMob> tier1Mobs;
     private ArrayList<GameMob> tier2Mobs;
     private ArrayList<GameMob> tier3Mobs;
@@ -56,25 +55,25 @@ public class ThreeTierEntityDispenser extends EntityDispenser {
 
     @Override
     protected void updateMobs(GameBoard board) {
-        currentTick += UPDATE_FREQUENCY;
         List<GameMob> mobsOnBoard = board.getMobs();
         int maxTiersOnBoard = 1;
-        if ((/*currentTick % mobPopTickFrequency == 0 ||*/ board.getMobs().size() < minMobOnBoard) && !lastMobPoped) {
-           for(GameMob mob:mobsOnBoard){
-               if(mob.getAlignement()>maxTiersOnBoard);
-               maxTiersOnBoard=mob.getAlignement();
-           }
+        if ((tickCount % mobPopTickFrequency == 0 || board.getMobs().size() < minMobOnBoard) && !lastMobPoped) {
+            for (GameMob mob : mobsOnBoard) {
+                if (mob.getAlignement() > maxTiersOnBoard) ;
+                maxTiersOnBoard = mob.getAlignement();
+            }
 
             GameMob concernedMob = getConcernedMob(maxTiersOnBoard);
             if (concernedMob != null) board.onNewMob(concernedMob);
         }
+
     }
 
 
     public GameMob getConcernedMob(int mxTierOnBoard) {
         GameMob concernedMob = null;
 
-        if (tier1Mobs.size() > 20 || ((mxTierOnBoard>1) && tier1Mobs.size()>0)) {
+        if (tier1Mobs.size() > 20 || ((mxTierOnBoard > 1) && tier1Mobs.size() > 0)) {
             concernedMob = tier1Mobs.get(0);
             tier1Mobs.remove(concernedMob);
         } else if (tier2Mobs.size() > 0) {

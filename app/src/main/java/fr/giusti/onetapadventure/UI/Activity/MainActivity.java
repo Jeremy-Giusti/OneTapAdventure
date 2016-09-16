@@ -17,7 +17,6 @@ import fr.giusti.onetapadventure.repository.SpriteRepo;
  * @author giusti
  */
 public class MainActivity extends Activity {
-    //TODO meriterai d'etre "skinné"
     private final static String TAG = MainActivity.class.getName();
 
     private Button mTestAreaButton;

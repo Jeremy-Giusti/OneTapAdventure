@@ -215,7 +215,6 @@ public class GameBoard {
             case MotionEvent.ACTION_DOWN:
                 Point eventPoint = new Point((int) event.getX(), (int) event.getY());
                 for (GameMob mob : mMobs) {
-                    // TODO gerer l'envergure du touché (constants)
                     mob.manageTouchEvent(eventPoint, Constants.TOUCH_STROKE, this);
                 }
                 mTouchPoints.add(new TouchPoint((int) event.getX(), (int) event.getY()));
@@ -254,7 +253,7 @@ public class GameBoard {
         mMobs.add(mob);
     }
 
-    public void onScore(int score) {//FIXME improve score events
+    public void onScore(int score) {
         if (mEventListener != null) {
             if (score < 0) {
                 mEventListener.onScoreMinus(-score);

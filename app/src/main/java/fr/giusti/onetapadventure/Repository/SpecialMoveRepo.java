@@ -19,9 +19,6 @@ import fr.giusti.onetapadventure.repository.entities.ParticuleRepo;
  */
 public class SpecialMoveRepo {
 
-    //TODO move
-    //eat move
-
     public static final String NO_MOVE = "noMove";
     public static final String AUTO_HEAL = "autoHeal";
     public static final String AUTO_HURT_EXPLODING = "autoHurtExploding";

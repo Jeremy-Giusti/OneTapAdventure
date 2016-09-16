@@ -47,7 +47,6 @@ public class TouchPoint {
     }
 
     public void draw(Canvas canvas, Paint brush) {
-        //TODO gerer l'etat
         if (state < 5) {
           canvas.drawCircle(x, y, Constants.TOUCH_STROKE*2 / 2, brush);
         } else if (state > 10) {

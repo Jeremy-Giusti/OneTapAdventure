@@ -2,6 +2,8 @@ package fr.giusti.onetapadventure.UI.Activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -123,7 +125,6 @@ public class GameActivity extends Activity implements OnBoardEventListener, OnGa
 
         @Override
         public void onClick(View v) {
-            // TODO test
             try {
                 mDrawingSurface.stopGame();
             } catch (InterruptedException e) {
@@ -140,11 +141,10 @@ public class GameActivity extends Activity implements OnBoardEventListener, OnGa
     private void startNewGame() {
         try {
             //GameBoard board=mRepo.generateSampleBoard(this);
+            //board.setBoardEventListener(this);
+
             GameBoard board = mRepo.generateLvl_1x1(this, this);
             Log.d(TAG, "Board created");
-
-            board.setBoardEventListener(this);
-            //  board.setScrollingEndListener(this);
 
             mDrawingSurface.startGame(board);
         } catch (CloneNotSupportedException e) {
@@ -175,7 +175,12 @@ public class GameActivity extends Activity implements OnBoardEventListener, OnGa
     }
 
     @Override
-    public void onGameEnd(eConditionType gameResult, String gameId, int score) {
-        Toast.makeText(this, "end of game, result: " + gameResult + "\n Score: " + score, Toast.LENGTH_LONG).show();
+    public void onGameEnd(final eConditionType gameResult, String gameId, final int score) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(GameActivity.this, "end of game, result: " + gameResult + "\n Score: " + score, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

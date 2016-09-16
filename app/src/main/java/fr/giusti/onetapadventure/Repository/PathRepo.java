@@ -9,10 +9,7 @@ import java.util.Arrays;
 
 public class PathRepo {
 
-
-    //TODO composed path smoothing (add curve between different path)
-
-    /**
+     /**
      * @param originalPath the original path
      * @param start        beginning of the new path from the original
      * @param end          end of the new path from the original
