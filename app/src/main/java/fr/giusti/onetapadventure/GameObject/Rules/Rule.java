@@ -6,6 +6,7 @@ package fr.giusti.onetapadventure.gameObject.rules;
 public class Rule {
     public static final String BOARD_EMPTY_RULE_KEY = "boardEmpty";
     private final String idName;
+    private final boolean reduce;
     public eConditionType type;
     public eConditions condition;
     private int valueInt = 0;
@@ -22,23 +23,25 @@ public class Rule {
         this.valueInt = valueInt;
         this.goalInt = goalInt;
         intCondition = true;
+        reduce = (valueInt > goalInt);
     }
 
 
-    public Rule(String idName,String goalStr, eConditions condition, eConditionType type) {
+    public Rule(String idName, String goalStr, eConditions condition, eConditionType type) {
         this.idName = idName;
         this.goalStr = goalStr;
         this.condition = condition;
         this.type = type;
         intCondition = false;
+        reduce = false;
     }
 
-    public eConditionType ruleProgress(int value, boolean reduce) {
+    public eConditionType ruleProgress(int value) {
         if (condition == eConditions.MOB_COUNT)
             return (value == goalInt) ? type : eConditionType.NULL;
 
         if (reduce) valueInt--;
-        else value++;
+        else valueInt++;
         onProgress(null);
         return (valueInt == goalInt) ? type : eConditionType.NULL;
     }
@@ -49,21 +52,22 @@ public class Rule {
     }
 
     private void onProgress(String value) {
-        if(listener!=null){
-            if(intCondition){
-                if(goalInt == 0){
-                    listener.onRuleProgress(""+valueInt);
-                }else{
-                    listener.onRuleProgress(""+valueInt+"/"+goalInt);
+        if (listener != null) {
+            if (intCondition) {
+                if (goalInt == 0) {
+                    listener.onRuleProgress(idName, "" + valueInt);
+                } else {
+                    listener.onRuleProgress(idName, "" + valueInt + "/" + goalInt);
                 }
-            }else{
-                listener.onRuleProgress(goalStr+"/"+value);
+            } else {
+                listener.onRuleProgress(idName, goalStr + "/" + value);
             }
         }
     }
 
     public void setListener(IRuleProgressListener listener) {
         this.listener = listener;
+        onProgress("_");
     }
 
     public String getIdName() {

@@ -1,4 +1,4 @@
-package fr.giusti.onetapadventure.repository.entities;
+package fr.giusti.onetapadventure.gameObject.entities;
 
 import android.util.Pair;
 
@@ -7,8 +7,6 @@ import java.util.List;
 
 import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
-import fr.giusti.onetapadventure.gameObject.entities.Entity;
-import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 
 /**
@@ -73,7 +71,8 @@ public class ThreeTierEntityDispenser extends EntityDispenser {
     public GameMob getConcernedMob(int mxTierOnBoard) {
         GameMob concernedMob = null;
 
-        if (tier1Mobs.size() > 20 || ((mxTierOnBoard > 1) && tier1Mobs.size() > 0)) {
+        if (tier1Mobs.size() > 20 || ((mxTierOnBoard > 1 || tier2Mobs.size() == 0 || tier2Mobs.size() == 3) && tier1Mobs.size() > 0)) {
+            //tier 1 poping or already tier 2-3 on board or no more tier 2-3 available
             concernedMob = tier1Mobs.get(0);
             tier1Mobs.remove(concernedMob);
         } else if (tier2Mobs.size() > 0) {

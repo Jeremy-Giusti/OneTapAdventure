@@ -56,9 +56,9 @@ public class GameRepo {
         SpriteRepo.addPicture(backGameBoard,fullSizedBackground);
 
         RulesManager rulesManager = RuleRepo.getLvl_1x1_Rules(gameListener);
-        GameBoard board = new GameBoard(EntityDispenserRepo.getLvl1_1MobDispenser(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight));
+        GameBoard board = new GameBoard(EntityDispenserRepo.getLvl1_1MobDispenser(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight),rulesManager);
         board.resize(mScreenWidth,mScreenHeight);
-        board.setBoardEventListener(rulesManager);
+//        board.setBoardEventListener(rulesManager);
         return board;
     }
 

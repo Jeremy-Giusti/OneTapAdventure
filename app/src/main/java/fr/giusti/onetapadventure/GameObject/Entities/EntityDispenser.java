@@ -1,4 +1,4 @@
-package fr.giusti.onetapadventure.repository.entities;
+package fr.giusti.onetapadventure.gameObject.entities;
 
 import android.util.Pair;
 

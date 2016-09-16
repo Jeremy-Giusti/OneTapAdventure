@@ -5,5 +5,5 @@ package fr.giusti.onetapadventure.gameObject.rules;
  */
 public interface IRuleProgressListener {
 
-    void onRuleProgress(String displayableProgress);
+    void onRuleProgress(String ruleId,String displayableProgress);
 }

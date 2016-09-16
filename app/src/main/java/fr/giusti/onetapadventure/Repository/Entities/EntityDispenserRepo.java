@@ -2,11 +2,8 @@ package fr.giusti.onetapadventure.repository.entities;
 
 import android.content.Context;
 
-import java.util.ArrayList;
-
-import fr.giusti.onetapadventure.commons.Constants;
-import fr.giusti.onetapadventure.gameObject.GameBoard;
-import fr.giusti.onetapadventure.gameObject.entities.GameMob;
+import fr.giusti.onetapadventure.gameObject.entities.EntityDispenser;
+import fr.giusti.onetapadventure.gameObject.entities.ThreeTierEntityDispenser;
 
 /**
  * Created by jérémy on 10/09/2016.

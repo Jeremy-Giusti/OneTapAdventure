@@ -17,7 +17,7 @@ import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 public class RuleRepo {
 
     public static RulesManager getLvl_1x1_Rules(final OnGameEndListener gameEndListener) {
-        Rule masterRule = new Rule(Lvl1Constant.ESCAPING_MOB_RULE, eConditionType.DEFEAT, eConditions.MOB_AWAY, 0, Lvl1Constant.MOB_NB / 4);
+        Rule masterRule = new Rule(Lvl1Constant.ESCAPING_MOB_RULE, eConditionType.DEFEAT, eConditions.MOB_AWAY, Lvl1Constant.MAX_MOB_AWAY, 0);
         Rule endRule = new Rule(Lvl1Constant.LEVEL_END_RULE, eConditionType.END, eConditions.MOB_COUNTDOWN, 0, Lvl1Constant.MOB_NB);
 
         OnRuleAccomplishedListener accomplishedBehavior = new OnRuleAccomplishedListener() {

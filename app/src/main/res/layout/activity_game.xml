@@ -6,7 +6,7 @@
         android:id="@+id/GameBoard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true" />
 
     <Button
         android:id="@+id/ag_b_Stop"
@@ -20,8 +20,37 @@
         android:id="@+id/ag_b_restart"
         android:layout_width="128dp"
         android:layout_height="wrap_content"
+        android:layout_above="@id/ag_b_Stop"
+        android:layout_alignParentLeft="true"
+        android:text="Restart" />
+
+    <TextView
+        android:id="@+id/ag_defeat_rule_tv"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ag_b_Stop"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/ag_b_restart"
+        android:background="#55000000"
+        android:gravity="center"
+        android:padding="@dimen/small_spacing"
+        android:text=""
+        android:textColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/ag_end_rule_tv"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ag_defeat_rule_tv"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:text="Restart" />
+        android:layout_alignStart="@+id/ag_defeat_rule_tv"
+        android:gravity="center"
+        android:layout_alignTop="@+id/ag_b_Stop"
+        android:background="#55000000"
+        android:padding="@dimen/small_spacing"
+        android:text=""
+        android:textColor="@android:color/white" />
 
 </RelativeLayout>

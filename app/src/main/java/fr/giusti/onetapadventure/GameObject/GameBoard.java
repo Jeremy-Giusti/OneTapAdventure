@@ -19,9 +19,10 @@ import fr.giusti.onetapadventure.gameObject.entities.Entity;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.gameObject.entities.Particule;
 import fr.giusti.onetapadventure.gameObject.entities.Scenery;
+import fr.giusti.onetapadventure.gameObject.rules.RulesManager;
 import fr.giusti.onetapadventure.gameObject.rules.eConditions;
 import fr.giusti.onetapadventure.repository.SpriteRepo;
-import fr.giusti.onetapadventure.repository.entities.EntityDispenser;
+import fr.giusti.onetapadventure.gameObject.entities.EntityDispenser;
 
 /**
  * represente la carte du jeu avec une taille limite, des mobs
@@ -33,6 +34,7 @@ public class GameBoard {
     private CopyOnWriteArrayList<Particule> mParticules = new CopyOnWriteArrayList<Particule>();
     private CopyOnWriteArrayList<Scenery> mSceneries = new CopyOnWriteArrayList<Scenery>();
     private CopyOnWriteArrayList<TouchPoint> mTouchPoints = new CopyOnWriteArrayList<TouchPoint>();
+    private RulesManager mRulesManager;
 
 
     /**
@@ -44,6 +46,7 @@ public class GameBoard {
 
     private String mBackgroundBitmapId;
 
+    @Deprecated
     private OnBoardEventListener mEventListener = null;
     /**
      * empty border around camera (left and right)
@@ -79,6 +82,20 @@ public class GameBoard {
         this.mBackgroundBitmapId = backgroundBitmapId;
         mCameraBound = drawedBounds;
         mBoardBounds = new Rect(0, 0, boardWidth, boardHeight);
+    }
+
+    /**
+     * @param mobsDisp           les entité mobile qui seront presente sur la carte
+     * @param backgroundBitmapId l'image de fond
+     */
+    public GameBoard(EntityDispenser mobsDisp, String backgroundBitmapId, int boardWidth, int boardHeight, Rect drawedBounds, RulesManager rulesManager) {
+        super();
+        this.mMobDisp = mobsDisp;
+        initEntityLists(mobsDisp.getInitialList());
+        this.mBackgroundBitmapId = backgroundBitmapId;
+        mCameraBound = drawedBounds;
+        mBoardBounds = new Rect(0, 0, boardWidth, boardHeight);
+        this.mRulesManager = rulesManager;
     }
 
     private void initEntityLists(ArrayList<Entity> initialList) {
@@ -157,17 +174,26 @@ public class GameBoard {
     /**
      * @param eventListener called when a mob die
      */
+    @Deprecated
     public void setBoardEventListener(OnBoardEventListener eventListener) {
         this.mEventListener = eventListener;
     }
 
+    public RulesManager getRulesManager() {
+        return mRulesManager;
+    }
+
+    public void setmRulesManager(RulesManager mRulesManager) {
+        this.mRulesManager = mRulesManager;
+    }
 
     /**
      * met a jour la carte après un tick
      */
     public void update() {
-        if (!started) {
-            mEventListener.firstUpdate();
+        if (!started && getRulesManager()!=null) {
+//            mEventListener.firstUpdate();
+            mRulesManager.firstUpdate();
             started = true;
         }
 
@@ -233,32 +259,36 @@ public class GameBoard {
     }
 
     public void onMobDeath(GameMob mob) {
-        if (mEventListener != null) {
-            mEventListener.onMobCountChange(mMobs.size() - 1, eConditions.MOB_DEATH, mob.clone());//FIXME mob.clone ?
+//        if (mEventListener != null) {
+//            mEventListener.onMobCountChange(mMobs.size() - 1, eConditions.MOB_DEATH, mob.clone());//FIXME mob.clone ?
+//        }
+        if (mRulesManager != null) {
+            mRulesManager.onMobCountChange(mMobs.size() - 1, eConditions.MOB_DEATH, mob.clone());//FIXME mob.clone ?
         }
+
         mMobs.remove(mob);
     }
 
     public void onMobAway(GameMob mob) {
-        if (mEventListener != null) {
-            mEventListener.onMobCountChange(mMobs.size() - 1, eConditions.MOB_AWAY, mob.clone());
+        if (mRulesManager != null) {
+            mRulesManager.onMobCountChange(mMobs.size() - 1, eConditions.MOB_AWAY, mob.clone());
         }
         mMobs.remove(mob);
     }
 
     public void onNewMob(GameMob mob) {
-        if (mEventListener != null) {
-            mEventListener.onMobCountChange(mMobs.size() + 1, eConditions.NEW_MOB, mob.clone());
+        if (mRulesManager != null) {
+            mRulesManager.onMobCountChange(mMobs.size() + 1, eConditions.NEW_MOB, mob.clone());
         }
         mMobs.add(mob);
     }
 
     public void onScore(int score) {
-        if (mEventListener != null) {
+        if (mRulesManager != null) {
             if (score < 0) {
-                mEventListener.onScoreMinus(-score);
+                mRulesManager.onScoreMinus(-score);
             } else {
-                mEventListener.onScorePlus(score);
+                mRulesManager.onScorePlus(score);
             }
         }
     }
@@ -281,7 +311,7 @@ public class GameBoard {
 
         for (Scenery scenery : mSceneries) {
             scenery.draw(canvas, mBrush);
-         //   canvas.drawRect(scenery.hitbox,mBrush);
+            //   canvas.drawRect(scenery.hitbox,mBrush);
         }
 
         for (GameMob mob : mMobs) {

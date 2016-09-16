@@ -13,7 +13,7 @@ import fr.giusti.onetapadventure.gameObject.entities.GameMob;
  * Created by jérémy on 08/09/2016.
  */
 public class RulesManager implements OnBoardEventListener {
-    public static final int TIME_PROGRESS_FREQUENCY = 1000;
+    public static final int TIME_PROGRESS_FREQUENCY = 1000;// 1sec
     private HashMap<eConditions, ArrayList<Rule>> indexedRuleList = new HashMap<>();
     private ArrayList<Rule> accomplishedRules = new ArrayList<>();
     private Rule masterRule;
@@ -97,7 +97,7 @@ public class RulesManager implements OnBoardEventListener {
     public void onTimeProgress(int progress) {
         //find if a rule is linked to the condition and test it
         eConditionType result;
-        result = timerRule.ruleProgress(progress, true);
+        result = timerRule.ruleProgress(progress);
 
         if (result != eConditionType.NULL) {
             onRuleAccomplished(timerRule);
@@ -110,9 +110,11 @@ public class RulesManager implements OnBoardEventListener {
         switch (reason) {
             case MOB_DEATH:
                 onMobDeath(mob);
+                onMobCountDown(mob);
                 break;
             case MOB_AWAY:
                 onMobGetAway(mob);
+                onMobCountDown(mob);
                 break;
             case NEW_MOB:
                 onNewMob(mob);
@@ -125,7 +127,7 @@ public class RulesManager implements OnBoardEventListener {
         eConditionType result;
         for (int i = 0; i < conditionRule.size(); i++) {
             rule = conditionRule.get(i);
-            result = rule.ruleProgress(count, true);
+            result = rule.ruleProgress(count);
 
             if (result != eConditionType.NULL) {
                 conditionRule.remove(rule);
@@ -141,7 +143,7 @@ public class RulesManager implements OnBoardEventListener {
         eConditionType result;
         for (int i = 0; i < conditionRule.size(); i++) {
             rule = conditionRule.get(i);
-            if (rule.intCondition) result = rule.ruleProgress(1, true);
+            if (rule.intCondition) result = rule.ruleProgress(1);
             else result = rule.ruleProgress(deadMob.getIdName());
             if (result != eConditionType.NULL) {
                 conditionRule.remove(rule);
@@ -157,7 +159,7 @@ public class RulesManager implements OnBoardEventListener {
         eConditionType result;
         for (int i = 0; i < conditionRule.size(); i++) {
             rule = conditionRule.get(i);
-            if (rule.intCondition) result = rule.ruleProgress(1, false);
+            if (rule.intCondition) result = rule.ruleProgress(1);
             else result = rule.ruleProgress(deadMob.getIdName());
             if (result != eConditionType.NULL) {
                 conditionRule.remove(rule);
@@ -174,7 +176,7 @@ public class RulesManager implements OnBoardEventListener {
         eConditionType result;
         for (int i = 0; i < conditionRule.size(); i++) {
             rule = conditionRule.get(i);
-            if (rule.intCondition) result = rule.ruleProgress(1, true);
+            if (rule.intCondition) result = rule.ruleProgress(1);
             else result = rule.ruleProgress(mobAway.getIdName());
             if (result != eConditionType.NULL) {
                 conditionRule.remove(rule);
@@ -190,7 +192,7 @@ public class RulesManager implements OnBoardEventListener {
         eConditionType result;
         for (int i = 0; i < conditionRule.size(); i++) {
             rule = conditionRule.get(i);
-            result = rule.ruleProgress(1, true);
+            result = rule.ruleProgress(1);
             if (result != eConditionType.NULL) {
                 conditionRule.remove(rule);
                 i--;
@@ -206,7 +208,7 @@ public class RulesManager implements OnBoardEventListener {
         eConditionType result;
         for (int i = 0; i < conditionRule.size(); i++) {
             rule = conditionRule.get(i);
-            result = rule.ruleProgress(add, false);
+            result = rule.ruleProgress(add);
             if (result != eConditionType.NULL) {
                 conditionRule.remove(rule);
                 i--;
@@ -222,7 +224,7 @@ public class RulesManager implements OnBoardEventListener {
         eConditionType result;
         for (int i = 0; i < conditionRule.size(); i++) {
             rule = conditionRule.get(i);
-            result = rule.ruleProgress(remove, true);
+            result = rule.ruleProgress(remove);
             if (result != eConditionType.NULL) {
                 conditionRule.remove(rule);
                 i--;

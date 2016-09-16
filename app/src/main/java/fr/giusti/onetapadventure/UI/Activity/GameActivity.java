@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import fr.giusti.onetapadventure.R;
@@ -15,10 +16,12 @@ import fr.giusti.onetapadventure.UI.CustomView.DrawingView;
 import fr.giusti.onetapadventure.callback.OnBoardEventListener;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
+import fr.giusti.onetapadventure.gameObject.rules.IRuleProgressListener;
 import fr.giusti.onetapadventure.gameObject.rules.OnGameEndListener;
 import fr.giusti.onetapadventure.gameObject.rules.eConditionType;
 import fr.giusti.onetapadventure.gameObject.rules.eConditions;
 import fr.giusti.onetapadventure.repository.GameRepo;
+import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 
 /**
  * classe qui contient tout une "partie"
@@ -27,11 +30,13 @@ import fr.giusti.onetapadventure.repository.GameRepo;
  *
  * @author giusti
  */
-public class GameActivity extends Activity implements OnBoardEventListener, OnGameEndListener {
+public class GameActivity extends Activity implements OnBoardEventListener, OnGameEndListener, IRuleProgressListener {
     private static final String TAG = GameActivity.class.getSimpleName();
     private DrawingView mDrawingSurface;
     private Button mPauseButton;
     private Button mRestartButton;
+    private TextView mRule1;
+    private TextView mRule2;
     private boolean running = false;
     private boolean paused = false;
     private GameRepo mRepo;
@@ -58,6 +63,8 @@ public class GameActivity extends Activity implements OnBoardEventListener, OnGa
         mDrawingSurface = (DrawingView) findViewById(R.id.GameBoard);
         mPauseButton = (Button) findViewById(R.id.ag_b_Stop);
         mRestartButton = (Button) findViewById(R.id.ag_b_restart);
+        mRule1 = (TextView) findViewById(R.id.ag_defeat_rule_tv);
+        mRule2 = (TextView) findViewById(R.id.ag_end_rule_tv);
     }
 
     private void initEvents() {
@@ -145,7 +152,8 @@ public class GameActivity extends Activity implements OnBoardEventListener, OnGa
 
             GameBoard board = mRepo.generateLvl_1x1(this, this);
             Log.d(TAG, "Board created");
-
+            board.getRulesManager().setRuleListener(Lvl1Constant.ESCAPING_MOB_RULE, this);
+            board.getRulesManager().setRuleListener(Lvl1Constant.LEVEL_END_RULE, this);
             mDrawingSurface.startGame(board);
         } catch (CloneNotSupportedException e) {
             Toast.makeText(this, "error clonning sample mob list", Toast.LENGTH_SHORT).show();
@@ -182,5 +190,20 @@ public class GameActivity extends Activity implements OnBoardEventListener, OnGa
                 Toast.makeText(GameActivity.this, "end of game, result: " + gameResult + "\n Score: " + score, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    public void onRuleProgress(final String ruleId, final String displayableProgress) {
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if (Lvl1Constant.ESCAPING_MOB_RULE.equals(ruleId)) {
+                    mRule1.setText(displayableProgress);
+                } else {
+                    mRule2.setText(displayableProgress);
+                }            }
+        });
+
     }
 }
