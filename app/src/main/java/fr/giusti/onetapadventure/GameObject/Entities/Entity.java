@@ -2,6 +2,8 @@ package fr.giusti.onetapadventure.gameObject.entities;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PointF;
+import android.graphics.Rect;
 import android.graphics.RectF;
 
 import fr.giusti.onetapadventure.gameObject.GameBoard;
@@ -108,7 +110,7 @@ public abstract class Entity implements Cloneable {
      * @param canvas
      * @param mBrush
      */
-    public abstract void draw(Canvas canvas, Paint mBrush);
+    public abstract void draw(Canvas canvas, Paint mBrush, Rect cameraBound);
 
 
 

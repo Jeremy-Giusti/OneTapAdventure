@@ -105,7 +105,7 @@ public class ModelConverter {
     }
 
     public static BoardDB boardDbToBoard(GameBoard board, String boardId) {
-        return new BoardDB(boardId, board.getBackgroundBitmapId(), board.getHeight(), board.getWidth(), board.getmCameraBound());
+        return new BoardDB(boardId, board.getBackgroundBitmapId(), board.getHeight(), board.getWidth(), board.getmCameraBounds());
     }
 
 }

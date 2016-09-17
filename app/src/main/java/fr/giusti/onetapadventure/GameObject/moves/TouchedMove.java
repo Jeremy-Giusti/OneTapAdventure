@@ -9,6 +9,6 @@ import fr.giusti.onetapadventure.gameObject.entities.GameMob;
  * Created by giusti on 30/03/2015.
  */
 public interface TouchedMove {
-    public void doTouchedMove(GameBoard board, GameMob currentMob, Point touchPoint);
+    public void doTouchedMove(GameBoard board, GameMob currentMob);
     public String getId();
 }

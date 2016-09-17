@@ -26,7 +26,7 @@ public class TouchedMoveRepo {
 
     public static TouchedMove default_touched_move = new TouchedMove() {
         @Override
-        public void doTouchedMove(GameBoard board, GameMob currentMob, Point touchPoint) {
+        public void doTouchedMove(GameBoard board, GameMob currentMob) {
             int mobHealth = currentMob.getHealth();
             if (mobHealth > 1) {
                 mobHealth--;
@@ -46,7 +46,7 @@ public class TouchedMoveRepo {
     };
     public static TouchedMove bleedMove = new TouchedMove() {
         @Override
-        public void doTouchedMove(GameBoard board, GameMob currentMob, Point touchPoint) {
+        public void doTouchedMove(GameBoard board, GameMob currentMob) {
             int mobHealth = currentMob.getHealth();
             if (mobHealth > 1) {
                 mobHealth--;
@@ -57,7 +57,7 @@ public class TouchedMoveRepo {
                 currentMob.setState(GameMob.eMobState.DYING);
             }
             currentMob.setAnimationState(0);
-            board.getmParticules().add(new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.BLOOD_PARTICULE, touchPoint.x, touchPoint.y, (int) currentMob.getWidth(), (int) currentMob.getHeight(), false, new PointF[]{currentMob.getCurrentMove()}));
+            board.getmParticules().add(new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.BLOOD_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), (int) currentMob.getWidth(), (int) currentMob.getHeight(), false, new PointF[]{currentMob.getCurrentMove()}));
 
         }
 
@@ -68,7 +68,7 @@ public class TouchedMoveRepo {
     };
     public static TouchedMove healMove = new TouchedMove() {
         @Override
-        public void doTouchedMove(GameBoard board, GameMob currentMob, Point touchPoint) {
+        public void doTouchedMove(GameBoard board, GameMob currentMob) {
             int mobHealth = currentMob.getHealth();
             if (mobHealth < 9) {//9 de vie max
                 currentMob.setHealth(mobHealth + 1);
@@ -85,7 +85,7 @@ public class TouchedMoveRepo {
 
     public static TouchedMove baitMove = new TouchedMove() {
         @Override
-        public void doTouchedMove(GameBoard board, GameMob currentMob, Point touchPoint) {
+        public void doTouchedMove(GameBoard board, GameMob currentMob) {
             int mobHealth = currentMob.getHealth();
             if (mobHealth > 1) {
                 mobHealth--;
@@ -145,7 +145,7 @@ public class TouchedMoveRepo {
 
     public static TouchedMove mobAwayMove = new TouchedMove() {
         @Override
-        public void doTouchedMove(GameBoard board, GameMob currentMob, Point touchPoint) {
+        public void doTouchedMove(GameBoard board, GameMob currentMob) {
             if (GameMob.eMobState.DYING != currentMob.getState())
                 board.onMobAway(currentMob);
         }

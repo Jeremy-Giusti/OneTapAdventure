@@ -5,10 +5,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.graphics.RectF;
-import android.util.Log;
 
 import fr.giusti.onetapadventure.commons.Constants;
+import fr.giusti.onetapadventure.commons.Utils;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.moves.SpecialMove;
 import fr.giusti.onetapadventure.gameObject.moves.TouchedMove;
@@ -218,8 +219,8 @@ public class GameMob extends Entity {
             return;
         }
 
-        float deplacementX = (float)(movePattern[currentMove].x * xAlteration);
-        float deplacementY = (float)(movePattern[currentMove].y * yAlteration);
+        float deplacementX = (float) (movePattern[currentMove].x * xAlteration);
+        float deplacementY = (float) (movePattern[currentMove].y * yAlteration);
 
         move(deplacementX, deplacementY);
         manageMapLimitCollision(board);
@@ -332,13 +333,12 @@ public class GameMob extends Entity {
      * @param mBrush
      */
     @Override
-    public void draw(Canvas canvas, Paint mBrush) {
-        if (mBitmapId != null) {
-
-            //RectF rectPositionOnScreen = new RectF(mPosition);
-//            rectPositionOnScreen.offsetTo(mPosition.left, mPosition.top);
-            Log.i(TAG, "drawing: " + idName + "\n column:" + mSpriteCurrentColumn + " line:" + mState.index);
-            canvas.drawBitmap(SpriteRepo.getSpriteBitmap(mBitmapId, mSpriteCurrentColumn, mState.index), null, mPosition, mBrush);
+    public void draw(Canvas canvas, Paint mBrush, Rect cameraPosition) {
+        if (mBitmapId != null && Utils.doRectIntersect(cameraPosition, mPosition)) {
+            RectF positionOnSceen = new RectF(mPosition);
+            positionOnSceen.offset(-cameraPosition.left, -cameraPosition.top);
+            //    Log.i(TAG, "drawing: " + idName + "\n column:" + mSpriteCurrentColumn + " line:" + mState.index);
+            canvas.drawBitmap(SpriteRepo.getSpriteBitmap(mBitmapId, mSpriteCurrentColumn, mState.index), null, positionOnSceen, mBrush);
 
         }
 
@@ -354,29 +354,22 @@ public class GameMob extends Entity {
 
     /**
      * gere un clique et met a jour le status du mob en fonction
-     *
-     * @param touchStroke
-     * @param event
      */
-    public void manageTouchEvent(Point event, int touchStroke, GameBoard board) {
+    public void manageTouchEvent(GameBoard board) {
         if (isDead())
             return;// deja mort
-        float eventX = event.x;
-        float eventY = event.y;
 
-        if (mPosition.intersects((eventX - touchStroke / 2), (eventY - touchStroke / 2), (eventX + touchStroke / 2), (eventY + touchStroke / 2))) {
-            if (this.mTouchedMove != null) {
-                this.mTouchedMove.doTouchedMove(board, this, new Point((int) eventX, (int) eventY));
-            } else if (mHealth > 1) {
-                mHealth--;
-                mState = eMobState.HURT;
-            } else {
-                mHealth = 0;
-                mState = eMobState.DYING;
-            }
-            mAnimationState = 0;
-
+        if (this.mTouchedMove != null) {
+            this.mTouchedMove.doTouchedMove(board, this);
+        } else if (mHealth > 1) {
+            mHealth--;
+            mState = eMobState.HURT;
+        } else {
+            mHealth = 0;
+            mState = eMobState.DYING;
         }
+        mAnimationState = 0;
+
     }
 
     /**
@@ -421,13 +414,17 @@ public class GameMob extends Entity {
 //        float diffHeight = (oldHeight - newHeight) / 2;
 //        float diffWidth = (oldWidth -newWidth ) / 2;
 
-        mPosition = new RectF(mPosition.left *ratio, mPosition.top*ratio, mPosition.right *ratio, mPosition.bottom *ratio);
-        movePattern = PathRepo.createScalePath(ratio,movePattern);
+        mPosition = new RectF(mPosition.left * ratio, mPosition.top * ratio, mPosition.right * ratio, mPosition.bottom * ratio);
+        movePattern = PathRepo.createScalePath(ratio, movePattern);
         SpriteRepo.resizeSprites(mBitmapId, (int) getWidth(), (int) getHeight());
     }
 
     public boolean isJustMoving() {
         return mState == eMobState.MOVING_LEFT || mState == eMobState.MOVING_UP || mState == eMobState.MOVING_RIGHT || mState == eMobState.MOVING_DOWN;
+    }
+
+    public boolean isDying() {
+        return eMobState.DYING == mState;
     }
 
     public enum eMobState {

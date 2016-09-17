@@ -2,8 +2,10 @@ package fr.giusti.onetapadventure.gameObject.entities;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
 
+import fr.giusti.onetapadventure.commons.Utils;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.moves.TouchedMove;
 import fr.giusti.onetapadventure.repository.SpriteRepo;
@@ -14,7 +16,6 @@ import fr.giusti.onetapadventure.repository.SpriteRepo;
 public class Scenery extends Entity {
 
     public RectF hitbox;
-    private RectF hitboxTemp;
     private TouchedMove touchedByMob;
 
     /**
@@ -29,7 +30,6 @@ public class Scenery extends Entity {
         super(idName, x, y, width, height, mBitmapId);
         touchedByMob = onCollision;
         this.hitbox = hitbox;
-        hitboxTemp = new RectF(hitbox);
     }
 
     public Scenery(String idName, int x, int y, int width, int height, float hitboxRatio, TouchedMove onCollision, String mBitmapId) {
@@ -51,39 +51,28 @@ public class Scenery extends Entity {
     @Override
     public void update(GameBoard board) {
         for (GameMob mob : board.getMobs()) {
-            if (hitboxTemp.intersect(mob.mPosition)) {
-                hitboxTemp = new RectF(hitbox);
-                touchedByMob.doTouchedMove(board, mob, null);
+            if (Utils.doRectIntersect(hitbox,mob.mPosition)) {
+                touchedByMob.doTouchedMove(board, mob);
             }
         }
     }
 
     @Override
-    public void draw(Canvas canvas, Paint mBrush) {
-        canvas.drawBitmap(SpriteRepo.getPicture(mBitmapId), null, mPosition, mBrush);
+    public void draw(Canvas canvas, Paint mBrush, Rect cameraPostion) {
+        if (Utils.doRectIntersect(cameraPostion, mPosition)) {//On screen
+            RectF positionOnSceen = new RectF(mPosition);
+            positionOnSceen.offset(-cameraPostion.left, -cameraPostion.top);
+            canvas.drawBitmap(SpriteRepo.getPicture(mBitmapId), null, mPosition, mBrush);
+        }
     }
 
     @Override
     public void resize(float ratio) {
-//        float oldWidth = getWidth();
-//        float newWidth = oldWidth * ratio;
-//        float oldHeight = getHeight();
-//        float newHeight = oldHeight * ratio;
-//        float diffHeight = (newHeight - oldHeight) / 2;
-//        float diffWidth = (newWidth - oldWidth) / 2;
 
         mPosition = new RectF(mPosition.left * ratio, mPosition.top * ratio, mPosition.right * ratio, mPosition.bottom * ratio);
 
         SpriteRepo.resizePicture(mBitmapId, ratio);
 
-//        float oldWidthHB = hitbox.width();
-//        float newWidthHB = oldWidthHB * ratio;
-//        float oldHeightHB = hitbox.height();
-//        float newHeightHB = oldHeightHB * ratio;
-//        float diffHeightHB = (newHeightHB - oldHeightHB) / 2;
-//        float diffWidthHB = (newWidthHB - oldWidthHB) / 2;
-
         hitbox = new RectF(hitbox.left * ratio, hitbox.top * ratio, hitbox.right * ratio, hitbox.bottom * ratio);
-        hitboxTemp = new RectF(hitbox);
     }
 }

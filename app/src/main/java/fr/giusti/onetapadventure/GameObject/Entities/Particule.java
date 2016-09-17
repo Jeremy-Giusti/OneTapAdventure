@@ -2,13 +2,14 @@ package fr.giusti.onetapadventure.gameObject.entities;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.graphics.RectF;
 
+import fr.giusti.onetapadventure.commons.Constants;
+import fr.giusti.onetapadventure.commons.Utils;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.repository.SpriteRepo;
-import fr.giusti.onetapadventure.commons.Constants;
 
 /**
  * Particule are only graphicale element, they cannot interact with anything (they are result of actions, and can't be a cause)
@@ -136,9 +137,12 @@ public class Particule extends Entity {
      * @param mBrush
      */
     @Override
-    public void draw(Canvas canvas, Paint mBrush) {
-
-        canvas.drawBitmap(SpriteRepo.getSpriteBitmap(mBitmapId, mSpirteColumn, 0), null, mPosition, mBrush);
+    public void draw(Canvas canvas, Paint mBrush, Rect cameraPosition) {
+        if (Utils.doRectIntersect(cameraPosition, mPosition)) {//On screen
+            RectF positionOnSceen = new RectF(mPosition);
+            positionOnSceen.offset(-cameraPosition.left, -cameraPosition.top);
+            canvas.drawBitmap(SpriteRepo.getSpriteBitmap(mBitmapId, mSpirteColumn, 0), null, positionOnSceen, mBrush);
+        }
 
     }
 

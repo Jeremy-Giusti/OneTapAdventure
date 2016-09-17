@@ -121,7 +121,7 @@ public class SpecialMoveRepo {
 
                     Particule explosionParticule = new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.EXPLOSION_PARTICULE, particuleX, particuleY, particuleWidth, particuleHeight, false, null);
                     for (GameMob mob : board.getMobs()) {
-                        mob.manageTouchEvent(new Point(particuleX, particuleY), particuleHeight * 2, board);
+                        mob.manageTouchEvent(board);
                     }
 
                     board.addParticule(explosionParticule);

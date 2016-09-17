@@ -55,23 +55,22 @@ public class ThreeTierEntityDispenser extends EntityDispenser {
     protected void updateMobs(GameBoard board) {
         List<GameMob> mobsOnBoard = board.getMobs();
         int maxTiersOnBoard = 1;
-        if ((tickCount % mobPopTickFrequency == 0 || board.getMobs().size() < minMobOnBoard) && !lastMobPoped) {
+        if ((tickCount % mobPopTickFrequency == 0 || board.getMobs().size() < minMobOnBoard)&& !lastMobPoped) {
             for (GameMob mob : mobsOnBoard) {
                 if (mob.getAlignement() > maxTiersOnBoard) ;
                 maxTiersOnBoard = mob.getAlignement();
             }
 
-            GameMob concernedMob = getConcernedMob(maxTiersOnBoard);
-            if (concernedMob != null) board.onNewMob(concernedMob);
+            ArrayList<GameMob> concernedMob = getConcernedMobs(maxTiersOnBoard);
+            if (concernedMob != null) board.onNewMobs(concernedMob);
         }
-
     }
 
 
-    public GameMob getConcernedMob(int mxTierOnBoard) {
+    public ArrayList<GameMob> getConcernedMobs(int mxTierOnBoard) {
+        ArrayList<GameMob> concernedMobList = new ArrayList<>();
         GameMob concernedMob = null;
-
-        if (tier1Mobs.size() > 20 || ((mxTierOnBoard > 1 || tier2Mobs.size() == 0 || tier2Mobs.size() == 3) && tier1Mobs.size() > 0)) {
+        if (tier1Mobs.size() > 20 || (mxTierOnBoard > 1 && tier1Mobs.size() > 0)) {
             //tier 1 poping or already tier 2-3 on board or no more tier 2-3 available
             concernedMob = tier1Mobs.get(0);
             tier1Mobs.remove(concernedMob);
@@ -81,11 +80,18 @@ public class ThreeTierEntityDispenser extends EntityDispenser {
         } else if (tier3Mobs.size() > 0) {
             concernedMob = tier3Mobs.get(0);
             tier3Mobs.remove(concernedMob);
+        } else if (tier1Mobs.size() > 0) {
+            concernedMobList.addAll(tier1Mobs);
+            tier1Mobs.clear();
         } else if (!lastMobPoped) {
             concernedMob = lastMob;
             lastMobPoped = true;
         }
-        return concernedMob;
+
+        if (concernedMob != null) {
+            concernedMobList.add(concernedMob);
+        }
+        return concernedMobList;
     }
 
     @Override

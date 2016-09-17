@@ -1,37 +1,29 @@
 package fr.giusti.onetapadventure.gameObject;
 
-import fr.giusti.onetapadventure.commons.Constants;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
+
+import java.util.List;
+
+import fr.giusti.onetapadventure.commons.Constants;
+import fr.giusti.onetapadventure.commons.Utils;
+import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 
 public class TouchPoint {
 
-    private int x;
-    private int y;
+    public RectF mPosition;
     private int state = 0;
     private final static int LENGTH_ANIMATION_FRAME = Constants.FRAME_DURATION;
+    private boolean actionDone = false;
 
-    public TouchPoint(int x, int y) {
+
+    public TouchPoint(float x, float y, int reach) {
         super();
-        this.x = x;
-        this.y = y;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
+        float halfReach = reach / 2;
+        mPosition = new RectF(x - halfReach, y - halfReach, x + halfReach, y + halfReach);
     }
 
     public int getState() {
@@ -41,28 +33,45 @@ public class TouchPoint {
     public void setState(int state) {
         this.state = state;
     }
-    
-    public void update(){
+
+    public void update(GameBoard board) {
+        if (!actionDone) {
+            actionDone = true;
+            List<GameMob> mobList = board.getMobs();
+            for (GameMob mob : mobList) {
+                if (Utils.doRectIntersect(mPosition, mob.mPosition) && ! mob.isDying()) {
+                    mob.manageTouchEvent(board);
+                }
+            }
+        }
         state++;
     }
 
-    public void draw(Canvas canvas, Paint brush) {
-        if (state < 5) {
-          canvas.drawCircle(x, y, Constants.TOUCH_STROKE*2 / 2, brush);
-        } else if (state > 10) {
-            canvas.drawCircle(x, y, Constants.TOUCH_STROKE*2 / 8, brush);
-        } else {
-            canvas.drawCircle(x, y, Constants.TOUCH_STROKE*2 / 4, brush);
+    public void draw(Canvas canvas, Paint brush, Rect cameraPostion) {
+
+        if (Utils.doRectIntersect(cameraPostion, mPosition)) {//On screen
+            RectF positionOnSceen = new RectF(mPosition);
+            positionOnSceen.offset(-cameraPostion.left, -cameraPostion.top);
+            if (state < 5) {
+                canvas.drawRect(positionOnSceen,brush);
+               // canvas.drawCircle(mPosition.centerX(), mPosition.centerY(), Constants.TOUCH_STROKE * 2 / 2, brush);
+            } else if (state > 10) {
+                canvas.drawRect(positionOnSceen,brush);
+               // canvas.drawCircle(mPosition.centerX(), mPosition.centerY(), Constants.TOUCH_STROKE * 2 / 8, brush);
+            } else {
+                canvas.drawRect(positionOnSceen,brush);
+                // canvas.drawCircle(mPosition.centerX(), mPosition.centerY(), Constants.TOUCH_STROKE * 2 / 4, brush);
+            }
         }
     }
-    
-    public boolean isEnded(){
-        return state>=(LENGTH_ANIMATION_FRAME*Constants.NB_FRAME_ON_ANIMATION);
+
+    public boolean isEnded() {
+        return state >= (LENGTH_ANIMATION_FRAME * Constants.NB_FRAME_ON_ANIMATION);
     }
-    
-    public static Paint GetPaint(Paint paint){
+
+    public static Paint GetPaint(Paint paint) {
         paint.setStrokeWidth(1);
-        paint.setColor(Color.argb(100,255, 0, 0));
+        paint.setColor(Color.argb(100, 255, 0, 0));
         return paint;
     }
 }

@@ -83,8 +83,8 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback, 
     }
 
     private void resize() {
-        getLayoutParams().width = mMap.getmCameraBound().width();
-        getLayoutParams().height = mMap.getmCameraBound().height();
+        getLayoutParams().width = mMap.getmCameraBounds().width();
+        getLayoutParams().height = mMap.getmCameraBounds().height();
     }
 
     /**
