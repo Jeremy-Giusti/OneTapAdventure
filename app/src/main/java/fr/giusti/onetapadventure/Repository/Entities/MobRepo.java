@@ -238,10 +238,10 @@ public class MobRepo {
             path = PathRepo.generateLineToDest(new PointF(x, y), posDest, Constants.FRAME_PER_SEC * 3);
         } else {
             if (seed % 4 > 2) {
-                path = PathRepo.generateLineToDest(new PointF(x, y), posDest, Constants.FRAME_PER_SEC * 2);
+                path = PathRepo.generateLineToDest(new PointF(x, y), posDest, (int) (Constants.FRAME_PER_SEC * 3.50f));
                 touchedMove = touchedMoveRepo.getMoveById(TouchedMoveRepo.BAIT);
             } else {
-                path = PathRepo.generateCurvedPath(new PointF(x, y), posDest, 100, (seed % 2 == 1), (int) (Constants.FRAME_PER_SEC * 2.5));
+                path = PathRepo.generateCurvedPath(new PointF(x, y), posDest, 200, (seed % 2 == 1), (int) (Constants.FRAME_PER_SEC * 3.75));
             }
             spriteId = (difficulty == 2) ? "tier2Mob" : "tier3Mob";
         }

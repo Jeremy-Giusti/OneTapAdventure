@@ -49,7 +49,6 @@ public class ParticuleRepo {
             mParticuleList.put(BLOOD_PARTICULE, initParticule(R.drawable.blood_particule, BLOOD_PARTICULE));
             mParticuleList.put(EXPLOSION_PARTICULE, initParticule(R.drawable.explosion_particule, EXPLOSION_PARTICULE));
             mParticuleList.put(SMOKE_PARTICULE, initParticule(R.drawable.smoke_particule, SMOKE_PARTICULE));
-
             mParticuleList.put(NUMBER1_PARTICULE, initParticule(R.drawable.particule_1, NUMBER1_PARTICULE));
             mParticuleList.put(NUMBER2_PARTICULE, initParticule(R.drawable.particule_2, NUMBER2_PARTICULE));
             mParticuleList.put(NUMBER3_PARTICULE, initParticule(R.drawable.particule_3, NUMBER3_PARTICULE));
@@ -92,7 +91,6 @@ public class ParticuleRepo {
      */
     public Particule generateOrGetCustomParticule(String id, int x, int y, int width, int height, boolean reversed, PointF[] path) {
         String customParticuleId = id+width+"x"+height+reversed;
-        //TODO optimise
         //if(mParticuleList.containsKey(customParticuleId))
         if (mParticuleList.containsKey(id)) {
             Particule result = mParticuleList.get(id).clone();
