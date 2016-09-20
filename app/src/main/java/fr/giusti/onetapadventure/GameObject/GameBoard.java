@@ -19,6 +19,8 @@ import fr.giusti.onetapadventure.gameObject.entities.EntityDispenser;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.gameObject.entities.Particule;
 import fr.giusti.onetapadventure.gameObject.entities.Scenery;
+import fr.giusti.onetapadventure.gameObject.interactions.TouchDispenser;
+import fr.giusti.onetapadventure.gameObject.interactions.TouchPoint;
 import fr.giusti.onetapadventure.gameObject.rules.RulesManager;
 import fr.giusti.onetapadventure.gameObject.rules.eConditions;
 import fr.giusti.onetapadventure.repository.SpriteRepo;
@@ -28,6 +30,7 @@ import fr.giusti.onetapadventure.repository.SpriteRepo;
  * gere les evenement lié au jeu (update on tick/on touch/...)
  */
 public class GameBoard {
+    private TouchDispenser mTouchDisp;
     private EntityDispenser mMobDisp;
     private CopyOnWriteArrayList<GameMob> mMobs = new CopyOnWriteArrayList<GameMob>();
     private CopyOnWriteArrayList<Particule> mParticules = new CopyOnWriteArrayList<Particule>();
@@ -70,26 +73,15 @@ public class GameBoard {
         mBoardBounds = new Rect(0, 0, boardWidth, boardHeight);
     }
 
-    /**
-     * @param mobsDisp           les entité mobile qui seront presente sur la carte
-     * @param backgroundBitmapId l'image de fond
-     */
-    public GameBoard(EntityDispenser mobsDisp, String backgroundBitmapId, int boardWidth, int boardHeight, Rect drawedBounds) {
-        super();
-        this.mMobDisp = mobsDisp;
-        initEntityLists(mobsDisp.getInitialList());
-        this.mBackgroundBitmapId = backgroundBitmapId;
-        mCameraBounds = drawedBounds;
-        mBoardBounds = new Rect(0, 0, boardWidth, boardHeight);
-    }
 
     /**
      * @param mobsDisp           les entité mobile qui seront presente sur la carte
      * @param backgroundBitmapId l'image de fond
      */
-    public GameBoard(EntityDispenser mobsDisp, String backgroundBitmapId, int boardWidth, int boardHeight, Rect drawedBounds, RulesManager rulesManager) {
+    public GameBoard(EntityDispenser mobsDisp, String backgroundBitmapId, int boardWidth, int boardHeight, Rect drawedBounds, RulesManager rulesManager, TouchDispenser touchDisp) {
         super();
         this.mMobDisp = mobsDisp;
+        this.mTouchDisp = touchDisp;
         initEntityLists(mobsDisp.getInitialList());
         this.mBackgroundBitmapId = backgroundBitmapId;
         mCameraBounds = drawedBounds;
@@ -238,7 +230,10 @@ public class GameBoard {
     public void touchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                mTouchPoints.add(new TouchPoint(event.getX(), event.getY(), Constants.TOUCH_STROKE));
+                if (mTouchDisp == null)
+                    mTouchPoints.add(new TouchPoint(event.getX(), event.getY(), Constants.TOUCH_STROKE));
+                else
+                    mTouchPoints.add(mTouchDisp.generateTouchPoint(event.getX(), event.getY()));
                 break;
             case MotionEvent.ACTION_MOVE:
                 // todo

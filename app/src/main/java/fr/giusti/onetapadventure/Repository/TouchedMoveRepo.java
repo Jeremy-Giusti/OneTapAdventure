@@ -1,11 +1,11 @@
 package fr.giusti.onetapadventure.repository;
 
-import android.graphics.Point;
 import android.graphics.PointF;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.gameObject.entities.Particule;
@@ -26,10 +26,10 @@ public class TouchedMoveRepo {
 
     public static TouchedMove default_touched_move = new TouchedMove() {
         @Override
-        public void doTouchedMove(GameBoard board, GameMob currentMob) {
+        public void doTouchedMove(GameBoard board, GameMob currentMob, int damage) {
             int mobHealth = currentMob.getHealth();
-            if (mobHealth > 1) {
-                mobHealth--;
+            if (mobHealth > damage) {
+                mobHealth-=damage;
                 currentMob.setHealth(mobHealth);
                 currentMob.setState(GameMob.eMobState.HURT);
             } else {
@@ -46,10 +46,10 @@ public class TouchedMoveRepo {
     };
     public static TouchedMove bleedMove = new TouchedMove() {
         @Override
-        public void doTouchedMove(GameBoard board, GameMob currentMob) {
+        public void doTouchedMove(GameBoard board, GameMob currentMob, int damage) {
             int mobHealth = currentMob.getHealth();
-            if (mobHealth > 1) {
-                mobHealth--;
+            if (mobHealth > damage) {
+                mobHealth-=damage;
                 currentMob.setHealth(mobHealth);
                 currentMob.setState(GameMob.eMobState.HURT);
             } else {
@@ -68,10 +68,10 @@ public class TouchedMoveRepo {
     };
     public static TouchedMove healMove = new TouchedMove() {
         @Override
-        public void doTouchedMove(GameBoard board, GameMob currentMob) {
+        public void doTouchedMove(GameBoard board, GameMob currentMob, int damage) {
             int mobHealth = currentMob.getHealth();
-            if (mobHealth < 9) {//9 de vie max
-                currentMob.setHealth(mobHealth + 1);
+            if (mobHealth < (9* Constants.TOUCH_DAMAGE)) {//9 de vie max
+                currentMob.setHealth(mobHealth + Constants.TOUCH_DAMAGE);
             }
             currentMob.setState(GameMob.eMobState.SPE1);
             currentMob.setAnimationState(0);
@@ -85,10 +85,10 @@ public class TouchedMoveRepo {
 
     public static TouchedMove baitMove = new TouchedMove() {
         @Override
-        public void doTouchedMove(GameBoard board, GameMob currentMob) {
+        public void doTouchedMove(GameBoard board, GameMob currentMob, int damage) {
             int mobHealth = currentMob.getHealth();
-            if (mobHealth > 1) {
-                mobHealth--;
+            if (mobHealth > damage) {
+                mobHealth-=damage;
                 currentMob.setHealth(mobHealth);
                 currentMob.setState(GameMob.eMobState.HURT);
                 //creer des leurres
@@ -145,7 +145,7 @@ public class TouchedMoveRepo {
 
     public static TouchedMove mobAwayMove = new TouchedMove() {
         @Override
-        public void doTouchedMove(GameBoard board, GameMob currentMob) {
+        public void doTouchedMove(GameBoard board, GameMob currentMob, int damage) {
             if (GameMob.eMobState.DYING != currentMob.getState())
                 board.onMobAway(currentMob);
         }

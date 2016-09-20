@@ -65,13 +65,13 @@ public class MobRepo {
 
         SpecialMoveRepo moveRepo = new SpecialMoveRepo();
         TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
-        GameMob blueMob = new GameMob("programmedMob1", 1, 250, 32, 32, mob1Pattern, moveRepo.getMoveById(SpecialMoveRepo.TRAIL), touchedMoveRepo.getMoveById(TouchedMoveRepo.BAIT), bitmapId4, 5, 1);
-        GameMob greenMob = new GameMob("programmedMob3", 100, 100, 48, 48, mob3Pattern, moveRepo.getMoveById(SpecialMoveRepo.SWAP), null, bitmapId3, 1, 1);
-        GameMob yellowMob = new GameMob("programmedMob6", 250, 250, 32, 32, mob6Pattern, moveRepo.getMoveById(SpecialMoveRepo.AUTO_HEAL), touchedMoveRepo.getMoveById(TouchedMoveRepo.BLEED), bitmapId2, 2, 1);
-        GameMob orangeMob = new GameMob("programmedMob5", 250, 250, 40, 40, mob5Pattern, moveRepo.getMoveById(SpecialMoveRepo.AUTO_HURT_EXPLODING), touchedMoveRepo.getMoveById(TouchedMoveRepo.HEAL), bitmapId4, 2, 1);
+        GameMob blueMob = new GameMob("programmedMob1", 1, 250, 32, 32, mob1Pattern, moveRepo.getMoveById(SpecialMoveRepo.SMOKE_TRAIL), touchedMoveRepo.getMoveById(TouchedMoveRepo.BAIT), bitmapId4, 50, 1);
+        GameMob greenMob = new GameMob("programmedMob3", 100, 100, 48, 48, mob3Pattern, moveRepo.getMoveById(SpecialMoveRepo.SWAP), null, bitmapId3, 10, 1);
+        GameMob yellowMob = new GameMob("programmedMob6", 250, 250, 32, 32, mob6Pattern, moveRepo.getMoveById(SpecialMoveRepo.AUTO_HEAL), touchedMoveRepo.getMoveById(TouchedMoveRepo.BLEED), bitmapId2, 20, 1);
+        GameMob orangeMob = new GameMob("programmedMob5", 250, 250, 40, 40, mob5Pattern, moveRepo.getMoveById(SpecialMoveRepo.AUTO_HURT_EXPLODING), touchedMoveRepo.getMoveById(TouchedMoveRepo.HEAL), bitmapId4, 20, 1);
 
         returnList.add(blueMob);
-        returnList.add(new GameMob("programmedMob2", 10, 10, 48, 48, mob2Pattern, moveRepo.getMoveById(SpecialMoveRepo.TELEPORT), null, bitmapId, 3, 1));
+        returnList.add(new GameMob("programmedMob2", 10, 10, 48, 48, mob2Pattern, moveRepo.getMoveById(SpecialMoveRepo.TELEPORT), null, bitmapId, 30, 1));
 
         returnList.add(greenMob);
 
@@ -183,7 +183,7 @@ public class MobRepo {
 
         PointF[] mob1Pattern = PathRepo.generateLineToDest(startPos, posDest, Constants.FRAME_PER_SEC * 3);
 
-        GameMob mob1 = new GameMob("firstMob", (int) startPos.x, (int) startPos.y, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE, mob1Pattern, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mob1sptsheetId, 1, 1);
+        GameMob mob1 = new GameMob("firstMob", (int) startPos.x, (int) startPos.y, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE, mob1Pattern, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mob1sptsheetId, 10, 1);
         mob1.setAlignement(1);
         entityList.add(mob1);
 
@@ -219,7 +219,7 @@ public class MobRepo {
         SpecialMoveRepo moveRepo = new SpecialMoveRepo();
         TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
         int lastMobDirection = (Math.random() < 0.5) ? -1 : 1;
-        GameMob lastMob = new GameMob("lastMob", (int) startPos.x, (int) startPos.y, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE, new PointF[]{new PointF(-4, 15 * lastMobDirection)}, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), "lastMob", 3, 1);
+        GameMob lastMob = new GameMob("lastMob", (int) startPos.x, (int) startPos.y, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE, new PointF[]{new PointF(-4, 15 * lastMobDirection)}, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), "lastMob", 30, 1);
         lastMob.setAlignement(4);
         backupList.add(new Pair<>(0, lastMob));
         // -----------------------------------------------------
@@ -245,7 +245,7 @@ public class MobRepo {
             }
             spriteId = (difficulty == 2) ? "tier2Mob" : "tier3Mob";
         }
-        return new GameMob(id, x, y, width, height, path, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMove, spriteId, difficulty, 1);
+        return new GameMob(id, x, y, width, height, path, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMove, spriteId, difficulty * Constants.TOUCH_DAMAGE, 1);
 
     }
 }

@@ -5,10 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 
+import fr.giusti.onetapadventure.R;
+import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
+import fr.giusti.onetapadventure.gameObject.interactions.TouchDispenser;
 import fr.giusti.onetapadventure.gameObject.rules.OnGameEndListener;
 import fr.giusti.onetapadventure.gameObject.rules.RulesManager;
-import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapadventure.repository.entities.EntityDispenserRepo;
 import fr.giusti.onetapadventure.repository.entities.MobRepo;
 import fr.giusti.onetapadventure.repository.entities.ParticuleRepo;
@@ -20,7 +22,7 @@ public class GameRepo {
     private int mScreenWidth;
     private int mScreenHeight;
 
-    public GameRepo( int screenWidth, int screenHeight) {
+    public GameRepo(int screenWidth, int screenHeight) {
         super();
         this.mScreenHeight = screenHeight;
         this.mScreenWidth = screenWidth;
@@ -40,9 +42,9 @@ public class GameRepo {
         int boardHeight = fullSizedBackground.getHeight();
         int boardWidth = fullSizedBackground.getWidth();
 
-        SpriteRepo.addPicture(backGameBoard,fullSizedBackground);
+        SpriteRepo.addPicture(backGameBoard, fullSizedBackground);
         GameBoard board = new GameBoard(MobRepo.getSampleMobList(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight));
-        board.resize(mScreenWidth,mScreenHeight);
+        board.resize(mScreenWidth, mScreenHeight);
         return board;
     }
 
@@ -53,12 +55,15 @@ public class GameRepo {
 
         int boardHeight = fullSizedBackground.getHeight();
         int boardWidth = fullSizedBackground.getWidth();
-        SpriteRepo.addPicture(backGameBoard,fullSizedBackground);
+        SpriteRepo.addPicture(backGameBoard, fullSizedBackground);
 
         RulesManager rulesManager = RuleRepo.getLvl_1x1_Rules(gameListener);
-        GameBoard board = new GameBoard(EntityDispenserRepo.getLvl1_1MobDispenser(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight),rulesManager);
-        board.resize(mScreenWidth,mScreenHeight);
-//        board.setBoardEventListener(rulesManager);
+
+        //TODO faire un sprite pour le toucher
+        TouchDispenser touchDisp = new TouchDispenser(Constants.TOUCH_STROKE, null, Constants.TOUCH_DAMAGE);
+
+        GameBoard board = new GameBoard(EntityDispenserRepo.getLvl1_1MobDispenser(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight), rulesManager, touchDisp);
+        board.resize(mScreenWidth, mScreenHeight);
         return board;
     }
 

@@ -1,4 +1,4 @@
-package fr.giusti.onetapadventure.gameObject;
+package fr.giusti.onetapadventure.gameObject.interactions;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -10,6 +10,7 @@ import java.util.List;
 
 import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.commons.Utils;
+import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 
 public class TouchPoint {
@@ -18,12 +19,25 @@ public class TouchPoint {
     private int state = 0;
     private final static int LENGTH_ANIMATION_FRAME = Constants.FRAME_DURATION;
     private boolean actionDone = false;
+    private String spriteId = null;
+    private int stroke =Constants.TOUCH_STROKE;
+    private int damage = Constants.TOUCH_DAMAGE;
 
 
-    public TouchPoint(float x, float y, int reach) {
+    public TouchPoint(float x, float y, int stroke) {
         super();
-        float halfReach = reach / 2;
+        this.stroke = stroke;
+        float halfReach = stroke / 2;
         mPosition = new RectF(x - halfReach, y - halfReach, x + halfReach, y + halfReach);
+    }
+
+    public TouchPoint(float x, float y, String spriteId, int stroke, int damage) {
+        float halfReach = stroke / 2;
+        mPosition = new RectF(x - halfReach, y - halfReach, x + halfReach, y + halfReach);
+
+        this.spriteId = spriteId;
+        this.stroke = stroke;
+        this.damage = damage;
     }
 
     public int getState() {
@@ -39,8 +53,8 @@ public class TouchPoint {
             actionDone = true;
             List<GameMob> mobList = board.getMobs();
             for (GameMob mob : mobList) {
-                if (Utils.doRectIntersect(mPosition, mob.mPosition) && ! mob.isDying()) {
-                    mob.manageTouchEvent(board);
+                if (Utils.doRectIntersect(mPosition, mob.mPosition) && !mob.isDying()) {
+                    mob.manageTouchEvent(board,damage);
                 }
             }
         }
@@ -52,15 +66,19 @@ public class TouchPoint {
         if (Utils.doRectIntersect(cameraPostion, mPosition)) {//On screen
             RectF positionOnSceen = new RectF(mPosition);
             positionOnSceen.offset(-cameraPostion.left, -cameraPostion.top);
-            if (state < 5) {
-                canvas.drawRect(positionOnSceen,brush);
-               // canvas.drawCircle(mPosition.centerX(), mPosition.centerY(), Constants.TOUCH_STROKE * 2 / 2, brush);
-            } else if (state > 10) {
-                canvas.drawRect(positionOnSceen,brush);
-               // canvas.drawCircle(mPosition.centerX(), mPosition.centerY(), Constants.TOUCH_STROKE * 2 / 8, brush);
-            } else {
-                canvas.drawRect(positionOnSceen,brush);
-                // canvas.drawCircle(mPosition.centerX(), mPosition.centerY(), Constants.TOUCH_STROKE * 2 / 4, brush);
+            if (spriteId == null) {
+                if (state < 5) {
+                    canvas.drawRect(positionOnSceen, brush);
+                    // canvas.drawCircle(mPosition.centerX(), mPosition.centerY(), Constants.TOUCH_STROKE * 2 / 2, brush);
+                } else if (state > 10) {
+                    canvas.drawRect(positionOnSceen, brush);
+                    // canvas.drawCircle(mPosition.centerX(), mPosition.centerY(), Constants.TOUCH_STROKE * 2 / 8, brush);
+                } else {
+                    canvas.drawRect(positionOnSceen, brush);
+                    // canvas.drawCircle(mPosition.centerX(), mPosition.centerY(), Constants.TOUCH_STROKE * 2 / 4, brush);
+                }
+            }else{
+                //TODO Draw sprite
             }
         }
     }

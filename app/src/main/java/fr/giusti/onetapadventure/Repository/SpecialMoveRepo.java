@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.gameObject.entities.Particule;
 import fr.giusti.onetapadventure.gameObject.moves.SpecialMove;
-import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.repository.entities.ParticuleRepo;
 
 /**
@@ -25,7 +25,7 @@ public class SpecialMoveRepo {
     public static final String MULTIPLIE = "multiplie";
     public static final String TELEPORT = "teleport";
     public static final String SWAP = "swap";
-    public static final String TRAIL = "trail";
+    public static final String SMOKE_TRAIL = "smoke_trail";
 
 
     private static SpecialMove noMove = new SpecialMove() {
@@ -45,10 +45,10 @@ public class SpecialMoveRepo {
         @Override
         public void doSpecialMove(GameBoard board, GameMob currentMob) {
             int currentHealth = currentMob.getHealth();
-            if (currentMob.isJustMoving() && this.lastUse > 180 && currentHealth < 5) {
+            if (currentMob.isJustMoving() && this.lastUse > 180 && currentHealth < (5 * Constants.TOUCH_DAMAGE)) {
                 lastUse = 0;
                 currentMob.setState(GameMob.eMobState.SPE1);
-                currentMob.setHealth(currentHealth + 1);
+                currentMob.setHealth(currentHealth + Constants.TOUCH_DAMAGE);
                 currentMob.setAnimationState(0);
             } else {
                 lastUse++;
@@ -61,28 +61,30 @@ public class SpecialMoveRepo {
         }
     };
 
-    private static SpecialMove trail = new SpecialMove() {
+    private static SpecialMove smoke_trail = new SpecialMove() {
 
-        private int lastUse=0;
+        private int lastUse = 0;
+
         @Override
         public void doSpecialMove(GameBoard board, GameMob currentMob) {
             if (currentMob.isJustMoving() && lastUse > 5) {
-                lastUse=0;
+                lastUse = 0;
                 Particule trailParicule = new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.SMOKE_PARTICULE, (int) currentMob.getPosition().centerX(), (int) currentMob.getPosition().centerY(), 16, 16, false, null);
                 board.addParticule(trailParicule);
-            }else{
+            } else {
                 lastUse++;
             }
         }
 
         @Override
         public String getId() {
-            return TRAIL;
+            return SMOKE_TRAIL;
         }
     };
 
     private static SpecialMove autoHurtExploding = new SpecialMove() {
         private int lastUse = 0;
+        private int lastShowed = -1;
 
         @Override
         public void doSpecialMove(GameBoard board, GameMob currentMob) {
@@ -90,8 +92,8 @@ public class SpecialMoveRepo {
             if (lastUse >= Constants.FRAME_PER_SEC * 2) {
                 lastUse = 0;
                 int mobHealth = currentMob.getHealth();
-                if (mobHealth > 1) {
-                    mobHealth--;
+                if (mobHealth > Constants.TOUCH_DAMAGE) {
+                    mobHealth -= Constants.TOUCH_DAMAGE;
                     currentMob.setHealth(mobHealth);
                     currentMob.setState(GameMob.eMobState.HURT);
                     switch (mobHealth) {
@@ -102,26 +104,32 @@ public class SpecialMoveRepo {
                         case 1:
                             break;
                     }
-                    if (mobHealth == 3) {
-                        Particule numberParicule = new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.NUMBER3_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), 0, 0, false, new PointF[]{new PointF(0, 2)});
-                        board.addParticule(numberParicule);
-                    } else if (mobHealth == 2) {
-                        Particule numberParicule = new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.NUMBER2_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), 0, 0, false, new PointF[]{new PointF(0, 2)});
-                        board.addParticule(numberParicule);
-                    } else if (mobHealth == 1) {
+                    if (mobHealth <= Constants.TOUCH_DAMAGE && lastShowed != 1) {
+                        lastShowed = 1;
                         Particule numberParicule = new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.NUMBER1_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), 0, 0, false, new PointF[]{new PointF(0, 2)});
                         board.addParticule(numberParicule);
+                    } else if (mobHealth <= (2 * Constants.TOUCH_DAMAGE) && lastShowed != 2) {
+                        lastShowed = 2;
+                        Particule numberParicule = new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.NUMBER2_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), 0, 0, false, new PointF[]{new PointF(0, 2)});
+                        board.addParticule(numberParicule);
+                    } else if (mobHealth <= (3 * Constants.TOUCH_DAMAGE) && lastShowed != 3) {
+                        lastShowed = 3;
+                        Particule numberParicule = new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.NUMBER3_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), 0, 0, false, new PointF[]{new PointF(0, 2)});
+                        board.addParticule(numberParicule);
+                    } else {
+                        lastShowed = -1;
                     }
                 } else {
                     //EXPLOSION !
-                    int particuleWidth = (int)currentMob.getWidth() * 4;
-                    int particuleHeight =(int) currentMob.getHeight() * 4;
-                    int particuleX = (int)currentMob.getPositionX();
-                    int particuleY = (int)currentMob.getPositionY();
+                    int particuleWidth = (int) currentMob.getWidth() * 4;
+                    int particuleHeight = (int) currentMob.getHeight() * 4;
+                    int particuleX = (int) currentMob.getPositionX();
+                    int particuleY = (int) currentMob.getPositionY();
 
                     Particule explosionParticule = new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.EXPLOSION_PARTICULE, particuleX, particuleY, particuleWidth, particuleHeight, false, null);
                     for (GameMob mob : board.getMobs()) {
-                        mob.manageTouchEvent(board);
+                        //TODO MAKE AOE event instead of touch
+                        mob.manageTouchEvent(board, Constants.TOUCH_DAMAGE);
                     }
 
                     board.addParticule(explosionParticule);
@@ -146,7 +154,7 @@ public class SpecialMoveRepo {
 
         @Override
         public void doSpecialMove(GameBoard board, GameMob currentMob) {
-            if (currentMob.isJustMoving()&& this.lastUse > 450) {
+            if (currentMob.isJustMoving() && this.lastUse > 450) {
                 lastUse = 0;
                 currentMob.setState(GameMob.eMobState.SPE1);
                 currentMob.setAnimationState(0);
@@ -178,8 +186,8 @@ public class SpecialMoveRepo {
                 int newX = (int) (Math.random() * board.getWidth());
                 int newY = (int) (Math.random() * board.getHeight());
 
-                int width = (int)currentMob.getWidth() * 2;
-                int height =(int) currentMob.getHeight() * 2;
+                int width = (int) currentMob.getWidth() * 2;
+                int height = (int) currentMob.getHeight() * 2;
 
                 Particule firstParticule = particuleRepo.generateOrGetCustomParticule(ParticuleRepo.TP_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), width, height, false, null);
                 Particule secondParticule = particuleRepo.generateOrGetCustomParticule(ParticuleRepo.TP_PARTICULE, newX, newY, width, height, true, null);
@@ -267,7 +275,7 @@ public class SpecialMoveRepo {
         specialeMoveList.put(noMove.getId(), noMove);
         specialeMoveList.put(teleport.getId(), teleport);
         specialeMoveList.put(swap.getId(), swap);
-        specialeMoveList.put(trail.getId(), trail);
+        specialeMoveList.put(smoke_trail.getId(), smoke_trail);
 
 
     }

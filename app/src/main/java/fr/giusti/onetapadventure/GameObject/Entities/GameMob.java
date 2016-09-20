@@ -355,14 +355,14 @@ public class GameMob extends Entity {
     /**
      * gere un clique et met a jour le status du mob en fonction
      */
-    public void manageTouchEvent(GameBoard board) {
+    public void manageTouchEvent(GameBoard board, int damage) {
         if (isDead())
             return;// deja mort
 
         if (this.mTouchedMove != null) {
-            this.mTouchedMove.doTouchedMove(board, this);
-        } else if (mHealth > 1) {
-            mHealth--;
+            this.mTouchedMove.doTouchedMove(board, this, damage);
+        } else if (mHealth > damage) {
+            mHealth -= damage;
             mState = eMobState.HURT;
         } else {
             mHealth = 0;

@@ -52,7 +52,7 @@ public class Scenery extends Entity {
     public void update(GameBoard board) {
         for (GameMob mob : board.getMobs()) {
             if (Utils.doRectIntersect(hitbox,mob.mPosition)) {
-                touchedByMob.doTouchedMove(board, mob);
+                touchedByMob.doTouchedMove(board, mob, damage);
             }
         }
     }
