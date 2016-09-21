@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
+import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.commons.Utils;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.moves.TouchedMove;
@@ -52,7 +53,7 @@ public class Scenery extends Entity {
     public void update(GameBoard board) {
         for (GameMob mob : board.getMobs()) {
             if (Utils.doRectIntersect(hitbox,mob.mPosition)) {
-                touchedByMob.doTouchedMove(board, mob, damage);
+                touchedByMob.doTouchedMove(board, mob, Constants.TOUCH_DAMAGE);
             }
         }
     }

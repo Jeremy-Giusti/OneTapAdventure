@@ -37,7 +37,7 @@ public class ParticuleHolder {
      * @param path       the new path
      * @return null if not found
      */
-    public static Particule getAvailableParticule(String templateId, int x, int y, int width, int height, boolean reversed, PointF[] path) {
+    public static Particule getAvailableParticule(String templateId, int x, int y, float width, float height, boolean reversed, PointF[] path) {
         String customParticuleId = templateId + width + "x" + height;
         Particule result = null;
         ArrayList<Particule> availablePool = availableParticules.get(customParticuleId);
@@ -48,7 +48,9 @@ public class ParticuleHolder {
         } else {
             result = ParticuleRepo.getTemplateParticule(templateId).clone();
             result.setAnimationReversed(reversed);
-            result.setMovePattern(path);
+            if (path != null) {
+                result.setMovePattern(path);
+            }
             result.setmPosition(new RectF(x - width / 2, y - height / 2, x + width / 2, y + height / 2));
         }
         return result;

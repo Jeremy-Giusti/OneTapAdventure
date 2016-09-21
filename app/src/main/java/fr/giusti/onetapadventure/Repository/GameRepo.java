@@ -9,15 +9,17 @@ import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.interactions.TouchDispenser;
+import fr.giusti.onetapadventure.gameObject.rules.IRuleProgressListener;
 import fr.giusti.onetapadventure.gameObject.rules.OnGameEndListener;
 import fr.giusti.onetapadventure.gameObject.rules.RulesManager;
 import fr.giusti.onetapadventure.repository.entities.EntityDispenserRepo;
 import fr.giusti.onetapadventure.repository.entities.MobRepo;
 import fr.giusti.onetapadventure.repository.entities.ParticuleRepo;
+import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 
 public class GameRepo {
-//    /** the variable used to scale every game element to the screen height (implying the width will be scaled by the same variable but everything too long will be cropped on display)  */
-//    private double mRatioY;
+    public static final String LVL_TEST = "lvl test";
+    public static final String LVL_1 = "lvl 1";
 
     private int mScreenWidth;
     private int mScreenHeight;
@@ -26,6 +28,20 @@ public class GameRepo {
         super();
         this.mScreenHeight = screenHeight;
         this.mScreenWidth = screenWidth;
+    }
+
+    public GameBoard getBoardByLvlId(Context context, String lvlId, OnGameEndListener endListener, IRuleProgressListener ruleProgressListener) throws CloneNotSupportedException {
+        GameBoard result = null;
+        switch (lvlId) {
+            case LVL_TEST:
+                result = generateSampleBoard(context);
+                break;
+            case LVL_1:
+                result = generateLvl_1x1(context, endListener, ruleProgressListener);
+                break;
+        }
+
+        return result;
     }
 
     /**
@@ -48,7 +64,7 @@ public class GameRepo {
         return board;
     }
 
-    public GameBoard generateLvl_1x1(Context context, OnGameEndListener gameListener) throws CloneNotSupportedException {
+    public GameBoard generateLvl_1x1(Context context, OnGameEndListener gameListener, IRuleProgressListener ruleProgressListener) throws CloneNotSupportedException {
         ParticuleRepo.initCache(context);
         String backGameBoard = "background1x1";
         Bitmap fullSizedBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.lvl1x1_back);
@@ -64,8 +80,9 @@ public class GameRepo {
 
         GameBoard board = new GameBoard(EntityDispenserRepo.getLvl1_1MobDispenser(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight), rulesManager, touchDisp);
         board.resize(mScreenWidth, mScreenHeight);
+        board.getRulesManager().setRuleListener(Lvl1Constant.ESCAPING_MOB_RULE, ruleProgressListener);
+        board.getRulesManager().setRuleListener(Lvl1Constant.LEVEL_END_RULE, ruleProgressListener);
         return board;
     }
-
 
 }

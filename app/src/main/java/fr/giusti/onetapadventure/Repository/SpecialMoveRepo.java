@@ -9,6 +9,7 @@ import java.util.List;
 
 import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
+import fr.giusti.onetapadventure.gameObject.ParticuleHolder;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.gameObject.entities.Particule;
 import fr.giusti.onetapadventure.gameObject.moves.SpecialMove;
@@ -69,7 +70,7 @@ public class SpecialMoveRepo {
         public void doSpecialMove(GameBoard board, GameMob currentMob) {
             if (currentMob.isJustMoving() && lastUse > 5) {
                 lastUse = 0;
-                Particule trailParicule = new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.SMOKE_PARTICULE, (int) currentMob.getPosition().centerX(), (int) currentMob.getPosition().centerY(), 16, 16, false, null);
+                Particule trailParicule = ParticuleHolder.getAvailableParticule(ParticuleRepo.SMOKE_PARTICULE, (int) currentMob.getPosition().centerX(), (int) currentMob.getPosition().centerY(), 16, 16, false, null);
                 board.addParticule(trailParicule);
             } else {
                 lastUse++;
@@ -106,15 +107,15 @@ public class SpecialMoveRepo {
                     }
                     if (mobHealth <= Constants.TOUCH_DAMAGE && lastShowed != 1) {
                         lastShowed = 1;
-                        Particule numberParicule = new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.NUMBER1_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), 0, 0, false, new PointF[]{new PointF(0, 2)});
+                        Particule numberParicule = ParticuleHolder.getAvailableParticule(ParticuleRepo.NUMBER1_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), currentMob.mPosition.width(),currentMob.mPosition.height(), false, new PointF[]{new PointF(0, 2)});
                         board.addParticule(numberParicule);
                     } else if (mobHealth <= (2 * Constants.TOUCH_DAMAGE) && lastShowed != 2) {
                         lastShowed = 2;
-                        Particule numberParicule = new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.NUMBER2_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), 0, 0, false, new PointF[]{new PointF(0, 2)});
+                        Particule numberParicule = ParticuleHolder.getAvailableParticule(ParticuleRepo.NUMBER2_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(),currentMob.mPosition.width(),currentMob.mPosition.height(), false, new PointF[]{new PointF(0, 2)});
                         board.addParticule(numberParicule);
                     } else if (mobHealth <= (3 * Constants.TOUCH_DAMAGE) && lastShowed != 3) {
                         lastShowed = 3;
-                        Particule numberParicule = new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.NUMBER3_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), 0, 0, false, new PointF[]{new PointF(0, 2)});
+                        Particule numberParicule = ParticuleHolder.getAvailableParticule(ParticuleRepo.NUMBER3_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), currentMob.mPosition.width(),currentMob.mPosition.height(), false, new PointF[]{new PointF(0, 2)});
                         board.addParticule(numberParicule);
                     } else {
                         lastShowed = -1;
@@ -126,7 +127,7 @@ public class SpecialMoveRepo {
                     int particuleX = (int) currentMob.getPositionX();
                     int particuleY = (int) currentMob.getPositionY();
 
-                    Particule explosionParticule = new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.EXPLOSION_PARTICULE, particuleX, particuleY, particuleWidth, particuleHeight, false, null);
+                    Particule explosionParticule = ParticuleHolder.getAvailableParticule(ParticuleRepo.EXPLOSION_PARTICULE, particuleX, particuleY, particuleWidth, particuleHeight, false, null);
                     for (GameMob mob : board.getMobs()) {
                         //TODO MAKE AOE event instead of touch
                         mob.manageTouchEvent(board, Constants.TOUCH_DAMAGE);
@@ -189,8 +190,8 @@ public class SpecialMoveRepo {
                 int width = (int) currentMob.getWidth() * 2;
                 int height = (int) currentMob.getHeight() * 2;
 
-                Particule firstParticule = particuleRepo.generateOrGetCustomParticule(ParticuleRepo.TP_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), width, height, false, null);
-                Particule secondParticule = particuleRepo.generateOrGetCustomParticule(ParticuleRepo.TP_PARTICULE, newX, newY, width, height, true, null);
+                Particule firstParticule = ParticuleHolder.getAvailableParticule(ParticuleRepo.TP_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), width, height, false, null);
+                Particule secondParticule = ParticuleHolder.getAvailableParticule(ParticuleRepo.TP_PARTICULE, newX, newY, width, height, true, null);
 
                 currentMob.setPositionFromXY(newX, newY);
                 //add particule inverse and not
@@ -239,8 +240,8 @@ public class SpecialMoveRepo {
                 nextPositionOtherMob = currentMob.getFuturePositionCenter(delayBeforeTp);
 
 
-                Particule firstParticule = particuleRepo.generateOrGetCustomParticule(ParticuleRepo.SWAP_PARTICULE, nextPosition.x, nextPosition.y, 0, 0, false, null);
-                Particule secondParticule = particuleRepo.generateOrGetCustomParticule(ParticuleRepo.SWAP_PARTICULE, nextPositionOtherMob.x, nextPositionOtherMob.y, 0, 0, false, null);
+                Particule firstParticule = ParticuleHolder.getAvailableParticule(ParticuleRepo.SWAP_PARTICULE, nextPosition.x, nextPosition.y, currentMob.getWidth(), currentMob.getHeight(), false, null);
+                Particule secondParticule = ParticuleHolder.getAvailableParticule(ParticuleRepo.SWAP_PARTICULE, nextPositionOtherMob.x, nextPositionOtherMob.y, currentMob.getWidth(), currentMob.getHeight(), false, null);
 
                 //add particule inverse and not
 

@@ -9,5 +9,6 @@
     <string name="touchMove_prompt">Touched Move</string>
     <string name="posx"><![CDATA[position x (<512)]]></string>
     <string name="posy"><![CDATA[position y (<512)]]></string>
+    <string name="error_level_generation">Error generating current lvl</string>
 
 </resources>

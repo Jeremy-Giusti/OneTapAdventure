@@ -14,6 +14,7 @@ import android.widget.Toast;
 import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapadventure.UI.CustomView.DrawingView;
 import fr.giusti.onetapadventure.callback.OnBoardEventListener;
+import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.gameObject.rules.IRuleProgressListener;
@@ -40,6 +41,7 @@ public class GameActivity extends Activity implements OnBoardEventListener, OnGa
     private boolean running = false;
     private boolean paused = false;
     private GameRepo mRepo;
+    private String currentLvl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class GameActivity extends Activity implements OnBoardEventListener, OnGa
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE);
 
+        currentLvl = getIntent().getStringExtra(Constants.LEVEL_NAME);
         initViews();
         initEvents();
     }
@@ -150,10 +153,19 @@ public class GameActivity extends Activity implements OnBoardEventListener, OnGa
             //GameBoard board=mRepo.generateSampleBoard(this);
             //board.setBoardEventListener(this);
 
-            GameBoard board = mRepo.generateLvl_1x1(this, this);
+//           GameBoard board = mRepo.generateLvl_1x1(this, this);
+//            board.getRulesManager().setRuleListener(Lvl1Constant.ESCAPING_MOB_RULE, this);
+//            board.getRulesManager().setRuleListener(Lvl1Constant.LEVEL_END_RULE, this);
+
+            GameBoard board = mRepo.getBoardByLvlId(this, currentLvl, this, this);
+
+            if (board == null) {
+                Toast.makeText(this, R.string.error_level_generation, Toast.LENGTH_SHORT).show();
+                this.finish();
+            }
+
             Log.d(TAG, "Board created");
-            board.getRulesManager().setRuleListener(Lvl1Constant.ESCAPING_MOB_RULE, this);
-            board.getRulesManager().setRuleListener(Lvl1Constant.LEVEL_END_RULE, this);
+
             mDrawingSurface.startGame(board);
         } catch (CloneNotSupportedException e) {
             Toast.makeText(this, "error clonning sample mob list", Toast.LENGTH_SHORT).show();
@@ -202,7 +214,8 @@ public class GameActivity extends Activity implements OnBoardEventListener, OnGa
                     mRule1.setText(displayableProgress);
                 } else {
                     mRule2.setText(displayableProgress);
-                }            }
+                }
+            }
         });
 
     }

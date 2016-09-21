@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
+import fr.giusti.onetapadventure.gameObject.ParticuleHolder;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.gameObject.entities.Particule;
 import fr.giusti.onetapadventure.gameObject.moves.TouchedMove;
@@ -57,7 +58,7 @@ public class TouchedMoveRepo {
                 currentMob.setState(GameMob.eMobState.DYING);
             }
             currentMob.setAnimationState(0);
-            board.getmParticules().add(new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.BLOOD_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), (int) currentMob.getWidth(), (int) currentMob.getHeight(), false, new PointF[]{currentMob.getCurrentMove()}));
+            board.getmParticules().add(ParticuleHolder.getAvailableParticule(ParticuleRepo.BLOOD_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(),  currentMob.getWidth(), currentMob.getHeight(), false, new PointF[]{currentMob.getCurrentMove()}));
 
         }
 
@@ -120,7 +121,7 @@ public class TouchedMoveRepo {
                         currentMob.setyAlteration(1);
                         break;
                 }
-                Particule particule1 = new ParticuleRepo().generateOrGetCustomParticule(ParticuleRepo.SMOKE_PARTICULE,
+                Particule particule1 = ParticuleHolder.getAvailableParticule(ParticuleRepo.SMOKE_PARTICULE,
                         particuleX,
                         particuleY,
                         particuleWidth,
