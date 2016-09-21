@@ -196,6 +196,7 @@ public class GameBoard {
         for (Particule particule : Collections.synchronizedList(mParticules)) {
             if (particule.getmAnimationState() < 0) {
                 mParticules.remove(particule);
+                particule.recycle();
             } else {
                 particule.update(this);
             }

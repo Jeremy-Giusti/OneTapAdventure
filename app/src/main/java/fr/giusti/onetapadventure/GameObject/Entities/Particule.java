@@ -9,6 +9,7 @@ import android.graphics.RectF;
 import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.commons.Utils;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
+import fr.giusti.onetapadventure.gameObject.ParticuleHolder;
 import fr.giusti.onetapadventure.repository.SpriteRepo;
 
 /**
@@ -36,15 +37,18 @@ public class Particule extends Entity {
 
     protected boolean animationReversed = false;
 
-    protected boolean infinite = false;
+
+    /**
+     * true if the particule is not used
+     */
+    protected boolean mAvailable = false;
 
 
-    public Particule(String name, int x, int y, int width, int height, PointF[] movePattern, String mBitmapId, boolean reverseAnimation, boolean infinite) {
+    public Particule(String name, int x, int y, int width, int height, PointF[] movePattern, String mBitmapId, boolean reverseAnimation) {
 
         super(name, x, y, width, height, mBitmapId);
         this.movePattern = movePattern;
         this.animationReversed = reverseAnimation;
-        this.infinite = infinite;
     }
 
 
@@ -98,7 +102,6 @@ public class Particule extends Entity {
     @Override
     public void update(GameBoard board) {
         move();
-        //TODO map collision ?
         updateSprite();
     }
 
@@ -108,7 +111,8 @@ public class Particule extends Entity {
     private void move() {
         this.mPosition.offset(movePattern[currentMove].x, movePattern[currentMove].y);
 
-        currentMove = 0;
+        if ((currentMove + 1) < movePattern.length) currentMove++;
+        else currentMove = 0;
 
     }
 
@@ -118,7 +122,7 @@ public class Particule extends Entity {
     private void updateSprite() {
         // check l'etat du mob et son stade dans l'animation
         if (mAnimationState >= Constants.PARTICULE_COMPLETE_ANIMATION_DURATION || mAnimationState == -1) {
-            mAnimationState = (infinite) ? 0 : -1;
+            mAnimationState = -1;
         } else {
             if (animationReversed) {
                 this.mSpirteColumn = (int) (((Constants.PARTICULE_COMPLETE_ANIMATION_DURATION - 1) - mAnimationState) / Constants.FRAME_DURATION);
@@ -166,13 +170,23 @@ public class Particule extends Entity {
                 (int) mPosition.height(),
                 cloneMovePattern,
                 mBitmapId,
-                this.animationReversed,
-                infinite);
+                this.animationReversed);
         return clone;
 
     }
 
+    public void recycle() {
+        ParticuleHolder.recycle(this);
+    }
 
+
+    public void setAvailable(boolean available) {
+        this.mAvailable = available;
+    }
+
+    public boolean isAvailable() {
+        return mAvailable;
+    }
 }
 
 

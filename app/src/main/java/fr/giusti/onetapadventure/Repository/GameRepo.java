@@ -35,7 +35,7 @@ public class GameRepo {
      * @throws CloneNotSupportedException
      */
     public GameBoard generateSampleBoard(Context context) throws CloneNotSupportedException {
-        new ParticuleRepo().initCache(context);
+        ParticuleRepo.initCache(context);
         String backGameBoard = "background";
         Bitmap fullSizedBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.grid512);
 
@@ -49,7 +49,7 @@ public class GameRepo {
     }
 
     public GameBoard generateLvl_1x1(Context context, OnGameEndListener gameListener) throws CloneNotSupportedException {
-        new ParticuleRepo().initCache(context);
+        ParticuleRepo.initCache(context);
         String backGameBoard = "background1x1";
         Bitmap fullSizedBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.lvl1x1_back);
 
