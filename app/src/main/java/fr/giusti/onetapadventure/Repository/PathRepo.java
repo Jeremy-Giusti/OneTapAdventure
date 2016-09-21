@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 public class PathRepo {
 
-     /**
+    /**
      * @param originalPath the original path
      * @param start        beginning of the new path from the original
      * @param end          end of the new path from the original
@@ -87,7 +87,7 @@ public class PathRepo {
     public static PointF[] generateLineToDest(PointF startingPosition, PointF destination, int pathLength) {
         PointF[] result = new PointF[pathLength];
         float xSpeed = (destination.x - startingPosition.x) / (float) pathLength;
-        float ySpeed = (destination.y - startingPosition.y) /(float) pathLength;
+        float ySpeed = (destination.y - startingPosition.y) / (float) pathLength;
 
         for (int i = 0; i < pathLength; i++) {
             result[i] = new PointF(xSpeed, ySpeed);
@@ -138,11 +138,11 @@ public class PathRepo {
         int inversedInt = (inversed) ? -1 : 1;
 
         for (int i = 1; i < pathLength; i++) {
-            float avancement = i /(float) pathLength;
+            float avancement = i / (float) pathLength;
             float curveAvancement = (float) Math.cos(Math.PI * avancement);
 
-            float xCurrentCurve = (inversedInt * curve * xCurveRatio * curveAvancement)/(pathLength/2) ;
-            float yCurrentCurve = (inversedInt * curve * yCurveRatio * curveAvancement)/(pathLength/2) ;
+            float xCurrentCurve = (inversedInt * curve * xCurveRatio * curveAvancement) / (pathLength / 2);
+            float yCurrentCurve = (inversedInt * curve * yCurveRatio * curveAvancement) / (pathLength / 2);
 
             returnPath[i].x += xCurrentCurve;
             returnPath[i].y += yCurrentCurve;
@@ -322,4 +322,28 @@ public class PathRepo {
 
     }
 
+    /**
+     * make average from 3 consecutive point(previous, current,next) for each point
+     *
+     * @param roughtPath
+     * @return
+     */
+    public static PointF[] softenPath(PointF[] roughtPath) {
+        PointF[] result = new PointF[roughtPath.length];
+
+        PointF previousPoint;
+        PointF currentPoint;
+        PointF nextPoint;
+
+        for (int i = 1; i < (roughtPath.length - 1); i++) {
+            previousPoint = roughtPath[i - 1];
+            currentPoint = roughtPath[i];
+            nextPoint = roughtPath[i + 1];
+            float smoothX = (previousPoint.x + currentPoint.x + nextPoint.x) / 3f;
+            float smoothY = (previousPoint.y + currentPoint.y + nextPoint.y) / 3f;
+            result[i] = new PointF(smoothX, smoothY);
+        }
+
+        return result;
+    }
 }

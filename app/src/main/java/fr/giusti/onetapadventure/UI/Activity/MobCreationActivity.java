@@ -30,6 +30,7 @@ import fr.giusti.onetapadventure.gameObject.moves.SpecialMove;
 import fr.giusti.onetapadventure.gameObject.moves.TouchedMove;
 import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
+import fr.giusti.onetapadventure.repository.PathRepo;
 import fr.giusti.onetapadventure.repository.entities.MobRepo;
 import fr.giusti.onetapadventure.repository.SpecialMoveRepo;
 import fr.giusti.onetapadventure.repository.SpriteRepo;
@@ -61,8 +62,8 @@ public class MobCreationActivity extends Activity {
     private Button mSkinSelectionButton;
     private PathDrawingView mPatternSurface;
     private GameMob mMobCreating = new GameMob("", 0, 0, 2, 2, null, null, null, null, 1, 1);
-    protected Point mPatternLastPoint;
-    private ArrayList<Point> mMobPattern;
+    protected PointF mPatternLastPoint;
+    private ArrayList<PointF> mMobPattern;
     private int mobHealth;
 
 
@@ -222,8 +223,8 @@ public class MobCreationActivity extends Activity {
             mMobCreating.setBitmapId(spriteSheetId);
 
             // generation de l'epaisseur/hauteur du mob selon son skin
-            this.mWidthEdit.setText("" + singleSpriteDimens.x);
-            this.mHeightEdit.setText("" + singleSpriteDimens.y);
+            mWidthEdit.setText("" + singleSpriteDimens.x);
+            mHeightEdit.setText("" + singleSpriteDimens.y);
             if (mSkinImage instanceof SpriteView) {
                 ((SpriteView) mSkinImage).setSpriteSheet(spriteSheetId);
             } else {
@@ -243,23 +244,23 @@ public class MobCreationActivity extends Activity {
         public boolean onTouch(View v, MotionEvent event) {
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
-                    mMobPattern = new ArrayList<Point>();
-                    mPatternLastPoint = new Point((int) event.getX(), (int) event.getY());
-                    mMobPattern.add(new Point(0, 0));
+                    mMobPattern = new ArrayList<>();
+                    mPatternLastPoint = new PointF( event.getX(),  event.getY());
+                    mMobPattern.add(new PointF(0, 0));
                     break;
 
                 case MotionEvent.ACTION_UP:
                     PointF[] resultPattern = new PointF[mMobPattern.size()];
-                    mMobCreating.setMovePattern(mMobPattern.toArray(resultPattern));
+                    mMobCreating.setMovePattern(PathRepo.softenPath(mMobPattern.toArray(resultPattern)));
                     v.performClick();
                     break;
 
                 case MotionEvent.ACTION_MOVE:
-                    Point newPoint = new Point((int) event.getX() - mPatternLastPoint.x, (int) event.getY() - mPatternLastPoint.y);
+                    PointF newPoint = new PointF( event.getX() - mPatternLastPoint.x,  event.getY() - mPatternLastPoint.y);
                     if (pathStarted || (newPoint.x != 0 || newPoint.y != 0)) {
                         pathStarted = true;
                         mMobPattern.add(newPoint);
-                        mPatternLastPoint = new Point((int) event.getX(), (int) event.getY());
+                        mPatternLastPoint = new PointF(event.getX(),  event.getY());
                     }
                     break;
 
@@ -283,5 +284,9 @@ public class MobCreationActivity extends Activity {
         mSkinImage.setImageResource(android.R.drawable.ic_menu_help);
         mPatternSurface.reset();
         mPatternSurface.invalidate();
+    }
+
+    public void onClickGeneratePath(View view) {
+
     }
 }

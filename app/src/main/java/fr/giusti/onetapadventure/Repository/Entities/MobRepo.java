@@ -61,13 +61,13 @@ public class MobRepo {
         //work (not perfectly but still)
         PointF[] mob5Pattern = PathRepo.generateLoopedPath(Constants.FRAME_PER_SEC, new Point(0, 0), new Point(0, 5), 7, 0);//un tour a la seconde
         //seems to work
-        PointF[] mob6Pattern = PathRepo.generateRandomPath(100, 5, 5, 15, 15, 25);
+        PointF[] mob6Pattern = PathRepo.generateLinePath(1, 4,4);
 
         SpecialMoveRepo moveRepo = new SpecialMoveRepo();
         TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
         GameMob blueMob = new GameMob("programmedMob1", 1, 250, 32, 32, mob1Pattern, moveRepo.getMoveById(SpecialMoveRepo.SMOKE_TRAIL), touchedMoveRepo.getMoveById(TouchedMoveRepo.BAIT), bitmapId4, 50, 1);
-        GameMob greenMob = new GameMob("programmedMob3", 100, 100, 48, 48, mob3Pattern, moveRepo.getMoveById(SpecialMoveRepo.SWAP), null, bitmapId3, 10, 1);
-        GameMob yellowMob = new GameMob("programmedMob6", 250, 250, 32, 32, mob6Pattern, moveRepo.getMoveById(SpecialMoveRepo.AUTO_HEAL), touchedMoveRepo.getMoveById(TouchedMoveRepo.BLEED), bitmapId2, 20, 1);
+        GameMob greenMob = new GameMob("programmedMob3", 100, 100, 48, 48, mob3Pattern, moveRepo.getMoveById(SpecialMoveRepo.SWAP), touchedMoveRepo.getMoveById(TouchedMoveRepo.BLEED), bitmapId3, 10, 1);
+        GameMob yellowMob = new GameMob("programmedMob6", 250, 250, 48, 48, mob6Pattern, moveRepo.getMoveById(SpecialMoveRepo.MULTIPLIE), null, bitmapId2, 10, 1);
         GameMob orangeMob = new GameMob("programmedMob5", 250, 250, 40, 40, mob5Pattern, moveRepo.getMoveById(SpecialMoveRepo.AUTO_HURT_EXPLODING), touchedMoveRepo.getMoveById(TouchedMoveRepo.HEAL), bitmapId4, 20, 1);
 
         returnList.add(blueMob);

@@ -134,5 +134,15 @@
             android:layout_width="match_parent"
             android:layout_alignParentBottom="true"
             android:layout_below="@+id/mca_mobSkinImage" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:text="generate"
+            android:padding="10dp"
+            android:visibility="gone"
+            android:background="#44ffffff"
+            android:onClick="onClickGeneratePath"/>
     </RelativeLayout>
 </LinearLayout>

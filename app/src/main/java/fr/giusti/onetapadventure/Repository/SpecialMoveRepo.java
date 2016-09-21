@@ -12,6 +12,7 @@ import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.ParticuleHolder;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.gameObject.entities.Particule;
+import fr.giusti.onetapadventure.gameObject.interactions.TouchPoint;
 import fr.giusti.onetapadventure.gameObject.moves.SpecialMove;
 import fr.giusti.onetapadventure.repository.entities.ParticuleRepo;
 
@@ -128,10 +129,9 @@ public class SpecialMoveRepo {
                     int particuleY = (int) currentMob.getPositionY();
 
                     Particule explosionParticule = ParticuleHolder.getAvailableParticule(ParticuleRepo.EXPLOSION_PARTICULE, particuleX, particuleY, particuleWidth, particuleHeight, false, null);
-                    for (GameMob mob : board.getMobs()) {
+
                         //TODO MAKE AOE event instead of touch
-                        mob.manageTouchEvent(board, Constants.TOUCH_DAMAGE);
-                    }
+                        board.addTouchEvent(new TouchPoint(currentMob.getPositionX(),currentMob.getPositionY(),Constants.TOUCH_STROKE*2));
 
                     board.addParticule(explosionParticule);
                     currentMob.setHealth(-1);

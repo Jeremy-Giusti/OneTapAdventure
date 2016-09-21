@@ -138,6 +138,11 @@ public class GameBoard {
         this.mParticules = mParticules;
     }
 
+    public void addTouchEvent(TouchPoint touchPoint) {
+        this.mTouchPoints.add(touchPoint);
+    }
+
+
     public String getBackgroundBitmapId() {
         return mBackgroundBitmapId;
     }
