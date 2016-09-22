@@ -11,7 +11,7 @@ import fr.giusti.onetapadventure.gameObject.entities.ThreeTierEntityDispenser;
 public class EntityDispenserRepo {
 
     public static EntityDispenser getLvl1_1MobDispenser(Context context) {
-        ThreeTierEntityDispenser result = new ThreeTierEntityDispenser(MobRepo.getLvl1x1InitList(context), MobRepo.getLvl1x1BackupList(context));
+        ThreeTierEntityDispenser result = new ThreeTierEntityDispenser(EntityRepo.getLvl1x1InitList(context), EntityRepo.getLvl1x1BackupList(context));
         return result;
     }
 }

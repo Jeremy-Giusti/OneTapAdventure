@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import fr.giusti.onetapadventure.callback.OnRuleAccomplishedListener;
 import fr.giusti.onetapadventure.commons.Constants;
+import fr.giusti.onetapadventure.commons.GameConstant;
 import fr.giusti.onetapadventure.gameObject.rules.OnGameEndListener;
 import fr.giusti.onetapadventure.gameObject.rules.Rule;
 import fr.giusti.onetapadventure.gameObject.rules.RulesManager;
@@ -23,18 +24,18 @@ public class RuleRepo {
         OnRuleAccomplishedListener accomplishedBehavior = new OnRuleAccomplishedListener() {
             @Override
             public void onMasterRuleAccomplished(Rule masterRule, Rule timerRule, ArrayList<Rule> secondaries) {
-                gameEndListener.onGameEnd(eConditionType.DEFEAT, Constants.getLevelId(1, 1), 0);
+                gameEndListener.onGameEnd(eConditionType.DEFEAT, GameConstant.getLevelId(1, 1), 0);
             }
 
             @Override
             public void onTimerEnded(Rule masterRule, Rule timerRule, ArrayList<Rule> secondaries) {
                 //Should not happen
-                gameEndListener.onGameEnd(eConditionType.NULL, Constants.getLevelId(1, 1), 0);
+                gameEndListener.onGameEnd(eConditionType.NULL, GameConstant.getLevelId(1, 1), 0);
             }
 
             @Override
             public void onGameEnded(Rule masterRule, Rule timerRule, ArrayList<Rule> secondaries) {
-                gameEndListener.onGameEnd(eConditionType.VICTORY, Constants.getLevelId(1, 1), 1000);
+                gameEndListener.onGameEnd(eConditionType.VICTORY, GameConstant.getLevelId(1, 1), 1000);
             }
         };
 

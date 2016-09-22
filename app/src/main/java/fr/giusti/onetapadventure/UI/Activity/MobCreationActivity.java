@@ -31,7 +31,7 @@ import fr.giusti.onetapadventure.gameObject.moves.TouchedMove;
 import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.repository.PathRepo;
-import fr.giusti.onetapadventure.repository.entities.MobRepo;
+import fr.giusti.onetapadventure.repository.entities.EntityRepo;
 import fr.giusti.onetapadventure.repository.SpecialMoveRepo;
 import fr.giusti.onetapadventure.repository.SpriteRepo;
 import fr.giusti.onetapadventure.repository.TouchedMoveRepo;
@@ -180,7 +180,7 @@ public class MobCreationActivity extends Activity {
             mMobCreating.setPosition(new RectF(mobXposition, mobYposition, mobXposition + mobWidth, mobYposition + mobHeight));
             mMobCreating.setHealth(mobHealth);
 
-            MobRepo.saveGameMob(this, mMobCreating, null);
+            EntityRepo.saveGameMob(this, mMobCreating, null);
 
             Toast.makeText(this, "Mob créer:\n path lenght: " + mMobCreating.getMovePattern().length + "\n skin id: " + mMobCreating.getBitmapId(), Toast.LENGTH_LONG).show();
             resetMobCreating();

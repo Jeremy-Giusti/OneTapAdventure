@@ -13,13 +13,13 @@ import fr.giusti.onetapadventure.gameObject.rules.IRuleProgressListener;
 import fr.giusti.onetapadventure.gameObject.rules.OnGameEndListener;
 import fr.giusti.onetapadventure.gameObject.rules.RulesManager;
 import fr.giusti.onetapadventure.repository.entities.EntityDispenserRepo;
-import fr.giusti.onetapadventure.repository.entities.MobRepo;
+import fr.giusti.onetapadventure.repository.entities.EntityRepo;
 import fr.giusti.onetapadventure.repository.entities.ParticuleRepo;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 
 public class GameRepo {
     public static final String LVL_TEST = "lvl test";
-    public static final String LVL_1 = "lvl 1";
+    public static final String LVL_1 = "1x1";
 
     private int mScreenWidth;
     private int mScreenHeight;
@@ -37,6 +37,7 @@ public class GameRepo {
                 result = generateSampleBoard(context);
                 break;
             case LVL_1:
+                //FIXME /not a dynamic detection\
                 result = generateLvl_1x1(context, endListener, ruleProgressListener);
                 break;
         }
@@ -59,7 +60,7 @@ public class GameRepo {
         int boardWidth = fullSizedBackground.getWidth();
 
         SpriteRepo.addPicture(backGameBoard, fullSizedBackground);
-        GameBoard board = new GameBoard(MobRepo.getSampleMobList(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight));
+        GameBoard board = new GameBoard(EntityRepo.getSampleMobList(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight));
         board.resize(mScreenWidth, mScreenHeight);
         return board;
     }

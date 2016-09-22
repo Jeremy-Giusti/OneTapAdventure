@@ -20,6 +20,10 @@
             android:label="@string/app_name"
             android:screenOrientation="landscape"></activity>
         <activity
+            android:name="fr.giusti.onetapadventure.UI.Activity.LvlSelectionActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape"></activity>
+        <activity
             android:name="fr.giusti.onetapadventure.UI.Activity.MobCreationActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/Mob_creation"

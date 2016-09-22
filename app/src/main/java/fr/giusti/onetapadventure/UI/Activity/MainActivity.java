@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapadventure.commons.Constants;
+import fr.giusti.onetapadventure.commons.GameConstant;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.repository.GameRepo;
 import fr.giusti.onetapadventure.repository.SpriteRepo;
@@ -48,7 +49,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Log.d(TAG, "test area clicked");
                 Intent myIntent = new Intent(MainActivity.this, GameActivity.class);
-                myIntent.putExtra(Constants.LEVEL_NAME, GameRepo.LVL_TEST);
+                myIntent.putExtra(GameConstant.LEVEL_NAME, GameRepo.LVL_TEST);
                 MainActivity.this.startActivity(myIntent);
 
             }
@@ -60,8 +61,8 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                //TODO DISPLAY lvl choice activity
                 Log.d(TAG, "game area clicked");
-                Intent myIntent = new Intent(MainActivity.this, GameActivity.class);
-                myIntent.putExtra(Constants.LEVEL_NAME, GameRepo.LVL_1);
+                Intent myIntent = new Intent(MainActivity.this, LvlSelectionActivity.class);
+                //myIntent.putExtra(GameConstant.LEVEL_NAME, GameRepo.LVL_1);
                 MainActivity.this.startActivity(myIntent);
 
             }

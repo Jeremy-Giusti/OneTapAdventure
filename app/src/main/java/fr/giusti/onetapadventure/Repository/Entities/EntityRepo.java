@@ -28,10 +28,10 @@ import fr.giusti.onetapadventure.repository.SpriteRepo;
 import fr.giusti.onetapadventure.repository.TouchedMoveRepo;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 
-public class MobRepo {
+public class EntityRepo {
 
 
-    private static final String TAG = MobRepo.class.getSimpleName();
+    private static final String TAG = EntityRepo.class.getSimpleName();
 
     /**
      * creer une liste de mob generé en dur (code) +les mobs créés avec l'editeur de mob
@@ -158,7 +158,7 @@ public class MobRepo {
         TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
 
         String bitmapId = "hole1pict";
-        SpriteRepo.addPicture(bitmapId, BitmapFactory.decodeResource(context.getResources(), R.drawable.brokenglass_front));
+        SpriteRepo.addPicture(bitmapId, BitmapFactory.decodeResource(context.getResources(), R.drawable.brokenglass_left_side));
 
         PointF posDest = new PointF(Lvl1Constant.HOLE1_DIMENS.left + (Lvl1Constant.HOLE1_DIMENS.width() / 2), Lvl1Constant.HOLE1_DIMENS.top + (Lvl1Constant.HOLE1_DIMENS.height() / 2));
         PointF startPos = new PointF(Lvl1Constant.MOB_POP_X, Lvl1Constant.MOB_POP_Y_MAX_VAlUE / 2);

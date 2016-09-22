@@ -15,6 +15,7 @@ import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapadventure.UI.CustomView.DrawingView;
 import fr.giusti.onetapadventure.callback.OnBoardEventListener;
 import fr.giusti.onetapadventure.commons.Constants;
+import fr.giusti.onetapadventure.commons.GameConstant;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.gameObject.rules.IRuleProgressListener;
@@ -57,7 +58,7 @@ public class GameActivity extends Activity implements OnBoardEventListener, OnGa
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE);
 
-        currentLvl = getIntent().getStringExtra(Constants.LEVEL_NAME);
+        currentLvl = getIntent().getStringExtra(GameConstant.LEVEL_NAME);
         initViews();
         initEvents();
     }
