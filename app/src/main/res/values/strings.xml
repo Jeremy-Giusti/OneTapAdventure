@@ -10,5 +10,6 @@
     <string name="posx"><![CDATA[position x (<512)]]></string>
     <string name="posy"><![CDATA[position y (<512)]]></string>
     <string name="error_level_generation">Error generating current lvl</string>
+    <string name="all_permissions_needed">All permission are needed for the game to work without error</string>
 
 </resources>

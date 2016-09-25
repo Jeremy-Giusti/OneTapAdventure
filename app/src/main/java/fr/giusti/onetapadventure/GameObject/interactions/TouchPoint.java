@@ -53,7 +53,7 @@ public class TouchPoint {
             actionDone = true;
             List<GameMob> mobList = board.getMobs();
             for (GameMob mob : mobList) {
-                if (Utils.doRectIntersect(mPosition, mob.mPosition) && !mob.isDying()) {
+                if (Utils.doRectIntersect(mPosition, mob.mPosition) && mob.isActive()) {
                     mob.manageTouchEvent(board,damage);
                 }
             }

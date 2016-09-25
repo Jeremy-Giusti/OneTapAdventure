@@ -219,6 +219,11 @@ public class GameMob extends Entity {
             return;
         }
 
+        if (hasDisapperred()) {
+            board.onMobAway(this);
+            return;
+        }
+
         float deplacementX = (float) (movePattern[currentMove].x * xAlteration);
         float deplacementY = (float) (movePattern[currentMove].y * yAlteration);
 
@@ -240,12 +245,14 @@ public class GameMob extends Entity {
      * @param deplacementY
      */
     protected void move(float deplacementX, float deplacementY) {
-        this.mPosition.offset(deplacementX, deplacementY);
-        if (mState != eMobState.DYING) {//si il est mort il ne change plus de direction
-            if (currentMove < (movePattern.length - 1)) {
-                currentMove++;
-            } else {
-                currentMove = 0;
+        if (mState != eMobState.DISAPPEARING) {//ne bouge plus quand il disparait
+            this.mPosition.offset(deplacementX, deplacementY);
+            if (mState != eMobState.DYING) {//si il est mort il ne change plus de direction
+                if (currentMove < (movePattern.length - 1)) {
+                    currentMove++;
+                } else {
+                    currentMove = 0;
+                }
             }
         }
 
@@ -304,7 +311,7 @@ public class GameMob extends Entity {
     protected void updateSprite() {
         // check l'etat du mob et son stade dans l'animation
         if (mAnimationState == Constants.COMPLETE_ANIMATION_DURATION) {
-            if (mState != eMobState.DYING) {
+            if (isActive()) {
                 mAnimationState = 0;
                 if (!isJustMoving()) {
                     mState = eMobState.MOVING_DOWN;
@@ -313,14 +320,15 @@ public class GameMob extends Entity {
         } else {
             mAnimationState++;
         }
-        this.mSpriteCurrentColumn = (int) (mAnimationState / Constants.FRAME_DURATION);
-//        this.mSpriteCurrentLine = mState;
+        this.mSpriteCurrentColumn = mAnimationState / Constants.FRAME_DURATION;
 
     }
 
     private void doSpecialMove(GameBoard board) {
-        if (this.mSpecialMove1 != null) {
-            this.mSpecialMove1.doSpecialMove(board, this);
+        if (isActive()) {
+            if (this.mSpecialMove1 != null) {
+                this.mSpecialMove1.doSpecialMove(board, this);
+            }
         }
     }
 
@@ -337,9 +345,13 @@ public class GameMob extends Entity {
         if (mBitmapId != null && Utils.doRectIntersect(cameraPosition, mPosition)) {
             RectF positionOnSceen = new RectF(mPosition);
             positionOnSceen.offset(-cameraPosition.left, -cameraPosition.top);
-            //    Log.i(TAG, "drawing: " + idName + "\n column:" + mSpriteCurrentColumn + " line:" + mState.index);
-            canvas.drawBitmap(SpriteRepo.getSpriteBitmap(mBitmapId, mSpriteCurrentColumn, mState.index), null, positionOnSceen, mBrush);
-
+            if (mState != eMobState.DISAPPEARING) {
+                canvas.drawBitmap(SpriteRepo.getSpriteBitmap(mBitmapId, mSpriteCurrentColumn, mState.index), null, positionOnSceen, mBrush);
+            } else {
+                mBrush.setAlpha((int)(255-((mAnimationState /(float) Constants.COMPLETE_ANIMATION_DURATION) * 255)));
+                canvas.drawBitmap(SpriteRepo.getSpriteBitmap(mBitmapId, mSpriteCurrentColumn, 3), null, positionOnSceen, mBrush);
+                mBrush.setAlpha(255);
+            }
         }
 
     }
@@ -372,14 +384,8 @@ public class GameMob extends Entity {
 
     }
 
-    /**
-     * mState=5 (dead) + mAnimationState = complete (already looped one time, showing the death animation)
-     *
-     * @return
-     */
-    public boolean isDead() {
-        return (mState == eMobState.DYING && mAnimationState == Constants.COMPLETE_ANIMATION_DURATION) ? true : false;
-    }
+
+
 
     @Override
     public GameMob clone() {
@@ -423,8 +429,38 @@ public class GameMob extends Entity {
         return mState == eMobState.MOVING_LEFT || mState == eMobState.MOVING_UP || mState == eMobState.MOVING_RIGHT || mState == eMobState.MOVING_DOWN;
     }
 
+    /**
+     * mState=5 (dead) + mAnimationState = complete (already looped one time, showing the death animation)
+     *
+     * @return
+     */
     public boolean isDying() {
         return eMobState.DYING == mState;
+    }
+
+
+    public boolean hasDisapperred() {
+        return (mState == eMobState.DISAPPEARING && mAnimationState == Constants.COMPLETE_ANIMATION_DURATION);
+    }
+
+    /**
+     * mState=5 (dead) + mAnimationState = complete (already looped one time, showing the death animation)
+     *
+     * @return
+     */
+    public boolean isDead() {
+        return (mState == eMobState.DYING && mAnimationState == Constants.COMPLETE_ANIMATION_DURATION);
+    }
+
+    public boolean isActive() {
+        return eMobState.DYING != mState && eMobState.DISAPPEARING != mState;
+    }
+
+    public void setDisappering() {
+        if (eMobState.DISAPPEARING != mState) {
+            mState = eMobState.DISAPPEARING;
+            mAnimationState = 1;
+        }
     }
 
     public enum eMobState {
@@ -436,7 +472,8 @@ public class GameMob extends Entity {
         HURT(4),
         DYING(5),
         SPE1(6),
-        SPE2(7);
+        SPE2(7),
+        DISAPPEARING(8);
 
         public final int index;
 

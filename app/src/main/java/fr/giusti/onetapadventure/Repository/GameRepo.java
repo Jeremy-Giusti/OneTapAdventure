@@ -20,6 +20,7 @@ import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 public class GameRepo {
     public static final String LVL_TEST = "lvl test";
     public static final String LVL_1 = "1x1";
+    public static final String LVL_2 = "1x2";
 
     private int mScreenWidth;
     private int mScreenHeight;

@@ -343,7 +343,8 @@ public class PathRepo {
             float smoothY = (previousPoint.y + currentPoint.y + nextPoint.y) / 3f;
             result[i] = new PointF(smoothX, smoothY);
         }
-
+        result[0] = roughtPath[0];
+        result[roughtPath.length - 1] = roughtPath[roughtPath.length - 1];
         return result;
     }
 }

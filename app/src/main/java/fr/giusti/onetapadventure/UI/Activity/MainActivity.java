@@ -1,6 +1,5 @@
 package fr.giusti.onetapadventure.UI.Activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,9 +8,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import fr.giusti.onetapadventure.R;
-import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.commons.GameConstant;
-import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.repository.GameRepo;
 import fr.giusti.onetapadventure.repository.SpriteRepo;
 
@@ -20,7 +17,7 @@ import fr.giusti.onetapadventure.repository.SpriteRepo;
  *
  * @author giusti
  */
-public class MainActivity extends Activity {
+public class MainActivity extends PermissionAskerActivity {
     private final static String TAG = MainActivity.class.getName();
 
     private Button mGameAreaButton, mTestAreaButton, mMobCreationScreenButton, mLoadAllButton, mFlushAllButton;
@@ -59,7 +56,7 @@ public class MainActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-               //TODO DISPLAY lvl choice activity
+                //TODO DISPLAY lvl choice activity
                 Log.d(TAG, "game area clicked");
                 Intent myIntent = new Intent(MainActivity.this, LvlSelectionActivity.class);
                 //myIntent.putExtra(GameConstant.LEVEL_NAME, GameRepo.LVL_1);

@@ -148,7 +148,8 @@ public class TouchedMoveRepo {
         @Override
         public void doTouchedMove(GameBoard board, GameMob currentMob, int damage) {
             if (GameMob.eMobState.DYING != currentMob.getState())
-                board.onMobAway(currentMob);
+                //board.onMobAway(currentMob);
+            currentMob.setDisappering();
         }
 
         @Override
