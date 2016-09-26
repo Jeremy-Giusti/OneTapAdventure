@@ -55,6 +55,9 @@ public class EntitySpawner {
         if (conditionType == eConditions.MOB_COUNT)
             return (cdtProgress == conditionValue) ? onConditionMet() : null;
 
+        if (conditionType == eConditions.TIMER)
+            return ((cdtProgress % conditionValue) == 0 ) ? onConditionMet() : null;
+
         conditionProgress += cdtProgress;
         if (conditionProgress == conditionValue) {
             conditionProgress = initialProgressValue;

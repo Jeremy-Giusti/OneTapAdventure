@@ -13,7 +13,6 @@ import fr.giusti.onetapadventure.gameObject.entities.GameMob;
  * Created by jérémy on 08/09/2016.
  */
 public class RulesManager implements OnBoardEventListener {
-    public static final int TIME_PROGRESS_FREQUENCY = 1000;// 1sec
     private HashMap<eConditions, ArrayList<Rule>> indexedRuleList = new HashMap<>();
     private ArrayList<Rule> accomplishedRules = new ArrayList<>();
     private Rule masterRule;
@@ -81,19 +80,10 @@ public class RulesManager implements OnBoardEventListener {
 
     @Override
     public void firstUpdate() {
-        if (timerRule != null)
-            new Runnable() {
-
-                @Override
-                public void run() {
-                    if (timerRule != null) {
-                        onTimeProgress(TIME_PROGRESS_FREQUENCY);
-                        new Handler().postDelayed(this, TIME_PROGRESS_FREQUENCY);
-                    }
-                }
-            }.run();
+        //nothing ?
     }
 
+    @Override
     public void onTimeProgress(int progress) {
         //find if a rule is linked to the condition and test it
         eConditionType result;

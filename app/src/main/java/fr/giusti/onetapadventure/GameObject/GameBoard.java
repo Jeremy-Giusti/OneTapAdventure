@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -15,10 +16,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import fr.giusti.onetapadventure.callback.OnBoardEventListener;
 import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.gameObject.entities.Entity;
-import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.EntityDispenser;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.gameObject.entities.Particule;
 import fr.giusti.onetapadventure.gameObject.entities.Scenery;
+import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.EntityDispenser;
 import fr.giusti.onetapadventure.gameObject.interactions.TouchDispenser;
 import fr.giusti.onetapadventure.gameObject.interactions.TouchPoint;
 import fr.giusti.onetapadventure.gameObject.rules.RulesManager;
@@ -30,13 +31,20 @@ import fr.giusti.onetapadventure.repository.SpriteRepo;
  * gere les evenement lié au jeu (update on tick/on touch/...)
  */
 public class GameBoard {
+    public static final int TIME_PROGRESS_FREQUENCY = 1000;// 1sec
+    private int timeProgress = 0;
+    private Boolean timeProgressed = false;
+    private Handler timerHandler = new Handler();
+    private Runnable timerRunable;
+
     private TouchDispenser mTouchDisp;
     private EntityDispenser mMobDisp;
+    private RulesManager mRulesManager;
+
     private CopyOnWriteArrayList<GameMob> mMobs = new CopyOnWriteArrayList<GameMob>();
     private CopyOnWriteArrayList<Particule> mParticules = new CopyOnWriteArrayList<Particule>();
     private CopyOnWriteArrayList<Scenery> mSceneries = new CopyOnWriteArrayList<Scenery>();
     private CopyOnWriteArrayList<TouchPoint> mTouchPoints = new CopyOnWriteArrayList<TouchPoint>();
-    private RulesManager mRulesManager;
 
 
     /**
@@ -82,23 +90,11 @@ public class GameBoard {
         super();
         this.mMobDisp = mobsDisp;
         this.mTouchDisp = touchDisp;
-        initEntityLists(mobsDisp.getInitialList());
+        onNewEntities(mobsDisp.getInitialList());
         this.mBackgroundBitmapId = backgroundBitmapId;
         mCameraBounds = drawedBounds;
         mBoardBounds = new Rect(0, 0, boardWidth, boardHeight);
         this.mRulesManager = rulesManager;
-    }
-
-    private void initEntityLists(ArrayList<Entity> initialList) {
-        for (Entity entity : initialList) {
-            if (entity instanceof GameMob) {
-                mMobs.add((GameMob) entity);
-            } else if (entity instanceof Particule) {
-                mParticules.add((Particule) entity);
-            } else if (entity instanceof Scenery) {
-                mSceneries.add((Scenery) entity);
-            }
-        }
     }
 
 
@@ -179,7 +175,7 @@ public class GameBoard {
         return mRulesManager;
     }
 
-    public void setmRulesManager(RulesManager mRulesManager) {
+    public void setRulesManager(RulesManager mRulesManager) {
         this.mRulesManager = mRulesManager;
     }
 
@@ -189,7 +185,14 @@ public class GameBoard {
     public void update() {
         if (!started && getRulesManager() != null) {
             mRulesManager.firstUpdate();
+            startTimer();
             started = true;
+        }
+
+        synchronized (timeProgressed) {
+            if (timeProgressed) {
+                mRulesManager.onTimeProgress(timeProgress);
+            }
         }
 
         for (GameMob mob : Collections.synchronizedList(mMobs)) {
@@ -281,6 +284,18 @@ public class GameBoard {
         mMobs.addAll(mobList);
     }
 
+    public void onNewEntities(ArrayList<Entity> entities) {
+        for (Entity entity : entities) {
+            if (entity instanceof GameMob) {
+                mMobs.add((GameMob) entity);
+            } else if (entity instanceof Particule) {
+                mParticules.add((Particule) entity);
+            } else if (entity instanceof Scenery) {
+                mSceneries.add((Scenery) entity);
+            }
+        }
+    }
+
     public void onScore(int score) {
         if (mRulesManager != null) {
             if (score < 0) {
@@ -324,6 +339,24 @@ public class GameBoard {
         }
 
         mBrush.setAlpha(255);
+    }
+
+    private void startTimer() {
+        timerRunable = new Runnable() {
+            @Override
+            public void run() {
+                synchronized (timeProgressed) {
+                    timeProgress += TIME_PROGRESS_FREQUENCY;
+                    timeProgressed = true;
+                }
+                timerHandler.postDelayed(this, TIME_PROGRESS_FREQUENCY);
+            }
+        };
+        timerHandler.postDelayed(timerRunable, TIME_PROGRESS_FREQUENCY);
+    }
+
+    private void stopTimer() {
+        timerHandler.removeCallbacks(timerRunable);
     }
 
 
