@@ -3,9 +3,8 @@ package fr.giusti.onetapadventure.repository;
 import java.util.ArrayList;
 
 import fr.giusti.onetapadventure.callback.OnRuleAccomplishedListener;
-import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.commons.GameConstant;
-import fr.giusti.onetapadventure.gameObject.rules.OnGameEndListener;
+import fr.giusti.onetapadventure.callback.OnGameEndListener;
 import fr.giusti.onetapadventure.gameObject.rules.Rule;
 import fr.giusti.onetapadventure.gameObject.rules.RulesManager;
 import fr.giusti.onetapadventure.gameObject.rules.eConditionType;

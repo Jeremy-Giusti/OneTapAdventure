@@ -1,4 +1,4 @@
-package fr.giusti.onetapadventure.gameObject.entities;
+package fr.giusti.onetapadventure.gameObject.entities.entityDistribution;
 
 import android.util.Pair;
 
@@ -7,6 +7,9 @@ import java.util.List;
 
 import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
+import fr.giusti.onetapadventure.gameObject.entities.Entity;
+import fr.giusti.onetapadventure.gameObject.entities.GameMob;
+import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.EntityDispenser;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 
 /**

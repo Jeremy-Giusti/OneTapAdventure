@@ -2,8 +2,8 @@ package fr.giusti.onetapadventure.repository.entities;
 
 import android.content.Context;
 
-import fr.giusti.onetapadventure.gameObject.entities.EntityDispenser;
-import fr.giusti.onetapadventure.gameObject.entities.ThreeTierEntityDispenser;
+import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.EntityDispenser;
+import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.ThreeTierEntityDispenser;
 
 /**
  * Created by jérémy on 10/09/2016.

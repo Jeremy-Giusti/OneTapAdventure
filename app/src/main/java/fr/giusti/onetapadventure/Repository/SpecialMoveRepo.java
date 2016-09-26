@@ -9,7 +9,7 @@ import java.util.List;
 
 import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
-import fr.giusti.onetapadventure.gameObject.ParticuleHolder;
+import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.ParticuleHolder;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.gameObject.entities.Particule;
 import fr.giusti.onetapadventure.gameObject.interactions.TouchPoint;

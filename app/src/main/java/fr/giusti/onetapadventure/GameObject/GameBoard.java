@@ -15,7 +15,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import fr.giusti.onetapadventure.callback.OnBoardEventListener;
 import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.gameObject.entities.Entity;
-import fr.giusti.onetapadventure.gameObject.entities.EntityDispenser;
+import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.EntityDispenser;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.gameObject.entities.Particule;
 import fr.giusti.onetapadventure.gameObject.entities.Scenery;
@@ -188,12 +188,9 @@ public class GameBoard {
      */
     public void update() {
         if (!started && getRulesManager() != null) {
-//            mEventListener.firstUpdate();
             mRulesManager.firstUpdate();
             started = true;
         }
-
-        //  this.updateCameraPosition();
 
         for (GameMob mob : Collections.synchronizedList(mMobs)) {
             mob.update(this);
@@ -225,10 +222,6 @@ public class GameBoard {
             mMobDisp.onTick(this);
         }
     }
-
-//    private void updateCameraPosition() {
-//        mCameraPosOnScreen = new Rect(mCameraBounds.left + borderHorz, mCameraBounds.top + borderVert, mCameraBounds.right + borderHorz, mCameraBounds.bottom + borderVert);
-//    }
 
     /**
      * action touch

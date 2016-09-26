@@ -10,7 +10,7 @@ import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.interactions.TouchDispenser;
 import fr.giusti.onetapadventure.gameObject.rules.IRuleProgressListener;
-import fr.giusti.onetapadventure.gameObject.rules.OnGameEndListener;
+import fr.giusti.onetapadventure.callback.OnGameEndListener;
 import fr.giusti.onetapadventure.gameObject.rules.RulesManager;
 import fr.giusti.onetapadventure.repository.entities.EntityDispenserRepo;
 import fr.giusti.onetapadventure.repository.entities.EntityRepo;

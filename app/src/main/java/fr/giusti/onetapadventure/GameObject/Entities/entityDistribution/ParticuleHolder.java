@@ -1,4 +1,4 @@
-package fr.giusti.onetapadventure.gameObject;
+package fr.giusti.onetapadventure.gameObject.entities.entityDistribution;
 
 import android.graphics.PointF;
 import android.graphics.RectF;

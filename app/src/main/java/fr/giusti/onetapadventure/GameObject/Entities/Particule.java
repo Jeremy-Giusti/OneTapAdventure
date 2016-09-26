@@ -9,7 +9,7 @@ import android.graphics.RectF;
 import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.commons.Utils;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
-import fr.giusti.onetapadventure.gameObject.ParticuleHolder;
+import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.ParticuleHolder;
 import fr.giusti.onetapadventure.repository.SpriteRepo;
 
 /**

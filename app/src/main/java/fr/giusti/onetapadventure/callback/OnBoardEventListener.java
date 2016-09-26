@@ -12,4 +12,6 @@ public interface OnBoardEventListener {
     void onScorePlus(int add);
 
     void onScoreMinus(int remove);
+
+    void onTimeProgress(int progress);
 }

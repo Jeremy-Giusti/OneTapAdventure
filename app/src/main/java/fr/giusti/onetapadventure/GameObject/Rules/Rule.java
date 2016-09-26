@@ -16,6 +16,14 @@ public class Rule {
     private IRuleProgressListener listener;
 
 
+    /**
+     *
+     * @param idName id
+     * @param type the kind of result this rule will return if condition is met
+     * @param condition the kind of event this rule should listening to
+     * @param valueInt current progress
+     * @param goalInt if value match goal then type is returned
+     */
     public Rule(String idName, eConditionType type, eConditions condition, int valueInt, int goalInt) {
         this.idName = idName;
         this.type = type;
@@ -27,6 +35,13 @@ public class Rule {
     }
 
 
+    /**
+     *
+     * @param idName id
+     * @param goalStr the string to match to get the type as result
+     * @param condition the kind of event this rule should listening to
+     * @param type the kind of result this rule will return if condition is met
+     */
     public Rule(String idName, String goalStr, eConditions condition, eConditionType type) {
         this.idName = idName;
         this.goalStr = goalStr;
