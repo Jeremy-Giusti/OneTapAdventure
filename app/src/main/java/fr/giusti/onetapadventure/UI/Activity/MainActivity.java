@@ -56,7 +56,6 @@ public class MainActivity extends PermissionAskerActivity {
 
             @Override
             public void onClick(View v) {
-                //TODO DISPLAY lvl choice activity
                 Log.d(TAG, "game area clicked");
                 Intent myIntent = new Intent(MainActivity.this, LvlSelectionActivity.class);
                 //myIntent.putExtra(GameConstant.LEVEL_NAME, GameRepo.LVL_1);

@@ -31,7 +31,7 @@ import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
  *
  * @author giusti
  */
-public class GameActivity extends Activity implements OnBoardEventListener, OnGameEndListener, IRuleProgressListener {
+public class GameActivity extends Activity implements OnGameEndListener, IRuleProgressListener {
     private static final String TAG = GameActivity.class.getSimpleName();
     private DrawingView mDrawingSurface;
     private Button mPauseButton;
@@ -171,27 +171,6 @@ public class GameActivity extends Activity implements OnBoardEventListener, OnGa
             Toast.makeText(this, "error clonning sample mob list", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
-    }
-
-
-    @Override
-    public void firstUpdate() {
-
-    }
-
-    @Override
-    public void onMobCountChange(int count, eConditions reason, GameMob mob) {
-
-    }
-
-    @Override
-    public void onScorePlus(int add) {
-
-    }
-
-    @Override
-    public void onScoreMinus(int remove) {
-
     }
 
     @Override

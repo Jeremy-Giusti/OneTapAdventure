@@ -12,7 +12,7 @@ import fr.giusti.onetapadventure.gameObject.interactions.TouchDispenser;
 import fr.giusti.onetapadventure.gameObject.rules.IRuleProgressListener;
 import fr.giusti.onetapadventure.callback.OnGameEndListener;
 import fr.giusti.onetapadventure.gameObject.rules.RulesManager;
-import fr.giusti.onetapadventure.repository.entities.EntityDispenserRepo;
+import fr.giusti.onetapadventure.repository.entities.EntitySpawnerRepo;
 import fr.giusti.onetapadventure.repository.entities.EntityRepo;
 import fr.giusti.onetapadventure.repository.entities.ParticuleRepo;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
@@ -80,7 +80,7 @@ public class GameRepo {
         //TODO faire un sprite pour le toucher
         TouchDispenser touchDisp = new TouchDispenser(Constants.TOUCH_STROKE, null, Constants.TOUCH_DAMAGE);
 
-        GameBoard board = new GameBoard(EntityDispenserRepo.getLvl1_1MobDispenser(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight), rulesManager, touchDisp);
+        GameBoard board = new GameBoard(EntitySpawnerRepo.getLvl1_1SpawnerManager(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight), rulesManager, touchDisp);
         board.resize(mScreenWidth, mScreenHeight);
         board.getRulesManager().setRuleListener(Lvl1Constant.ESCAPING_MOB_RULE, ruleProgressListener);
         board.getRulesManager().setRuleListener(Lvl1Constant.LEVEL_END_RULE, ruleProgressListener);

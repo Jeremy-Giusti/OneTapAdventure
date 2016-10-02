@@ -19,7 +19,7 @@ import fr.giusti.onetapadventure.gameObject.entities.Entity;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.gameObject.entities.Particule;
 import fr.giusti.onetapadventure.gameObject.entities.Scenery;
-import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.EntityDispenser;
+import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.EntitySpawnerManager;
 import fr.giusti.onetapadventure.gameObject.interactions.TouchDispenser;
 import fr.giusti.onetapadventure.gameObject.interactions.TouchPoint;
 import fr.giusti.onetapadventure.gameObject.rules.RulesManager;
@@ -38,7 +38,7 @@ public class GameBoard {
     private Runnable timerRunable;
 
     private TouchDispenser mTouchDisp;
-    private EntityDispenser mMobDisp;
+    private EntitySpawnerManager mEntityManager;
     private RulesManager mRulesManager;
 
     private CopyOnWriteArrayList<GameMob> mMobs = new CopyOnWriteArrayList<GameMob>();
@@ -83,14 +83,14 @@ public class GameBoard {
 
 
     /**
-     * @param mobsDisp           les entité mobile qui seront presente sur la carte
      * @param backgroundBitmapId l'image de fond
      */
-    public GameBoard(EntityDispenser mobsDisp, String backgroundBitmapId, int boardWidth, int boardHeight, Rect drawedBounds, RulesManager rulesManager, TouchDispenser touchDisp) {
+    public GameBoard(EntitySpawnerManager entityManager, String backgroundBitmapId, int boardWidth, int boardHeight, Rect drawedBounds, RulesManager rulesManager, TouchDispenser touchDisp) {
         super();
-        this.mMobDisp = mobsDisp;
+        this.mEntityManager = entityManager;
         this.mTouchDisp = touchDisp;
-        onNewEntities(mobsDisp.getInitialList());
+        entityManager.setBoard(this);
+        onNewEntities(entityManager.getInitialList());
         this.mBackgroundBitmapId = backgroundBitmapId;
         mCameraBounds = drawedBounds;
         mBoardBounds = new Rect(0, 0, boardWidth, boardHeight);
@@ -185,6 +185,7 @@ public class GameBoard {
     public void update() {
         if (!started && getRulesManager() != null) {
             mRulesManager.firstUpdate();
+            mEntityManager.firstUpdate();
             startTimer();
             started = true;
         }
@@ -192,6 +193,8 @@ public class GameBoard {
         synchronized (timeProgressed) {
             if (timeProgressed) {
                 mRulesManager.onTimeProgress(timeProgress);
+                mEntityManager.onTimeProgress(timeProgress);
+                timeProgressed = false;
             }
         }
 
@@ -221,9 +224,6 @@ public class GameBoard {
 
         }
 
-        if (mMobDisp != null) {
-            mMobDisp.onTick(this);
-        }
     }
 
     /**
@@ -253,7 +253,10 @@ public class GameBoard {
     public void onMobDeath(GameMob mob) {
 
         if (mRulesManager != null) {
-            mRulesManager.onMobCountChange(mMobs.size() - 1, eConditions.MOB_DEATH, mob);//mob.clone ?
+            mRulesManager.onMobCountChange(mMobs.size() - 1, eConditions.MOB_DEATH, mob);
+        }
+        if (mEntityManager != null) {
+            mEntityManager.onMobCountChange(mMobs.size() - 1, eConditions.MOB_DEATH, mob);
         }
 
         mMobs.remove(mob);
@@ -263,31 +266,43 @@ public class GameBoard {
         if (mRulesManager != null) {
             mRulesManager.onMobCountChange(mMobs.size() - 1, eConditions.MOB_AWAY, mob);
         }
+        if (mEntityManager != null) {
+            mEntityManager.onMobCountChange(mMobs.size() - 1, eConditions.MOB_AWAY, mob);
+        }
         mMobs.remove(mob);
     }
 
     public void onNewMob(GameMob mob) {
-        if (mRulesManager != null) {
-            mRulesManager.onMobCountChange(mMobs.size() + 1, eConditions.NEW_MOB, mob);
-        }
         mMobs.add(mob);
+
+        if (mRulesManager != null) {
+            mRulesManager.onMobCountChange(mMobs.size(), eConditions.NEW_MOB, mob);
+        }
+        if (mEntityManager != null) {
+            mEntityManager.onMobCountChange(mMobs.size(), eConditions.NEW_MOB, mob);
+        }
     }
 
     public void onNewMobs(List<GameMob> mobList) {
-        if (mRulesManager != null) {
-            int i = 1;
-            for (GameMob mob : mobList) {
+        int i = 1;
+        for (GameMob mob : mobList) {
+            if (mRulesManager != null) {
                 mRulesManager.onMobCountChange(mMobs.size() + i, eConditions.NEW_MOB, mob);
             }
-            i++;
+            if (mEntityManager != null) {
+                mEntityManager.onMobCountChange(mMobs.size() + i, eConditions.NEW_MOB, mob);
+            }
         }
+        i++;
+
         mMobs.addAll(mobList);
     }
 
     public void onNewEntities(ArrayList<Entity> entities) {
+        if (entities == null) return;
         for (Entity entity : entities) {
             if (entity instanceof GameMob) {
-                mMobs.add((GameMob) entity);
+                onNewMob((GameMob) entity);
             } else if (entity instanceof Particule) {
                 mParticules.add((Particule) entity);
             } else if (entity instanceof Scenery) {
@@ -302,6 +317,13 @@ public class GameBoard {
                 mRulesManager.onScoreMinus(-score);
             } else {
                 mRulesManager.onScorePlus(score);
+            }
+        }
+        if (mEntityManager != null) {
+            if (score < 0) {
+                mEntityManager.onScoreMinus(-score);
+            } else {
+                mEntityManager.onScorePlus(score);
             }
         }
     }
@@ -417,8 +439,8 @@ public class GameBoard {
             part.resize(ratio);
         }
 
-        if (mMobDisp != null) {
-            mMobDisp.resize(ratio);
+        if (mEntityManager != null) {
+            mEntityManager.resize(ratio);
         }
 
     }

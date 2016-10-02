@@ -6,7 +6,6 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.Log;
-import android.util.Pair;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -61,7 +60,7 @@ public class EntityRepo {
         //work (not perfectly but still)
         PointF[] mob5Pattern = PathRepo.generateLoopedPath(Constants.FRAME_PER_SEC, new Point(0, 0), new Point(0, 5), 7, 0);//un tour a la seconde
         //seems to work
-        PointF[] mob6Pattern = PathRepo.generateLinePath(1, 4,4);
+        PointF[] mob6Pattern = PathRepo.generateLinePath(1, 4, 4);
 
         SpecialMoveRepo moveRepo = new SpecialMoveRepo();
         TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
@@ -196,22 +195,29 @@ public class EntityRepo {
      * @param context
      * @return
      */
-    public static ArrayList<Pair<Integer, GameMob>> getLvl1x1BackupList(Context context) {
-        ArrayList<Pair<Integer, GameMob>> backupList = new ArrayList<Pair<Integer, GameMob>>();
+    public static ArrayList<Entity> getLvl1x1BackupList(Context context) {
+        ArrayList<Entity> backupList = new ArrayList<>();
         int mobNb = Lvl1Constant.MOB_NB - 2;
 
         String mobaseNameID = "mob";
         int currentTier = 1;
+        int tier1Added = 0;
         PointF posDest = new PointF(Lvl1Constant.HOLE1_DIMENS.left + Lvl1Constant.HOLE1_DIMENS.width() / 2, Lvl1Constant.HOLE1_DIMENS.top + Lvl1Constant.HOLE1_DIMENS.height() / 2);
+
         for (int i = 0; i < mobNb; i++) {
-            if (i < Lvl1Constant.TIERS1_MOB_OCCURENCE) currentTier = 1;
-            else if (i < Lvl1Constant.TIERS1_MOB_OCCURENCE + Lvl1Constant.TIERS2_MOB_OCCURENCE)
-                currentTier = 2;
-            else currentTier = 3;
+            if (tier1Added < 2 || i < (mobNb / 3)) {
+                tier1Added++;
+                currentTier = 1;
+            } else {
+                currentTier = (i < (mobNb / 3) * 2) ? 2 : 3;
+                tier1Added = 0;
+            }
+
+
             int seed = (int) (Math.random() * (float) Lvl1Constant.MOB_POP_Y_MAX_VAlUE);
             GameMob mob = getMobFromSeed(context, currentTier, seed, posDest, mobaseNameID + i, Lvl1Constant.MOB_POP_X, seed, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE);
             mob.setAlignement(currentTier);
-            backupList.add(new Pair<>(currentTier, mob));
+            backupList.add(mob);
         }
 
         //--------------------Last mob --------------------------
@@ -221,7 +227,7 @@ public class EntityRepo {
         int lastMobDirection = (Math.random() < 0.5) ? -1 : 1;
         GameMob lastMob = new GameMob("lastMob", (int) startPos.x, (int) startPos.y, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE, new PointF[]{new PointF(-4, 15 * lastMobDirection)}, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), "lastMob", 30, 1);
         lastMob.setAlignement(4);
-        backupList.add(new Pair<>(0, lastMob));
+        backupList.add(lastMob);
         // -----------------------------------------------------
 
         return backupList;

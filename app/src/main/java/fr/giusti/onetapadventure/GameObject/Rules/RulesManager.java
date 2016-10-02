@@ -1,7 +1,5 @@
 package fr.giusti.onetapadventure.gameObject.rules;
 
-import android.os.Handler;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -85,6 +83,7 @@ public class RulesManager implements OnBoardEventListener {
 
     @Override
     public void onTimeProgress(int progress) {
+        if (timerRule == null) return;
         //find if a rule is linked to the condition and test it
         eConditionType result;
         result = timerRule.ruleProgress(progress);
