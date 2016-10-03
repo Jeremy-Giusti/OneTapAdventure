@@ -233,14 +233,30 @@ public class EntityRepo {
         return backupList;
     }
 
+
+
+    public static ArrayList<Entity> getLvl1x2InitList(Context context) {
+
+        return null;
+    }
+
     public static GameMob getMobFromSeed(Context context, int difficulty, int seed, PointF posDest, String id, int x, int y, int width, int height) {
         SpecialMoveRepo moveRepo = new SpecialMoveRepo();
         TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
         TouchedMove touchedMove = touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE);
         PointF[] path;
         String spriteId;
+
+        String mob1sptsheetId = "tier1Mob";
+        SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet), mob1sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+        String mob2sptsheetId = "tier2Mob";
+        SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet_yellow), mob2sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+        String mob3sptsheetId = "tier3Mob";
+        SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet4), mob3sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+
+
         if (difficulty < 2) {
-            spriteId = "tier1Mob";
+            spriteId = mob1sptsheetId;
             path = PathRepo.generateLineToDest(new PointF(x, y), posDest, Constants.FRAME_PER_SEC * 3);
         } else {
             if (seed % 4 > 2) {
@@ -249,7 +265,7 @@ public class EntityRepo {
             } else {
                 path = PathRepo.generateCurvedPath(new PointF(x, y), posDest, 200, (seed % 2 == 1), (int) (Constants.FRAME_PER_SEC * 3.75));
             }
-            spriteId = (difficulty == 2) ? "tier2Mob" : "tier3Mob";
+            spriteId = (difficulty == 2) ? mob2sptsheetId : mob3sptsheetId;
         }
         return new GameMob(id, x, y, width, height, path, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMove, spriteId, difficulty * Constants.TOUCH_DAMAGE, 1);
 

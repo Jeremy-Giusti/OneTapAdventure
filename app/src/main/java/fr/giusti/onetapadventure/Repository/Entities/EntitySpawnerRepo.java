@@ -20,4 +20,11 @@ public class EntitySpawnerRepo {
         result.addSpawner(new EntitySpawner(eConditions.TIMER, 3000, 0, false, eEntityDistributionMode.ONE_BY_ONE_ORDERED, null));
         return result;
     }
+
+    public static EntitySpawnerManager getLvl1_2SpawnerManager(Context context) {
+        EntitySpawnerManager result = new EntitySpawnerManager(EntityRepo.getLvl1x2InitList(context), EntityRepo.getLvl1x1BackupList(context));
+
+        result.addSpawner(new EntitySpawner(eConditions.TIMER, 3000, 0, false, eEntityDistributionMode.ONE_BY_ONE_ORDERED, null));
+        return result;
+    }
 }

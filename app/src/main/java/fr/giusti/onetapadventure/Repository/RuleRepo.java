@@ -10,6 +10,7 @@ import fr.giusti.onetapadventure.gameObject.rules.RulesManager;
 import fr.giusti.onetapadventure.gameObject.rules.eConditionType;
 import fr.giusti.onetapadventure.gameObject.rules.eConditions;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
+import fr.giusti.onetapadventure.repository.levelsData.Lvl2Constant;
 
 /**
  * Created by jérémy on 09/09/2016.
@@ -19,32 +20,18 @@ public class RuleRepo {
     public static RulesManager getLvl_1x1_Rules(final OnGameEndListener gameEndListener) {
         Rule masterRule = new Rule(Lvl1Constant.ESCAPING_MOB_RULE, eConditionType.DEFEAT, eConditions.MOB_AWAY, Lvl1Constant.MAX_MOB_AWAY, 0);
         Rule endRule = new Rule(Lvl1Constant.LEVEL_END_RULE, eConditionType.END, eConditions.MOB_COUNTDOWN, 0, Lvl1Constant.MOB_NB);
-
-        OnRuleAccomplishedListener accomplishedBehavior = new OnRuleAccomplishedListener() {
-            @Override
-            public void onMasterRuleAccomplished(Rule masterRule, Rule timerRule, ArrayList<Rule> secondaries) {
-                gameEndListener.onGameEnd(eConditionType.DEFEAT, GameConstant.getLevelId(1, 1), 0);
-            }
-
-            @Override
-            public void onTimerEnded(Rule masterRule, Rule timerRule, ArrayList<Rule> secondaries) {
-                //Should not happen
-                gameEndListener.onGameEnd(eConditionType.NULL, GameConstant.getLevelId(1, 1), 0);
-            }
-
-            @Override
-            public void onGameEnded(Rule masterRule, Rule timerRule, ArrayList<Rule> secondaries) {
-                gameEndListener.onGameEnd(eConditionType.VICTORY, GameConstant.getLevelId(1, 1), 1000);
-            }
-        };
-
-
+        String gameId = GameConstant.getLevelId(1, 1);
+        OnRuleAccomplishedListener accomplishedBehavior = getDefaultBehavior(gameEndListener, gameId);
         return new RulesManager(masterRule, accomplishedBehavior, endRule);
     }
 
+
     public static RulesManager getLvl_1x2_Rules(OnGameEndListener endListener) {
-        //TODO
-        return null;
+        String gameId = GameConstant.getLevelId(1, 2);
+        Rule masterRule = new Rule(Lvl1Constant.ESCAPING_MOB_RULE, eConditionType.DEFEAT, eConditions.MOB_AWAY, Lvl2Constant.MAX_MOB_AWAY, 0);
+        Rule endRule = new Rule(Lvl1Constant.LEVEL_END_RULE, eConditionType.END, eConditions.MOB_COUNTDOWN, 0, Lvl2Constant.MOB_NB);
+        OnRuleAccomplishedListener accomplishedBehavior = getDefaultBehavior(endListener, gameId);
+        return new RulesManager(masterRule, accomplishedBehavior, endRule);
     }
 
 
