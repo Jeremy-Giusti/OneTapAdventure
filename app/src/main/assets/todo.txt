@@ -2,15 +2,6 @@
 
 *******************************************| TODO |*******************************************
 
-    prioritised Functionality:
-    - gestion drawing offset si camera != boardDimens
-    - mob Disapear (no moving + no touchable + alpha increase) => status ? move ?
-    - augmenter les pv et degate du toucher pour avoir plus d'amplitude sur la vie des mob (x10 ou x100)
-    - voir pathRepo
-    - ameliorer la creation de particule
-    - mob cannibale
-	- mettre en pause et reprendre le jeux (?comment?)
-
 
     Creation activity:
      - updaté la vue portrait
@@ -19,7 +10,7 @@
     Low priority:
  	 - transformer le projet en librairie => refractoring pour avoir une logique de librairie
  	 - bug reprise app apres avoir changé d'orientation+veille
-     - sugarOrm
+     - orm for database
      - sounds
 
 

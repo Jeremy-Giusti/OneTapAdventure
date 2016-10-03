@@ -41,10 +41,15 @@ public class GameRepo {
                 //FIXME /not a dynamic detection\
                 result = generateLvl_1x1(context, endListener, ruleProgressListener);
                 break;
+            case LVL_2:
+                //FIXME /not a dynamic detection\
+                result = generateLvl_1x2(context, endListener, ruleProgressListener);
+                break;
         }
 
         return result;
     }
+
 
     /**
      * create a sample gameBoard from the application datas
@@ -81,6 +86,26 @@ public class GameRepo {
         TouchDispenser touchDisp = new TouchDispenser(Constants.TOUCH_STROKE, null, Constants.TOUCH_DAMAGE);
 
         GameBoard board = new GameBoard(EntitySpawnerRepo.getLvl1_1SpawnerManager(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight), rulesManager, touchDisp);
+        board.resize(mScreenWidth, mScreenHeight);
+        board.getRulesManager().setRuleListener(Lvl1Constant.ESCAPING_MOB_RULE, ruleProgressListener);
+        board.getRulesManager().setRuleListener(Lvl1Constant.LEVEL_END_RULE, ruleProgressListener);
+        return board;
+    }
+
+    private GameBoard generateLvl_1x2(Context context, OnGameEndListener endListener, IRuleProgressListener ruleProgressListener) {
+        ParticuleRepo.initCache(context);
+        String backGameBoard = "background1x2";
+        Bitmap fullSizedBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.lvl1x2_back);
+
+        int boardHeight = fullSizedBackground.getHeight();
+        int boardWidth = fullSizedBackground.getWidth();
+        SpriteRepo.addPicture(backGameBoard, fullSizedBackground);
+
+        RulesManager rulesManager = RuleRepo.getLvl_1x2_Rules(endListener);
+
+        TouchDispenser touchDisp = new TouchDispenser(Constants.TOUCH_STROKE, null, Constants.TOUCH_DAMAGE);
+
+        GameBoard board = new GameBoard(EntitySpawnerRepo.getLvl1_2SpawnerManager(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight), rulesManager, touchDisp);
         board.resize(mScreenWidth, mScreenHeight);
         board.getRulesManager().setRuleListener(Lvl1Constant.ESCAPING_MOB_RULE, ruleProgressListener);
         board.getRulesManager().setRuleListener(Lvl1Constant.LEVEL_END_RULE, ruleProgressListener);
