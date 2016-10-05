@@ -7,5 +7,8 @@ package fr.giusti.onetapadventure.gameObject.entities.entityDistribution;
 public enum eEntityDistributionMode {
     ALL_AT_ONCE,
     ONE_BY_ONE_ORDERED,
+    GROUPED_ORDERED,
+    GROUPED_SEMIRANDOM,
+    GROUPED_RANDOM,
     ONE_BY_ONE_RANDOM;
 }
