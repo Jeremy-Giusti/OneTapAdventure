@@ -132,7 +132,7 @@ public class RulesManager implements OnBoardEventListener {
         eConditionType result;
         for (int i = 0; i < conditionRule.size(); i++) {
             rule = conditionRule.get(i);
-            if (rule.intCondition) result = rule.ruleProgress(1);
+            if (rule.isNumericalCondition) result = rule.ruleProgress(1);
             else result = rule.ruleProgress(deadMob.getIdName());
             if (result != eConditionType.NULL) {
                 conditionRule.remove(rule);
@@ -148,7 +148,7 @@ public class RulesManager implements OnBoardEventListener {
         eConditionType result;
         for (int i = 0; i < conditionRule.size(); i++) {
             rule = conditionRule.get(i);
-            if (rule.intCondition) result = rule.ruleProgress(1);
+            if (rule.isNumericalCondition) result = rule.ruleProgress(1);
             else result = rule.ruleProgress(deadMob.getIdName());
             if (result != eConditionType.NULL) {
                 conditionRule.remove(rule);
@@ -165,7 +165,7 @@ public class RulesManager implements OnBoardEventListener {
         eConditionType result;
         for (int i = 0; i < conditionRule.size(); i++) {
             rule = conditionRule.get(i);
-            if (rule.intCondition) result = rule.ruleProgress(1);
+            if (rule.isNumericalCondition) result = rule.ruleProgress(1);
             else result = rule.ruleProgress(mobAway.getIdName());
             if (result != eConditionType.NULL) {
                 conditionRule.remove(rule);

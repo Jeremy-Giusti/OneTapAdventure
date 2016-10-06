@@ -4,17 +4,21 @@ package fr.giusti.onetapadventure.gameObject.rules;
  * Created by jérémy on 08/09/2016.
  */
 public class Rule {
-    public static final String BOARD_EMPTY_RULE_KEY = "boardEmpty";
     private final String idName;
-    private final boolean reduce;
-    public eConditionType type;
-    public eConditions condition;
+    public final eConditionType type;
+    public final eConditions condition;
+    public boolean isNumericalCondition = true;
     private int valueInt = 0;
     private int goalInt = 0;
     private String goalStr = "";
-    public boolean intCondition = true;
     private IRuleProgressListener listener;
 
+
+    public Rule(String idName, eConditionType type, eConditions condition) {
+        this.idName = idName;
+        this.type = type;
+        this.condition = condition;
+    }
 
     /**
      *
@@ -30,8 +34,7 @@ public class Rule {
         this.condition = condition;
         this.valueInt = valueInt;
         this.goalInt = goalInt;
-        intCondition = true;
-        reduce = (valueInt > goalInt);
+        isNumericalCondition = true;
     }
 
 
@@ -47,16 +50,42 @@ public class Rule {
         this.goalStr = goalStr;
         this.condition = condition;
         this.type = type;
-        intCondition = false;
-        reduce = false;
+        isNumericalCondition = false;
+    }
+
+    public int getValueInt() {
+        return valueInt;
+    }
+
+    public void setValueInt(int valueInt) {
+        this.valueInt = valueInt;
+    }
+
+    public int getGoalInt() {
+        return goalInt;
+    }
+
+    public void setGoalInt(int goalInt) {
+        this.goalInt = goalInt;
+    }
+
+    public String getGoalStr() {
+        return goalStr;
+    }
+
+    public void setGoalStr(String goalStr) {
+        this.goalStr = goalStr;
+    }
+
+    public IRuleProgressListener getListener() {
+        return listener;
     }
 
     public eConditionType ruleProgress(int value) {
         if (condition == eConditions.MOB_COUNT)
             return (value == goalInt) ? type : eConditionType.NULL;
 
-        if (reduce) valueInt--;
-        else valueInt++;
+        valueInt+=value;
         onProgress(null);
         return (valueInt == goalInt) ? type : eConditionType.NULL;
     }
@@ -68,7 +97,7 @@ public class Rule {
 
     private void onProgress(String value) {
         if (listener != null) {
-            if (intCondition) {
+            if (isNumericalCondition) {
                 if (goalInt == 0) {
                     listener.onRuleProgress(idName, "" + valueInt);
                 } else {

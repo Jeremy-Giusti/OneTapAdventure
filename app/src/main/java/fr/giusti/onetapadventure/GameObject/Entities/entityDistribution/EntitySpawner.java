@@ -14,19 +14,36 @@ import fr.giusti.onetapadventure.gameObject.rules.eConditions;
  */
 
 public class EntitySpawner {
-    public final eConditions conditionType;
-    private int conditionValue = 0;
-    private int conditionProgress = -1;
-    private int initialProgressValue = -1;
 
+    public final eConditions conditionType;
+    public final eEntityDistributionMode distibutionMode;
+
+    /**
+     * once reached by progress trigger entity spawn <br>
+     * and reset progress to initialValue
+     */
+    private final int conditionGoalValue;
+    private final int initialProgressValue;
+    private int conditionProgress = -1;
+
+
+    private int groupeSize = 5;
     private boolean useSharedMobList = false;
     private boolean infinitePop = false;
-    private eEntityDistributionMode distibutionMode = eEntityDistributionMode.ONE_BY_ONE_ORDERED;
 
     private ArrayList<Entity> entityList;
     private int mobIndex = 0;
 
     private SpawnerListener listener;
+
+
+    public EntitySpawner(eEntityDistributionMode distibutionMode, eConditions conditionType, int conditionGoalValue, int initialProgressValue) {
+        this.distibutionMode = distibutionMode;
+        this.conditionType = conditionType;
+        this.conditionGoalValue = conditionGoalValue;
+        this.initialProgressValue = initialProgressValue;
+        useSharedMobList = true;
+    }
 
     /**
      * @param conditionType      more like an id work as the condition type in wich this spawner should be notified on a change
@@ -38,7 +55,7 @@ public class EntitySpawner {
      */
     public EntitySpawner(eConditions conditionType, int conditionGoalValue, int conditionProgress, boolean infinitePop, eEntityDistributionMode distibutionMode, ArrayList<Entity> entityList) {
         this.conditionType = conditionType;
-        this.conditionValue = conditionGoalValue;
+        this.conditionGoalValue = conditionGoalValue;
         this.initialProgressValue = conditionProgress;
         this.conditionProgress = conditionProgress;
         this.infinitePop = infinitePop;
@@ -48,6 +65,38 @@ public class EntitySpawner {
         } else {
             this.entityList = entityList;
         }
+    }
+
+    public int getGroupeSize() {
+        return groupeSize;
+    }
+
+    public void setGroupeSize(int groupeSize) {
+        this.groupeSize = groupeSize;
+    }
+
+    public boolean isUseSharedMobList() {
+        return useSharedMobList;
+    }
+
+    public void setUseSharedMobList(boolean useSharedMobList) {
+        this.useSharedMobList = useSharedMobList;
+    }
+
+    public boolean isInfinitePop() {
+        return infinitePop;
+    }
+
+    public void setInfinitePop(boolean infinitePop) {
+        this.infinitePop = infinitePop;
+    }
+
+    public ArrayList<Entity> getEntityList() {
+        return entityList;
+    }
+
+    public void setEntityList(ArrayList<Entity> entityList) {
+        this.entityList = entityList;
     }
 
     public void setListener(SpawnerListener listener) {
@@ -61,13 +110,13 @@ public class EntitySpawner {
         }
 
         if (conditionType == eConditions.MOB_COUNT)
-            return (cdtProgress == conditionValue) ? onConditionMet() : null;
+            return (cdtProgress == conditionGoalValue) ? onConditionMet() : null;
 
         if (conditionType == eConditions.TIMER)
-            return ((cdtProgress % conditionValue) == 0) ? onConditionMet() : null;
+            return ((cdtProgress % conditionGoalValue) == 0) ? onConditionMet() : null;
 
         conditionProgress += cdtProgress;
-        if (conditionProgress == conditionValue) {
+        if (conditionProgress == conditionGoalValue) {
             conditionProgress = initialProgressValue;
             return onConditionMet();
         }
@@ -100,6 +149,15 @@ public class EntitySpawner {
                     mobIndex = (int) (Math.random() * entityList.size()) - 1;
                     result.add(entityList.get(mobIndex));
                     if (!infinitePop) entityList.remove(mobIndex);
+                    break;
+                case GROUPED_ORDERED:
+                    //TODO
+                    break;
+                case GROUPED_RANDOM:
+                    //TODO
+                    break;
+                case GROUPED_SEMIRANDOM:
+                    //TODO
                     break;
             }
             return result;
