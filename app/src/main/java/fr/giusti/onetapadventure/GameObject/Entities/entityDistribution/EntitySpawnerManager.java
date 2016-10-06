@@ -165,7 +165,7 @@ public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListen
     }
 
     @Override
-    public void onSpawnRequested(boolean infinitePop, eEntityDistributionMode distribMode) {
+    public void onSpawnRequested(boolean infinitePop, eEntityDistributionMode distribMode, int groupeSize) {
         if (sharedList == null || sharedList.isEmpty()) return;
         if (sharedMobIndex >= sharedList.size()) sharedMobIndex = 0;
 
@@ -190,6 +190,34 @@ public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListen
                 sharedMobIndex = (int) (Math.random() * sharedList.size()) - 1;
                 result.add(sharedList.get(sharedMobIndex));
                 if (!infinitePop) sharedList.remove(sharedMobIndex);
+                break;
+            case GROUPED_ORDERED:
+                for (int i = 0; i < groupeSize; i++) {
+                    result.add(sharedList.get(sharedMobIndex));
+                    if (!infinitePop) sharedList.remove(sharedMobIndex);
+                    else if (sharedMobIndex < sharedList.size() + 1)
+                        sharedMobIndex++;
+                    else
+                        sharedMobIndex = 0;
+                }
+                break;
+            case GROUPED_RANDOM:
+                for (int i = 0; i < groupeSize; i++) {
+                    sharedMobIndex = (int) (Math.random() * sharedList.size()) - 1;
+                    result.add(sharedList.get(sharedMobIndex));
+                    if (!infinitePop) sharedList.remove(sharedMobIndex);
+                }
+                break;
+            case GROUPED_SEMIRANDOM:
+                sharedMobIndex = (int) (Math.random() * sharedList.size()) - 1;
+                for (int i = 0; i < groupeSize; i++) {
+                    result.add(sharedList.get(sharedMobIndex));
+                    if (!infinitePop) sharedList.remove(sharedMobIndex);
+                    else if (sharedMobIndex < sharedList.size() + 1)
+                        sharedMobIndex++;
+                    else
+                        sharedMobIndex = 0;
+                }
                 break;
         }
         board.onNewEntities(result);

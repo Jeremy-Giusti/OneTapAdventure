@@ -9,5 +9,5 @@ import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.eEntityD
 
 public interface SpawnerListener {
     void onSpawnerEmpty(EntitySpawner popper);
-    void onSpawnRequested(boolean infinitePop, eEntityDistributionMode distribMode);
+    void onSpawnRequested(boolean infinitePop, eEntityDistributionMode distribMode, int groupSize);
 }
