@@ -18,8 +18,15 @@ import fr.giusti.onetapadventure.repository.levelsData.Lvl2Constant;
 public class RuleRepo {
 
     public static RulesManager getLvl_1x1_Rules(final OnGameEndListener gameEndListener) {
-        Rule masterRule = new Rule(Lvl1Constant.ESCAPING_MOB_RULE, eConditionType.DEFEAT, eConditions.MOB_AWAY, Lvl1Constant.MAX_MOB_AWAY, 0);
-        Rule endRule = new Rule(Lvl1Constant.LEVEL_END_RULE, eConditionType.END, eConditions.MOB_COUNTDOWN, 0, Lvl1Constant.MOB_NB);
+        Rule masterRule = new Rule.RuleBuilder(Lvl1Constant.ESCAPING_MOB_RULE, eConditionType.DEFEAT, eConditions.MOB_AWAY)
+                .setNumericalCondition( Lvl1Constant.MAX_MOB_AWAY, 0)
+                .build();
+
+       // Rule masterRule = new Rule(Lvl1Constant.ESCAPING_MOB_RULE, eConditionType.DEFEAT, eConditions.MOB_AWAY, Lvl1Constant.MAX_MOB_AWAY, 0);
+        Rule endRule = new Rule.RuleBuilder(Lvl1Constant.LEVEL_END_RULE, eConditionType.END, eConditions.MOB_COUNTDOWN)
+                .setNumericalCondition( 0, Lvl1Constant.MOB_NB)
+                .build();
+        //Rule endRule = new Rule(Lvl1Constant.LEVEL_END_RULE, eConditionType.END, eConditions.MOB_COUNTDOWN, 0, Lvl1Constant.MOB_NB);
         String gameId = GameConstant.getLevelId(1, 1);
         OnRuleAccomplishedListener accomplishedBehavior = getDefaultBehavior(gameEndListener, gameId);
         return new RulesManager(masterRule, accomplishedBehavior, endRule);
@@ -28,8 +35,14 @@ public class RuleRepo {
 
     public static RulesManager getLvl_1x2_Rules(OnGameEndListener endListener) {
         String gameId = GameConstant.getLevelId(1, 2);
-        Rule masterRule = new Rule(Lvl1Constant.ESCAPING_MOB_RULE, eConditionType.DEFEAT, eConditions.MOB_AWAY, Lvl2Constant.MAX_MOB_AWAY, 0);
-        Rule endRule = new Rule(Lvl1Constant.LEVEL_END_RULE, eConditionType.END, eConditions.MOB_COUNTDOWN, 0, Lvl2Constant.MOB_NB);
+        Rule masterRule = new Rule.RuleBuilder(Lvl2Constant.ESCAPING_MOB_RULE, eConditionType.DEFEAT, eConditions.MOB_AWAY)
+                .setNumericalCondition( Lvl2Constant.MAX_MOB_AWAY, 0)
+                .build();
+
+        Rule endRule = new Rule.RuleBuilder(Lvl2Constant.TIMER_RULE, eConditionType.VICTORY, eConditions.TIMER)
+                .setNumericalCondition( Lvl2Constant.TIMER_END_VALUE, 0)
+                .build();
+
         OnRuleAccomplishedListener accomplishedBehavior = getDefaultBehavior(endListener, gameId);
         return new RulesManager(masterRule, accomplishedBehavior, endRule);
     }
@@ -41,7 +54,6 @@ public class RuleRepo {
      * @param gameEndListener
      * @return
      */
-    //TODO
     private static OnRuleAccomplishedListener getDefaultBehavior(final OnGameEndListener gameEndListener, final String lvlId) {
         return new OnRuleAccomplishedListener() {
             @Override

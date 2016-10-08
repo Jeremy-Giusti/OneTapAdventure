@@ -183,13 +183,15 @@ public class GameActivity extends Activity implements OnGameEndListener, IRulePr
         });
     }
 
+
+    String firstRuleid = null;
     @Override
     public void onRuleProgress(final String ruleId, final String displayableProgress) {
-
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                if (Lvl1Constant.ESCAPING_MOB_RULE.equals(ruleId)) {
+                if(firstRuleid==null) firstRuleid=ruleId;
+                if (firstRuleid.equals(ruleId)) {
                     mRule1.setText(displayableProgress);
                 } else {
                     mRule2.setText(displayableProgress);

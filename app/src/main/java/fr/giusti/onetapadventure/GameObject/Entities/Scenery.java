@@ -76,4 +76,10 @@ public class Scenery extends Entity {
 
         hitbox = new RectF(hitbox.left * ratio, hitbox.top * ratio, hitbox.right * ratio, hitbox.bottom * ratio);
     }
+
+    @Override
+    public Scenery clone() {
+        Scenery result = new Scenery(idName+"clone",(int)getPositionX(),(int)getPositionY(),(int)getWidth(),(int)getHeight(),hitbox,touchedByMob,mBitmapId);
+        return result;
+    }
 }

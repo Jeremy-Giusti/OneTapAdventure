@@ -171,12 +171,12 @@ public class TouchedMoveRepo {
     }
 
 
-    public TouchedMove getMoveById(String id) {
+    public static TouchedMove getMoveById(String id) {
         return TouchedMoveRepo.touchedMoveList.get(id);
     }
 
-    public ArrayList<String> getMoveIdList() {
-        return new ArrayList<String>(touchedMoveList.keySet());
+    public static ArrayList<String> getMoveIdList() {
+        return new ArrayList<>(touchedMoveList.keySet());
     }
 
 

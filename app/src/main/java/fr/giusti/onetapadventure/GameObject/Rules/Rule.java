@@ -45,15 +45,24 @@ public class Rule {
         this.type = type;
         isNumericalCondition = false;
     }
-    
+
 
     public eConditionType ruleProgress(int value) {
         if (condition == eConditions.MOB_COUNT)
             return (value == goalInt) ? type : eConditionType.NULL;
+        if (condition == eConditions.TIMER) {
+            valueInt = value;
+        }else{
+            valueInt += value;
+        }
 
-        valueInt += value;
         onProgress(null);
-        return (valueInt == goalInt) ? type : eConditionType.NULL;
+        if(condition == eConditions.TIMER){
+            return (valueInt > goalInt) ? type : eConditionType.NULL;
+
+        }else {
+            return (valueInt == goalInt) ? type : eConditionType.NULL;
+        }
     }
 
     public eConditionType ruleProgress(String value) {
@@ -64,10 +73,15 @@ public class Rule {
     private void onProgress(String value) {
         if (listener != null) {
             if (isNumericalCondition) {
-                if (goalInt == 0) {
-                    listener.onRuleProgress(idName, "" + valueInt);
+                if (eConditions.TIMER == condition) {
+                    //FIXME better time progress display
+                    listener.onRuleProgress(idName, "" + valueInt / 1000 + "/" + goalInt / 1000);
                 } else {
-                    listener.onRuleProgress(idName, "" + valueInt + "/" + goalInt);
+                    if (goalInt == 0) {
+                        listener.onRuleProgress(idName, "" + valueInt);
+                    } else {
+                        listener.onRuleProgress(idName, "" + valueInt + "/" + goalInt);
+                    }
                 }
             } else {
                 listener.onRuleProgress(idName, goalStr + "/" + value);
@@ -84,7 +98,7 @@ public class Rule {
         return idName;
     }
 
-    public class RuleBuilder {
+    public static class RuleBuilder {
         private final String idName;
         private final eConditionType type;
         private final eConditions condition;

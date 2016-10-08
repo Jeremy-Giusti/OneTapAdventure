@@ -20,6 +20,7 @@ public class Constants {
     public static final int DEFAULT_GAME_WIDTH = 512;
     public static final String SPRITE_REPO_FOLDER_NAME = "SpriteFolder/";
     public static final int TOUCH_DAMAGE = 10;
+    public static final int DEFAULT_MOB_SIZE = 48;
 
 
     public static String getSpriteRepoFolder(Context context) {

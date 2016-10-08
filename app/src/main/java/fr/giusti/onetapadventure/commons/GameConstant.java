@@ -15,6 +15,7 @@ public class GameConstant {
     public static final String BACKGROUND = "background";
     public static final String LVL_COUNT = "lvl count";
     public static final String AREA = "area";
+    public static final int DEFAULT_MOB_SIZE = 48;
 
     public static final String getLevelId(int world, int lvl) {
         return "" + world + "x" + lvl;

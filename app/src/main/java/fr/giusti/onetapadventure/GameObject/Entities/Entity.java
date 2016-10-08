@@ -116,5 +116,8 @@ public abstract class Entity implements Cloneable {
 
     public abstract void resize(float ratio);
 
+    @Override
+    public abstract Entity clone();
+
 
 }

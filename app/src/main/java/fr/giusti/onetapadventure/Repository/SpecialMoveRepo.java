@@ -282,11 +282,11 @@ public class SpecialMoveRepo {
     }
 
 
-    public SpecialMove getMoveById(String id) {
+    public static SpecialMove getMoveById(String id) {
         return SpecialMoveRepo.specialeMoveList.get(id);
     }
 
-    public ArrayList<String> getMoveIdList() {
+    public static ArrayList<String> getMoveIdList() {
         return new ArrayList<String>(specialeMoveList.keySet());
     }
 }

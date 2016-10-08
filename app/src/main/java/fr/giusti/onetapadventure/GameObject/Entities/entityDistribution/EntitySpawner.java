@@ -116,7 +116,7 @@ public class EntitySpawner {
 
     private ArrayList<Entity> onConditionMet() {
         if (useSharedMobList) {
-            listener.onSpawnRequested(infinitePop, distibutionMode,groupeSize);
+            listener.onSpawnRequested(infinitePop, distibutionMode, groupeSize);
             return null;
         } else {
             ArrayList<Entity> result = new ArrayList<>();
@@ -159,7 +159,7 @@ public class EntitySpawner {
                     }
                     break;
                 case GROUPED_SEMIRANDOM:
-                    mobIndex = (int) (Math.random() * entityList.size()) - 1;
+                    mobIndex = (int)( (Math.random() * entityList.size()/groupeSize) - 1)*groupeSize;//if group size==5 index can be 5-10-15-...
                     for (int i = 0; i < groupeSize; i++) {
                         result.add(entityList.get(mobIndex));
                         if (!infinitePop) entityList.remove(mobIndex);
@@ -183,7 +183,7 @@ public class EntitySpawner {
     }
 
 
-    public class EntitySpawnerBuilder {
+    public static class EntitySpawnerBuilder {
 
         private final eEntityDistributionMode distibutionMode;
         private final eConditions conditionType;
@@ -191,16 +191,16 @@ public class EntitySpawner {
         private final int initialProgressValue;
 
         private ArrayList<Entity> entityList;
-        private boolean useSharedList;
-        private boolean infinitePop;
-        private int groupeSize;
+        private boolean useSharedList = true;
+        private boolean infinitePop = false;
+        private int groupeSize = 5;
 
         public EntitySpawnerBuilder(eEntityDistributionMode distibutionMode, eConditions conditionType, int conditionGoalValue, int initialProgressValue) {
             this.distibutionMode = distibutionMode;
             this.conditionType = conditionType;
             this.conditionGoalValue = conditionGoalValue;
             this.initialProgressValue = initialProgressValue;
-            useSharedMobList = true;
+            this.useSharedList = true;
         }
 
         public EntitySpawnerBuilder setEntityList(ArrayList<Entity> entityList) {
@@ -218,7 +218,7 @@ public class EntitySpawner {
             return this;
         }
 
-        public EntitySpawnerBuilder setSpawnerInfinit() {
+        public EntitySpawnerBuilder setSpawnerInfinite() {
             this.infinitePop = true;
             return this;
         }

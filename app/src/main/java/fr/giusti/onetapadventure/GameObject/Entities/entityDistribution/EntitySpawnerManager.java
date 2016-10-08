@@ -173,50 +173,79 @@ public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListen
         switch (distribMode) {
             case ALL_AT_ONCE:
                 //put all mob
-                result.addAll(sharedList);
-                if (!infinitePop) sharedList.clear();
+                if (!infinitePop) {
+                    result.addAll(sharedList);
+                    sharedList.clear();
+                } else {
+                    for (Entity entity : sharedList) {
+                        result.add(entity.clone());
+                    }
+
+                }
                 break;
             case ONE_BY_ONE_ORDERED:
                 //add a mob from the list by order
-                result.add(sharedList.get(sharedMobIndex));
-                if (!infinitePop) sharedList.remove(sharedMobIndex);
-                else if (sharedMobIndex < sharedList.size() + 1)
-                    sharedMobIndex++;
-                else
-                    sharedMobIndex = 0;
+                if (!infinitePop) {
+                    result.add(sharedList.get(sharedMobIndex));
+                    sharedList.remove(sharedMobIndex);
+                } else {
+                    result.add(sharedList.get(sharedMobIndex).clone());
+
+                    if (sharedMobIndex < sharedList.size() + 1)
+                        sharedMobIndex++;
+                    else
+                        sharedMobIndex = 0;
+                }
                 break;
             case ONE_BY_ONE_RANDOM:
                 //add a random mob from list
                 sharedMobIndex = (int) (Math.random() * sharedList.size()) - 1;
-                result.add(sharedList.get(sharedMobIndex));
-                if (!infinitePop) sharedList.remove(sharedMobIndex);
+                if (!infinitePop) {
+                    result.add(sharedList.get(sharedMobIndex));
+                    sharedList.remove(sharedMobIndex);
+                } else {
+                    result.add(sharedList.get(sharedMobIndex).clone());
+                }
                 break;
             case GROUPED_ORDERED:
                 for (int i = 0; i < groupeSize; i++) {
-                    result.add(sharedList.get(sharedMobIndex));
-                    if (!infinitePop) sharedList.remove(sharedMobIndex);
-                    else if (sharedMobIndex < sharedList.size() + 1)
-                        sharedMobIndex++;
-                    else
-                        sharedMobIndex = 0;
+                    if (!infinitePop) {
+                        result.add(sharedList.get(sharedMobIndex));
+                        sharedList.remove(sharedMobIndex);
+                    } else {
+                        result.add(sharedList.get(sharedMobIndex).clone());
+                        if (sharedMobIndex < sharedList.size() + 1)
+                            sharedMobIndex++;
+                        else
+                            sharedMobIndex = 0;
+                    }
                 }
                 break;
             case GROUPED_RANDOM:
                 for (int i = 0; i < groupeSize; i++) {
                     sharedMobIndex = (int) (Math.random() * sharedList.size()) - 1;
-                    result.add(sharedList.get(sharedMobIndex));
-                    if (!infinitePop) sharedList.remove(sharedMobIndex);
+                    if (!infinitePop) {
+                        result.add(sharedList.get(sharedMobIndex));
+                        sharedList.remove(sharedMobIndex);
+                    } else {
+                        result.add(sharedList.get(sharedMobIndex).clone());
+                    }
                 }
                 break;
             case GROUPED_SEMIRANDOM:
-                sharedMobIndex = (int) (Math.random() * sharedList.size()) - 1;
+                sharedMobIndex = (int) ((Math.random() * sharedList.size() / groupeSize) - 1) * groupeSize;//if group size==5 index can be 5-10-15-...
                 for (int i = 0; i < groupeSize; i++) {
-                    result.add(sharedList.get(sharedMobIndex));
-                    if (!infinitePop) sharedList.remove(sharedMobIndex);
-                    else if (sharedMobIndex < sharedList.size() + 1)
-                        sharedMobIndex++;
-                    else
-                        sharedMobIndex = 0;
+                    if (!infinitePop) {
+                        result.add(sharedList.get(sharedMobIndex));
+                        sharedList.remove(sharedMobIndex);
+                    } else {
+                        result.add(sharedList.get(sharedMobIndex).clone());
+                        if (sharedMobIndex < sharedList.size() + 1)
+                            sharedMobIndex++;
+                        else
+                            sharedMobIndex = 0;
+                    }
+
                 }
                 break;
         }

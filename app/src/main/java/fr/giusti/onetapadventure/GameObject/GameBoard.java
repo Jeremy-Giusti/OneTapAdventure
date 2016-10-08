@@ -31,7 +31,7 @@ import fr.giusti.onetapadventure.repository.SpriteRepo;
  * gere les evenement lié au jeu (update on tick/on touch/...)
  */
 public class GameBoard {
-    public static final int TIME_PROGRESS_FREQUENCY = 1000;// 1sec
+    public static final int TIME_PROGRESS_FREQUENCY = 500;// 0.5sec
     private int timeProgress = 0;
     private Boolean timeProgressed = false;
     private Handler timerHandler = new Handler();

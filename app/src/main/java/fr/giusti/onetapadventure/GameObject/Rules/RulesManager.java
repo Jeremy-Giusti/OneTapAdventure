@@ -49,6 +49,11 @@ public class RulesManager implements OnBoardEventListener {
     }
 
     public boolean setRuleListener(String ruleName, IRuleProgressListener ruleListener) {
+
+        if(timerRule.getIdName().equals(ruleName)){
+            timerRule.setListener(ruleListener);
+            return true;
+        }
         for (ArrayList<Rule> ruleList : indexedRuleList.values()) {
             for (Rule rule : ruleList) {
                 if (ruleName.equals(rule.getIdName())) {
@@ -181,7 +186,7 @@ public class RulesManager implements OnBoardEventListener {
         eConditionType result;
         for (int i = 0; i < conditionRule.size(); i++) {
             rule = conditionRule.get(i);
-            result = rule.ruleProgress(1);
+            result = rule.ruleProgress(-1);
             if (result != eConditionType.NULL) {
                 conditionRule.remove(rule);
                 i--;
