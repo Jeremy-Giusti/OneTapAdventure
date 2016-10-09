@@ -194,19 +194,19 @@ public class EntityRepo {
      */
     public static ArrayList<Entity> getLvl1x1BackupList(Context context) {
         ArrayList<Entity> backupList = new ArrayList<>();
-        int mobNb = Lvl1Constant.MOB_NB - 2;
+        int tierMobNb = Lvl1Constant.MIXED_TIER_MOB_NB;
 
         String mobaseNameID = "mob";
         int currentTier = 1;
         int tier1Added = 0;
         PointF posDest = new PointF(Lvl1Constant.HOLE1_DIMENS.left + Lvl1Constant.HOLE1_DIMENS.width() / 2, Lvl1Constant.HOLE1_DIMENS.top + Lvl1Constant.HOLE1_DIMENS.height() / 2);
 
-        for (int i = 0; i < mobNb; i++) {
-            if (tier1Added < 2 || i < (mobNb / 3)) {
+        for (int i = 0; i < tierMobNb; i++) {
+            if (tier1Added < 2 || i < (tierMobNb / 3)) {
                 tier1Added++;
                 currentTier = 1;
             } else {
-                currentTier = (i < (mobNb / 3) * 2) ? 2 : 3;
+                currentTier = (i < (tierMobNb / 3) * 2) ? 2 : 3;
                 tier1Added = 0;
             }
 
@@ -232,6 +232,14 @@ public class EntityRepo {
         // -----------------------------------------------------
 
         return backupList;
+    }
+
+    public static ArrayList<Entity> getLvl1x1LastWave(Context context) {
+        ArrayList<Entity> result = new ArrayList<>();
+        for (int i = 0; i < Lvl1Constant.END_MOB_WAVE; i++) {
+            result.add(generateSimpleRandomizedMob("wave" + i, context, new Rect(1010, 5, 1019, 506), Lvl1Constant.HOLE1_DIMENS, Constants.FRAME_PER_SEC * 3));
+        }
+        return result;
     }
 
 
@@ -282,7 +290,7 @@ public class EntityRepo {
 
         ArrayList<Entity> result = new ArrayList<>();
 
-        Rect dest = new Rect(Lvl2Constant.HOLE1_DIMENS.left, 0, Lvl2Constant.HOLE1_DIMENS.right, 512);
+        Rect dest = new Rect(Lvl2Constant.HOLE1_DIMENS.left, 64, Lvl2Constant.HOLE1_DIMENS.right, 458);
         int startx;
         int startYmin;
         int startYmax;
@@ -306,7 +314,7 @@ public class EntityRepo {
         int startYmin;
         int startYmax;
 
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 6; i++) {
             startx = (i < Lvl2Constant.MOB_NB / 2) ? 5 : 1014;
             startYmin = 5;
             startYmax = 507;
@@ -387,8 +395,9 @@ public class EntityRepo {
         PointF[] path = PathRepo.generateLineToDest(new PointF(startPoint), new PointF(destPoint), 3 * Constants.FRAME_PER_SEC);
         String mobsptsheetId = "tpMob";
         SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet_purple), mobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
-        return new GameMob(id, startPoint.x, startPoint.y, GameConstant.DEFAULT_MOB_SIZE, GameConstant.DEFAULT_MOB_SIZE, path, moveRepo.getMoveById(SpecialMoveRepo.TELEPORT), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mobsptsheetId, health, 1);
+        return new GameMob(id, startPoint.x, startPoint.y, GameConstant.DEFAULT_MOB_SIZE, GameConstant.DEFAULT_MOB_SIZE, path, moveRepo.getMoveById(SpecialMoveRepo. NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.TELEPORT), mobsptsheetId, health, 1);
 
     }
+
 
 }

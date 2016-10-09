@@ -24,7 +24,7 @@ public class RuleRepo {
 
        // Rule masterRule = new Rule(Lvl1Constant.ESCAPING_MOB_RULE, eConditionType.DEFEAT, eConditions.MOB_AWAY, Lvl1Constant.MAX_MOB_AWAY, 0);
         Rule endRule = new Rule.RuleBuilder(Lvl1Constant.LEVEL_END_RULE, eConditionType.END, eConditions.MOB_COUNTDOWN)
-                .setNumericalCondition( 0, Lvl1Constant.MOB_NB)
+                .setNumericalCondition( 0, Lvl1Constant.MOB_TOTAL_NB)
                 .build();
         //Rule endRule = new Rule(Lvl1Constant.LEVEL_END_RULE, eConditionType.END, eConditions.MOB_COUNTDOWN, 0, Lvl1Constant.MOB_NB);
         String gameId = GameConstant.getLevelId(1, 1);

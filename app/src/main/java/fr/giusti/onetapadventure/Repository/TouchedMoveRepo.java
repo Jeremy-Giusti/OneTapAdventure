@@ -4,8 +4,10 @@ import android.graphics.PointF;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import fr.giusti.onetapadventure.commons.Constants;
+import fr.giusti.onetapadventure.commons.GameConstant;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.gameObject.entities.Particule;
@@ -20,12 +22,19 @@ public class TouchedMoveRepo {
 
     public static final String DEFAULT_MOVE = "touched";
     public static final String BLEED = "bleed";
+    public static final String TELEPORT = "teleport";
     public static final String HEAL = "heal";
     public static final String BAIT = "bait";
     public static final String MOB_AWAY_MOVE = "mob_away";
 
 
     public static TouchedMove default_touched_move = new TouchedMove() {
+
+        @Override
+        public String getId() {
+            return DEFAULT_MOVE;
+        }
+
         @Override
         public void doTouchedMove(GameBoard board, GameMob currentMob, int damage) {
             int mobHealth = currentMob.getHealth();
@@ -40,12 +49,14 @@ public class TouchedMoveRepo {
             currentMob.setAnimationState(0);
         }
 
-        @Override
-        public String getId() {
-            return DEFAULT_MOVE;
-        }
     };
     public static TouchedMove bleedMove = new TouchedMove() {
+
+        @Override
+        public String getId() {
+            return BLEED;
+        }
+
         @Override
         public void doTouchedMove(GameBoard board, GameMob currentMob, int damage) {
             int mobHealth = currentMob.getHealth();
@@ -62,12 +73,13 @@ public class TouchedMoveRepo {
 
         }
 
-        @Override
-        public String getId() {
-            return BLEED;
-        }
     };
     public static TouchedMove healMove = new TouchedMove() {
+        @Override
+        public String getId() {
+            return HEAL;
+        }
+
         @Override
         public void doTouchedMove(GameBoard board, GameMob currentMob, int damage) {
             int mobHealth = currentMob.getHealth();
@@ -78,13 +90,15 @@ public class TouchedMoveRepo {
             currentMob.setAnimationState(0);
         }
 
-        @Override
-        public String getId() {
-            return HEAL;
-        }
+
     };
 
     public static TouchedMove baitMove = new TouchedMove() {
+        @Override
+        public String getId() {
+            return BAIT;
+        }
+
         @Override
         public void doTouchedMove(GameBoard board, GameMob currentMob, int damage) {
             int mobHealth = currentMob.getHealth();
@@ -146,14 +160,16 @@ public class TouchedMoveRepo {
             currentMob.setAnimationState(0);
         }
 
-        @Override
-        public String getId() {
-            return BAIT;
-        }
+
     };
 
 
     public static TouchedMove mobAwayMove = new TouchedMove() {
+        @Override
+        public String getId() {
+            return MOB_AWAY_MOVE;
+        }
+
         @Override
         public void doTouchedMove(GameBoard board, GameMob currentMob, int damage) {
             if (GameMob.eMobState.DYING != currentMob.getState())
@@ -161,10 +177,56 @@ public class TouchedMoveRepo {
                 currentMob.setDisappering();
         }
 
+
+    };
+
+    public static TouchedMove tpMove = new TouchedMove() {
         @Override
         public String getId() {
-            return MOB_AWAY_MOVE;
+            return TELEPORT;
         }
+
+        @Override
+        public void doTouchedMove(GameBoard board, GameMob currentMob, int damage) {
+            if (GameMob.eMobState.DYING != currentMob.getState()) {
+
+                int mobHealth = currentMob.getHealth();
+                if (mobHealth > damage) {
+                    mobHealth -= damage;
+                    currentMob.setHealth(mobHealth);
+                    currentMob.setState(GameMob.eMobState.HURT);
+                } else {
+                    currentMob.setHealth(0);
+                    currentMob.setState(GameMob.eMobState.DYING);
+                    return;
+                }
+
+                currentMob.setAnimationState(0);
+
+                int xDIrection = (Math.random() < 0.5) ? 1 : -1;
+                int yDIrection = (Math.random() < 0.5) ? 1 : -1;
+
+                Random r = new Random();
+
+                int XTP = r.nextInt(GameConstant.SHORT_TP_MAX_RANGE - GameConstant.SHORT_TP_MIN_RANGE) + GameConstant.SHORT_TP_MIN_RANGE;
+                int YTP = r.nextInt(GameConstant.SHORT_TP_MAX_RANGE - GameConstant.SHORT_TP_MIN_RANGE) + GameConstant.SHORT_TP_MIN_RANGE;
+
+
+                int width = (int) currentMob.getWidth() * 2;
+                int height = (int) currentMob.getHeight() * 2;
+
+                Particule firstParticule = ParticuleHolder.getAvailableParticule(ParticuleRepo.TP_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), width, height, false, null);
+
+                currentMob.setPositionFromXY(currentMob.getPositionX() + (XTP * xDIrection), currentMob.getPositionY() + (YTP * yDIrection));
+
+                Particule secondParticule = ParticuleHolder.getAvailableParticule(ParticuleRepo.TP_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), width, height, true, null);
+
+                board.addParticule(firstParticule);
+                board.addParticule(secondParticule);
+            }
+        }
+
+
     };
 
 
@@ -176,6 +238,7 @@ public class TouchedMoveRepo {
         touchedMoveList.put(bleedMove.getId(), bleedMove);
         touchedMoveList.put(healMove.getId(), healMove);
         touchedMoveList.put(mobAwayMove.getId(), mobAwayMove);
+        touchedMoveList.put(tpMove.getId(), tpMove);
         touchedMoveList.put(default_touched_move.getId(), default_touched_move);
     }
 

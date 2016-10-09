@@ -1,5 +1,7 @@
 package fr.giusti.onetapadventure.commons;
 
+import android.graphics.Rect;
+
 import fr.giusti.onetapadventure.R;
 
 /**
@@ -16,6 +18,8 @@ public class GameConstant {
     public static final String LVL_COUNT = "lvl count";
     public static final String AREA = "area";
     public static final int DEFAULT_MOB_SIZE = 48;
+    public static final int SHORT_TP_MAX_RANGE = 144;
+    public static final int SHORT_TP_MIN_RANGE = 72;
 
     public static final String getLevelId(int world, int lvl) {
         return "" + world + "x" + lvl;

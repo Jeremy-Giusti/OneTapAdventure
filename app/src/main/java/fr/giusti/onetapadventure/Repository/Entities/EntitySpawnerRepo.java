@@ -15,11 +15,10 @@ public class EntitySpawnerRepo {
     public static EntitySpawnerManager getLvl1_1SpawnerManager(Context context) {
         EntitySpawnerManager result = new EntitySpawnerManager(EntityRepo.getLvl1x1InitList(context), EntityRepo.getLvl1x1BackupList(context));
 
-        //  result.addSpawner(new EntitySpawner(eConditions.MOB_COUNT, 2, 0, false, eEntityDistributionMode.ONE_BY_ONE_ORDERED, null));
         result.addSpawner(new EntitySpawner.EntitySpawnerBuilder(eEntityDistributionMode.ONE_BY_ONE_ORDERED, eConditions.MOB_COUNT, 1, 0).setUseSharedList().build());
-        // result.addSpawner(new EntitySpawner(eConditions.MOB_COUNT, 1, 0, false, eEntityDistributionMode.ONE_BY_ONE_ORDERED, null));
         result.addSpawner(new EntitySpawner.EntitySpawnerBuilder(eEntityDistributionMode.ONE_BY_ONE_ORDERED, eConditions.TIMER, 3000, 0).setUseSharedList().build());
-        //  result.addSpawner(new EntitySpawner(eConditions.TIMER, 3000, 0, false, eEntityDistributionMode.ONE_BY_ONE_ORDERED, null));
+        result.addSpawner(new EntitySpawner.EntitySpawnerBuilder(eEntityDistributionMode.ALL_AT_ONCE, eConditions.MOB_COUNT, 0, -1).setEntityList(EntityRepo.getLvl1x1LastWave(context)).build());
+
         return result;
     }
 
