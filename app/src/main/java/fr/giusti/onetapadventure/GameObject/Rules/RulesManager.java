@@ -50,7 +50,7 @@ public class RulesManager implements OnBoardEventListener {
 
     public boolean setRuleListener(String ruleName, IRuleProgressListener ruleListener) {
 
-        if(timerRule.getIdName().equals(ruleName)){
+        if(timerRule!=null && timerRule.getIdName().equals(ruleName)){
             timerRule.setListener(ruleListener);
             return true;
         }

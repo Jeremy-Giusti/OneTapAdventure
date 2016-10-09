@@ -7,9 +7,9 @@ import java.util.HashMap;
 
 import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
-import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.ParticuleHolder;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.gameObject.entities.Particule;
+import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.ParticuleHolder;
 import fr.giusti.onetapadventure.gameObject.moves.TouchedMove;
 import fr.giusti.onetapadventure.repository.entities.ParticuleRepo;
 
@@ -30,7 +30,7 @@ public class TouchedMoveRepo {
         public void doTouchedMove(GameBoard board, GameMob currentMob, int damage) {
             int mobHealth = currentMob.getHealth();
             if (mobHealth > damage) {
-                mobHealth-=damage;
+                mobHealth -= damage;
                 currentMob.setHealth(mobHealth);
                 currentMob.setState(GameMob.eMobState.HURT);
             } else {
@@ -50,7 +50,7 @@ public class TouchedMoveRepo {
         public void doTouchedMove(GameBoard board, GameMob currentMob, int damage) {
             int mobHealth = currentMob.getHealth();
             if (mobHealth > damage) {
-                mobHealth-=damage;
+                mobHealth -= damage;
                 currentMob.setHealth(mobHealth);
                 currentMob.setState(GameMob.eMobState.HURT);
             } else {
@@ -58,7 +58,7 @@ public class TouchedMoveRepo {
                 currentMob.setState(GameMob.eMobState.DYING);
             }
             currentMob.setAnimationState(0);
-            board.getmParticules().add(ParticuleHolder.getAvailableParticule(ParticuleRepo.BLOOD_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(),  currentMob.getWidth(), currentMob.getHeight(), false, new PointF[]{currentMob.getCurrentMove()}));
+            board.getmParticules().add(ParticuleHolder.getAvailableParticule(ParticuleRepo.BLOOD_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), currentMob.getWidth(), currentMob.getHeight(), false, new PointF[]{currentMob.getCurrentMove()}));
 
         }
 
@@ -71,7 +71,7 @@ public class TouchedMoveRepo {
         @Override
         public void doTouchedMove(GameBoard board, GameMob currentMob, int damage) {
             int mobHealth = currentMob.getHealth();
-            if (mobHealth < (9* Constants.TOUCH_DAMAGE)) {//9 de vie max
+            if (mobHealth < (9 * Constants.TOUCH_DAMAGE)) {//9 de vie max
                 currentMob.setHealth(mobHealth + Constants.TOUCH_DAMAGE);
             }
             currentMob.setState(GameMob.eMobState.SPE1);
@@ -89,7 +89,7 @@ public class TouchedMoveRepo {
         public void doTouchedMove(GameBoard board, GameMob currentMob, int damage) {
             int mobHealth = currentMob.getHealth();
             if (mobHealth > damage) {
-                mobHealth-=damage;
+                mobHealth -= damage;
                 currentMob.setHealth(mobHealth);
                 currentMob.setState(GameMob.eMobState.HURT);
                 //creer des leurres
@@ -103,24 +103,30 @@ public class TouchedMoveRepo {
 
                 //Change la direction du mob
                 currentMob.setCurrentMove(0);
-                switch ((int) (Math.random() * 4)) {
-                    case 1:
-                        currentMob.setxAlteration(-1);
-                        currentMob.setyAlteration(1);
-                        break;
-                    case 2:
-                        currentMob.setxAlteration(1);
-                        currentMob.setyAlteration(-1);
-                        break;
-                    case 3:
-                        currentMob.setxAlteration(-1);
-                        currentMob.setyAlteration(-1);
-                        break;
-                    default:
-                        currentMob.setxAlteration(1);
-                        currentMob.setyAlteration(1);
-                        break;
-                }
+                //random 4 direction
+//                switch ((int) (Math.random() * 4)) {
+//                    case 1:
+//                        currentMob.setxAlteration(-1);
+//                        currentMob.setyAlteration(1);
+//                        break;
+//                    case 2:
+//                        currentMob.setxAlteration(1);
+//                        currentMob.setyAlteration(-1);
+//                        break;
+//                    case 3:
+//                        currentMob.setxAlteration(-1);
+//                        currentMob.setyAlteration(-1);
+//                        break;
+//                    default:
+//                        currentMob.setxAlteration(1);
+//                        currentMob.setyAlteration(1);
+//                        break;
+//            }
+
+                //just  inverse direction
+                currentMob.setxAlteration(currentMob.getxAlteration() * -1);
+                currentMob.setyAlteration(currentMob.getyAlteration() * -1);
+
                 Particule particule1 = ParticuleHolder.getAvailableParticule(ParticuleRepo.SMOKE_PARTICULE,
                         particuleX,
                         particuleY,
@@ -130,10 +136,13 @@ public class TouchedMoveRepo {
                         null);
                 board.addParticule(particule1);
 
-            } else {
+            } else
+
+            {
                 currentMob.setHealth(0);
                 currentMob.setState(GameMob.eMobState.DYING);
             }
+
             currentMob.setAnimationState(0);
         }
 
@@ -149,7 +158,7 @@ public class TouchedMoveRepo {
         public void doTouchedMove(GameBoard board, GameMob currentMob, int damage) {
             if (GameMob.eMobState.DYING != currentMob.getState())
                 //board.onMobAway(currentMob);
-            currentMob.setDisappering();
+                currentMob.setDisappering();
         }
 
         @Override

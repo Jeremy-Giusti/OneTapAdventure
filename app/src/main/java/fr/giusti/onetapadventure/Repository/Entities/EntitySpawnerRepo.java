@@ -26,16 +26,15 @@ public class EntitySpawnerRepo {
     public static EntitySpawnerManager getLvl1_2SpawnerManager(Context context) {
         EntitySpawnerManager result = new EntitySpawnerManager(EntityRepo.getLvl1x2InitList(context), EntityRepo.getLvl1x2BackupList(context));
 
-        result.addSpawner(new EntitySpawner.EntitySpawnerBuilder(eEntityDistributionMode.GROUPED_SEMIRANDOM, eConditions.TIMER, 2500, 0)
+        result.addSpawner(new EntitySpawner.EntitySpawnerBuilder(eEntityDistributionMode.GROUPED_SEMIRANDOM, eConditions.TIMER, 2000, 0)
                 .setSpawnerInfinite()
                 .setUseSharedList()
                 .build());
 
-        //TODO pop a special mob
-//        result.addSpawner(new EntitySpawner.EntitySpawnerBuilder(eEntityDistributionMode.GROUPED_SEMIRANDOM, eConditions.MOB_COUNT, 1, 0)
-//                .setSpawnerInfinite()
-//                .setUseSharedList()
-//                .build());
+        result.addSpawner(new EntitySpawner.EntitySpawnerBuilder(eEntityDistributionMode.ONE_BY_ONE_RANDOM, eConditions.MOB_COUNT, 0, 0)
+                .setSpawnerInfinite()
+                .setEntityList(EntityRepo.getLvl1x2SpecialList(context))
+                .build());
 
         return result;
     }

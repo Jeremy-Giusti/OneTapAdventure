@@ -9,9 +9,9 @@ import java.util.List;
 
 import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
-import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.ParticuleHolder;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.gameObject.entities.Particule;
+import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.ParticuleHolder;
 import fr.giusti.onetapadventure.gameObject.interactions.TouchPoint;
 import fr.giusti.onetapadventure.gameObject.moves.SpecialMove;
 import fr.giusti.onetapadventure.repository.entities.ParticuleRepo;
@@ -20,7 +20,7 @@ import fr.giusti.onetapadventure.repository.entities.ParticuleRepo;
  * Created by giusti on 20/03/2015.
  */
 public class SpecialMoveRepo {
-
+        //TODO limited range tp/switch
     public static final String NO_MOVE = "noMove";
     public static final String AUTO_HEAL = "autoHeal";
     public static final String AUTO_HURT_EXPLODING = "autoHurtExploding";
@@ -108,15 +108,15 @@ public class SpecialMoveRepo {
                     }
                     if (mobHealth <= Constants.TOUCH_DAMAGE && lastShowed != 1) {
                         lastShowed = 1;
-                        Particule numberParicule = ParticuleHolder.getAvailableParticule(ParticuleRepo.NUMBER1_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), currentMob.mPosition.width(),currentMob.mPosition.height(), false, new PointF[]{new PointF(0, 2)});
+                        Particule numberParicule = ParticuleHolder.getAvailableParticule(ParticuleRepo.NUMBER1_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), currentMob.mPosition.width(), currentMob.mPosition.height(), false, new PointF[]{new PointF(0, 2)});
                         board.addParticule(numberParicule);
                     } else if (mobHealth <= (2 * Constants.TOUCH_DAMAGE) && lastShowed != 2) {
                         lastShowed = 2;
-                        Particule numberParicule = ParticuleHolder.getAvailableParticule(ParticuleRepo.NUMBER2_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(),currentMob.mPosition.width(),currentMob.mPosition.height(), false, new PointF[]{new PointF(0, 2)});
+                        Particule numberParicule = ParticuleHolder.getAvailableParticule(ParticuleRepo.NUMBER2_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), currentMob.mPosition.width(), currentMob.mPosition.height(), false, new PointF[]{new PointF(0, 2)});
                         board.addParticule(numberParicule);
                     } else if (mobHealth <= (3 * Constants.TOUCH_DAMAGE) && lastShowed != 3) {
                         lastShowed = 3;
-                        Particule numberParicule = ParticuleHolder.getAvailableParticule(ParticuleRepo.NUMBER3_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), currentMob.mPosition.width(),currentMob.mPosition.height(), false, new PointF[]{new PointF(0, 2)});
+                        Particule numberParicule = ParticuleHolder.getAvailableParticule(ParticuleRepo.NUMBER3_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), currentMob.mPosition.width(), currentMob.mPosition.height(), false, new PointF[]{new PointF(0, 2)});
                         board.addParticule(numberParicule);
                     } else {
                         lastShowed = -1;
@@ -130,8 +130,8 @@ public class SpecialMoveRepo {
 
                     Particule explosionParticule = ParticuleHolder.getAvailableParticule(ParticuleRepo.EXPLOSION_PARTICULE, particuleX, particuleY, particuleWidth, particuleHeight, false, null);
 
-                        //TODO MAKE AOE event instead of touch
-                        board.addTouchEvent(new TouchPoint(currentMob.getPositionX(),currentMob.getPositionY(),Constants.TOUCH_STROKE*2));
+                    //TODO MAKE AOE event instead of touch
+                    board.addTouchEvent(new TouchPoint(currentMob.getPositionX(), currentMob.getPositionY(), Constants.TOUCH_STROKE * 2));
 
                     board.addParticule(explosionParticule);
                     currentMob.setHealth(-1);
@@ -177,10 +177,14 @@ public class SpecialMoveRepo {
         private int lastUse = 0;
 
         @Override
+        public String getId() {
+            return TELEPORT;
+        }
+
+        @Override
         public void doSpecialMove(GameBoard board, GameMob currentMob) {
-            if (currentMob.isJustMoving() && this.lastUse > 120) {
+            if (currentMob.isJustMoving() && this.lastUse > Constants.FRAME_PER_SEC * 1.75) {
                 lastUse = 0;
-                ParticuleRepo particuleRepo = new ParticuleRepo();
                 currentMob.setState(GameMob.eMobState.SPE1);
                 currentMob.setAnimationState(0);
 
@@ -194,7 +198,6 @@ public class SpecialMoveRepo {
                 Particule secondParticule = ParticuleHolder.getAvailableParticule(ParticuleRepo.TP_PARTICULE, newX, newY, width, height, true, null);
 
                 currentMob.setPositionFromXY(newX, newY);
-                //add particule inverse and not
 
                 board.addParticule(firstParticule);
                 board.addParticule(secondParticule);
@@ -203,10 +206,7 @@ public class SpecialMoveRepo {
             }
         }
 
-        @Override
-        public String getId() {
-            return TELEPORT;
-        }
+
     };
 
     private static SpecialMove swap = new SpecialMove() {

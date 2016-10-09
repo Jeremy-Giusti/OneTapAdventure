@@ -123,47 +123,69 @@ public class EntitySpawner {
             switch (distibutionMode) {
                 case ALL_AT_ONCE:
                     //put all mob
-                    result.addAll(entityList);
-                    if (!infinitePop) entityList.clear();
+                    if (!infinitePop) {
+                        result.addAll(entityList);
+                        entityList.clear();
+                    } else {
+                        for (Entity entity : entityList)
+                            result.add(entity.clone());
+
+                    }
                     break;
                 case ONE_BY_ONE_ORDERED:
                     //add a mob from the list by order
-                    result.add(entityList.get(mobIndex));
-                    if (!infinitePop) entityList.remove(mobIndex);
-                    else if (mobIndex < entityList.size() + 1)
-                        mobIndex++;
-                    else
-                        mobIndex = 0;
-                    break;
-                case ONE_BY_ONE_RANDOM:
-                    //add a random mob from list
-                    mobIndex = (int) (Math.random() * entityList.size()) - 1;
-                    result.add(entityList.get(mobIndex));
-                    if (!infinitePop) entityList.remove(mobIndex);
-                    break;
-                case GROUPED_ORDERED:
-                    for (int i = 0; i < groupeSize; i++) {
+                    if (!infinitePop) {
                         result.add(entityList.get(mobIndex));
-                        if (!infinitePop) entityList.remove(mobIndex);
-                        else if (mobIndex < entityList.size() + 1)
+                        entityList.remove(mobIndex);
+                    } else {
+                        result.add(entityList.get(mobIndex).clone());
+                        if (mobIndex + 1 < entityList.size())
                             mobIndex++;
                         else
                             mobIndex = 0;
                     }
                     break;
+                case ONE_BY_ONE_RANDOM:
+                    //add a random mob from list
+                    mobIndex = (int) (Math.random() * entityList.size());
+                    if (!infinitePop) {
+                        result.add(entityList.get(mobIndex));
+                        entityList.remove(mobIndex);
+                    } else {
+                        result.add(entityList.get(mobIndex).clone());
+                    }
+                    break;
+                case GROUPED_ORDERED:
+                    for (int i = 0; i < groupeSize; i++) {
+                        if (!infinitePop) {
+                            result.add(entityList.get(mobIndex));
+                            entityList.remove(mobIndex);
+                        } else {
+                            result.add(entityList.get(mobIndex).clone());
+                            if (mobIndex + 1 < entityList.size())
+                                mobIndex++;
+                            else
+                                mobIndex = 0;
+                        }
+                    }
+                    break;
                 case GROUPED_RANDOM:
                     for (int i = 0; i < groupeSize; i++) {
-                        mobIndex = (int) (Math.random() * entityList.size()) - 1;
-                        result.add(entityList.get(mobIndex));
-                        if (!infinitePop) entityList.remove(mobIndex);
+                        mobIndex = (int) (Math.random() * entityList.size());
+                        if (!infinitePop){
+                            result.add(entityList.get(mobIndex));
+                            entityList.remove(mobIndex);
+                        }else{
+                            result.add(entityList.get(mobIndex).clone());
+                        }
                     }
                     break;
                 case GROUPED_SEMIRANDOM:
-                    mobIndex = (int)( (Math.random() * entityList.size()/groupeSize) - 1)*groupeSize;//if group size==5 index can be 5-10-15-...
+                    mobIndex = (int) ((Math.random() * entityList.size() / groupeSize)) * groupeSize;//if group size==5 index can be 5-10-15-...
                     for (int i = 0; i < groupeSize; i++) {
                         result.add(entityList.get(mobIndex));
                         if (!infinitePop) entityList.remove(mobIndex);
-                        else if (mobIndex < entityList.size() + 1)
+                        else if (mobIndex + 1 < entityList.size())
                             mobIndex++;
                         else
                             mobIndex = 0;

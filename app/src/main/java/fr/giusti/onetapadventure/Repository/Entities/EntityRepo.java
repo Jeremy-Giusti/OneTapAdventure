@@ -218,14 +218,15 @@ public class EntityRepo {
         }
 
         //--------------------Last mob --------------------------
-        PointF startPos = new PointF(Lvl1Constant.MOB_POP_X, Lvl1Constant.MOB_POP_Y_MAX_VAlUE / 2);
-        SpecialMoveRepo moveRepo = new SpecialMoveRepo();
-        TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
-        int lastMobDirection = (Math.random() < 0.5) ? -1 : 1;
-        String lastMobsptsheetId = "lastMob";
-        SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet3), lastMobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
-
-        GameMob lastMob = new GameMob("lastMob", (int) startPos.x, (int) startPos.y, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE, new PointF[]{new PointF(-4, 15 * lastMobDirection)}, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), "lastMob", 30, 1);
+        Point startPos = new Point(Lvl1Constant.MOB_POP_X, Lvl1Constant.MOB_POP_Y_MAX_VAlUE / 2);
+        GameMob lastMob = getRapidScanMob("lastMob", context, startPos, 30);
+//        SpecialMoveRepo moveRepo = new SpecialMoveRepo();
+//        TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
+//        int lastMobDirection = (Math.random() < 0.5) ? -1 : 1;
+//        String lastMobsptsheetId = "lastMob";
+//        SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet3), lastMobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+//
+//        GameMob lastMob = new GameMob("lastMob", (int) startPos.x, (int) startPos.y, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE, new PointF[]{new PointF(-4, 15 * lastMobDirection)}, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), "lastMob", 30, 1);
         lastMob.setAlignement(4);
         backupList.add(lastMob);
         // -----------------------------------------------------
@@ -288,13 +289,41 @@ public class EntityRepo {
 
         for (int i = 0; i < Lvl2Constant.MOB_NB; i++) {
             startx = (i < Lvl2Constant.MOB_NB / 2) ? 5 : 1014;
-            startYmin = (i % 2 == 0) ? 5 : 256;
-            startYmax = (i % 2 == 0) ? 256 : 507;
+            startYmin = (i % 10 < 5) ? 5 : 256;
+            startYmax = (i % 10 < 5) ? 256 : 507;
             result.add(generateSimpleRandomizedMob("mobNb" + i, context, new Rect(startx, startYmin, startx + 5, startYmax), dest, Constants.FRAME_PER_SEC * 3));
         }
 
         return result;
     }
+
+    public static ArrayList<Entity> getLvl1x2SpecialList(Context context) {
+
+        ArrayList<Entity> result = new ArrayList<>();
+
+        Rect dest = new Rect(Lvl2Constant.HOLE1_DIMENS.left, 0, Lvl2Constant.HOLE1_DIMENS.right, 512);
+        int startx;
+        int startYmin;
+        int startYmax;
+
+        for (int i = 0; i < 8; i++) {
+            startx = (i < Lvl2Constant.MOB_NB / 2) ? 5 : 1014;
+            startYmin = 5;
+            startYmax = 507;
+            result.add(generateSimpleRandomizedMob("mobNb" + i, context, new Rect(startx, startYmin, startx + 5, startYmax), dest, Constants.FRAME_PER_SEC * 3));
+        }
+
+        Point startPoint = (Math.random() < 0.5) ? new Point(5, 232) : new Point(1019, 232);
+        result.add(getRapidScanMob("rapideMob", context, startPoint, 10));
+
+        Point startPoint2 = (Math.random() < 0.5) ? new Point(5, 232) : new Point(1019, 232);
+        Point destPoint = new Point(dest.centerX(), dest.centerY());
+        result.add(getTeleportMob("teleportMob", context, startPoint2, destPoint, 30));
+
+
+        return result;
+    }
+
 
     public static GameMob getMobFromSeed(Context context, int difficulty, int seed, PointF posDest, String id, int x, int y, int width, int height) {
         SpecialMoveRepo moveRepo = new SpecialMoveRepo();
@@ -342,5 +371,24 @@ public class EntityRepo {
         return new GameMob(id, startX, startY, GameConstant.DEFAULT_MOB_SIZE, 48, path, SpecialMoveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), TouchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mob1sptsheetId, Constants.TOUCH_DAMAGE, 1);
     }
 
+    public static GameMob getRapidScanMob(String id, Context context, Point startPos, int health) {
+        SpecialMoveRepo moveRepo = new SpecialMoveRepo();
+        TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
+        int lastMobDirection = (Math.random() < 0.5) ? -1 : 1;
+        String lastMobsptsheetId = "rapideMob";
+        SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet3), lastMobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+        return new GameMob(id, startPos.x, startPos.y, GameConstant.DEFAULT_MOB_SIZE, GameConstant.DEFAULT_MOB_SIZE, new PointF[]{new PointF(-4, 15 * lastMobDirection)}, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), lastMobsptsheetId, health, 1);
+    }
+
+    private static GameMob getTeleportMob(String id, Context context, Point startPoint, Point destPoint, int health) {
+        SpecialMoveRepo moveRepo = new SpecialMoveRepo();
+        TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
+
+        PointF[] path = PathRepo.generateLineToDest(new PointF(startPoint), new PointF(destPoint), 3 * Constants.FRAME_PER_SEC);
+        String mobsptsheetId = "tpMob";
+        SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet_purple), mobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+        return new GameMob(id, startPoint.x, startPoint.y, GameConstant.DEFAULT_MOB_SIZE, GameConstant.DEFAULT_MOB_SIZE, path, moveRepo.getMoveById(SpecialMoveRepo.TELEPORT), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mobsptsheetId, health, 1);
+
+    }
 
 }
