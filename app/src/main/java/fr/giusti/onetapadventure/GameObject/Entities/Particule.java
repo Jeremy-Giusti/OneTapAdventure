@@ -10,6 +10,7 @@ import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.commons.Utils;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.ParticuleHolder;
+import fr.giusti.onetapadventure.repository.PathRepo;
 import fr.giusti.onetapadventure.repository.SpriteRepo;
 
 /**
@@ -152,7 +153,8 @@ public class Particule extends Entity {
 
     @Override
     public void resize(float ratio) {
-        //? no need ?
+        mPosition = new RectF(mPosition.left * ratio, mPosition.top * ratio, mPosition.right * ratio, mPosition.bottom * ratio);
+        movePattern = PathRepo.createScalePath(ratio, movePattern);
     }
 
     @Override

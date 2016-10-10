@@ -17,7 +17,9 @@ import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.commons.GameConstant;
 import fr.giusti.onetapadventure.gameObject.entities.Entity;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
+import fr.giusti.onetapadventure.gameObject.entities.Particule;
 import fr.giusti.onetapadventure.gameObject.entities.Scenery;
+import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.ParticuleHolder;
 import fr.giusti.onetapadventure.gameObject.moves.TouchedMove;
 import fr.giusti.onetapadventure.repository.DB.ModelConverter;
 import fr.giusti.onetapadventure.repository.DB.model.MobDB;
@@ -175,6 +177,11 @@ public class EntityRepo {
         Scenery hole1 = new Scenery("holes1", Lvl1Constant.HOLE1_DIMENS.left, Lvl1Constant.HOLE1_DIMENS.top, Lvl1Constant.HOLE1_DIMENS.width(), Lvl1Constant.HOLE1_DIMENS.height(), hitbox, touchedMoveRepo.getMoveById(TouchedMoveRepo.MOB_AWAY_MOVE), bitmapId);
         entityList.add(hole1);
 
+        Particule glassParticule1 = ParticuleHolder.getAvailableParticule(ParticuleRepo.GLASS_PARTICULE , Lvl1Constant.HOLE1_DIMENS.centerX(), Lvl1Constant.HOLE1_DIMENS.centerY()-Lvl1Constant.HOLE1_DIMENS.width()/2, Lvl1Constant.HOLE1_DIMENS.width(), Lvl1Constant.HOLE1_DIMENS.width(), false, new PointF[]{new PointF(0, 6)});
+        Particule glassParticule2 = ParticuleHolder.getAvailableParticule(ParticuleRepo.GLASS_PARTICULE , Lvl1Constant.HOLE1_DIMENS.centerX(), Lvl1Constant.HOLE1_DIMENS.centerY()+Lvl1Constant.HOLE1_DIMENS.width()/2, Lvl1Constant.HOLE1_DIMENS.width(), Lvl1Constant.HOLE1_DIMENS.width(), false, new PointF[]{new PointF(0, 6)});
+        entityList.add(glassParticule1);
+        entityList.add(glassParticule2);
+
         String mob1sptsheetId = "tier1Mob";
         SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet), mob1sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
         PointF[] mob1Pattern = PathRepo.generateLineToDest(startPos, posDest, Constants.FRAME_PER_SEC * 3);
@@ -262,6 +269,9 @@ public class EntityRepo {
 
         Scenery hole1 = new Scenery("holes1", Lvl2Constant.HOLE1_DIMENS.left, Lvl2Constant.HOLE1_DIMENS.top, Lvl2Constant.HOLE1_DIMENS.width(), Lvl2Constant.HOLE1_DIMENS.height(), hitbox, touchedMoveRepo.getMoveById(TouchedMoveRepo.MOB_AWAY_MOVE), bitmapId);
         entityList.add(hole1);
+
+        Particule glassParticule = ParticuleHolder.getAvailableParticule(ParticuleRepo.GLASS_PARTICULE , Lvl2Constant.HOLE1_DIMENS.centerX(), Lvl2Constant.HOLE1_DIMENS.centerY(), Lvl2Constant.HOLE1_DIMENS.width(), Lvl2Constant.HOLE1_DIMENS.height(), false, new PointF[]{new PointF(0, 6)});
+        entityList.add(glassParticule);
 
         String mob1sptsheetId = "tier1Mob";
         SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet), mob1sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
@@ -395,7 +405,7 @@ public class EntityRepo {
         PointF[] path = PathRepo.generateLineToDest(new PointF(startPoint), new PointF(destPoint), 3 * Constants.FRAME_PER_SEC);
         String mobsptsheetId = "tpMob";
         SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet_purple), mobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
-        return new GameMob(id, startPoint.x, startPoint.y, GameConstant.DEFAULT_MOB_SIZE, GameConstant.DEFAULT_MOB_SIZE, path, moveRepo.getMoveById(SpecialMoveRepo. NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.TELEPORT), mobsptsheetId, health, 1);
+        return new GameMob(id, startPoint.x, startPoint.y, GameConstant.DEFAULT_MOB_SIZE, GameConstant.DEFAULT_MOB_SIZE, path, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.TELEPORT), mobsptsheetId, health, 1);
 
     }
 

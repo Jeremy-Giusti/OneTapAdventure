@@ -18,6 +18,7 @@ import fr.giusti.onetapadventure.repository.SpriteRepo;
  */
 public class ParticuleRepo {
 
+    public final static String GLASS_PARTICULE = "glassParticule";
     public final static String TP_PARTICULE = "TpParticle";
     public final static String SWAP_PARTICULE = "swapParticule";
     public final static String BLOOD_PARTICULE = "bloodParticule";
@@ -39,6 +40,7 @@ public class ParticuleRepo {
     public static void initCache(Context context) {
 
         if (mTemplateParticuleList.isEmpty()) {
+            mTemplateParticuleList.put(GLASS_PARTICULE, initParticule(context,R.drawable.broken_glass_particle, GLASS_PARTICULE));
             mTemplateParticuleList.put(TP_PARTICULE, initParticule(context,R.drawable.tp_particle, TP_PARTICULE));
             mTemplateParticuleList.put(SWAP_PARTICULE, initParticule(context,R.drawable.swap_particule, SWAP_PARTICULE));
             mTemplateParticuleList.put(BLOOD_PARTICULE, initParticule(context,R.drawable.blood_particule, BLOOD_PARTICULE));
