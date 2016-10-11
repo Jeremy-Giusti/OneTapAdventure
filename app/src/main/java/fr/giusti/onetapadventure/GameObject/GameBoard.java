@@ -87,10 +87,10 @@ public class GameBoard {
      */
     public GameBoard(EntitySpawnerManager entityManager, String backgroundBitmapId, int boardWidth, int boardHeight, Rect drawedBounds, RulesManager rulesManager, TouchDispenser touchDisp) {
         super();
+        onNewEntities(entityManager.getInitialList());//should be called first to prevent board event will game isn't running
         this.mEntityManager = entityManager;
         this.mTouchDisp = touchDisp;
         entityManager.setBoard(this);
-        onNewEntities(entityManager.getInitialList());
         this.mBackgroundBitmapId = backgroundBitmapId;
         mCameraBounds = drawedBounds;
         mBoardBounds = new Rect(0, 0, boardWidth, boardHeight);

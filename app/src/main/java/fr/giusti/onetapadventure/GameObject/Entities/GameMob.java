@@ -59,6 +59,11 @@ public class GameMob extends Entity {
     private int mHealth = 1;
 
     /**
+     * mob default life
+     */
+    private final int mDefaultHealth;
+
+    /**
      * stat<4 = normal,
      * 0=left, 1 haut, 2 bas, 3 droite
      * 4= touché, 5 mourant, 6 spe1, 7 spe2
@@ -86,6 +91,7 @@ public class GameMob extends Entity {
         this.mSpecialMove1 = specialMove1;
         this.mTouchedMove = touchedmove;
         this.mHealth = health;
+        this.mDefaultHealth = health;
         this.mState = eMobState.values()[state];
     }
 
@@ -95,6 +101,7 @@ public class GameMob extends Entity {
         this.mSpecialMove1 = specialMove1;
         this.mTouchedMove = touchedmove;
         this.mHealth = health;
+        this.mDefaultHealth = health;
         this.mState = state;
     }
 
@@ -338,22 +345,39 @@ public class GameMob extends Entity {
      * dessine le mob sur le canvas (utilise son skin + position x,y)
      *
      * @param canvas
-     * @param mBrush
+     * @param brush
      */
     @Override
-    public void draw(Canvas canvas, Paint mBrush, Rect cameraPosition) {
+    public void draw(Canvas canvas, Paint brush, Rect cameraPosition) {
         if (mBitmapId != null && Utils.doRectIntersect(cameraPosition, mPosition)) {
             RectF positionOnSceen = new RectF(mPosition);
             positionOnSceen.offset(-cameraPosition.left, -cameraPosition.top);
             if (mState != eMobState.DISAPPEARING) {
-                canvas.drawBitmap(SpriteRepo.getSpriteBitmap(mBitmapId, mSpriteCurrentColumn, mState.index), null, positionOnSceen, mBrush);
+                if (eMobState.HURT == mState) {
+                    drawLife(canvas, brush, positionOnSceen);
+                }
+                canvas.drawBitmap(SpriteRepo.getSpriteBitmap(mBitmapId, mSpriteCurrentColumn, mState.index), null, positionOnSceen, brush);
             } else {
-                mBrush.setAlpha((int)(255-((mAnimationState /(float) Constants.COMPLETE_ANIMATION_DURATION) * 255)));
-                canvas.drawBitmap(SpriteRepo.getSpriteBitmap(mBitmapId, mSpriteCurrentColumn, 3), null, positionOnSceen, mBrush);
-                mBrush.setAlpha(255);
+                brush.setAlpha((int) (255 - ((mAnimationState / (float) Constants.COMPLETE_ANIMATION_DURATION) * 255)));
+                canvas.drawBitmap(SpriteRepo.getSpriteBitmap(mBitmapId, mSpriteCurrentColumn, 3), null, positionOnSceen, brush);
+                brush.setAlpha(255);
             }
         }
 
+    }
+
+    private void drawLife(Canvas canvas, Paint brush, RectF positionOnSceen) {
+        brush.setStyle(Paint.Style.STROKE);
+        brush.setStrokeWidth(4);
+        RectF heathBarPos = new RectF(positionOnSceen);
+        //TODO use percentage of mob height for offset ?
+        heathBarPos.offset(0, 20);
+
+        brush.setARGB(255, 255, 0, 0);
+        canvas.drawArc(heathBarPos, 0, 180, false, brush);
+
+        brush.setARGB(255, 0, 255, 0);
+        canvas.drawArc(heathBarPos, 0, 180 * (mHealth / (float) mDefaultHealth), false, brush);
     }
 
     public static Paint GetPaint(Paint paint) {
@@ -383,8 +407,6 @@ public class GameMob extends Entity {
         mAnimationState = 0;
 
     }
-
-
 
 
     @Override
