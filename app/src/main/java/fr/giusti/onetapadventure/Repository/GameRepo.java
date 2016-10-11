@@ -6,14 +6,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 
 import fr.giusti.onetapadventure.R;
+import fr.giusti.onetapadventure.callback.OnGameEndListener;
 import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.interactions.TouchDispenser;
 import fr.giusti.onetapadventure.gameObject.rules.IRuleProgressListener;
-import fr.giusti.onetapadventure.callback.OnGameEndListener;
 import fr.giusti.onetapadventure.gameObject.rules.RulesManager;
-import fr.giusti.onetapadventure.repository.entities.EntitySpawnerRepo;
 import fr.giusti.onetapadventure.repository.entities.EntityRepo;
+import fr.giusti.onetapadventure.repository.entities.EntitySpawnerRepo;
 import fr.giusti.onetapadventure.repository.entities.ParticuleRepo;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl2Constant;
@@ -83,7 +83,10 @@ public class GameRepo {
 
         RulesManager rulesManager = RuleRepo.getLvl_1x1_Rules(gameListener);
 
-        TouchDispenser touchDisp = new TouchDispenser(Constants.TOUCH_STROKE, null, Constants.TOUCH_DAMAGE);
+        String touchSpriteID = "touchSprite";
+        Bitmap touchSprite = BitmapFactory.decodeResource(context.getResources(), R.drawable.touch1);
+        SpriteRepo.addSpriteSheet(touchSprite, touchSpriteID, Constants.PARTICULE_NB_FRAME_ON_ANIMATION, 1);
+        TouchDispenser touchDisp = new TouchDispenser(Constants.TOUCH_STROKE*2, touchSpriteID, Constants.TOUCH_DAMAGE);
 
         GameBoard board = new GameBoard(EntitySpawnerRepo.getLvl1_1SpawnerManager(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight), rulesManager, touchDisp);
         board.resize(mScreenWidth, mScreenHeight);

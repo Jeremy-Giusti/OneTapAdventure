@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import fr.giusti.onetapadventure.gameObject.entities.Particule;
@@ -28,9 +29,11 @@ public class ParticuleRepo {
     public final static String NUMBER2_PARTICULE = "number2Particule";
     public final static String NUMBER3_PARTICULE = "number3Particule";
 
+    public final static String GROUPE_SPARK_PARTICULE = "groupspark";
 
-    //Must be created with the board
+
     private static HashMap<String, Particule> mTemplateParticuleList = new HashMap<String, Particule>();
+//    private static HashMap<String, ArrayList<Particule>> mTemplateGroupedParticuleList = new HashMap<String, ArrayList<Particule>>();
 
     /**
      * populate the cache with the default particules
@@ -50,6 +53,19 @@ public class ParticuleRepo {
             mTemplateParticuleList.put(NUMBER2_PARTICULE, initParticule(context,R.drawable.particule_2, NUMBER2_PARTICULE));
             mTemplateParticuleList.put(NUMBER3_PARTICULE, initParticule(context,R.drawable.particule_3, NUMBER3_PARTICULE));
         }
+//        if(mTemplateGroupedParticuleList.isEmpty()){
+//            ArrayList<Particule> sparkGroup = new ArrayList<>();
+//            Particule spark0 = initParticule(context,R.drawable.spark_particule, "spark0");
+//            sparkGroup.add(spark0);
+//            sparkGroup.add(spark0.clone());
+//            Particule spark1 = initParticule(context,R.drawable.spark_particule1, "spark1");
+//            sparkGroup.add(spark1);
+//            sparkGroup.add(spark1.clone());
+//            sparkGroup.add(initParticule(context,R.drawable.spark_particule2, "spark2"));
+//            sparkGroup.add(initParticule(context,R.drawable.spark_particule3, "spark3"));
+//            sparkGroup.add(initParticule(context,R.drawable.spark_particule4, "spark4"));
+//            mTemplateGroupedParticuleList.put(GROUPE_SPARK_PARTICULE,sparkGroup);
+//        }
     }
 
     /**
@@ -75,4 +91,7 @@ public class ParticuleRepo {
         return mTemplateParticuleList.get(id);
     }
 
+//    public static ArrayList<Particule> getGroupedParticule(String id) {
+//        return mTemplateGroupedParticuleList.get(id);
+//    }
 }

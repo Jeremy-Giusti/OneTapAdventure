@@ -12,6 +12,8 @@ import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.commons.Utils;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
+import fr.giusti.onetapadventure.repository.SpriteRepo;
+import fr.giusti.onetapadventure.repository.entities.ParticuleRepo;
 
 public class TouchPoint {
 
@@ -20,7 +22,7 @@ public class TouchPoint {
     private final static int LENGTH_ANIMATION_FRAME = Constants.FRAME_DURATION;
     private boolean actionDone = false;
     private String spriteId = null;
-    private int stroke =Constants.TOUCH_STROKE;
+    private int stroke = Constants.TOUCH_STROKE;
     private int damage = Constants.TOUCH_DAMAGE;
 
 
@@ -54,10 +56,14 @@ public class TouchPoint {
             List<GameMob> mobList = board.getMobs();
             for (GameMob mob : mobList) {
                 if (Utils.doRectIntersect(mPosition, mob.mPosition) && mob.isActive()) {
-                    mob.manageTouchEvent(board,damage);
+                    mob.manageTouchEvent(board, damage);
                 }
             }
         }
+        if(state<1){
+            board.addParticules(ParticuleRepo.getGroupedParticule());
+        }
+
         state++;
     }
 
@@ -77,14 +83,15 @@ public class TouchPoint {
                     canvas.drawRect(positionOnSceen, brush);
                     // canvas.drawCircle(mPosition.centerX(), mPosition.centerY(), Constants.TOUCH_STROKE * 2 / 4, brush);
                 }
-            }else{
-                //TODO Draw sprite
+            } else if (!isEnded()) {
+                int currentFrame = state / LENGTH_ANIMATION_FRAME;
+                canvas.drawBitmap(SpriteRepo.getSpriteBitmap(spriteId, currentFrame, 0), null, positionOnSceen, brush);
             }
         }
     }
 
     public boolean isEnded() {
-        return state >= (LENGTH_ANIMATION_FRAME * Constants.NB_FRAME_ON_ANIMATION);
+        return state >= (LENGTH_ANIMATION_FRAME * Constants.PARTICULE_NB_FRAME_ON_ANIMATION);
     }
 
     public static Paint GetPaint(Paint paint) {

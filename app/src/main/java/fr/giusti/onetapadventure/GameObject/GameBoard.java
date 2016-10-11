@@ -126,6 +126,10 @@ public class GameBoard {
         this.mParticules.add(particule);
     }
 
+    public void addParticules(ArrayList<Particule> particules) {
+        this.mParticules.addAll(particules);
+    }
+
     public Particule getParticule(int particuleIndex) {
         return mParticules.get(particuleIndex);
     }
@@ -444,5 +448,6 @@ public class GameBoard {
         }
 
     }
+
 
 }
