@@ -1,63 +1,102 @@
-package fr.giusti.onetapadventure.GameObject;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+package fr.giusti.onetapadventure.gameObject;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import fr.giusti.onetapadventure.callback.OnAllMobDeadListener;
-import fr.giusti.onetapadventure.callback.OnMobDeathListener;
-import fr.giusti.onetapadventure.callback.OnScrollingEndListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import fr.giusti.onetapadventure.callback.OnBoardEventListener;
 import fr.giusti.onetapadventure.commons.Constants;
-import fr.giusti.onetapadventure.Repository.SpriteRepo;
+import fr.giusti.onetapadventure.gameObject.entities.Entity;
+import fr.giusti.onetapadventure.gameObject.entities.GameMob;
+import fr.giusti.onetapadventure.gameObject.entities.Particule;
+import fr.giusti.onetapadventure.gameObject.entities.Scenery;
+import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.EntitySpawnerManager;
+import fr.giusti.onetapadventure.gameObject.interactions.TouchDispenser;
+import fr.giusti.onetapadventure.gameObject.interactions.TouchPoint;
+import fr.giusti.onetapadventure.gameObject.rules.RulesManager;
+import fr.giusti.onetapadventure.gameObject.rules.eConditions;
+import fr.giusti.onetapadventure.repository.SpriteRepo;
 
 /**
  * represente la carte du jeu avec une taille limite, des mobs
  * gere les evenement lié au jeu (update on tick/on touch/...)
  */
 public class GameBoard {
+    public static final int TIME_PROGRESS_FREQUENCY = 500;// 0.5sec
+    private int timeProgress = 0;
+    private Boolean timeProgressed = false;
+    private Handler timerHandler = new Handler();
+    private Runnable timerRunable;
+
+    private TouchDispenser mTouchDisp;
+    private EntitySpawnerManager mEntityManager;
+    private RulesManager mRulesManager;
+
     private CopyOnWriteArrayList<GameMob> mMobs = new CopyOnWriteArrayList<GameMob>();
     private CopyOnWriteArrayList<Particule> mParticules = new CopyOnWriteArrayList<Particule>();
+    private CopyOnWriteArrayList<Scenery> mSceneries = new CopyOnWriteArrayList<Scenery>();
     private CopyOnWriteArrayList<TouchPoint> mTouchPoints = new CopyOnWriteArrayList<TouchPoint>();
-    /**
-     * la partie de l'image qui va etre dessinée en fond)
-     */
-    private Rect mDrawedBackgroundPortionBounds;
+
+
     /**
      * les limite du board
      */
     public Rect mBoardBounds;
+    public Rect mCameraBounds;
+    //   public Rect mCameraPosOnScreen;// a quoi ça sere ?
 
     private String mBackgroundBitmapId;
-    private int mBackgroundBitmapWidth;
-    private int mBackgroundBitmapHeight;
 
-    private OnMobDeathListener mMobDeathListener = null;
-    private OnAllMobDeadListener mAllMobDeadListener = null;
-    private OnScrollingEndListener mScrollingEndListener = null;
+    @Deprecated
+    private OnBoardEventListener mEventListener = null;
+    /**
+     * empty border around camera (left and right)
+     */
+    private int borderHorz;
+    /**
+     * empty border around camera (above and under)
+     */
+    private int borderVert;
+    private boolean started = false;
 
 
     /**
      * @param mobs               les entité mobile qui seront presente sur la carte
      * @param backgroundBitmapId l'image de fond
      */
-    public GameBoard(CopyOnWriteArrayList<GameMob> mobs, String backgroundBitmapId, int boardWidth, int boardHeight) {
+    public GameBoard(ArrayList<GameMob> mobs, String backgroundBitmapId, int boardWidth, int boardHeight, Rect drawedBounds) {
         super();
-        this.mMobs = mobs;
+        this.mMobs = new CopyOnWriteArrayList<>(mobs);
         this.mBackgroundBitmapId = backgroundBitmapId;
-        Point backgroundDimens = new SpriteRepo().getDimensionSpriteSheet(backgroundBitmapId);
-        mBackgroundBitmapWidth = backgroundDimens.x;
-        mBackgroundBitmapHeight = backgroundDimens.y;
-        mDrawedBackgroundPortionBounds = new Rect(0, 0, boardWidth, boardHeight);
+        mCameraBounds = drawedBounds;
         mBoardBounds = new Rect(0, 0, boardWidth, boardHeight);
     }
+
+
+    /**
+     * @param backgroundBitmapId l'image de fond
+     */
+    public GameBoard(EntitySpawnerManager entityManager, String backgroundBitmapId, int boardWidth, int boardHeight, Rect drawedBounds, RulesManager rulesManager, TouchDispenser touchDisp) {
+        super();
+        onNewEntities(entityManager.getInitialList());//should be called first to prevent board event will game isn't running
+        this.mEntityManager = entityManager;
+        this.mTouchDisp = touchDisp;
+        entityManager.setBoard(this);
+        this.mBackgroundBitmapId = backgroundBitmapId;
+        mCameraBounds = drawedBounds;
+        mBoardBounds = new Rect(0, 0, boardWidth, boardHeight);
+        this.mRulesManager = rulesManager;
+    }
+
 
     /**
      * @return la liste de mob de ce plateau
@@ -66,10 +105,11 @@ public class GameBoard {
         return mMobs;
     }
 
-    public void setMobs(CopyOnWriteArrayList<GameMob> mobs) {
-        this.mMobs = mobs;
+    public void setMobs(ArrayList<GameMob> mobs) {
+        this.mMobs = new CopyOnWriteArrayList<>(mobs);
     }
 
+    @Deprecated
     public void addMob(GameMob mob) {
         this.mMobs.add(mob);
     }
@@ -94,6 +134,11 @@ public class GameBoard {
         this.mParticules = mParticules;
     }
 
+    public void addTouchEvent(TouchPoint touchPoint) {
+        this.mTouchPoints.add(touchPoint);
+    }
+
+
     public String getBackgroundBitmapId() {
         return mBackgroundBitmapId;
     }
@@ -102,68 +147,83 @@ public class GameBoard {
         this.mBackgroundBitmapId = backgroundBitmapId;
     }
 
-    /**
-     * @param mMobDeathListener called when a mob die
-     */
-    public void setMobDeathListener(OnMobDeathListener mMobDeathListener) {
-        this.mMobDeathListener = mMobDeathListener;
+    public int getHeight() {
+        return this.mBoardBounds.height();
+    }
+
+    public int getWidth() {
+        return this.mBoardBounds.width();
+    }
+
+    public Rect getmCameraBounds() {
+        return mCameraBounds;
+    }
+
+    public void setmCameraBounds(Rect mCameraBounds) {
+        this.mCameraBounds = mCameraBounds;
     }
 
     /**
-     * @param mAllMobDeadListener called when all mob are dead
+     * @param eventListener called when a mob die
      */
-    public void setAllMobDeadListener(OnAllMobDeadListener mAllMobDeadListener) {
-        this.mAllMobDeadListener = mAllMobDeadListener;
+    @Deprecated
+    public void setBoardEventListener(OnBoardEventListener eventListener) {
+        this.mEventListener = eventListener;
     }
 
-    /**
-     * @param mScrollingEndListener called when the scroll reach the background end
-     */
-    public void setScrollingEndListener(OnScrollingEndListener mScrollingEndListener) {
-        this.mScrollingEndListener = mScrollingEndListener;
+    public RulesManager getRulesManager() {
+        return mRulesManager;
+    }
+
+    public void setRulesManager(RulesManager mRulesManager) {
+        this.mRulesManager = mRulesManager;
     }
 
     /**
      * met a jour la carte après un tick
      */
     public void update() {
-        for (GameMob mob : Collections.synchronizedList(mMobs)) {
-            if (mob.isDead()) {
-                if (mMobs.size() < 2 && mAllMobDeadListener != null) {
-                    mAllMobDeadListener.OnAllMobDead(mob.clone());
-                } else if (mMobDeathListener != null) {
-                    mMobDeathListener.OnMobDeath(mob.clone());
-                }
-                mMobs.remove(mob);
-            } else {
-                mob.update(this);
+        if (!started && getRulesManager() != null) {
+            mRulesManager.firstUpdate();
+            mEntityManager.firstUpdate();
+            startTimer();
+            started = true;
+        }
+
+        synchronized (timeProgressed) {
+            if (timeProgressed) {
+                mRulesManager.onTimeProgress(timeProgress);
+                mEntityManager.onTimeProgress(timeProgress);
+                timeProgressed = false;
             }
+        }
+
+        for (GameMob mob : Collections.synchronizedList(mMobs)) {
+            mob.update(this);
         }
         for (Particule particule : Collections.synchronizedList(mParticules)) {
             if (particule.getmAnimationState() < 0) {
                 mParticules.remove(particule);
+                particule.recycle();
             } else {
-                particule.update();
+                particule.update(this);
             }
         }
+
 
         for (TouchPoint touch : mTouchPoints) {
             if (touch.isEnded()) {
                 mTouchPoints.remove(touch);
             } else {
-                touch.update();
+                touch.update(this);
             }
+        }
+
+        for (Scenery scenery : mSceneries) {
+            scenery.update(this);
 
         }
 
-        // TODO gerer les depassement dans les deux sens (sortie de la map par la gauche ou par le haut +callback avec limit touché (enum ?)
-        if (mDrawedBackgroundPortionBounds.left > mBackgroundBitmapWidth)
-            this.mDrawedBackgroundPortionBounds.offsetTo(0, mDrawedBackgroundPortionBounds.top);
-        if (mDrawedBackgroundPortionBounds.top > mBackgroundBitmapHeight)
-            this.mDrawedBackgroundPortionBounds.offsetTo(mDrawedBackgroundPortionBounds.left, 0);
-
-        // TODO creer une vitesse de deplacement x et y
-        this.mDrawedBackgroundPortionBounds.offset(1, 0);
     }
 
     /**
@@ -172,12 +232,10 @@ public class GameBoard {
     public void touchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                Point eventPoint = new Point((int) event.getX(), (int) event.getY());
-                for (GameMob mob : mMobs) {
-                    // TODO gerer l'envergure du touché (constants)
-                    mob.manageTouchEvent(eventPoint, Constants.TOUCH_STROKE, this);
-                }
-                mTouchPoints.add(new TouchPoint((int) event.getX(), (int) event.getY()));
+                if (mTouchDisp == null)
+                    mTouchPoints.add(new TouchPoint(event.getX(), event.getY(), Constants.TOUCH_STROKE));
+                else
+                    mTouchPoints.add(mTouchDisp.generateTouchPoint(event.getX(), event.getY()));
                 break;
             case MotionEvent.ACTION_MOVE:
                 // todo
@@ -192,6 +250,84 @@ public class GameBoard {
         }
     }
 
+    public void onMobDeath(GameMob mob) {
+
+        if (mRulesManager != null) {
+            mRulesManager.onMobCountChange(mMobs.size() - 1, eConditions.MOB_DEATH, mob);
+        }
+        if (mEntityManager != null) {
+            mEntityManager.onMobCountChange(mMobs.size() - 1, eConditions.MOB_DEATH, mob);
+        }
+
+        mMobs.remove(mob);
+    }
+
+    public void onMobAway(GameMob mob) {
+        if (mRulesManager != null) {
+            mRulesManager.onMobCountChange(mMobs.size() - 1, eConditions.MOB_AWAY, mob);
+        }
+        if (mEntityManager != null) {
+            mEntityManager.onMobCountChange(mMobs.size() - 1, eConditions.MOB_AWAY, mob);
+        }
+        mMobs.remove(mob);
+    }
+
+    public void onNewMob(GameMob mob) {
+        mMobs.add(mob);
+
+        if (mRulesManager != null) {
+            mRulesManager.onMobCountChange(mMobs.size(), eConditions.NEW_MOB, mob);
+        }
+        if (mEntityManager != null) {
+            mEntityManager.onMobCountChange(mMobs.size(), eConditions.NEW_MOB, mob);
+        }
+    }
+
+    public void onNewMobs(List<GameMob> mobList) {
+        int i = 1;
+        for (GameMob mob : mobList) {
+            if (mRulesManager != null) {
+                mRulesManager.onMobCountChange(mMobs.size() + i, eConditions.NEW_MOB, mob);
+            }
+            if (mEntityManager != null) {
+                mEntityManager.onMobCountChange(mMobs.size() + i, eConditions.NEW_MOB, mob);
+            }
+        }
+        i++;
+
+        mMobs.addAll(mobList);
+    }
+
+    public void onNewEntities(ArrayList<Entity> entities) {
+        if (entities == null) return;
+        for (Entity entity : entities) {
+            if (entity instanceof GameMob) {
+                onNewMob((GameMob) entity);
+            } else if (entity instanceof Particule) {
+                mParticules.add((Particule) entity);
+            } else if (entity instanceof Scenery) {
+                mSceneries.add((Scenery) entity);
+            }
+        }
+    }
+
+    public void onScore(int score) {
+        if (mRulesManager != null) {
+            if (score < 0) {
+                mRulesManager.onScoreMinus(-score);
+            } else {
+                mRulesManager.onScorePlus(score);
+            }
+        }
+        if (mEntityManager != null) {
+            if (score < 0) {
+                mEntityManager.onScoreMinus(-score);
+            } else {
+                mEntityManager.onScorePlus(score);
+            }
+        }
+    }
+
     /**
      * dessine la map puis les mob
      *
@@ -200,53 +336,113 @@ public class GameBoard {
      */
     public void draw(Canvas canvas, Paint mBrush) {
 
-        Bitmap backgroundBitmap = SpriteRepo.getBitmap(mBackgroundBitmapId);
+        Bitmap backgroundBitmap = SpriteRepo.getPicture(mBackgroundBitmapId);
 
-        int diffX = mDrawedBackgroundPortionBounds.right - backgroundBitmap.getWidth();
-        int diffY = mDrawedBackgroundPortionBounds.bottom - backgroundBitmap.getHeight();
 
-        if (diffX > 0) {
-            // partie gauche de l'ecran
-            Rect boardHalf = new Rect(mBoardBounds.left, mBoardBounds.top, mBoardBounds.right - diffX, mBoardBounds.bottom);
-            // partie droite de l'image ("fin" de l'image")
-            Rect backgroundHalf = new Rect(backgroundBitmap.getWidth() - boardHalf.width(), mDrawedBackgroundPortionBounds.top, backgroundBitmap.getWidth(), mDrawedBackgroundPortionBounds.bottom);
-            canvas.drawBitmap(backgroundBitmap, backgroundHalf, boardHalf, mBrush);
+        canvas.drawBitmap(backgroundBitmap, mCameraBounds, mCameraBounds, mBrush);
 
-            // partie droite de l'ecran
-            boardHalf = new Rect(boardHalf.right, mBoardBounds.top, mBoardBounds.right, mBoardBounds.bottom);
-            // partie gauche de l'image (debut)
-            backgroundHalf = new Rect(0, mDrawedBackgroundPortionBounds.top, diffX, mDrawedBackgroundPortionBounds.bottom);
-
-            canvas.drawBitmap(backgroundBitmap, backgroundHalf, boardHalf, mBrush);
-
-        } else if (diffY > 0) {
-            // TODO scrolling vertical
-        } else {
-            canvas.drawBitmap(backgroundBitmap, mDrawedBackgroundPortionBounds, mBoardBounds, mBrush);
-
-        }
         Log.d("GAMEBOARD", "Number of mob to draw : " + mMobs.size());
-        mBrush = GameMob.GetPaint(mBrush);
+        //mBrush = GameMob.GetPaint(mBrush);
+        for (Scenery scenery : mSceneries) {
+            scenery.draw(canvas, mBrush, mCameraBounds);
+            //   canvas.drawRect(scenery.hitbox,mBrush);
+        }
+
         for (GameMob mob : mMobs) {
-            mob.draw(canvas, mBrush);
+            mob.draw(canvas, mBrush, mCameraBounds);
         }
         for (Particule particule : mParticules) {
-            particule.draw(canvas, mBrush);
+            particule.draw(canvas, mBrush, mCameraBounds);
         }
+
         mBrush = TouchPoint.GetPaint(mBrush);
         for (TouchPoint touch : mTouchPoints) {
-            touch.draw(canvas, mBrush);
+            touch.draw(canvas, mBrush, mCameraBounds);
         }
-        // restore default brush ?
+
         mBrush.setAlpha(255);
     }
 
-    public int getHeight() {
-        return this.mBoardBounds.height();
+    private void startTimer() {
+        timerRunable = new Runnable() {
+            @Override
+            public void run() {
+                synchronized (timeProgressed) {
+                    timeProgress += TIME_PROGRESS_FREQUENCY;
+                    timeProgressed = true;
+                }
+                timerHandler.postDelayed(this, TIME_PROGRESS_FREQUENCY);
+            }
+        };
+        timerHandler.postDelayed(timerRunable, TIME_PROGRESS_FREQUENCY);
     }
 
-    public int getWidth() {
-        return this.mBoardBounds.width();
+    private void stopTimer() {
+        timerHandler.removeCallbacks(timerRunable);
+    }
+
+
+    /**
+     * first calculate how to adapt the camera bound to the screen size (border are the empty border that will result)<br>
+     * then calculate a ratio wich correspond to a scalling of everything to have a correct size on screen
+     *
+     * @param screenWidth
+     * @param screenHeight
+     */
+    public void resize(int screenWidth, int screenHeight) {
+        float screanHWRatio = screenHeight / (float) screenWidth;
+        float camHWRatio = mCameraBounds.height() / (float) mCameraBounds.width();
+
+        float ratio = 0;
+        borderHorz = 0;
+        borderVert = 0;
+        int cameraWidth = 0;
+        int cameraHeight = 0;
+
+
+        /**
+         * updating camera scale and borders depending on screen dimens
+         */
+        if (screanHWRatio < camHWRatio) {
+            //screen more wide than hight compared to camera so we change camera height to match screen and add border on left and right
+            ratio = screenHeight / (float) mCameraBounds.height();
+            cameraWidth = (int) (mCameraBounds.width() * ratio);
+            cameraHeight = (int) (mCameraBounds.height() * ratio);
+            borderHorz = (screenWidth - cameraWidth) / 2;
+        } else {
+            //screen more hight than wide compared to camera so we change camera width to match screen and add border on top and bottom
+            ratio = screenWidth / (float) mCameraBounds.width();
+            cameraWidth = (int) (mCameraBounds.width() * ratio);
+            cameraHeight = (int) (mCameraBounds.height() * ratio);
+            borderVert = (screenHeight - cameraHeight) / 2;
+        }
+
+        mCameraBounds.set(mCameraBounds.left, mCameraBounds.top, mCameraBounds.left + cameraWidth, mCameraBounds.top + cameraHeight);
+
+        /**
+         * redimensionning the board
+         */
+        int boardWidth = (int) (mBoardBounds.width() * ratio);
+        int boardHeight = (int) (mBoardBounds.height() * ratio);
+        mBoardBounds.set(mBoardBounds.left, mBoardBounds.top, mBoardBounds.left + boardWidth, mBoardBounds.top + boardHeight);
+        SpriteRepo.resizePicture(mBackgroundBitmapId, ratio);
+
+        for (GameMob mob : mMobs) {
+            mob.resize(ratio);
+        }
+
+        for (Scenery scen : mSceneries) {
+            scen.resize(ratio);
+        }
+
+        for (Particule part : mParticules) {
+            part.resize(ratio);
+        }
+
+        if (mEntityManager != null) {
+            mEntityManager.resize(ratio);
+        }
+
     }
 
 }

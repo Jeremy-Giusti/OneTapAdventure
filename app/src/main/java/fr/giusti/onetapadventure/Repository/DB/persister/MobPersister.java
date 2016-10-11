@@ -1,4 +1,4 @@
-package fr.giusti.onetapadventure.Repository.DB.persister;
+package fr.giusti.onetapadventure.repository.DB.persister;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,7 +10,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.giusti.onetapadventure.Repository.DB.model.MobDB;
+import fr.giusti.onetapadventure.repository.DB.model.MobDB;
 
 /**
  * Created by giusti on 17/03/2015.

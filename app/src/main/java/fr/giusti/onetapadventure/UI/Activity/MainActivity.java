@@ -1,34 +1,26 @@
 package fr.giusti.onetapadventure.UI.Activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
-
-import java.io.IOException;
 
 import fr.giusti.onetapadventure.R;
-import fr.giusti.onetapadventure.Repository.MobRepo;
-import fr.giusti.onetapadventure.Repository.SpriteRepo;
-import fr.giusti.onetapadventure.commons.Constants;
+import fr.giusti.onetapadventure.commons.GameConstant;
+import fr.giusti.onetapadventure.repository.GameRepo;
+import fr.giusti.onetapadventure.repository.SpriteRepo;
 
 /**
  * ecran menu
  *
  * @author giusti
  */
-public class MainActivity extends Activity {
-    //TODO meriterai d'etre "skinné"
+public class MainActivity extends PermissionAskerActivity {
     private final static String TAG = MainActivity.class.getName();
 
-    private Button mTestAreaButton;
-    private Button mMobCreationScreenButton;
-    private Button mLoadAllButton;
-    private Button mFlushAllButton;
+    private Button mGameAreaButton, mTestAreaButton, mMobCreationScreenButton, mLoadAllButton, mFlushAllButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +32,9 @@ public class MainActivity extends Activity {
     }
 
     private void initViews() {
-        this.mTestAreaButton = (Button) findViewById(R.id.ma_game_screen_button);
+        this.mTestAreaButton = (Button) findViewById(R.id.ma_test_screen_button);
+        this.mGameAreaButton = (Button) findViewById(R.id.ma_game_screen_button);
         this.mMobCreationScreenButton = (Button) findViewById(R.id.ma_create_mob_button);
-        this.mLoadAllButton = (Button) findViewById(R.id.ma_Load_all_button);
         this.mFlushAllButton = (Button) findViewById(R.id.ma_flush_all_button);
 
     }
@@ -52,8 +44,21 @@ public class MainActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-
+                Log.d(TAG, "test area clicked");
                 Intent myIntent = new Intent(MainActivity.this, GameActivity.class);
+                myIntent.putExtra(GameConstant.LEVEL_NAME, GameRepo.LVL_TEST);
+                MainActivity.this.startActivity(myIntent);
+
+            }
+        });
+
+        this.mGameAreaButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "game area clicked");
+                Intent myIntent = new Intent(MainActivity.this, LvlSelectionActivity.class);
+                //myIntent.putExtra(GameConstant.LEVEL_NAME, GameRepo.LVL_1);
                 MainActivity.this.startActivity(myIntent);
 
             }
@@ -69,27 +74,10 @@ public class MainActivity extends Activity {
             }
         });
 
-        mLoadAllButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO charger tout les mob dans le cache static
-                int mobsLoaded = 0;
-                try {
-                    mobsLoaded = new MobRepo(1, Constants.DEFAULT_GAME_WIDTH, Constants.DEFAULT_GAME_HEIGHT).LoadMobsFromDb(MainActivity.this);
-                    Toast.makeText(MainActivity.this, "" + mobsLoaded + " Mobs loaded", Toast.LENGTH_SHORT).show();
-
-                } catch (IOException e) {
-                    Log.e(TAG, "error while charging Db Mobs to cache" + e);
-                    Toast.makeText(MainActivity.this, "erreur au chargement des mobs",Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
         mFlushAllButton.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                MobRepo.fluchScaledMobCache();
                 SpriteRepo.flushCache();
             }
         });

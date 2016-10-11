@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="fr.giusti.onetapadventure" >
+    package="fr.giusti.onetapadventure">
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name" >
+        android:label="@string/app_name">
         <activity
             android:name="fr.giusti.onetapadventure.UI.Activity.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,17 +17,22 @@
         </activity>
         <activity
             android:name="fr.giusti.onetapadventure.UI.Activity.GameActivity"
-            android:label="@string/app_name" >
-        </activity>
+            android:label="@string/app_name"
+            android:screenOrientation="landscape"></activity>
+        <activity
+            android:name="fr.giusti.onetapadventure.UI.Activity.LvlSelectionActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape"></activity>
         <activity
             android:name="fr.giusti.onetapadventure.UI.Activity.MobCreationActivity"
-            android:label="@string/Mob_creation" >
-        </activity>
+            android:configChanges="orientation|screenSize"
+            android:label="@string/Mob_creation"
+            android:launchMode="singleInstance"
+            android:screenOrientation="landscape"></activity>
     </application>
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-
 
 
 </manifest>

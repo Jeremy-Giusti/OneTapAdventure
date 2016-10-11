@@ -2,21 +2,27 @@ package fr.giusti.onetapadventure.UI.Activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import fr.giusti.onetapadventure.GameObject.GameBoard;
-import fr.giusti.onetapadventure.GameObject.GameMob;
 import fr.giusti.onetapadventure.R;
-import fr.giusti.onetapadventure.Repository.GameRepo;
-import fr.giusti.onetapadventure.Repository.MobRepo;
 import fr.giusti.onetapadventure.UI.CustomView.DrawingView;
-import fr.giusti.onetapadventure.callback.OnAllMobDeadListener;
-import fr.giusti.onetapadventure.callback.OnMobDeathListener;
-import fr.giusti.onetapadventure.callback.OnScrollingEndListener;
-import fr.giusti.onetapadventure.commons.Constants;
+import fr.giusti.onetapadventure.callback.OnBoardEventListener;
+import fr.giusti.onetapadventure.commons.GameConstant;
+import fr.giusti.onetapadventure.gameObject.GameBoard;
+import fr.giusti.onetapadventure.gameObject.entities.GameMob;
+import fr.giusti.onetapadventure.gameObject.rules.IRuleProgressListener;
+import fr.giusti.onetapadventure.callback.OnGameEndListener;
+import fr.giusti.onetapadventure.gameObject.rules.eConditionType;
+import fr.giusti.onetapadventure.gameObject.rules.eConditions;
+import fr.giusti.onetapadventure.repository.GameRepo;
+import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 
 /**
  * classe qui contient tout une "partie"
@@ -25,18 +31,33 @@ import fr.giusti.onetapadventure.commons.Constants;
  *
  * @author giusti
  */
-public class GameActivity extends Activity implements OnAllMobDeadListener, OnMobDeathListener, OnScrollingEndListener {
+public class GameActivity extends Activity implements OnGameEndListener, IRuleProgressListener {
+    private static final String TAG = GameActivity.class.getSimpleName();
     private DrawingView mDrawingSurface;
     private Button mPauseButton;
     private Button mRestartButton;
+    private TextView mRule1;
+    private TextView mRule2;
     private boolean running = false;
     private boolean paused = false;
     private GameRepo mRepo;
+    private String currentLvl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "GameActivity created");
         setContentView(R.layout.activity_game);
+
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
+
+        currentLvl = getIntent().getStringExtra(GameConstant.LEVEL_NAME);
         initViews();
         initEvents();
     }
@@ -45,6 +66,8 @@ public class GameActivity extends Activity implements OnAllMobDeadListener, OnMo
         mDrawingSurface = (DrawingView) findViewById(R.id.GameBoard);
         mPauseButton = (Button) findViewById(R.id.ag_b_Stop);
         mRestartButton = (Button) findViewById(R.id.ag_b_restart);
+        mRule1 = (TextView) findViewById(R.id.ag_defeat_rule_tv);
+        mRule2 = (TextView) findViewById(R.id.ag_end_rule_tv);
     }
 
     private void initEvents() {
@@ -57,12 +80,17 @@ public class GameActivity extends Activity implements OnAllMobDeadListener, OnMo
     public void onWindowFocusChanged(boolean hasFocus) {
         if (hasFocus) {
             if (!running) {
-                if(mRepo==null){
-                    MobRepo.fluchScaledMobCache();
-                    mRepo= new GameRepo(Constants.DEFAULT_GAME_HEIGHT, mDrawingSurface.getWidth(), mDrawingSurface.getHeight());
+                if (mRepo == null) {
+                    mRepo = new GameRepo(mDrawingSurface.getWidth(), mDrawingSurface.getHeight());
                 }
-
+                Log.d(TAG, "starting board init");
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
                 startNewGame();
+//
+//                    }
+//                },1000);
                 running = true;
             }
         }
@@ -107,7 +135,6 @@ public class GameActivity extends Activity implements OnAllMobDeadListener, OnMo
 
         @Override
         public void onClick(View v) {
-            // TODO test
             try {
                 mDrawingSurface.stopGame();
             } catch (InterruptedException e) {
@@ -123,50 +150,54 @@ public class GameActivity extends Activity implements OnAllMobDeadListener, OnMo
      */
     private void startNewGame() {
         try {
-            GameBoard board=mRepo.generateSampleBoard(this);
+            //GameBoard board=mRepo.generateSampleBoard(this);
+            //board.setBoardEventListener(this);
 
-            board.setAllMobDeadListener(this);
-            board.setMobDeathListener(this);
-            //  board.setScrollingEndListener(this);
+//           GameBoard board = mRepo.generateLvl_1x1(this, this);
+//            board.getRulesManager().setRuleListener(Lvl1Constant.ESCAPING_MOB_RULE, this);
+//            board.getRulesManager().setRuleListener(Lvl1Constant.LEVEL_END_RULE, this);
+
+            GameBoard board = mRepo.getBoardByLvlId(this, currentLvl, this, this);
+
+            if (board == null) {
+                Toast.makeText(this, R.string.error_level_generation, Toast.LENGTH_SHORT).show();
+                this.finish();
+            }
+
+            Log.d(TAG, "Board created");
 
             mDrawingSurface.startGame(board);
         } catch (CloneNotSupportedException e) {
-            Toast.makeText(this, "error clonning sample mob list",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "error clonning sample mob list", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }
 
     @Override
-    public void OnScrollingEnd() {
-
-        this.runOnUiThread(new Runnable() {
+    public void onGameEnd(final eConditionType gameResult, String gameId, final int score) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
             public void run() {
-                Toast.makeText(GameActivity.this, "scolling end", Toast.LENGTH_SHORT).show();
+                Toast.makeText(GameActivity.this, "end of game, result: " + gameResult + "\n Score: " + score, Toast.LENGTH_LONG).show();
             }
         });
-
     }
 
+
+    String firstRuleid = null;
     @Override
-    public void OnMobDeath(final GameMob deadMob) {
-        this.runOnUiThread(new Runnable() {
+    public void onRuleProgress(final String ruleId, final String displayableProgress) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
             public void run() {
-                Toast.makeText(GameActivity.this, "mob dead at "+deadMob.mPosition.centerX()+":"+deadMob.mPosition.centerY(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-    }
-
-    @Override
-    public void OnAllMobDead(final GameMob lastMobKilled) {
-        this.runOnUiThread(new Runnable() {
-            public void run() {
-                Toast.makeText(GameActivity.this, "Last mob killed at "+lastMobKilled.mPosition.centerX()+":"+lastMobKilled.mPosition.centerY(), Toast.LENGTH_SHORT).show();
+                if(firstRuleid==null) firstRuleid=ruleId;
+                if (firstRuleid.equals(ruleId)) {
+                    mRule1.setText(displayableProgress);
+                } else {
+                    mRule2.setText(displayableProgress);
+                }
             }
         });
 
     }
-
-
 }

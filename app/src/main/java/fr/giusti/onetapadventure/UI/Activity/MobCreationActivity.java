@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -25,16 +26,17 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import fr.giusti.onetapadventure.GameObject.moves.SpecialMove;
-import fr.giusti.onetapadventure.GameObject.moves.TouchedMove;
+import fr.giusti.onetapadventure.gameObject.moves.SpecialMove;
+import fr.giusti.onetapadventure.gameObject.moves.TouchedMove;
 import fr.giusti.onetapadventure.R;
-import fr.giusti.onetapadventure.GameObject.GameMob;
-import fr.giusti.onetapadventure.Repository.MobRepo;
-import fr.giusti.onetapadventure.Repository.SpecialMoveRepo;
-import fr.giusti.onetapadventure.Repository.SpriteRepo;
-import fr.giusti.onetapadventure.Repository.TouchedMoveRepo;
+import fr.giusti.onetapadventure.gameObject.entities.GameMob;
+import fr.giusti.onetapadventure.repository.PathRepo;
+import fr.giusti.onetapadventure.repository.entities.EntityRepo;
+import fr.giusti.onetapadventure.repository.SpecialMoveRepo;
+import fr.giusti.onetapadventure.repository.SpriteRepo;
+import fr.giusti.onetapadventure.repository.TouchedMoveRepo;
 import fr.giusti.onetapadventure.UI.CustomView.PathDrawingView;
-import fr.giusti.onetapadventure.UI.CustomView.spriteView;
+import fr.giusti.onetapadventure.UI.CustomView.SpriteView;
 import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.commons.FileUtils;
 
@@ -45,7 +47,6 @@ import fr.giusti.onetapadventure.commons.FileUtils;
  * @author giusti
  */
 public class MobCreationActivity extends Activity {
-    //TODO champs mob size
     protected static final int SELECT_PHOTO = 95070;
     private static final String TAG = MobCreationActivity.class.getName();
     //private Button mValidateButton;
@@ -61,8 +62,8 @@ public class MobCreationActivity extends Activity {
     private Button mSkinSelectionButton;
     private PathDrawingView mPatternSurface;
     private GameMob mMobCreating = new GameMob("", 0, 0, 2, 2, null, null, null, null, 1, 1);
-    protected Point mPatternLastPoint;
-    private ArrayList<Point> mMobPattern;
+    protected PointF mPatternLastPoint;
+    private ArrayList<PointF> mMobPattern;
     private int mobHealth;
 
 
@@ -175,12 +176,11 @@ public class MobCreationActivity extends Activity {
             int mobHeight = Integer.parseInt(mHeightEdit.getText().toString());
 
             mobHealth = Integer.parseInt(mHealthEdit.getText().toString());
-            mMobCreating.setName(mMobNameEdit.getText().toString());
+            mMobCreating.setIdName(mMobNameEdit.getText().toString());
             mMobCreating.setPosition(new RectF(mobXposition, mobYposition, mobXposition + mobWidth, mobYposition + mobHeight));
             mMobCreating.setHealth(mobHealth);
 
-            new MobRepo(0d, 0, 0).addMobToUnscaledStaticList(mMobCreating);
-            new MobRepo(0d, 0, 0).saveGameMob(this, mMobCreating, null);
+            EntityRepo.saveGameMob(this, mMobCreating, null);
 
             Toast.makeText(this, "Mob créer:\n path lenght: " + mMobCreating.getMovePattern().length + "\n skin id: " + mMobCreating.getBitmapId(), Toast.LENGTH_LONG).show();
             resetMobCreating();
@@ -210,26 +210,25 @@ public class MobCreationActivity extends Activity {
     }
 
     /**
-     * recence le spriteSheet dans le repo dedié et genere les proportion du mob en fonction de la taille de l'image
+     * recense le spriteSheet dans le repo dedié et genere les proportion du mob en fonction de la taille de l'image
      *
      * @param spriteSheetUrl
      */
     private void manageSpriteSheetImport(String spriteSheetUrl) {
         try {
-            SpriteRepo spriteRepo = new SpriteRepo();
             File spriteSheetFile = new File(spriteSheetUrl);
             String spriteSheetId = spriteSheetFile.getName();
-            Point singleSpriteDimens = spriteRepo.saveAndLoadFile(this, spriteSheetUrl, spriteSheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+            Point singleSpriteDimens = SpriteRepo.saveAndLoadFile(this, spriteSheetUrl, spriteSheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT,true);
 
             mMobCreating.setBitmapId(spriteSheetId);
 
             // generation de l'epaisseur/hauteur du mob selon son skin
-            this.mWidthEdit.setText("" + singleSpriteDimens.x);
-            this.mHeightEdit.setText("" + singleSpriteDimens.y);
-            if (mSkinImage instanceof spriteView) {
-                ((spriteView) mSkinImage).setSpriteSheet(spriteSheetId);
+            mWidthEdit.setText("" + singleSpriteDimens.x);
+            mHeightEdit.setText("" + singleSpriteDimens.y);
+            if (mSkinImage instanceof SpriteView) {
+                ((SpriteView) mSkinImage).setSpriteSheet(spriteSheetId);
             } else {
-                mSkinImage.setImageBitmap(SpriteRepo.getBitmap(spriteSheetId));
+                mSkinImage.setImageBitmap(SpriteRepo.getPicture(spriteSheetId));
             }
         } catch (IOException e) {
             Log.e(TAG, "error while loading spritesheet: " + e);
@@ -245,23 +244,23 @@ public class MobCreationActivity extends Activity {
         public boolean onTouch(View v, MotionEvent event) {
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
-                    mMobPattern = new ArrayList<Point>();
-                    mPatternLastPoint = new Point((int) event.getX(), (int) event.getY());
-                    mMobPattern.add(new Point(0, 0));
+                    mMobPattern = new ArrayList<>();
+                    mPatternLastPoint = new PointF( event.getX(),  event.getY());
+                    mMobPattern.add(new PointF(0, 0));
                     break;
 
                 case MotionEvent.ACTION_UP:
-                    Point[] resultPattern = new Point[mMobPattern.size()];
-                    mMobCreating.setMovePattern(mMobPattern.toArray(resultPattern));
+                    PointF[] resultPattern = new PointF[mMobPattern.size()];
+                    mMobCreating.setMovePattern(PathRepo.softenPath(mMobPattern.toArray(resultPattern)));
                     v.performClick();
                     break;
 
                 case MotionEvent.ACTION_MOVE:
-                    Point newPoint = new Point((int) event.getX() - mPatternLastPoint.x, (int) event.getY() - mPatternLastPoint.y);
+                    PointF newPoint = new PointF( event.getX() - mPatternLastPoint.x,  event.getY() - mPatternLastPoint.y);
                     if (pathStarted || (newPoint.x != 0 || newPoint.y != 0)) {
                         pathStarted = true;
                         mMobPattern.add(newPoint);
-                        mPatternLastPoint = new Point((int) event.getX(), (int) event.getY());
+                        mPatternLastPoint = new PointF(event.getX(),  event.getY());
                     }
                     break;
 
@@ -285,5 +284,9 @@ public class MobCreationActivity extends Activity {
         mSkinImage.setImageResource(android.R.drawable.ic_menu_help);
         mPatternSurface.reset();
         mPatternSurface.invalidate();
+    }
+
+    public void onClickGeneratePath(View view) {
+
     }
 }

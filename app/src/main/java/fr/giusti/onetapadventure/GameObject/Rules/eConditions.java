@@ -1,0 +1,15 @@
+package fr.giusti.onetapadventure.gameObject.rules;
+
+/**
+ * Created by jérémy on 08/09/2016.
+ */
+public enum eConditions {
+    MOB_DEATH,
+    MOB_AWAY,
+    SCORE,
+    NEW_MOB,
+    MOB_COUNT,
+    MOB_COUNTDOWN,
+    TIMER;
+
+}

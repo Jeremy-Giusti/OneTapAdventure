@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
+    compileSdkVersion 24
     buildToolsVersion "23.0.1"
 
     defaultConfig {
         applicationId "fr.giusti.onetapadventure"
         minSdkVersion 16
-        targetSdkVersion 21
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
     }
@@ -20,5 +20,7 @@ android {
 }
 
 dependencies {
+    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.android.support:support-v13:24.2.1'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

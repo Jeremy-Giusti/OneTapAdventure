@@ -1,8 +1,8 @@
-package fr.giusti.onetapadventure.Repository.DB.persister;
+package fr.giusti.onetapadventure.repository.DB.persister;
 
 import android.content.Context;
 
-import fr.giusti.onetapadventure.Repository.DB.DataBaseHelper;
+import fr.giusti.onetapadventure.repository.DB.DataBaseHelper;
 
 /**
  * Created by giusti on 17/03/2015.

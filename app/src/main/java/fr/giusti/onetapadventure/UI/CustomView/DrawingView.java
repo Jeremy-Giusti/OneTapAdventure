@@ -7,18 +7,21 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import fr.giusti.onetapadventure.GameObject.GameBoard;
 
-public class DrawingView extends SurfaceView implements SurfaceHolder.Callback {
+import fr.giusti.onetapadventure.gameObject.GameBoard;
+
+public class DrawingView extends SurfaceView implements SurfaceHolder.Callback, TickingThread.OnTickListener {
+    private static final String TAG = DrawingView.class.getSimpleName();
     private Context mContext;
-    private DrawingThread mDrawThread;
+    private TickingThread mDrawThread;
     private Paint mBrush = new Paint();
     private GameBoard mMap;
-//    private float mMapRatioX = 0.5f;
+    //    private float mMapRatioX = 0.5f;
 //    private float mMapRatioY = 0.5f;
     final Handler handler = new Handler();
 
@@ -29,7 +32,7 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback {
         // make the GamePanel focusable so it can handle events
         mContext = context;
         setFocusable(true);
-       // mDrawThread = new DrawingThread(getHolder(), mContext, this);
+        // mDrawThread = new TickingThread(getHolder(), mContext, this);
         mBrush.setColor(mContext.getResources().getColor(android.R.color.darker_gray));
         mBrush.setStrokeWidth(5);
         initEvent();
@@ -43,7 +46,7 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback {
         // make the GamePanel focusable so it can handle events
         setFocusable(true);
         mContext = context;
-       // mDrawThread = new DrawingThread(getHolder(), mContext, this);
+        // mDrawThread = new TickingThread(getHolder(), mContext, this);
         mBrush.setColor(mContext.getResources().getColor(android.R.color.darker_gray));
         mBrush.setStrokeWidth(5);
         initEvent();
@@ -59,7 +62,7 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-           //     event.setLocation(event.getX() / mMapRatioX, event.getY() / mMapRatioY);
+                //     event.setLocation(event.getX() / mMapRatioX, event.getY() / mMapRatioY);
                 mMap.touchEvent(event);
                 return false;
             }
@@ -67,30 +70,39 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void startGame(GameBoard map) {
-        
-        mDrawThread=new DrawingThread(getHolder(), this);
+
+        mDrawThread = new TickingThread(this);
         mMap = map;
+        this.resize();
 //        mMapRatioX = this.getWidth() / mMap.mBoardWidth;
 //        mMapRatioY = this.getHeight() / mMap.mBoardHeight;
         mDrawThread.setRunning(true);
+        Log.d(TAG,"Drawing view ready, starting drawing thread");
+
         mDrawThread.start();
+    }
+
+    private void resize() {
+        getLayoutParams().width = mMap.getmCameraBounds().width();
+        getLayoutParams().height = mMap.getmCameraBounds().height();
     }
 
     /**
      * put an end to the thread execution
-     * @throws InterruptedException 
+     *
+     * @throws InterruptedException
      */
     public void stopGame() throws InterruptedException {
         mDrawThread.setRunning(false);
     }
-    
+
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         if (mMap != null) {
             // restart after being destroyed
             if (mDrawThread.getState() == Thread.State.TERMINATED) {
-                mDrawThread = new DrawingThread(getHolder(), this);
+                mDrawThread = new TickingThread(this);
                 mDrawThread.setRunning(true);
                 mDrawThread.start();
             }
@@ -110,9 +122,48 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback {
         // thread.join()
     }
 
+
+    /**
+     * draw and update map
+     *
+     * @return
+     */
+    @Override
+    public void onTick() {
+
+        Canvas canvas = null;
+        // try locking the canvas for exclusive pixel editing
+        // in the surface
+        try {
+            canvas = this.getHolder().lockCanvas();
+            synchronized (this.getHolder()) {
+                // update game state
+                this.update();
+                // render state to the screen
+                // draws the canvas on the panel
+                this.doDraw(canvas);
+            }
+        } finally {
+            // in case of an exception the surface is not left in
+            // an inconsistent state
+            if (canvas != null) {
+                this.getHolder().unlockCanvasAndPost(canvas);
+            }
+        }
+    }
+
+    /**
+     * only update map
+     *
+     * @return
+     */
+    @Override
+    public void onLightTick() {
+        this.update();
+    }
+
     public void doDraw(Canvas canvas) {
         mMap.draw(canvas, mBrush);
-
     }
 
     /**
@@ -122,6 +173,7 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback {
         mMap.update();
 
     }
+
 
     public void onSystemePause() throws InterruptedException {
         mDrawThread.onPause();
@@ -135,5 +187,6 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback {
         }
 
     }
+
 
 }

@@ -19,7 +19,7 @@
             android:id="@+id/mca_nameEdit"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:hint="mob name"
+            android:hint="mob idName"
             android:layout_columnWeight="2"
             android:ems="10" />
 
@@ -118,7 +118,7 @@
             android:layout_alignRight="@+id/mca_skinSelectionButton"
             android:layout_alignEnd="@+id/mca_skinSelectionButton" />
 
-        <fr.giusti.onetapadventure.UI.CustomView.spriteView
+        <fr.giusti.onetapadventure.UI.CustomView.SpriteView
             android:id="@+id/mca_mobSkinImage"
             android:layout_height="96dp"
             android:layout_width="96dp"
@@ -134,5 +134,15 @@
             android:layout_width="match_parent"
             android:layout_alignParentBottom="true"
             android:layout_below="@+id/mca_mobSkinImage" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:text="generate"
+            android:padding="10dp"
+            android:visibility="gone"
+            android:background="#44ffffff"
+            android:onClick="onClickGeneratePath"/>
     </RelativeLayout>
 </LinearLayout>

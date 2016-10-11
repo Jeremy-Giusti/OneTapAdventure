@@ -2,43 +2,18 @@
 
 *******************************************| TODO |*******************************************
 
-    prioritised Functionality:
-    - ameliorer la creation de particule
-    - variable alignement pour les mobs
-    - collision mob (methode non appelé a chaque fois)
-    - mob cannibale
-    - infinite particule
-	- mettre en pause et reprendre le jeux (?comment?)
-
 
     Creation activity:
      - updaté la vue portrait
 
 
     Low priority:
- 	 - organiser par "étape" (creation/mise a l'echelle/jeu/flush/...)
  	 - transformer le projet en librairie => refractoring pour avoir une logique de librairie
  	 - bug reprise app apres avoir changé d'orientation+veille
+     - orm for database
      - sounds
 
 
 
 	 OPTIONS:
  	 - add sprites to touch objects ,scalling touch ?
-     - dynamique board (mobs swpawn/walls/etc ...)
-     - Complexify particule object (special effect/touchable)
-
-
-
-
-=====| DONE! |==========| Redimensionnement |=============================
-faire une constante(ratio) a l'ouverture de l'appli
-correspond au ration hauteur donné (background ici)/hauteur de la surface
-mettre toutes les images en cache via un redimensionnement (en utilisant le ratio)
-
-pour l'affichage redimensionner l'image avec le ratio + couper sur la largeur
-
-gerer la taile des mob selon le spritesheet utilisé
-appliquer le ratio au move pattern des mob
-ajout dans le cache d'image d'une version scalled de l'image (/!\ grosse consomation de cache =\)
-*************************************************************************************************

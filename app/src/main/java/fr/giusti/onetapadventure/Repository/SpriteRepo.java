@@ -1,21 +1,22 @@
-package fr.giusti.onetapadventure.Repository;
+package fr.giusti.onetapadventure.repository;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Point;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import fr.giusti.onetapadventure.gameObject.GameMobSpriteHolder;
 import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.commons.FileUtils;
-import fr.giusti.onetapadventure.commons.Utils;
-
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Point;
 
 public class SpriteRepo {
-    private static HashMap<String, Bitmap> mBitmapList = new HashMap<String, Bitmap>();
-    private static HashMap<String, Point> mSpriteDimensList = new HashMap<String, Point>();
+    private static HashMap<String, GameMobSpriteHolder> mMobSpriteList = new HashMap<>();
+    private static HashMap<String, Bitmap> mPictureList = new HashMap<>();
+    // private static HashMap<String, Point> mSpriteDimensList = new HashMap<String, Point>();
 
 
     /**
@@ -24,21 +25,20 @@ public class SpriteRepo {
      * @param bitmapId
      * @return
      */
-    public static Bitmap getBitmap(String bitmapId) {
-        synchronized (mBitmapList) {
-            return mBitmapList.get(bitmapId);
+    public static Bitmap getPicture(String bitmapId) {
+        synchronized (mPictureList) {
+            return mPictureList.get(bitmapId);
         }
     }
 
+    public static void addPicture(String pictureId, Bitmap bitmap) {
+        mPictureList.put(pictureId, bitmap);
+
+    }
+
+
     public static Bitmap getSpriteBitmap(String bitmapId, int column, int line) {
-        Point spriteDimens = mSpriteDimensList.get(bitmapId);
-        return Bitmap.createBitmap(
-                mBitmapList.get(bitmapId),
-                column * spriteDimens.x,
-                line * spriteDimens.y,
-                spriteDimens.x,
-                spriteDimens.y
-        );
+        return mMobSpriteList.get(bitmapId).sprites[column][line];
     }
 
     /**
@@ -47,9 +47,9 @@ public class SpriteRepo {
      * @param bmp
      * @param bitmapId
      */
-    public void addBitmap(Bitmap bmp, String bitmapId, int nbColumn, int nbLine) {
-        mBitmapList.put(bitmapId, bmp);
-        mSpriteDimensList.put(bitmapId, new Point(bmp.getWidth() / nbColumn, bmp.getHeight() / nbLine));
+    public static void addSpriteSheet(Bitmap bmp, String bitmapId, int nbColumn, int nbLine) {
+        GameMobSpriteHolder newHolder = new GameMobSpriteHolder(bmp, nbColumn, nbLine);
+        mMobSpriteList.put(bitmapId, newHolder);
     }
 
     /**
@@ -60,17 +60,16 @@ public class SpriteRepo {
      * @param bitmapId id wich would be used
      * @return id finally used
      */
-    public String addSpriteSheetWithIdCheck(Bitmap bmp, String bitmapId, int nbColumn, int nbLine) {
+    public static String addSpriteSheetWithIdCheck(Bitmap bmp, String bitmapId, int nbColumn, int nbLine) {
         String idReturn = bitmapId;
 
-        if (mBitmapList.containsKey(bitmapId)) {
-            for (int i = 1; mBitmapList.containsKey(idReturn); i++) {
+        if (mMobSpriteList.containsKey(bitmapId)) {
+            for (int i = 1; mMobSpriteList.containsKey(idReturn); i++) {
                 idReturn = bitmapId + i;
             }
         }
 
-        mBitmapList.put(idReturn, bmp);
-        mSpriteDimensList.put(bitmapId, new Point(bmp.getWidth() / nbColumn, bmp.getHeight() / nbLine));
+        addSpriteSheet(bmp, idReturn, nbColumn, nbLine);
         return idReturn;
     }
 
@@ -79,10 +78,9 @@ public class SpriteRepo {
      * @param bitmapId
      * @return true if the id is found on the spriteSheet list
      */
-    public boolean addIfDoesntExist(String bitmapId, Bitmap bmp, int nbColumn, int nbLine) {
-        if (!mBitmapList.containsKey(bitmapId)) {
-            mBitmapList.put(bitmapId, bmp);
-            mSpriteDimensList.put(bitmapId, new Point(bmp.getWidth() / nbColumn, bmp.getHeight() / nbLine));
+    public static boolean addSpritesheetIfDoesntExist(String bitmapId, Bitmap bmp, int nbColumn, int nbLine) {
+        if (!mMobSpriteList.containsKey(bitmapId)) {
+            addSpriteSheet(bmp, bitmapId, nbColumn, nbLine);
             return true;
         } else {
             return false;
@@ -94,24 +92,35 @@ public class SpriteRepo {
      */
     public static void flushCache() {
 
-        for (Map.Entry<String, Bitmap> entry : mBitmapList.entrySet()) {
+        for (Map.Entry<String, Bitmap> entry : mPictureList.entrySet()) {
             entry.getValue().recycle();
         }
+        for (GameMobSpriteHolder holder : mMobSpriteList.values()) {
+            holder.flush();
+        }
 
-        mBitmapList = new HashMap<String, Bitmap>();
-        mSpriteDimensList = new HashMap<String, Point>();
+        mPictureList = new HashMap<String, Bitmap>();
+        mMobSpriteList = new HashMap<>();
 
     }
 
     /**
-     * @param backgroundBitmapId
+     * @param id
      * @return point.x la largeur de la bitmap, point.y la hauteur ||  null si pas d'image trouv�
      */
-    public Point getDimensionSpriteSheet(String backgroundBitmapId) {
-        if (mBitmapList.get(backgroundBitmapId) == null) {
+    public static Point getDimensionSprite(String id) {
+        if (mMobSpriteList.get(id) == null) {
             return null;
         } else {
-            return new Point(mBitmapList.get(backgroundBitmapId).getWidth(), mBitmapList.get(backgroundBitmapId).getHeight());
+            return mMobSpriteList.get(id).getFrameDimens();
+        }
+    }
+
+    public static Point getDimensionPicture(String pictureId) {
+        if (mPictureList.get(pictureId) == null) {
+            return null;
+        } else {
+            return new Point(mPictureList.get(pictureId).getWidth(), mPictureList.get(pictureId).getHeight());
         }
     }
 
@@ -126,17 +135,37 @@ public class SpriteRepo {
      * @param id         wanted
      * @return the dimension of one sprite from the spritesheet
      */
-    public Point saveAndLoadFile(Context context, String pictureUrl, String id, int nbColumn, int nbLine) throws IOException {
+    public static Point saveAndLoadFile(Context context, String pictureUrl, String id, int nbColumn, int nbLine) throws IOException {
 
         File destFile = new File(Constants.getSpriteRepoFolder(context), id);
         if (!destFile.exists()) {
             FileUtils.copyFile(pictureUrl, destFile.getAbsolutePath());
         }
-        this.addIfDoesntExist(id, FileUtils.fileToBitmap(pictureUrl), nbColumn, nbLine);
+        addSpritesheetIfDoesntExist(id, FileUtils.fileToBitmap(pictureUrl), nbColumn, nbLine);
 
-        return mSpriteDimensList.get(id);
+        return mMobSpriteList.get(id).getFrameDimens();
 
     }
+
+
+    /**
+     * add the file to the spriteRepoFolder and load the bitmap on the cache
+     *
+     * @param alsoPutOnPictureList true if the image should also be stored as a single picture
+     * @return
+     * @throws IOException
+     */
+    public static Point saveAndLoadFile(Context context, String pictureUrl, String id, int nbColumn, int nbLine, boolean alsoPutOnPictureList) throws IOException {
+        File destFile = new File(Constants.getSpriteRepoFolder(context), id);
+        if (!destFile.exists()) {
+            FileUtils.copyFile(pictureUrl, destFile.getAbsolutePath());
+        }
+        Bitmap picture = FileUtils.fileToBitmap(pictureUrl);
+        addSpritesheetIfDoesntExist(id, picture, nbColumn, nbLine);
+        if (alsoPutOnPictureList) addPicture(id, picture);
+        return mMobSpriteList.get(id).getFrameDimens();
+    }
+
 
     /**
      * get a bitmap from the file found from the id (and load it to the cache)
@@ -146,32 +175,43 @@ public class SpriteRepo {
      * @return the dimension of one sprite from the spritesheet
      * @throws IOException
      */
-    public Point loadFromId(Context context, String id, int nbColumn, int nbLine) throws IOException {
+    public static Point loadSpriteSheetFromId(Context context, String id, int nbColumn, int nbLine) throws IOException {
         File pictureFile = new File(Constants.getSpriteRepoFolder(context), id);
-        this.addIfDoesntExist(id, FileUtils.fileToBitmap(pictureFile.getAbsolutePath()), nbColumn, nbLine);
+        addSpritesheetIfDoesntExist(id, FileUtils.fileToBitmap(pictureFile.getAbsolutePath()), nbColumn, nbLine);
+        return mMobSpriteList.get(id).getFrameDimens();
+    }
 
-        return mSpriteDimensList.get(id);
+    public static void resizePicture(String id, float ratio) {
+        Bitmap picture = mPictureList.get(id);
+        picture = Bitmap.createScaledBitmap(picture,(int)(picture.getWidth()*ratio), (int)(picture.getHeight()*ratio), true);
+        mPictureList.put(id,picture);
+    }
+
+    public static void resizeSprites(String mSpritesId, int width, int height) {
+        mMobSpriteList.get(mSpritesId).resizeAllFrame(width,height);
     }
 
     ///////////////////////////////////////////Scaling/////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
 
-    /**
-     * @param imageKey
-     * @param ratio    le 'ratio brut' pour redimensionner les images
-     * @return le 'ratio arrondit' utilis� pour redimensionner les images en les deformant au minimum (l'id�e est de garder un spritesheet divisible par le nb de sprites)
-     */
-    public double getBestRatioForSpriteSheet(String imageKey, double ratio) {
-        if (mBitmapList.containsKey(imageKey)) {
-            int bitmapHeight = mBitmapList.get(imageKey).getHeight();
+//    /**
+//     * @param imageKey
+//     * @param ratio    le 'ratio brut' pour redimensionner les images
+//     * @return le 'ratio arrondit' utilis� pour redimensionner les images en les deformant au minimum (l'id�e est de garder un spritesheet divisible par le nb de sprites)
+//     */
+//    public double getBestRatioForSpriteSheet(String imageKey, double ratio) {
+//        if (mBitmapList.containsKey(imageKey)) {
+//            int bitmapHeight = mBitmapList.get(imageKey).getHeight();
+//
+//            //SCIENCE !
+//            double roundedRatio = Utils.findInversOfNearestDivider(bitmapHeight, Constants.SPRITESHEETHEIGHT, ratio);
+//            return roundedRatio;
+//        } else {
+//            return -1;
+//        }
+//    }
 
-            //SCIENCE !
-            double roundedRatio = Utils.findInversOfNearestDivider(bitmapHeight, Constants.SPRITESHEETHEIGHT, ratio);
-            return roundedRatio;
-        } else {
-            return -1;
-        }
-    }
+
 //
 //    /**
 //     * creé une spritesheet a l'echelle des diemnsions du mob
