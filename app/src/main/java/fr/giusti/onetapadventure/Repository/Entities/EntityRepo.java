@@ -162,7 +162,7 @@ public class EntityRepo {
         SpecialMoveRepo moveRepo = new SpecialMoveRepo();
         TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
 
-        String bitmapId = "hole1pict";
+        String bitmapId = "broken_glass_side";
         SpriteRepo.addPicture(bitmapId, BitmapFactory.decodeResource(context.getResources(), R.drawable.brokenglass_left_side));
 
         PointF posDest = new PointF(Lvl1Constant.HOLE1_DIMENS.left + (Lvl1Constant.HOLE1_DIMENS.width() / 2), Lvl1Constant.HOLE1_DIMENS.top + (Lvl1Constant.HOLE1_DIMENS.height() / 2));
@@ -177,17 +177,17 @@ public class EntityRepo {
         Scenery hole1 = new Scenery("holes1", Lvl1Constant.HOLE1_DIMENS.left, Lvl1Constant.HOLE1_DIMENS.top, Lvl1Constant.HOLE1_DIMENS.width(), Lvl1Constant.HOLE1_DIMENS.height(), hitbox, touchedMoveRepo.getMoveById(TouchedMoveRepo.MOB_AWAY_MOVE), bitmapId);
         entityList.add(hole1);
 
-        Particule glassParticule1 = ParticuleHolder.getAvailableParticule(ParticuleRepo.GLASS_PARTICULE , Lvl1Constant.HOLE1_DIMENS.centerX(), Lvl1Constant.HOLE1_DIMENS.centerY()-Lvl1Constant.HOLE1_DIMENS.width()/2, Lvl1Constant.HOLE1_DIMENS.width(), Lvl1Constant.HOLE1_DIMENS.width(), false, new PointF[]{new PointF(0, 6)});
-        Particule glassParticule2 = ParticuleHolder.getAvailableParticule(ParticuleRepo.GLASS_PARTICULE , Lvl1Constant.HOLE1_DIMENS.centerX(), Lvl1Constant.HOLE1_DIMENS.centerY()+Lvl1Constant.HOLE1_DIMENS.width()/2, Lvl1Constant.HOLE1_DIMENS.width(), Lvl1Constant.HOLE1_DIMENS.width(), false, new PointF[]{new PointF(0, 6)});
+        Particule glassParticule1 = ParticuleHolder.getAvailableParticule(ParticuleRepo.GLASS_PARTICULE, Lvl1Constant.HOLE1_DIMENS.centerX(), Lvl1Constant.HOLE1_DIMENS.centerY() - Lvl1Constant.HOLE1_DIMENS.width() / 2, Lvl1Constant.HOLE1_DIMENS.width(), Lvl1Constant.HOLE1_DIMENS.width(), false, new PointF[]{new PointF(0, 6)});
+        Particule glassParticule2 = ParticuleHolder.getAvailableParticule(ParticuleRepo.GLASS_PARTICULE, Lvl1Constant.HOLE1_DIMENS.centerX(), Lvl1Constant.HOLE1_DIMENS.centerY() + Lvl1Constant.HOLE1_DIMENS.width() / 2, Lvl1Constant.HOLE1_DIMENS.width(), Lvl1Constant.HOLE1_DIMENS.width(), false, new PointF[]{new PointF(0, 6)});
         entityList.add(glassParticule1);
         entityList.add(glassParticule2);
 
         String mob1sptsheetId = "tier1Mob";
         SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet), mob1sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
-        PointF[] mob1Pattern = PathRepo.generateLineToDest(startPos, posDest, (int)(Constants.FRAME_PER_SEC * 4.5));
+        PointF[] mob1Pattern = PathRepo.generateLineToDest(startPos, posDest, (int) (Constants.FRAME_PER_SEC * 4.5));
 
-        GameMob mob1 = new GameMob("firstMob1", (int) startPos.x, (int) startPos.y+50, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE, mob1Pattern, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mob1sptsheetId, 10, 1);
-        GameMob mob2 = new GameMob("firstMob2", (int) startPos.x, (int) startPos.y-50, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE, mob1Pattern, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mob1sptsheetId, 10, 1);
+        GameMob mob1 = new GameMob("firstMob1", (int) startPos.x, (int) startPos.y + 50, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE, mob1Pattern, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mob1sptsheetId, 10, 1);
+        GameMob mob2 = new GameMob("firstMob2", (int) startPos.x, (int) startPos.y - 50, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE, mob1Pattern, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mob1sptsheetId, 10, 1);
 
 
         entityList.add(mob1);
@@ -259,7 +259,7 @@ public class EntityRepo {
         SpecialMoveRepo moveRepo = new SpecialMoveRepo();
         TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
 
-        String bitmapId = "hole1pict";
+        String bitmapId = GameConstant.HOLE_FRONT_SPRITE_ID;
         SpriteRepo.addPicture(bitmapId, BitmapFactory.decodeResource(context.getResources(), R.drawable.brokenglass_front));
 
         PointF posDest = new PointF(Lvl2Constant.HOLE1_DIMENS.left + (Lvl2Constant.HOLE1_DIMENS.width() / 2), Lvl2Constant.HOLE1_DIMENS.top + (Lvl2Constant.HOLE1_DIMENS.height() / 2));
@@ -273,7 +273,7 @@ public class EntityRepo {
         Scenery hole1 = new Scenery("holes1", Lvl2Constant.HOLE1_DIMENS.left, Lvl2Constant.HOLE1_DIMENS.top, Lvl2Constant.HOLE1_DIMENS.width(), Lvl2Constant.HOLE1_DIMENS.height(), hitbox, touchedMoveRepo.getMoveById(TouchedMoveRepo.MOB_AWAY_MOVE), bitmapId);
         entityList.add(hole1);
 
-        Particule glassParticule = ParticuleHolder.getAvailableParticule(ParticuleRepo.GLASS_PARTICULE , Lvl2Constant.HOLE1_DIMENS.centerX(), Lvl2Constant.HOLE1_DIMENS.centerY(), Lvl2Constant.HOLE1_DIMENS.width(), Lvl2Constant.HOLE1_DIMENS.height(), false, new PointF[]{new PointF(0, 6)});
+        Particule glassParticule = ParticuleHolder.getAvailableParticule(ParticuleRepo.GLASS_PARTICULE, Lvl2Constant.HOLE1_DIMENS.centerX(), Lvl2Constant.HOLE1_DIMENS.centerY(), Lvl2Constant.HOLE1_DIMENS.width(), Lvl2Constant.HOLE1_DIMENS.height(), false, new PointF[]{new PointF(0, 6)});
         entityList.add(glassParticule);
 
         String mob1sptsheetId = "tier1Mob";

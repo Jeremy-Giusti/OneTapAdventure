@@ -450,4 +450,7 @@ public class GameBoard {
     }
 
 
+    public void onNewScenery(Scenery blab) {
+        mSceneries.add(blab);
+    }
 }

@@ -8,9 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import fr.giusti.onetapadventure.commons.Constants;
+import fr.giusti.onetapadventure.commons.GameConstant;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.gameObject.entities.Particule;
+import fr.giusti.onetapadventure.gameObject.entities.Scenery;
 import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.ParticuleHolder;
 import fr.giusti.onetapadventure.gameObject.interactions.TouchPoint;
 import fr.giusti.onetapadventure.gameObject.moves.SpecialMove;
@@ -20,13 +22,14 @@ import fr.giusti.onetapadventure.repository.entities.ParticuleRepo;
  * Created by giusti on 20/03/2015.
  */
 public class SpecialMoveRepo {
-        //TODO limited range tp/switch
+    //TODO limited range tp/switch
     public static final String NO_MOVE = "noMove";
     public static final String AUTO_HEAL = "autoHeal";
     public static final String AUTO_HURT_EXPLODING = "autoHurtExploding";
     public static final String MULTIPLIE = "multiplie";
     public static final String TELEPORT = "teleport";
     public static final String SWAP = "swap";
+    public static final String BREAK_GLASS = "broke_glass";
     public static final String SMOKE_TRAIL = "smoke_trail";
 
 
@@ -208,6 +211,39 @@ public class SpecialMoveRepo {
 
 
     };
+
+    private static SpecialMove breakGlassMove = new SpecialMove() {
+        int remainingIteration = 4;
+        int lastUse = 0;
+
+        @Override
+        public void doSpecialMove(GameBoard board, GameMob currentMob) {
+            if (lastUse < Constants.FRAME_PER_SEC * 4 && remainingIteration >= 4) {
+                lastUse++;
+            } else {
+                if (currentMob.getState() == GameMob.eMobState.HURT) {
+                    remainingIteration = 4;
+                }else if (currentMob.getState() != GameMob.eMobState.SPE1) {
+                    currentMob.setMovePattern(new PointF[]{new PointF(0,0)});
+                    currentMob.setState(GameMob.eMobState.SPE1);
+                    currentMob.setAnimationState(0);
+                    remainingIteration--;
+                }
+                if (remainingIteration == 0) {
+                    board.onNewScenery(new Scenery("brokenglass" + currentMob.getIdName(), (int) currentMob.mPosition.centerX(), (int) currentMob.mPosition.centerY(), (int) currentMob.mPosition.width() * 3, (int) currentMob.mPosition.height() * 3, 1, TouchedMoveRepo.getMoveById(TouchedMoveRepo.MOB_AWAY_MOVE), GameConstant.HOLE_FRONT_SPRITE_ID));
+                    currentMob.setHealth(0);
+                    currentMob.setState(GameMob.eMobState.DYING);
+                }
+            }
+
+        }
+
+        @Override
+        public String getId() {
+            return BREAK_GLASS;
+        }
+    };
+
 
     private static SpecialMove swap = new SpecialMove() {
         private int lastUse = 0;
