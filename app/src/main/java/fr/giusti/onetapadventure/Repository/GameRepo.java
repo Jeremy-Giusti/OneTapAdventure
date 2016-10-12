@@ -106,7 +106,11 @@ public class GameRepo {
 
         RulesManager rulesManager = RuleRepo.getLvl_1x2_Rules(endListener);
 
-        TouchDispenser touchDisp = new TouchDispenser(Constants.TOUCH_STROKE, null, Constants.TOUCH_DAMAGE);
+        String touchSpriteID = "touchSprite";
+        Bitmap touchSprite = BitmapFactory.decodeResource(context.getResources(), R.drawable.touch1);
+        SpriteRepo.addSpriteSheet(touchSprite, touchSpriteID, Constants.PARTICULE_NB_FRAME_ON_ANIMATION, 1);
+        TouchDispenser touchDisp = new TouchDispenser(Constants.TOUCH_STROKE*2, touchSpriteID, Constants.TOUCH_DAMAGE);
+       // TouchDispenser touchDisp = new TouchDispenser(Constants.TOUCH_STROKE, null, Constants.TOUCH_DAMAGE);
 
         GameBoard board = new GameBoard(EntitySpawnerRepo.getLvl1_2SpawnerManager(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight), rulesManager, touchDisp);
         board.resize(mScreenWidth, mScreenHeight);

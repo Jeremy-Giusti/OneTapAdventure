@@ -7,6 +7,7 @@ import android.graphics.RectF;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import fr.giusti.onetapadventure.gameObject.entities.Particule;
 import fr.giusti.onetapadventure.repository.entities.ParticuleRepo;
@@ -55,6 +56,46 @@ public class ParticuleHolder {
             }
             result.setmPosition(new RectF(x - width / 2, y - height / 2, x + width / 2, y + height / 2));
         }
+        return result;
+    }
+
+    /**
+     * should be avoided when possible
+     *
+     * @param groupId
+     * @param spawnArea
+     * @param generalDirection
+     * @param particulNb
+     * @return
+     */
+    public static ArrayList<Particule> getAvailableParticuleGroupe(String groupId, RectF spawnArea, Point generalDirection, int particulNb) {
+        ArrayList<Particule> result = new ArrayList<>();
+        ArrayList<String> particuleIdList = ParticuleRepo.mParticuleGroupIdList.get(ParticuleRepo.GROUPE_SPARK_PARTICULE);
+
+        ArrayList<Particule> availablePool;
+        Particule particule = null;
+        Random random = new Random();
+
+
+        for (int i = 0; i < particulNb; i++) {
+            String particuleId = particuleIdList.get((int) (Math.random() * particuleIdList.size()));
+            availablePool = availableParticules.get(particuleId);
+            if (availablePool != null && !availablePool.isEmpty()) {
+                particule = availablePool.get(0);
+                availablePool.remove(particule);
+                particule.setAvailable(false);
+            } else {
+                particule = ParticuleRepo.getTemplateParticule(particuleId).clone();
+            }
+            float x = random.nextInt((int)(spawnArea.right - spawnArea.left)) + spawnArea.left;
+            float y = random.nextInt((int)(spawnArea.bottom - spawnArea.top)) + spawnArea.top;
+            particule.setmPositionFromXY(x, y);
+            int xMovement = ((x % 2 == 1) ? 1 : -1) * (random.nextInt(3) + 1);
+            int yMovement = ((y % 2 == 1) ? 1 : -1) * (random.nextInt(3) + 1);
+            particule.setPath(new PointF(xMovement + generalDirection.x, yMovement + generalDirection.y));
+            result.add(particule);
+        }
+
         return result;
     }
 

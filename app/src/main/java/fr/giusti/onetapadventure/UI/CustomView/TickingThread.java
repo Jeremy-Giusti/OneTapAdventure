@@ -1,5 +1,5 @@
 //http://obviam.net/index.php/the-android-game-loop/
-package fr.giusti.onetapadventure.UI.CustomView;
+package fr.giusti.onetapadventure.UI.customView;
 
 import android.util.Log;
 

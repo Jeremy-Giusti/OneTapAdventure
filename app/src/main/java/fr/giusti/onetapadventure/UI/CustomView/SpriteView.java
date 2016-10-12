@@ -1,4 +1,4 @@
-package fr.giusti.onetapadventure.UI.CustomView;
+package fr.giusti.onetapadventure.UI.customView;
 
 import android.content.Context;
 import android.os.Handler;

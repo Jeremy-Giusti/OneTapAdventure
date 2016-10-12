@@ -1,4 +1,4 @@
-package fr.giusti.onetapadventure.UI.Activity;
+package fr.giusti.onetapadventure.UI.activity;
 
 import android.Manifest;
 import android.app.Activity;

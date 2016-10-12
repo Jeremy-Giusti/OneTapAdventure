@@ -61,7 +61,7 @@ public class Particule extends Entity {
         this.mPosition = mPosition;
     }
 
-    public void setmPositionFromXY(int x, int y) {
+    public void setmPositionFromXY(float x, float y) {
         mPosition.offsetTo(x, y);
     }
 
@@ -179,6 +179,7 @@ public class Particule extends Entity {
 
     public void recycle() {
         ParticuleHolder.recycle(this);
+        this.mAnimationState=0;
     }
 
 
@@ -188,6 +189,10 @@ public class Particule extends Entity {
 
     public boolean isAvailable() {
         return mAvailable;
+    }
+
+    public void setPath(PointF pointF) {
+        movePattern = new PointF[]{pointF};
     }
 }
 

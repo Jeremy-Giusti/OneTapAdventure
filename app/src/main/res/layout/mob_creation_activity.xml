@@ -40,7 +40,7 @@
         android:layout_toLeftOf="@+id/mca_marginCenter"
         android:text="select a spriteSheet" />
 
-    <fr.giusti.onetapadventure.UI.CustomView.SpriteView
+    <fr.giusti.onetapadventure.UI.customView.SpriteView
         android:id="@+id/mca_mobSkinImage"
         android:layout_width="match_parent"
         android:layout_height="64dp"
@@ -108,7 +108,7 @@
         android:ems="10"
         android:inputType="number" />
 
-    <fr.giusti.onetapadventure.UI.CustomView.PathDrawingView
+    <fr.giusti.onetapadventure.UI.customView.PathDrawingView
         android:id="@+id/mca_mobPatternSurface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

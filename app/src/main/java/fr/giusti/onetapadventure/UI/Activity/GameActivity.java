@@ -1,4 +1,4 @@
-package fr.giusti.onetapadventure.UI.Activity;
+package fr.giusti.onetapadventure.UI.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import fr.giusti.onetapadventure.R;
-import fr.giusti.onetapadventure.UI.CustomView.DrawingView;
+import fr.giusti.onetapadventure.UI.customView.DrawingView;
 import fr.giusti.onetapadventure.callback.OnBoardEventListener;
 import fr.giusti.onetapadventure.commons.GameConstant;
 import fr.giusti.onetapadventure.gameObject.GameBoard;

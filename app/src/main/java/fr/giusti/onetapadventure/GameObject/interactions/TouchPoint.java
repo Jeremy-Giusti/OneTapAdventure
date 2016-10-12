@@ -3,6 +3,7 @@ package fr.giusti.onetapadventure.gameObject.interactions;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
@@ -12,6 +13,7 @@ import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.commons.Utils;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
+import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.ParticuleHolder;
 import fr.giusti.onetapadventure.repository.SpriteRepo;
 import fr.giusti.onetapadventure.repository.entities.ParticuleRepo;
 
@@ -61,7 +63,7 @@ public class TouchPoint {
             }
         }
         if(state<1){
-            board.addParticules(ParticuleRepo.getGroupedParticule());
+            board.addParticules(ParticuleHolder.getAvailableParticuleGroupe(ParticuleRepo.GROUPE_SPARK_PARTICULE,mPosition,new Point(0,0),5));
         }
 
         state++;

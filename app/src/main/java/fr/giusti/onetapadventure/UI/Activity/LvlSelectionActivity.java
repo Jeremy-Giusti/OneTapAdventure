@@ -1,4 +1,4 @@
-package fr.giusti.onetapadventure.UI.Activity;
+package fr.giusti.onetapadventure.UI.activity;
 
 import android.os.Bundle;
 import android.support.v13.app.FragmentStatePagerAdapter;

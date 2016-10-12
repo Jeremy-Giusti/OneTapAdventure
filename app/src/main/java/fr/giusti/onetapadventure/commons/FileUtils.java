@@ -8,13 +8,10 @@ import android.net.Uri;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import fr.giusti.onetapadventure.UI.Activity.MobCreationActivity;
 
 /**
  * Created by giusti on 19/03/2015.

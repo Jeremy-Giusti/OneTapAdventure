@@ -1,4 +1,4 @@
-package fr.giusti.onetapadventure.UI.Activity;
+package fr.giusti.onetapadventure.UI.activity;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,8 +35,8 @@ import fr.giusti.onetapadventure.repository.entities.EntityRepo;
 import fr.giusti.onetapadventure.repository.SpecialMoveRepo;
 import fr.giusti.onetapadventure.repository.SpriteRepo;
 import fr.giusti.onetapadventure.repository.TouchedMoveRepo;
-import fr.giusti.onetapadventure.UI.CustomView.PathDrawingView;
-import fr.giusti.onetapadventure.UI.CustomView.SpriteView;
+import fr.giusti.onetapadventure.UI.customView.PathDrawingView;
+import fr.giusti.onetapadventure.UI.customView.SpriteView;
 import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.commons.FileUtils;
 
