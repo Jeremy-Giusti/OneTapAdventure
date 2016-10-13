@@ -11,6 +11,7 @@ import fr.giusti.onetapadventure.gameObject.rules.eConditionType;
 import fr.giusti.onetapadventure.gameObject.rules.eConditions;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl2Constant;
+import fr.giusti.onetapadventure.repository.levelsData.Lvl3Constant;
 
 /**
  * Created by jérémy on 09/09/2016.
@@ -18,11 +19,11 @@ import fr.giusti.onetapadventure.repository.levelsData.Lvl2Constant;
 public class RuleRepo {
 
     public static RulesManager getLvl_1x1_Rules(final OnGameEndListener gameEndListener) {
-        Rule masterRule = new Rule.RuleBuilder(Lvl1Constant.ESCAPING_MOB_RULE, eConditionType.DEFEAT, eConditions.MOB_AWAY)
+        Rule masterRule = new Rule.RuleBuilder(Lvl1Constant.ESCAPING_MOB_RULE, eConditionType.FAIL, eConditions.MOB_AWAY)
                 .setNumericalCondition( Lvl1Constant.MAX_MOB_AWAY, 0)
                 .build();
 
-       // Rule masterRule = new Rule(Lvl1Constant.ESCAPING_MOB_RULE, eConditionType.DEFEAT, eConditions.MOB_AWAY, Lvl1Constant.MAX_MOB_AWAY, 0);
+       // Rule masterRule = new Rule(Lvl1Constant.ESCAPING_MOB_RULE, eConditionType.FAIL, eConditions.MOB_AWAY, Lvl1Constant.MAX_MOB_AWAY, 0);
         Rule endRule = new Rule.RuleBuilder(Lvl1Constant.LEVEL_END_RULE, eConditionType.END, eConditions.MOB_COUNTDOWN)
                 .setNumericalCondition( 0, Lvl1Constant.MOB_TOTAL_NB)
                 .build();
@@ -35,7 +36,7 @@ public class RuleRepo {
 
     public static RulesManager getLvl_1x2_Rules(OnGameEndListener endListener) {
         String gameId = GameConstant.getLevelId(1, 2);
-        Rule masterRule = new Rule.RuleBuilder(Lvl2Constant.ESCAPING_MOB_RULE, eConditionType.DEFEAT, eConditions.MOB_AWAY)
+        Rule masterRule = new Rule.RuleBuilder(Lvl2Constant.ESCAPING_MOB_RULE, eConditionType.FAIL, eConditions.MOB_AWAY)
                 .setNumericalCondition( Lvl2Constant.MAX_MOB_AWAY, 0)
                 .build();
 
@@ -45,6 +46,20 @@ public class RuleRepo {
 
         OnRuleAccomplishedListener accomplishedBehavior = getDefaultBehavior(endListener, gameId);
         return new RulesManager(masterRule, accomplishedBehavior, endRule);
+    }
+
+    public static RulesManager getLvl_1x3_Rules(OnGameEndListener endListener) {
+        String gameId = GameConstant.getLevelId(1, 3);
+        Rule masterRule = new Rule.RuleBuilder(Lvl3Constant.SUCCESS_SCORE_RULE, eConditionType.VICTORY, eConditions.SCORE)
+                .setNumericalCondition( Lvl3Constant.SUCCESS_SCORE_RULE_VALUE, 0)
+                .build();
+
+        Rule defeatRule = new Rule.RuleBuilder(Lvl3Constant.DEFEAT_SCORE_RULE, eConditionType.END_DEFEAT, eConditions.SCORE)
+                .setNumericalCondition( Lvl3Constant.DEFEAT_SCORE_RULE_VALUE, 0)
+                .build();
+
+        OnRuleAccomplishedListener accomplishedBehavior = getDefaultBehavior(endListener, gameId);
+        return new RulesManager(masterRule, accomplishedBehavior, defeatRule);
     }
 
 
@@ -85,8 +100,10 @@ public class RuleRepo {
                 for (Rule rule : secondaries) {
                     if (rule.type == eConditionType.VICTORY) {
                         score += 100;
-                    } else if (rule.type == eConditionType.DEFEAT) {
+                    } else if (rule.type == eConditionType.FAIL) {
                         score -= 100;
+                    }else if (rule.type == eConditionType.END_DEFEAT) {
+                        score -= 1000;
                     }
                 }
 
@@ -95,6 +112,7 @@ public class RuleRepo {
         };
 
     }
+
 
 
 }

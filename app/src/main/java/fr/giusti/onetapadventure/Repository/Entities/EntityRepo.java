@@ -345,6 +345,13 @@ public class EntityRepo {
         return result;
     }
 
+    public static ArrayList<Entity> getLvl1x3SpecialList(Context context) {
+        ArrayList<Entity> result = new ArrayList<>();
+
+
+        return null;
+    }
+
 
     public static GameMob getMobFromSeed(Context context, int difficulty, int seed, PointF posDest, String id, int x, int y, int width, int height) {
         SpecialMoveRepo moveRepo = new SpecialMoveRepo();
@@ -411,6 +418,29 @@ public class EntityRepo {
         return new GameMob(id, startPoint.x, startPoint.y, GameConstant.DEFAULT_MOB_SIZE, GameConstant.DEFAULT_MOB_SIZE, path, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.TELEPORT), mobsptsheetId, health, 1);
 
     }
+
+    private static GameMob getHoleMakerMob(String id, Context context, Point startPoint, Point destPoint,int tickToDest, int health) {
+
+
+        String bitmapId = GameConstant.HOLE_FRONT_SPRITE_ID;
+        SpriteRepo.addPicture(bitmapId, BitmapFactory.decodeResource(context.getResources(), R.drawable.brokenglass_front));
+
+        PointF[] path = PathRepo.generateLineToDest(new PointF(startPoint), new PointF(destPoint), tickToDest);
+        String mobsptsheetId = "holemakermob";
+        SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet2), mobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+        return new GameMob(id, startPoint.x, startPoint.y, GameConstant.DEFAULT_MOB_SIZE, GameConstant.DEFAULT_MOB_SIZE, path, SpecialMoveRepo.getMoveById(SpecialMoveRepo.BREAK_GLASS), TouchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mobsptsheetId, health, 1);
+
+    }
+
+    private static GameMob getGhostMob(String id, Context context, Point startPoint, Point destPoint,int tickToDest, int health) {
+
+        PointF[] path = PathRepo.generateLineToDest(new PointF(startPoint), new PointF(destPoint), tickToDest);
+        String mobsptsheetId = "ghostmob";
+        SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet_purple), mobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+        return new GameMob(id, startPoint.x, startPoint.y, GameConstant.DEFAULT_MOB_SIZE, GameConstant.DEFAULT_MOB_SIZE, path, SpecialMoveRepo.getMoveById(SpecialMoveRepo.GHOST_MOVE), TouchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mobsptsheetId, health, 1);
+
+    }
+
 
 
 }

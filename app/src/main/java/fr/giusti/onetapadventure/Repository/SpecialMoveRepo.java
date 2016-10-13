@@ -31,6 +31,7 @@ public class SpecialMoveRepo {
     public static final String SWAP = "swap";
     public static final String BREAK_GLASS = "broke_glass";
     public static final String SMOKE_TRAIL = "smoke_trail";
+    public static final String GHOST_MOVE = "ghost_move";
 
 
     private static SpecialMove noMove = new SpecialMove() {
@@ -223,8 +224,8 @@ public class SpecialMoveRepo {
             } else {
                 if (currentMob.getState() == GameMob.eMobState.HURT) {
                     remainingIteration = 4;
-                }else if (currentMob.getState() != GameMob.eMobState.SPE1) {
-                    currentMob.setMovePattern(new PointF[]{new PointF(0,0)});
+                } else if (currentMob.getState() != GameMob.eMobState.SPE1) {
+                    currentMob.setMovePattern(new PointF[]{new PointF(0, 0)});
                     currentMob.setState(GameMob.eMobState.SPE1);
                     currentMob.setAnimationState(0);
                     remainingIteration--;
@@ -301,6 +302,37 @@ public class SpecialMoveRepo {
         }
     };
 
+    private static SpecialMove ghostMove = new SpecialMove() {
+        int currentTick = 0;
+        int frequency = Constants.FRAME_PER_SEC * 3;
+
+        @Override
+        public void doSpecialMove(GameBoard board, GameMob currentMob) {
+            currentTick++;
+            int periode = currentTick % (frequency * 2);
+            if (periode > frequency) {
+                if (periode == (frequency + 1)) {
+                    currentMob.setState(GameMob.eMobState.SPE1);
+                    currentMob.setAnimationState(0);
+                }
+                if (currentMob.isJustMoving()) {
+                    currentMob.setAlpha(0);
+                } else {
+                    currentMob.setAlpha(255);
+                }
+            } else if (periode < 1) {
+                currentMob.setAlpha(255);
+                currentMob.setState(GameMob.eMobState.SPE2);
+                currentMob.setAnimationState(0);
+            }
+        }
+
+        @Override
+        public String getId() {
+            return GHOST_MOVE;
+        }
+    };
+
 
     private final static HashMap<String, SpecialMove> specialeMoveList;
 
@@ -313,6 +345,7 @@ public class SpecialMoveRepo {
         specialeMoveList.put(teleport.getId(), teleport);
         specialeMoveList.put(swap.getId(), swap);
         specialeMoveList.put(smoke_trail.getId(), smoke_trail);
+        specialeMoveList.put(breakGlassMove.getId(), breakGlassMove);
 
 
     }

@@ -37,4 +37,21 @@ public class EntitySpawnerRepo {
 
         return result;
     }
+
+    public static EntitySpawnerManager getLvl1_3SpawnerManager(Context context) {
+        //TODO
+//        EntitySpawnerManager result = new EntitySpawnerManager(EntityRepo.getLvl1x2InitList(context), EntityRepo.getLvl1x2BackupList(context));
+
+//        result.addSpawner(new EntitySpawner.EntitySpawnerBuilder(eEntityDistributionMode.GROUPED_SEMIRANDOM, eConditions.TIMER, 2000, 0)
+//                .setSpawnerInfinite()
+//                .setUseSharedList()
+//                .build());
+//
+        result.addSpawner(new EntitySpawner.EntitySpawnerBuilder(eEntityDistributionMode.ONE_BY_ONE_ORDERED, eConditions.TIMER, 3000, 0)
+                .setSpawnerInfinite()
+                .setEntityList(EntityRepo.getLvl1x3SpecialList(context))
+                .build());
+
+        return result;
+    }
 }

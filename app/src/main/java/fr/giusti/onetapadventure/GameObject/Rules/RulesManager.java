@@ -72,7 +72,7 @@ public class RulesManager implements OnBoardEventListener {
         }
         if (rule.equals(timerRule)) {
             listener.onTimerEnded(rule, timerRule, accomplishedRules);
-        } else if (rule.type == eConditionType.END) {
+        } else if (rule.type == eConditionType.END || rule.type == eConditionType.END_DEFEAT) {
             accomplishedRules.add(rule);
             listener.onGameEnded(rule, timerRule, accomplishedRules);
         } else {

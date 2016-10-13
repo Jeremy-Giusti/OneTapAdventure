@@ -17,6 +17,7 @@ import fr.giusti.onetapadventure.repository.entities.EntitySpawnerRepo;
 import fr.giusti.onetapadventure.repository.entities.ParticuleRepo;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl2Constant;
+import fr.giusti.onetapadventure.repository.levelsData.Lvl3Constant;
 
 public class GameRepo {
     public static final String LVL_TEST = "lvl test";
@@ -110,12 +111,34 @@ public class GameRepo {
         Bitmap touchSprite = BitmapFactory.decodeResource(context.getResources(), R.drawable.touch1);
         SpriteRepo.addSpriteSheet(touchSprite, touchSpriteID, Constants.PARTICULE_NB_FRAME_ON_ANIMATION, 1);
         TouchDispenser touchDisp = new TouchDispenser(Constants.TOUCH_STROKE*2, touchSpriteID, Constants.TOUCH_DAMAGE);
-       // TouchDispenser touchDisp = new TouchDispenser(Constants.TOUCH_STROKE, null, Constants.TOUCH_DAMAGE);
 
         GameBoard board = new GameBoard(EntitySpawnerRepo.getLvl1_2SpawnerManager(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight), rulesManager, touchDisp);
         board.resize(mScreenWidth, mScreenHeight);
         board.getRulesManager().setRuleListener(Lvl2Constant.ESCAPING_MOB_RULE, ruleProgressListener);
         board.getRulesManager().setRuleListener(Lvl2Constant.TIMER_RULE, ruleProgressListener);
+        return board;
+    }
+
+    private GameBoard generateLvl_1x3(Context context, OnGameEndListener endListener, IRuleProgressListener ruleProgressListener) {
+        ParticuleRepo.initCache(context);
+        String backGameBoard = "background1x3";
+        Bitmap fullSizedBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.lvl1x3_back);//TODO
+
+        int boardHeight = fullSizedBackground.getHeight();
+        int boardWidth = fullSizedBackground.getWidth();
+        SpriteRepo.addPicture(backGameBoard, fullSizedBackground);
+
+        RulesManager rulesManager = RuleRepo.getLvl_1x3_Rules(endListener);
+
+        String touchSpriteID = "touchSprite";
+        Bitmap touchSprite = BitmapFactory.decodeResource(context.getResources(), R.drawable.touch1);
+        SpriteRepo.addSpriteSheet(touchSprite, touchSpriteID, Constants.PARTICULE_NB_FRAME_ON_ANIMATION, 1);
+        TouchDispenser touchDisp = new TouchDispenser(Constants.TOUCH_STROKE*2, touchSpriteID, Constants.TOUCH_DAMAGE);
+
+        GameBoard board = new GameBoard(EntitySpawnerRepo.getLvl1_3SpawnerManager(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight), rulesManager, touchDisp);
+        board.resize(mScreenWidth, mScreenHeight);
+        board.getRulesManager().setRuleListener(Lvl3Constant.SUCCESS_SCORE_RULE, ruleProgressListener);
+        board.getRulesManager().setRuleListener(Lvl3Constant.DEFEAT_SCORE_RULE, ruleProgressListener);
         return board;
     }
 

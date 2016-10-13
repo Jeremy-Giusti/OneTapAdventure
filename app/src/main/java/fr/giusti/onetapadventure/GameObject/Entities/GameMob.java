@@ -1,7 +1,6 @@
 package fr.giusti.onetapadventure.gameObject.entities;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
@@ -75,6 +74,8 @@ public class GameMob extends Entity {
      * 0-10,10-20,20-30 utilisé pour selectioner les sprite en sequence (joue l'animation)
      */
     private int mAnimationState = 0;
+
+    private Paint paint = new Paint();
 
     // ========================================================| BEAN |==================================================
 
@@ -252,7 +253,7 @@ public class GameMob extends Entity {
      * @param deplacementY
      */
     protected void move(float deplacementX, float deplacementY) {
-        if (mState != eMobState.DISAPPEARING) {//ne bouge plus quand il disparait
+        if (mState != eMobState.GOING_AWAY) {//ne bouge plus quand il disparait
             this.mPosition.offset(deplacementX, deplacementY);
             if (mState != eMobState.DYING) {//si il est mort il ne change plus de direction
                 if (currentMove < (movePattern.length - 1)) {
@@ -352,15 +353,15 @@ public class GameMob extends Entity {
         if (mBitmapId != null && Utils.doRectIntersect(cameraPosition, mPosition)) {
             RectF positionOnSceen = new RectF(mPosition);
             positionOnSceen.offset(-cameraPosition.left, -cameraPosition.top);
-            if (mState != eMobState.DISAPPEARING) {
-                if (eMobState.HURT == mState) {
-                    drawLife(canvas, brush, positionOnSceen);
-                }
-                canvas.drawBitmap(SpriteRepo.getSpriteBitmap(mBitmapId, mSpriteCurrentColumn, mState.index), null, positionOnSceen, brush);
+
+            if (mState == eMobState.GOING_AWAY) {
+                paint.setAlpha((int) (255 - ((mAnimationState / (float) Constants.COMPLETE_ANIMATION_DURATION) * 255)));
+                canvas.drawBitmap(SpriteRepo.getSpriteBitmap(mBitmapId, mSpriteCurrentColumn, 3), null, positionOnSceen, paint);
             } else {
-                brush.setAlpha((int) (255 - ((mAnimationState / (float) Constants.COMPLETE_ANIMATION_DURATION) * 255)));
-                canvas.drawBitmap(SpriteRepo.getSpriteBitmap(mBitmapId, mSpriteCurrentColumn, 3), null, positionOnSceen, brush);
-                brush.setAlpha(255);
+                if (eMobState.HURT == mState) {
+                    drawLife(canvas, paint, positionOnSceen);
+                }
+                canvas.drawBitmap(SpriteRepo.getSpriteBitmap(mBitmapId, mSpriteCurrentColumn, mState.index), null, positionOnSceen, paint);
             }
         }
 
@@ -380,11 +381,18 @@ public class GameMob extends Entity {
         canvas.drawArc(heathBarPos, 0, 180 * (mHealth / (float) mDefaultHealth), false, brush);
     }
 
-    public static Paint GetPaint(Paint paint) {
-        paint.setStrokeWidth(3);
-        paint.setColor(Color.argb(255, 150, 150, 150));
+    public Paint getPaint() {
         return paint;
     }
+
+    public void setPaint(Paint paint) {
+        this.paint = paint;
+    }
+
+    public void setAlpha(int alpha) {
+        this.paint.setAlpha(alpha);
+    }
+
 
     // =======================================================| EVENTS |===================================================
 
@@ -462,7 +470,7 @@ public class GameMob extends Entity {
 
 
     public boolean hasDisapperred() {
-        return (mState == eMobState.DISAPPEARING && mAnimationState == Constants.COMPLETE_ANIMATION_DURATION);
+        return (mState == eMobState.GOING_AWAY && mAnimationState == Constants.COMPLETE_ANIMATION_DURATION);
     }
 
     /**
@@ -475,12 +483,12 @@ public class GameMob extends Entity {
     }
 
     public boolean isActive() {
-        return eMobState.DYING != mState && eMobState.DISAPPEARING != mState;
+        return eMobState.DYING != mState && eMobState.GOING_AWAY != mState;
     }
 
     public void setDisappering() {
-        if (eMobState.DISAPPEARING != mState) {
-            mState = eMobState.DISAPPEARING;
+        if (eMobState.GOING_AWAY != mState) {
+            mState = eMobState.GOING_AWAY;
             mAnimationState = 1;
         }
     }
@@ -495,7 +503,7 @@ public class GameMob extends Entity {
         DYING(5),
         SPE1(6),
         SPE2(7),
-        DISAPPEARING(8);
+        GOING_AWAY(8);
 
         public final int index;
 
