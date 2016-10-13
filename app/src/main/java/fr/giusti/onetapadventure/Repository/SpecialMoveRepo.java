@@ -321,6 +321,7 @@ public class SpecialMoveRepo {
                     currentMob.setAlpha(255);
                 }
             } else if (periode < 1) {
+                //TODO particule repop
                 currentMob.setAlpha(255);
                 currentMob.setState(GameMob.eMobState.SPE2);
                 currentMob.setAnimationState(0);
@@ -346,6 +347,7 @@ public class SpecialMoveRepo {
         specialeMoveList.put(swap.getId(), swap);
         specialeMoveList.put(smoke_trail.getId(), smoke_trail);
         specialeMoveList.put(breakGlassMove.getId(), breakGlassMove);
+        specialeMoveList.put(ghostMove.getId(), ghostMove);
 
 
     }
