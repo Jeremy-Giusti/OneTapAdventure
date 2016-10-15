@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
@@ -63,7 +64,7 @@ public class TouchPoint {
             }
         }
         if(state<1){
-            board.addParticules(ParticuleHolder.getAvailableParticuleGroupe(ParticuleRepo.GROUPE_SPARK_PARTICULE,mPosition,new Point(0,0),5));
+            board.addParticules(ParticuleHolder.getAvailableParticuleGroupe(ParticuleRepo.GROUPE_SPARK_PARTICULE,mPosition,new PointF(0,0),5));
         }
 
         state++;

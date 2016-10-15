@@ -122,7 +122,7 @@ public class GameRepo {
     private GameBoard generateLvl_1x3(Context context, OnGameEndListener endListener, IRuleProgressListener ruleProgressListener) {
         ParticuleRepo.initCache(context);
         String backGameBoard = "background1x3";
-        Bitmap fullSizedBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.lvl1x3_back);//TODO
+        Bitmap fullSizedBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.lvl1x2_back);//TODO change background
 
         int boardHeight = fullSizedBackground.getHeight();
         int boardWidth = fullSizedBackground.getWidth();

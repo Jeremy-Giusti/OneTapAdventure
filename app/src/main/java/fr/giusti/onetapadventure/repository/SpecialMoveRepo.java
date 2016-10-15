@@ -214,16 +214,22 @@ public class SpecialMoveRepo {
     };
 
     private static SpecialMove breakGlassMove = new SpecialMove() {
-        int remainingIteration = 4;
+        private final int iteration=8;
+        int remainingIteration = iteration;
         int lastUse = 0;
 
         @Override
+        public String getId() {
+            return BREAK_GLASS;
+        }
+
+        @Override
         public void doSpecialMove(GameBoard board, GameMob currentMob) {
-            if (lastUse < Constants.FRAME_PER_SEC * 4 && remainingIteration >= 4) {
+            if (lastUse < Constants.FRAME_PER_SEC * 4 && remainingIteration >= iteration) {
                 lastUse++;
             } else {
                 if (currentMob.getState() == GameMob.eMobState.HURT) {
-                    remainingIteration = 4;
+                    remainingIteration = iteration;
                 } else if (currentMob.getState() != GameMob.eMobState.SPE1) {
                     currentMob.setMovePattern(new PointF[]{new PointF(0, 0)});
                     currentMob.setState(GameMob.eMobState.SPE1);
@@ -231,18 +237,19 @@ public class SpecialMoveRepo {
                     remainingIteration--;
                 }
                 if (remainingIteration == 0) {
-                    board.onNewScenery(new Scenery("brokenglass" + currentMob.getIdName(), (int) currentMob.mPosition.centerX(), (int) currentMob.mPosition.centerY(), (int) currentMob.mPosition.width() * 3, (int) currentMob.mPosition.height() * 3, 1, TouchedMoveRepo.getMoveById(TouchedMoveRepo.MOB_AWAY_MOVE), GameConstant.HOLE_FRONT_SPRITE_ID));
+                    int sceneryHeight =(int) currentMob.mPosition.height() * 2;
+                    int sceneryWidth =(int) currentMob.mPosition.width() * 2;
+                     board.onNewScenery(new Scenery("brokenglass" + currentMob.getIdName(), (int) currentMob.mPosition.centerX()-sceneryWidth/2, (int) currentMob.mPosition.centerY()-sceneryHeight/2,sceneryWidth , sceneryHeight, 1, TouchedMoveRepo.getMoveById(TouchedMoveRepo.MOB_AWAY_MOVE), GameConstant.HOLE_FRONT_SPRITE_ID));
                     currentMob.setHealth(0);
                     currentMob.setState(GameMob.eMobState.DYING);
+                    lastUse=0;
+                    remainingIteration=iteration;
                 }
             }
 
         }
 
-        @Override
-        public String getId() {
-            return BREAK_GLASS;
-        }
+
     };
 
 
@@ -315,16 +322,16 @@ public class SpecialMoveRepo {
                     currentMob.setState(GameMob.eMobState.SPE1);
                     currentMob.setAnimationState(0);
                 }
-                if (currentMob.isJustMoving()) {
-                    currentMob.setAlpha(0);
+                if (currentMob.isJustMoving() || (GameMob.eMobState.SPE1==currentMob.getState()&&currentMob.getAnimationState()==Constants.FRAME_DURATION*3-1)) {
+                    currentMob.setAlpha(50);
                 } else {
                     currentMob.setAlpha(255);
                 }
             } else if (periode < 1) {
-                //TODO particule repop
+                board.addParticules(ParticuleHolder.getAvailableParticuleGroupe(ParticuleRepo.GROUPE_PLASMA_SPARK_PARTICULE, currentMob.mPosition, new PointF(0,0), 10));
                 currentMob.setAlpha(255);
-                currentMob.setState(GameMob.eMobState.SPE2);
-                currentMob.setAnimationState(0);
+                //currentMob.setState(GameMob.eMobState.MOVING_DOWN);
+               // currentMob.setAnimationState(0);
             }
         }
 
@@ -354,7 +361,13 @@ public class SpecialMoveRepo {
 
 
     public static SpecialMove getMoveById(String id) {
-        return SpecialMoveRepo.specialeMoveList.get(id);
+        try {
+            return SpecialMoveRepo.specialeMoveList.get(id).getClass().newInstance();
+        } catch (InstantiationException e) {
+            return null;
+        } catch (IllegalAccessException e) {
+            return null;
+        }
     }
 
     public static ArrayList<String> getMoveIdList() {

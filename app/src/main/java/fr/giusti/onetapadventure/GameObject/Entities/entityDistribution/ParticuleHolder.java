@@ -68,9 +68,9 @@ public class ParticuleHolder {
      * @param particulNb
      * @return
      */
-    public static ArrayList<Particule> getAvailableParticuleGroupe(String groupId, RectF spawnArea, Point generalDirection, int particulNb) {
+    public static ArrayList<Particule> getAvailableParticuleGroupe(String groupId, RectF spawnArea, PointF generalDirection, int particulNb) {
         ArrayList<Particule> result = new ArrayList<>();
-        ArrayList<String> particuleIdList = ParticuleRepo.mParticuleGroupIdList.get(ParticuleRepo.GROUPE_SPARK_PARTICULE);
+        ArrayList<String> particuleIdList = ParticuleRepo.mParticuleGroupIdList.get(groupId);
 
         ArrayList<Particule> availablePool;
         Particule particule = null;

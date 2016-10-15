@@ -84,7 +84,10 @@ public class EntityRepo {
         //     returnList.add(new GameMob("programmedMob4", 256, 256, 2, 2, mob4Pattern, null, null, null, 1, 1));
         returnList.add(orangeMob);
         returnList.add(yellowMob);
-
+        GameMob ghostMob = getGhostMob("ghost",mContext,new Point(1000,500),new Point(0,250), Constants.FRAME_PER_SEC*5,50);
+        returnList.add(ghostMob);
+        GameMob holeMob = getHoleMakerMob("holemob",mContext,new Point(1000,16),new Point(0,250), Constants.FRAME_PER_SEC*5,10);
+        returnList.add(holeMob);
         try {
             returnList.addAll(LoadMobsFromDb(mContext));
         } catch (IOException e) {
@@ -436,7 +439,7 @@ public class EntityRepo {
 
         PointF[] path = PathRepo.generateLineToDest(new PointF(startPoint), new PointF(destPoint), tickToDest);
         String mobsptsheetId = "ghostmob";
-        SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet_purple), mobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+        SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheetghost), mobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
         return new GameMob(id, startPoint.x, startPoint.y, GameConstant.DEFAULT_MOB_SIZE, GameConstant.DEFAULT_MOB_SIZE, path, SpecialMoveRepo.getMoveById(SpecialMoveRepo.GHOST_MOVE), TouchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mobsptsheetId, health, 1);
 
     }

@@ -40,7 +40,7 @@ public class EntitySpawnerRepo {
 
     public static EntitySpawnerManager getLvl1_3SpawnerManager(Context context) {
         //TODO
-//        EntitySpawnerManager result = new EntitySpawnerManager(EntityRepo.getLvl1x2InitList(context), EntityRepo.getLvl1x2BackupList(context));
+        EntitySpawnerManager result = new EntitySpawnerManager(EntityRepo.getLvl1x2InitList(context), EntityRepo.getLvl1x2BackupList(context));
 
 //        result.addSpawner(new EntitySpawner.EntitySpawnerBuilder(eEntityDistributionMode.GROUPED_SEMIRANDOM, eConditions.TIMER, 2000, 0)
 //                .setSpawnerInfinite()

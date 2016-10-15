@@ -40,12 +40,12 @@ public class GameMob extends Entity {
     /**
      * multiplcateur pour les mouvements horizontaux (permet de ralentire/accelerer/inverser)
      */
-    public double xAlteration = 1;
+    public float xAlteration = 1;
 
     /**
      * multiplcateur pour les mouvements verticaux (permet de ralentire/accelerer/inverser)
      */
-    public double yAlteration = 1;
+    public float yAlteration = 1;
 
     /**
      * position actuel dans l'array de mouvement sequentiel
@@ -157,19 +157,19 @@ public class GameMob extends Entity {
         this.mTouchedMove = mTouchedMove;
     }
 
-    public double getxAlteration() {
+    public float getxAlteration() {
         return xAlteration;
     }
 
-    public void setxAlteration(double xAlteration) {
+    public void setxAlteration(float xAlteration) {
         this.xAlteration = xAlteration;
     }
 
-    public double getyAlteration() {
+    public float getyAlteration() {
         return yAlteration;
     }
 
-    public void setyAlteration(double yAlteration) {
+    public void setyAlteration(float yAlteration) {
         this.yAlteration = yAlteration;
     }
 
@@ -205,6 +205,11 @@ public class GameMob extends Entity {
         return movePattern[currentMove];
     }
 
+    public PointF getAlteredCurrentMove() {
+        return new PointF(movePattern[currentMove].x*xAlteration,movePattern[currentMove].y*yAlteration);
+    }
+
+
     public void setCurrentMove(int newCurrentMove) {
         currentMove = newCurrentMove;
     }
@@ -212,6 +217,7 @@ public class GameMob extends Entity {
 
     public void setMovePattern(PointF[] movePattern) {
         this.movePattern = movePattern;
+        currentMove=0;
     }
 
     // ======================================================| UPDATE |===================================================
