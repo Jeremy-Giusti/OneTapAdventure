@@ -383,7 +383,7 @@ public class EntityRepo {
             }
             spriteId = (difficulty == 2) ? mob2sptsheetId : mob3sptsheetId;
         }
-        return new GameMob(id, x, y, width, height, path, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMove, spriteId, difficulty * Constants.TOUCH_DAMAGE, 1);
+        return new GameMob(id, x, y, width, height, path, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMove, spriteId, difficulty * GameConstant.TOUCH_DAMAGE, 1);
     }
 
     public static GameMob generateSimpleRandomizedMob(String id, Context context, Rect startPos, Rect destPos, int travelTimeOnTick) {
@@ -399,7 +399,7 @@ public class EntityRepo {
 
         PointF[] path = PathRepo.generateLineToDest(new PointF(startX, startY), new PointF(destX, destY), travelTimeOnTick);
 
-        return new GameMob(id, startX, startY, GameConstant.DEFAULT_MOB_SIZE, 48, path, SpecialMoveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), TouchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mob1sptsheetId, Constants.TOUCH_DAMAGE, 1);
+        return new GameMob(id, startX, startY, GameConstant.DEFAULT_MOB_SIZE, 48, path, SpecialMoveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), TouchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mob1sptsheetId, GameConstant.TOUCH_DAMAGE, 1);
     }
 
     public static GameMob getRapidScanMob(String id, Context context, Point startPos, int health) {

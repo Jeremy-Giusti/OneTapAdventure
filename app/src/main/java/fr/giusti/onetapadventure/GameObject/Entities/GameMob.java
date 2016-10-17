@@ -8,12 +8,15 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 
 import fr.giusti.onetapadventure.commons.Constants;
+import fr.giusti.onetapadventure.commons.GameConstant;
 import fr.giusti.onetapadventure.commons.Utils;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.moves.SpecialMove;
 import fr.giusti.onetapadventure.gameObject.moves.TouchedMove;
 import fr.giusti.onetapadventure.repository.PathRepo;
+import fr.giusti.onetapadventure.repository.SpecialMoveRepo;
 import fr.giusti.onetapadventure.repository.SpriteRepo;
+import fr.giusti.onetapadventure.repository.TouchedMoveRepo;
 
 public class GameMob extends Entity {
     private static final String TAG = GameMob.class.getName();
@@ -69,6 +72,7 @@ public class GameMob extends Entity {
      */
     protected eMobState mState = eMobState.MOVING_UP;
 
+    private final int mScoreValue;
 
     /**
      * 0-10,10-20,20-30 utilisé pour selectioner les sprite en sequence (joue l'animation)
@@ -79,6 +83,17 @@ public class GameMob extends Entity {
 
     // ========================================================| BEAN |==================================================
 
+
+//    public GameMob(String idName, int x, int y, int width, int height, PointF[] movePattern, SpecialMove specialMove1, TouchedMove touchedmove, String mBitmapId, int health, int state) {
+//        super(idName, x, y, width, height, mBitmapId);
+//        this.movePattern = movePattern;
+//        this.mSpecialMove1 = specialMove1;
+//        this.mTouchedMove = touchedmove;
+//        this.mHealth = health;
+//        this.mDefaultHealth = health;
+//        this.mState = eMobState.values()[state];
+//    }
+
     /**
      * @param x           position horizontale initial
      * @param y           position verticale initial
@@ -86,17 +101,7 @@ public class GameMob extends Entity {
      * @param mBitmapId   un string qui sert d'id pour aller piocher le skin du mob dans le bitmapRepo (cache bitmap)
      * @param state       l'etat du mob (inutilisé pour le moment)
      */
-    public GameMob(String idName, int x, int y, int width, int height, PointF[] movePattern, SpecialMove specialMove1, TouchedMove touchedmove, String mBitmapId, int health, int state) {
-        super(idName, x, y, width, height, mBitmapId);
-        this.movePattern = movePattern;
-        this.mSpecialMove1 = specialMove1;
-        this.mTouchedMove = touchedmove;
-        this.mHealth = health;
-        this.mDefaultHealth = health;
-        this.mState = eMobState.values()[state];
-    }
-
-    public GameMob(String idName, int x, int y, int width, int height, PointF[] movePattern, SpecialMove specialMove1, TouchedMove touchedmove, String mBitmapId, int health, eMobState state) {
+    private GameMob(String idName, int x, int y, int width, int height, PointF[] movePattern, SpecialMove specialMove1, TouchedMove touchedmove, String mBitmapId, int health, eMobState state, int score) {
         super(idName, x, y, width, height, mBitmapId);
         this.movePattern = movePattern;
         this.mSpecialMove1 = specialMove1;
@@ -104,6 +109,18 @@ public class GameMob extends Entity {
         this.mHealth = health;
         this.mDefaultHealth = health;
         this.mState = state;
+        this.mScoreValue = score;
+    }
+
+    private GameMob(MobBuilder mobBuilder) {
+        super(mobBuilder.idName, mobBuilder.mSpriteSheetId, mobBuilder.mPosition);
+        this.movePattern = mobBuilder.movePattern;
+        this.mSpecialMove1 = mobBuilder.mSpecialMove1;
+        this.mTouchedMove = mobBuilder.mTouchedMove;
+        this.mHealth = mobBuilder.mHealth;
+        this.mDefaultHealth = mobBuilder.mDefaultHealth;
+        this.mState = mobBuilder.mState;
+        this.mScoreValue = mobBuilder.scoreValue;
     }
 
 
@@ -206,7 +223,7 @@ public class GameMob extends Entity {
     }
 
     public PointF getAlteredCurrentMove() {
-        return new PointF(movePattern[currentMove].x*xAlteration,movePattern[currentMove].y*yAlteration);
+        return new PointF(movePattern[currentMove].x * xAlteration, movePattern[currentMove].y * yAlteration);
     }
 
 
@@ -217,7 +234,7 @@ public class GameMob extends Entity {
 
     public void setMovePattern(PointF[] movePattern) {
         this.movePattern = movePattern;
-        currentMove=0;
+        currentMove = 0;
     }
 
     // ======================================================| UPDATE |===================================================
@@ -441,7 +458,8 @@ public class GameMob extends Entity {
                 mTouchedMove,
                 mBitmapId,
                 mHealth,
-                mState);
+                mState,
+                mScoreValue);
 
         return clone;
 
@@ -497,6 +515,80 @@ public class GameMob extends Entity {
             mState = eMobState.GOING_AWAY;
             mAnimationState = 1;
         }
+    }
+
+
+    public static class MobBuilder {
+        protected String idName;
+        protected String mSpriteSheetId;
+        protected PointF[] movePattern = new PointF[]{new PointF(0, 0)};
+        private int alignement = 0;
+        private SpecialMove mSpecialMove1 = SpecialMoveRepo.getMoveById(SpecialMoveRepo.NO_MOVE);
+        private TouchedMove mTouchedMove = TouchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE);
+        private int mHealth = GameConstant.TOUCH_DAMAGE;
+        private int mDefaultHealth = GameConstant.TOUCH_DAMAGE;
+        public RectF mPosition = new RectF();
+        public eMobState mState = eMobState.MOVING_DOWN;
+        public int scoreValue = 50;
+
+        public MobBuilder(String idName, String mSpriteSheetId, float x, float y) {
+            this.idName = idName;
+            this.mSpriteSheetId = mSpriteSheetId;
+            mPosition = new RectF(x - (GameConstant.DEFAULT_MOB_SIZE / 2), y - (GameConstant.DEFAULT_MOB_SIZE / 2), GameConstant.DEFAULT_MOB_SIZE, GameConstant.DEFAULT_MOB_SIZE);
+        }
+
+        public MobBuilder setMovePattern(PointF[] movePattern) {
+            this.movePattern = movePattern;
+            return this;
+        }
+
+        /**
+         * set default health AND health attribut
+         *
+         * @param health
+         * @return
+         */
+        public MobBuilder setDefaultHealth(int health) {
+            this.mDefaultHealth = health;
+            this.mHealth = health;
+            return this;
+        }
+
+        public MobBuilder setHealth(int health) {
+            this.mHealth = health;
+            return this;
+        }
+
+        public MobBuilder setAlignement(int alignement) {
+            this.alignement = alignement;
+            return this;
+        }
+
+        public MobBuilder setSpecialMove(SpecialMove specialMove1) {
+            this.mSpecialMove1 = specialMove1;
+            return this;
+        }
+
+        public MobBuilder setTouchedMove(TouchedMove touchedMove) {
+            this.mTouchedMove = touchedMove;
+            return this;
+        }
+
+        public MobBuilder setState(eMobState state) {
+            this.mState = state;
+            return this;
+        }
+
+        public MobBuilder setScore(int score) {
+            this.scoreValue = score;
+            return this;
+        }
+
+
+        public GameMob build() {
+            return new GameMob(this);
+        }
+
     }
 
     public enum eMobState {

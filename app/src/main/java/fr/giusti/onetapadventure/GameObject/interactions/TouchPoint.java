@@ -3,7 +3,6 @@ package fr.giusti.onetapadventure.gameObject.interactions;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -11,6 +10,7 @@ import android.graphics.RectF;
 import java.util.List;
 
 import fr.giusti.onetapadventure.commons.Constants;
+import fr.giusti.onetapadventure.commons.GameConstant;
 import fr.giusti.onetapadventure.commons.Utils;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
@@ -25,8 +25,8 @@ public class TouchPoint {
     private final static int LENGTH_ANIMATION_FRAME = Constants.FRAME_DURATION;
     private boolean actionDone = false;
     private String spriteId = null;
-    private int stroke = Constants.TOUCH_STROKE;
-    private int damage = Constants.TOUCH_DAMAGE;
+    private int stroke = GameConstant.TOUCH_STROKE;
+    private int damage = GameConstant.TOUCH_DAMAGE;
 
 
     public TouchPoint(float x, float y, int stroke) {

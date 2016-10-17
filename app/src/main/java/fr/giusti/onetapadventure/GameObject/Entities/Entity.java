@@ -42,6 +42,12 @@ public abstract class Entity implements Cloneable {
 
     }
 
+    public Entity(String idName, String mBitmapId,RectF mPosition) {
+        this.mPosition = mPosition;
+        this.idName = idName;
+        this.mBitmapId = mBitmapId;
+    }
+
     public String getIdName() {
         return idName;
     }

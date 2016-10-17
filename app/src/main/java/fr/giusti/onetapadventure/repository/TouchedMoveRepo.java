@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import fr.giusti.onetapadventure.commons.Constants;
 import fr.giusti.onetapadventure.commons.GameConstant;
 import fr.giusti.onetapadventure.gameObject.GameBoard;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
@@ -83,8 +82,8 @@ public class TouchedMoveRepo {
         @Override
         public void doTouchedMove(GameBoard board, GameMob currentMob, int damage) {
             int mobHealth = currentMob.getHealth();
-            if (mobHealth < (9 * Constants.TOUCH_DAMAGE)) {//9 de vie max
-                currentMob.setHealth(mobHealth + Constants.TOUCH_DAMAGE);
+            if (mobHealth < (9 * GameConstant.TOUCH_DAMAGE)) {//9 de vie max
+                currentMob.setHealth(mobHealth + GameConstant.TOUCH_DAMAGE);
             }
             currentMob.setState(GameMob.eMobState.SPE1);
             currentMob.setAnimationState(0);

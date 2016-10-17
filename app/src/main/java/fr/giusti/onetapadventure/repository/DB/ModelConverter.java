@@ -48,16 +48,18 @@ public class ModelConverter {
 
     public static GameMob mobDBToMob(MobDB mobdb) {
 
-        return new GameMob(
+        return new GameMob.MobBuilder(mobdb.getId(),mobdb.getSpriteSheetUrl(),mobdb.getPosX(), mobdb.getPosY()).set.build();
+
+                new GameMob(
                 mobdb.getId(),
-                mobdb.getPosX(),
-                mobdb.getPosY(),
+                ,
+               ,
                 mobdb.getWidth(),
                 mobdb.getHeight(),
                 null,
                 new SpecialMoveRepo().getMoveById(mobdb.getSpecialMoveId()),
                 new TouchedMoveRepo().getMoveById(mobdb.getTouchedMoveId()),
-                mobdb.getSpriteSheetUrl(),
+
                 mobdb.getHealth(),
                 0);
     }

@@ -51,10 +51,10 @@ public class SpecialMoveRepo {
         @Override
         public void doSpecialMove(GameBoard board, GameMob currentMob) {
             int currentHealth = currentMob.getHealth();
-            if (currentMob.isJustMoving() && this.lastUse > 180 && currentHealth < (5 * Constants.TOUCH_DAMAGE)) {
+            if (currentMob.isJustMoving() && this.lastUse > 180 && currentHealth < (5 * GameConstant.TOUCH_DAMAGE)) {
                 lastUse = 0;
                 currentMob.setState(GameMob.eMobState.SPE1);
-                currentMob.setHealth(currentHealth + Constants.TOUCH_DAMAGE);
+                currentMob.setHealth(currentHealth + GameConstant.TOUCH_DAMAGE);
                 currentMob.setAnimationState(0);
             } else {
                 lastUse++;
@@ -98,8 +98,8 @@ public class SpecialMoveRepo {
             if (lastUse >= Constants.FRAME_PER_SEC * 2) {
                 lastUse = 0;
                 int mobHealth = currentMob.getHealth();
-                if (mobHealth > Constants.TOUCH_DAMAGE) {
-                    mobHealth -= Constants.TOUCH_DAMAGE;
+                if (mobHealth > GameConstant.TOUCH_DAMAGE) {
+                    mobHealth -= GameConstant.TOUCH_DAMAGE;
                     currentMob.setHealth(mobHealth);
                     currentMob.setState(GameMob.eMobState.HURT);
                     switch (mobHealth) {
@@ -110,15 +110,15 @@ public class SpecialMoveRepo {
                         case 1:
                             break;
                     }
-                    if (mobHealth <= Constants.TOUCH_DAMAGE && lastShowed != 1) {
+                    if (mobHealth <= GameConstant.TOUCH_DAMAGE && lastShowed != 1) {
                         lastShowed = 1;
                         Particule numberParicule = ParticuleHolder.getAvailableParticule(ParticuleRepo.NUMBER1_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), currentMob.mPosition.width(), currentMob.mPosition.height(), false, new PointF[]{new PointF(0, 2)});
                         board.addParticule(numberParicule);
-                    } else if (mobHealth <= (2 * Constants.TOUCH_DAMAGE) && lastShowed != 2) {
+                    } else if (mobHealth <= (2 * GameConstant.TOUCH_DAMAGE) && lastShowed != 2) {
                         lastShowed = 2;
                         Particule numberParicule = ParticuleHolder.getAvailableParticule(ParticuleRepo.NUMBER2_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), currentMob.mPosition.width(), currentMob.mPosition.height(), false, new PointF[]{new PointF(0, 2)});
                         board.addParticule(numberParicule);
-                    } else if (mobHealth <= (3 * Constants.TOUCH_DAMAGE) && lastShowed != 3) {
+                    } else if (mobHealth <= (3 * GameConstant.TOUCH_DAMAGE) && lastShowed != 3) {
                         lastShowed = 3;
                         Particule numberParicule = ParticuleHolder.getAvailableParticule(ParticuleRepo.NUMBER3_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), currentMob.mPosition.width(), currentMob.mPosition.height(), false, new PointF[]{new PointF(0, 2)});
                         board.addParticule(numberParicule);
@@ -135,7 +135,7 @@ public class SpecialMoveRepo {
                     Particule explosionParticule = ParticuleHolder.getAvailableParticule(ParticuleRepo.EXPLOSION_PARTICULE, particuleX, particuleY, particuleWidth, particuleHeight, false, null);
 
                     //TODO MAKE AOE event instead of touch
-                    board.addTouchEvent(new TouchPoint(currentMob.getPositionX(), currentMob.getPositionY(), Constants.TOUCH_STROKE * 2));
+                    board.addTouchEvent(new TouchPoint(currentMob.getPositionX(), currentMob.getPositionY(), GameConstant.TOUCH_STROKE * 2));
 
                     board.addParticule(explosionParticule);
                     currentMob.setHealth(-1);

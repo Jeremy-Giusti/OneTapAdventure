@@ -1,6 +1,6 @@
 package fr.giusti.onetapadventure.gameObject.interactions;
 
-import fr.giusti.onetapadventure.commons.Constants;
+import fr.giusti.onetapadventure.commons.GameConstant;
 
 /**
  * Created by jgiusti on 20/09/2016.
@@ -8,9 +8,9 @@ import fr.giusti.onetapadventure.commons.Constants;
  */
 
 public class TouchDispenser {
-    private int touchStrock = Constants.TOUCH_STROKE;
+    private int touchStrock = GameConstant.TOUCH_STROKE;
     private String spriteId = null;
-    private int damageDone = Constants.TOUCH_DAMAGE;
+    private int damageDone = GameConstant.TOUCH_DAMAGE;
 
     public TouchDispenser(int touchStrock, String spriteId, int damageDone) {
         this.touchStrock = touchStrock;

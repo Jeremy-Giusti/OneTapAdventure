@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import fr.giusti.onetapadventure.callback.OnBoardEventListener;
-import fr.giusti.onetapadventure.commons.Constants;
+import fr.giusti.onetapadventure.commons.GameConstant;
 import fr.giusti.onetapadventure.gameObject.entities.Entity;
 import fr.giusti.onetapadventure.gameObject.entities.GameMob;
 import fr.giusti.onetapadventure.gameObject.entities.Particule;
@@ -237,7 +237,7 @@ public class GameBoard {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if (mTouchDisp == null)
-                    mTouchPoints.add(new TouchPoint(event.getX(), event.getY(), Constants.TOUCH_STROKE));
+                    mTouchPoints.add(new TouchPoint(event.getX(), event.getY(), GameConstant.TOUCH_STROKE));
                 else
                     mTouchPoints.add(mTouchDisp.generateTouchPoint(event.getX(), event.getY()));
                 break;
