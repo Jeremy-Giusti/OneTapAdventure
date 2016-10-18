@@ -584,6 +584,20 @@ public class GameMob extends Entity {
             return this;
         }
 
+        public MobBuilder setSize(int size) {
+            mPosition = new RectF(mPosition.centerX() - size / 2, mPosition.centerY() - size / 2, mPosition.centerX() + size / 2, mPosition.centerY() + size / 2);
+            return this;
+        }
+
+        public MobBuilder setHeight(int height) {
+            mPosition = new RectF(mPosition.left, mPosition.centerY() - height / 2, mPosition.right, mPosition.centerY() + height / 2);
+            return this;
+        }
+
+        public MobBuilder setWidth(int width) {
+            mPosition = new RectF(mPosition.centerX() - width / 2, mPosition.top, mPosition.centerX() + width / 2, mPosition.bottom);
+            return this;
+        }
 
         public GameMob build() {
             return new GameMob(this);

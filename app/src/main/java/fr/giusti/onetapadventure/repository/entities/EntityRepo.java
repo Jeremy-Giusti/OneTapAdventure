@@ -70,23 +70,40 @@ public class EntityRepo {
 
         SpecialMoveRepo moveRepo = new SpecialMoveRepo();
         TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
-        GameMob blueMob = new GameMob("programmedMob1", 1, 250, 32, 32, mob1Pattern, moveRepo.getMoveById(SpecialMoveRepo.SMOKE_TRAIL), touchedMoveRepo.getMoveById(TouchedMoveRepo.BAIT), bitmapId4, 50, 1);
-        GameMob greenMob = new GameMob("programmedMob3", 100, 100, 48, 48, mob3Pattern, moveRepo.getMoveById(SpecialMoveRepo.SWAP), touchedMoveRepo.getMoveById(TouchedMoveRepo.BLEED), bitmapId3, 10, 1);
-        GameMob yellowMob = new GameMob("programmedMob6", 250, 250, 48, 48, mob6Pattern, moveRepo.getMoveById(SpecialMoveRepo.MULTIPLIE), null, bitmapId2, 10, 1);
-        GameMob orangeMob = new GameMob("programmedMob5", 250, 250, 40, 40, mob5Pattern, moveRepo.getMoveById(SpecialMoveRepo.AUTO_HURT_EXPLODING), touchedMoveRepo.getMoveById(TouchedMoveRepo.HEAL), bitmapId4, 20, 1);
+        GameMob.MobBuilder mobBuilder = new GameMob.MobBuilder("programmedMob1", bitmapId4, 1, 250);
+        GameMob blueMob = mobBuilder.setSize(32).
+                setDefaultHealth(50).
+                setMovePattern(mob1Pattern).
+                setSpecialMove(moveRepo.getMoveById(SpecialMoveRepo.SMOKE_TRAIL)).
+                setTouchedMove(touchedMoveRepo.getMoveById(TouchedMoveRepo.BAIT))
+                .build();
+        mobBuilder = new GameMob.MobBuilder("programmedMob3", bitmapId3, 100, 100);
+        GameMob greenMob = mobBuilder.setMovePattern(mob3Pattern).
+                setSpecialMove(moveRepo.getMoveById(SpecialMoveRepo.SWAP)).
+                setTouchedMove(touchedMoveRepo.getMoveById(TouchedMoveRepo.BLEED))
+                .build();
+
+        mobBuilder = new GameMob.MobBuilder("programmedMob6", bitmapId2, 250, 250);
+        GameMob yellowMob = mobBuilder.setMovePattern(mob6Pattern).
+                setSpecialMove(moveRepo.getMoveById(SpecialMoveRepo.MULTIPLIE))
+                .build();
+        mobBuilder = new GameMob.MobBuilder("programmedMob5", bitmapId4, 250, 250);
+        GameMob orangeMob = mobBuilder.setMovePattern(mob5Pattern).
+                setSize(40).
+                setDefaultHealth(20).
+                setSpecialMove(moveRepo.getMoveById(SpecialMoveRepo.AUTO_HURT_EXPLODING)).
+                setTouchedMove(touchedMoveRepo.getMoveById(TouchedMoveRepo.HEAL))
+                .build();
+
 
         returnList.add(blueMob);
-        returnList.add(new GameMob("programmedMob2", 10, 10, 48, 48, mob2Pattern, moveRepo.getMoveById(SpecialMoveRepo.TELEPORT), null, bitmapId, 30, 1));
-
         returnList.add(greenMob);
-
-        //    Point[] mob4Pattern = {new Point(0, 0)};
-        //     returnList.add(new GameMob("programmedMob4", 256, 256, 2, 2, mob4Pattern, null, null, null, 1, 1));
         returnList.add(orangeMob);
         returnList.add(yellowMob);
-        GameMob ghostMob = getGhostMob("ghost",mContext,new Point(1000,500),new Point(0,250), Constants.FRAME_PER_SEC*5,50);
+
+        GameMob ghostMob = getGhostMob("ghost", mContext, new Point(1000, 500), new Point(0, 250), Constants.FRAME_PER_SEC * 5, 50);
         returnList.add(ghostMob);
-        GameMob holeMob = getHoleMakerMob("holemob",mContext,new Point(1000,16),new Point(0,250), Constants.FRAME_PER_SEC*5,10);
+        GameMob holeMob = getHoleMakerMob("holemob", mContext, new Point(1000, 16), new Point(0, 250), Constants.FRAME_PER_SEC * 5, 10);
         returnList.add(holeMob);
         try {
             returnList.addAll(LoadMobsFromDb(mContext));
@@ -187,11 +204,9 @@ public class EntityRepo {
 
         String mob1sptsheetId = "tier1Mob";
         SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet), mob1sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
-        PointF[] mob1Pattern = PathRepo.generateLineToDest(startPos, posDest, (int) (Constants.FRAME_PER_SEC * 4.5));
 
-        GameMob mob1 = new GameMob("firstMob1", (int) startPos.x, (int) startPos.y + 50, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE, mob1Pattern, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mob1sptsheetId, 10, 1);
-        GameMob mob2 = new GameMob("firstMob2", (int) startPos.x, (int) startPos.y - 50, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE, mob1Pattern, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mob1sptsheetId, 10, 1);
-
+        GameMob mob1 = generateSimpleRandomizedMob("firstMob1",context,new RectF(startPos.x-5,startPos.y+45,startPos.x+5,startPos.y+55),hitbox,(int) (Constants.FRAME_PER_SEC * 4.5));
+        GameMob mob2 =generateSimpleRandomizedMob("firstMob2",context,new RectF(startPos.x-5,startPos.y-55,startPos.x+5,startPos.y-45),hitbox,(int) (Constants.FRAME_PER_SEC * 4.5));
 
         entityList.add(mob1);
         entityList.add(mob2);
@@ -250,7 +265,7 @@ public class EntityRepo {
     public static ArrayList<Entity> getLvl1x1LastWave(Context context) {
         ArrayList<Entity> result = new ArrayList<>();
         for (int i = 0; i < Lvl1Constant.END_MOB_WAVE; i++) {
-            result.add(generateSimpleRandomizedMob("wave" + i, context, new Rect(1010, 5, 1019, 506), Lvl1Constant.HOLE1_DIMENS, Constants.FRAME_PER_SEC * 3));
+            result.add(generateSimpleRandomizedMob("wave" + i, context, new RectF(1010, 5, 1019, 506), new RectF(Lvl1Constant.HOLE1_DIMENS), Constants.FRAME_PER_SEC * 3));
         }
         return result;
     }
@@ -386,16 +401,16 @@ public class EntityRepo {
         return new GameMob(id, x, y, width, height, path, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMove, spriteId, difficulty * GameConstant.TOUCH_DAMAGE, 1);
     }
 
-    public static GameMob generateSimpleRandomizedMob(String id, Context context, Rect startPos, Rect destPos, int travelTimeOnTick) {
+    public static GameMob generateSimpleRandomizedMob(String id, Context context, RectF startPos, RectF destPos, int travelTimeOnTick) {
         String mob1sptsheetId = "tier1Mob";
         SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet), mob1sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
 
         Random r = new Random();
 
-        int startX = r.nextInt(startPos.right - startPos.left) + startPos.left;
-        int startY = r.nextInt(startPos.bottom - startPos.top) + startPos.top;
-        int destX = r.nextInt(destPos.right - destPos.left) + destPos.left;
-        int destY = r.nextInt(destPos.bottom - destPos.top) + destPos.top;
+        float startX = r.nextInt((int)(startPos.right - startPos.left)) + startPos.left;
+        float startY = r.nextInt((int)(startPos.bottom - startPos.top)) + startPos.top;
+        float destX = r.nextInt((int)(destPos.right - destPos.left)) + destPos.left;
+        float destY = r.nextInt((int)(destPos.bottom - destPos.top)) + destPos.top;
 
         PointF[] path = PathRepo.generateLineToDest(new PointF(startX, startY), new PointF(destX, destY), travelTimeOnTick);
 
@@ -422,7 +437,7 @@ public class EntityRepo {
 
     }
 
-    private static GameMob getHoleMakerMob(String id, Context context, Point startPoint, Point destPoint,int tickToDest, int health) {
+    private static GameMob getHoleMakerMob(String id, Context context, Point startPoint, Point destPoint, int tickToDest, int health) {
 
 
         String bitmapId = GameConstant.HOLE_FRONT_SPRITE_ID;
@@ -435,7 +450,7 @@ public class EntityRepo {
 
     }
 
-    private static GameMob getGhostMob(String id, Context context, Point startPoint, Point destPoint,int tickToDest, int health) {
+    private static GameMob getGhostMob(String id, Context context, Point startPoint, Point destPoint, int tickToDest, int health) {
 
         PointF[] path = PathRepo.generateLineToDest(new PointF(startPoint), new PointF(destPoint), tickToDest);
         String mobsptsheetId = "ghostmob";
@@ -443,7 +458,6 @@ public class EntityRepo {
         return new GameMob(id, startPoint.x, startPoint.y, GameConstant.DEFAULT_MOB_SIZE, GameConstant.DEFAULT_MOB_SIZE, path, SpecialMoveRepo.getMoveById(SpecialMoveRepo.GHOST_MOVE), TouchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mobsptsheetId, health, 1);
 
     }
-
 
 
 }

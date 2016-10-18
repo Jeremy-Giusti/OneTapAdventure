@@ -45,23 +45,16 @@ public class ModelConverter {
         mobDb.setSpriteSheetUrl(mob.getBitmapId());
         return mobDb;
     }
-
+//FIXME posy and x should be center...
     public static GameMob mobDBToMob(MobDB mobdb) {
 
-        return new GameMob.MobBuilder(mobdb.getId(),mobdb.getSpriteSheetUrl(),mobdb.getPosX(), mobdb.getPosY()).set.build();
-
-                new GameMob(
-                mobdb.getId(),
-                ,
-               ,
-                mobdb.getWidth(),
-                mobdb.getHeight(),
-                null,
-                new SpecialMoveRepo().getMoveById(mobdb.getSpecialMoveId()),
-                new TouchedMoveRepo().getMoveById(mobdb.getTouchedMoveId()),
-
-                mobdb.getHealth(),
-                0);
+        return new GameMob.MobBuilder(mobdb.getId(),mobdb.getSpriteSheetUrl(),mobdb.getPosX(), mobdb.getPosY())
+                .setDefaultHealth(mobdb.getHealth())
+                .setSpecialMove(new SpecialMoveRepo().getMoveById(mobdb.getSpecialMoveId()))
+                .setTouchedMove(new TouchedMoveRepo().getMoveById(mobdb.getTouchedMoveId()))
+                .setWidth(mobdb.getWidth())
+                .setHeight(mobdb.getHeight())
+                .build();
     }
 
     //--------------------------Path converter------------------------
