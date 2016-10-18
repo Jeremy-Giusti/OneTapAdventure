@@ -247,13 +247,6 @@ public class EntityRepo {
         //--------------------Last mob --------------------------
         Point startPos = new Point(Lvl1Constant.MOB_POP_X, Lvl1Constant.MOB_POP_Y_MAX_VAlUE / 2);
         GameMob lastMob = getRapidScanMob("lastMob", context, startPos, 30);
-//        SpecialMoveRepo moveRepo = new SpecialMoveRepo();
-//        TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
-//        int lastMobDirection = (Math.random() < 0.5) ? -1 : 1;
-//        String lastMobsptsheetId = "lastMob";
-//        SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet3), lastMobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
-//
-//        GameMob lastMob = new GameMob("lastMob", (int) startPos.x, (int) startPos.y, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE, new PointF[]{new PointF(-4, 15 * lastMobDirection)}, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), "lastMob", 30, 1);
         lastMob.setAlignement(4);
         backupList.add(lastMob);
         // -----------------------------------------------------
@@ -296,20 +289,20 @@ public class EntityRepo {
         String mob1sptsheetId = "tier1Mob";
         SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet), mob1sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
 
-        RectF rectDest = new RectF(posDest.x, posDest.y, posDest.x, posDest.y);
+        RectF rectDest = new RectF(posDest.x, posDest.y, posDest.x+1, posDest.y+1);
         // PointF[] mob1Pattern = PathRepo.generateLineToDest(new PointF(10, 10), posDest, Constants.FRAME_PER_SEC * 4);
-        GameMob mob1 = generateSimpleRandomizedMob("firstMob", context, new RectF(10, 10, 10, 10), rectDest, Constants.FRAME_PER_SEC * 4);
+        GameMob mob1 = generateSimpleRandomizedMob("firstMob", context, new RectF(10, 10, 11, 11), rectDest, Constants.FRAME_PER_SEC * 4);
         //      new GameMob("firstMob", 10, 10, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE, mob1Pattern, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mob1sptsheetId, 10, 1);
 
         // PointF[] mob2Pattern = PathRepo.generateLineToDest(new PointF(10, 500), posDest, Constants.FRAME_PER_SEC * 4);
-        GameMob mob2 = generateSimpleRandomizedMob("secondMob", context, new RectF(10, 500, 10, 500), rectDest, Constants.FRAME_PER_SEC * 4);
+        GameMob mob2 = generateSimpleRandomizedMob("secondMob", context, new RectF(10, 500, 11, 501), rectDest, Constants.FRAME_PER_SEC * 4);
         //new GameMob("secondMob", 10, 500, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE, mob2Pattern, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mob1sptsheetId, 10, 1);
 
         // PointF[] mob3Pattern = PathRepo.generateLineToDest(new PointF(1000, 10), posDest, Constants.FRAME_PER_SEC * 4);
-        GameMob mob3 = generateSimpleRandomizedMob("thirdMob", context, new RectF(1000, 10, 1000, 10), rectDest, Constants.FRAME_PER_SEC * 4);
+        GameMob mob3 = generateSimpleRandomizedMob("thirdMob", context, new RectF(1000, 10, 1001, 11), rectDest, Constants.FRAME_PER_SEC * 4);
 
         // PointF[] mob4Pattern = PathRepo.generateLineToDest(new PointF(1000, 500), posDest, Constants.FRAME_PER_SEC * 4);
-        GameMob mob4 = generateSimpleRandomizedMob("fourthMob", context, new RectF(1000, 500, 1000, 500), rectDest, Constants.FRAME_PER_SEC * 4);
+        GameMob mob4 = generateSimpleRandomizedMob("fourthMob", context, new RectF(1000, 500, 1001, 501), rectDest, Constants.FRAME_PER_SEC * 4);
 
         entityList.add(mob1);
         entityList.add(mob2);

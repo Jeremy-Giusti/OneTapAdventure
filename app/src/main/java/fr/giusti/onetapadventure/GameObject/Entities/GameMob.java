@@ -534,7 +534,7 @@ public class GameMob extends Entity {
         public MobBuilder(String idName, String mSpriteSheetId, float x, float y) {
             this.idName = idName;
             this.mSpriteSheetId = mSpriteSheetId;
-            mPosition = new RectF(x - (GameConstant.DEFAULT_MOB_SIZE / 2), y - (GameConstant.DEFAULT_MOB_SIZE / 2), GameConstant.DEFAULT_MOB_SIZE, GameConstant.DEFAULT_MOB_SIZE);
+            mPosition = new RectF(x - (GameConstant.DEFAULT_MOB_SIZE / 2), y - (GameConstant.DEFAULT_MOB_SIZE / 2), x + (GameConstant.DEFAULT_MOB_SIZE / 2), y + (GameConstant.DEFAULT_MOB_SIZE));
         }
 
         public MobBuilder setMovePattern(PointF[] movePattern) {

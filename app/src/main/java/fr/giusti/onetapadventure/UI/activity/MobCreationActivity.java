@@ -61,7 +61,7 @@ public class MobCreationActivity extends Activity {
     private ImageView mSkinImage;
     private Button mSkinSelectionButton;
     private PathDrawingView mPatternSurface;
-    private GameMob mMobCreating = new GameMob("", 0, 0, 2, 2, null, null, null, null, 1, 1);
+    private GameMob mMobCreating = new GameMob.MobBuilder("newmob","newsprite",0,0).build();
     protected PointF mPatternLastPoint;
     private ArrayList<PointF> mMobPattern;
     private int mobHealth;
@@ -275,7 +275,7 @@ public class MobCreationActivity extends Activity {
      * remet tout a zero (comme si l'activité venait de s'ouvrir)
      */
     private void resetMobCreating() {
-        mMobCreating = new GameMob("", 0, 0, 2, 2, null, null, null, null, 1, 1);
+        mMobCreating =  new GameMob.MobBuilder("newmob","newsprite",0,0).build();
         mPatternSurface.reset();
         mMobNameEdit.setText("");
         mXpositionEdit.setText("");
