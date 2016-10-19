@@ -65,7 +65,8 @@ public class EntityRepo {
         //work
         //work (not perfectly but still)
         //PointF[] mob5Pattern = PathRepo.generateLoopedPath(Constants.FRAME_PER_SEC, new Point(0, 0), new Point(0, 5), 7, 0);//un tour a la seconde
-        Pair<PointF,PointF[]> mob5Pattern = PathRepo.generateCirclePath(Constants.FRAME_PER_SEC*4, new PointF(512, 256),64, 0);//un tour a la seconde
+        Pair<PointF,PointF[]> mob5Pattern = PathRepo.generateSpiralePath(Constants.FRAME_PER_SEC*5, new PointF(512, 256),240, 0,4);//un tour a la seconde
+       //  Pair<PointF,PointF[]> mob5Pattern = PathRepo.generateCirclePath(Constants.FRAME_PER_SEC, new PointF(512, 256),240, 0);//un tour a la seconde
 
         //seems to work
         PointF[] mob6Pattern = PathRepo.generateLinePath(1, 4, 4);

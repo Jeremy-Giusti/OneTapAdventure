@@ -206,35 +206,26 @@ public class PathRepo {
     }
 
     public static Pair<PointF, PointF[]> generateSpiralePath(int pathLength, PointF center, int rayon, int startingPositionDegres, int iteration) {
-        Pair<PointF, PointF[]> portion = null;
-        ArrayList<PointF> path = new ArrayList<>();
-        PointF startPoint;
+        PointF[] result = new PointF[pathLength];
+        double progress = (Math.PI*2) * (startingPositionDegres/360);
+        double progressLeap = (Math.PI*2) / (pathLength/(float)iteration);
 
-        for (int i = 0; i < iteration; i++) {
-            portion = generateCirclePath(pathLength / iteration, center, rayon, startingPositionDegres);
-            path.addAll(new ArrayList<PointF>(Arrays.asList(portion.second)));
+        float xpos = (float) (center.x + (rayon * Math.cos(progress)));
+        float ypos = (float) (center.y + (rayon * Math.sin(progress)));
+        PointF initialPos = new PointF(xpos, ypos);
+
+        for (int postion = 0; postion < pathLength; postion++) {
+            progress += progressLeap;
+            float newXpos = (float) (center.x + ((rayon*(1-(postion/(float)pathLength))) * Math.cos(progress)));
+            float newYpos = (float) (center.y + ((rayon*(1-(postion/(float)pathLength)))* Math.sin(progress)));
+
+            result[postion] = new PointF(newXpos - xpos , newYpos - ypos );
+            xpos = newXpos;
+            ypos = newYpos;
         }
-        startPoint = portion.first;
-        PointF nextPos = new PointF(startPoint.x,startPoint.y);
-        for (int i = 0; i < pathLength; i++) {
-            PointF currentPoint = path.get(i);
-            nextPos.x += currentPoint.x;
-            nextPos.y += currentPoint.y;
-
-            float avancementDeci = i / pathLength;
-            float distX = center.x - nextPos.x;
-            float distY = center.y - nextPos.y;
-
-            currentPoint.x= currentPoint.x + (distX * avancementDeci);
-            currentPoint.y= currentPoint.y + (distY * avancementDeci);
-            //path.set(i, new PointF(currentPoint.x + (distX * avancementDeci), currentPoint.y + (distY * avancementDeci)));
-
-            nextPos.x += (distX * avancementDeci);
-            nextPos.y += (distY * avancementDeci);
-        }
-
-        return new Pair<>(startPoint, path.toArray(new PointF[path.size()]));
+        return new Pair<>(initialPos, result);
     }
+
 
 
     /**
