@@ -127,15 +127,15 @@ public class SpecialMoveRepo {
                     }
                 } else {
                     //EXPLOSION !
-                    int particuleWidth = (int) currentMob.getWidth() * 4;
-                    int particuleHeight = (int) currentMob.getHeight() * 4;
-                    int particuleX = (int) currentMob.getPositionX();
-                    int particuleY = (int) currentMob.getPositionY();
+                    int particuleWidth = (int) currentMob.getWidth() * 2;
+                    int particuleHeight = (int) currentMob.getHeight() * 2;
+                    int particuleX =  currentMob.getPositionX();
+                    int particuleY =  currentMob.getPositionY();
 
                     Particule explosionParticule = ParticuleHolder.getAvailableParticule(ParticuleRepo.EXPLOSION_PARTICULE, particuleX, particuleY, particuleWidth, particuleHeight, false, null);
 
                     //TODO MAKE AOE event instead of touch
-                    board.addTouchEvent(new TouchPoint(currentMob.getPositionX(), currentMob.getPositionY(), GameConstant.TOUCH_STROKE * 2));
+                    board.addTouchEvent(new TouchPoint(currentMob.getPositionX(), currentMob.getPositionY(), (int) (currentMob.getWidth() + currentMob.getHeight())));
 
                     board.addParticule(explosionParticule);
                     currentMob.setHealth(-1);
@@ -214,7 +214,7 @@ public class SpecialMoveRepo {
     };
 
     private static SpecialMove breakGlassMove = new SpecialMove() {
-        private final int iteration=8;
+        private final int iteration = 8;
         int remainingIteration = iteration;
         int lastUse = 0;
 
@@ -237,13 +237,13 @@ public class SpecialMoveRepo {
                     remainingIteration--;
                 }
                 if (remainingIteration == 0) {
-                    int sceneryHeight =(int) currentMob.mPosition.height() * 2;
-                    int sceneryWidth =(int) currentMob.mPosition.width() * 2;
-                     board.onNewScenery(new Scenery("brokenglass" + currentMob.getIdName(), (int) currentMob.mPosition.centerX()-sceneryWidth/2, (int) currentMob.mPosition.centerY()-sceneryHeight/2,sceneryWidth , sceneryHeight, 1, TouchedMoveRepo.getMoveById(TouchedMoveRepo.MOB_AWAY_MOVE), GameConstant.HOLE_FRONT_SPRITE_ID));
+                    int sceneryHeight = (int) currentMob.mPosition.height() * 2;
+                    int sceneryWidth = (int) currentMob.mPosition.width() * 2;
+                    board.onNewScenery(new Scenery("brokenglass" + currentMob.getIdName(), (int) currentMob.mPosition.centerX() - sceneryWidth / 2, (int) currentMob.mPosition.centerY() - sceneryHeight / 2, sceneryWidth, sceneryHeight, 1, TouchedMoveRepo.getMoveById(TouchedMoveRepo.MOB_AWAY_MOVE), GameConstant.HOLE_FRONT_SPRITE_ID));
                     currentMob.setHealth(0);
                     currentMob.setState(GameMob.eMobState.DYING);
-                    lastUse=0;
-                    remainingIteration=iteration;
+                    lastUse = 0;
+                    remainingIteration = iteration;
                 }
             }
 
@@ -322,16 +322,16 @@ public class SpecialMoveRepo {
                     currentMob.setState(GameMob.eMobState.SPE1);
                     currentMob.setAnimationState(0);
                 }
-                if (currentMob.isJustMoving() || (GameMob.eMobState.SPE1==currentMob.getState()&&currentMob.getAnimationState()==Constants.FRAME_DURATION*3-1)) {
+                if (currentMob.isJustMoving() || (GameMob.eMobState.SPE1 == currentMob.getState() && currentMob.getAnimationState() == Constants.FRAME_DURATION * 3 - 1)) {
                     currentMob.setAlpha(50);
                 } else {
                     currentMob.setAlpha(255);
                 }
             } else if (periode < 1) {
-                board.addParticules(ParticuleHolder.getAvailableParticuleGroupe(ParticuleRepo.GROUPE_PLASMA_SPARK_PARTICULE, currentMob.mPosition, new PointF(0,0), 10));
+                board.addParticules(ParticuleHolder.getAvailableParticuleGroupe(ParticuleRepo.GROUPE_PLASMA_SPARK_PARTICULE, currentMob.mPosition, new PointF(0, 0), 10));
                 currentMob.setAlpha(255);
                 //currentMob.setState(GameMob.eMobState.MOVING_DOWN);
-               // currentMob.setAnimationState(0);
+                // currentMob.setAnimationState(0);
             }
         }
 

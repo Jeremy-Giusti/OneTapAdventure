@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.Log;
+import android.util.Pair;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -63,7 +64,9 @@ public class EntityRepo {
         PointF[] mob3Pattern = PathRepo.speedDownPortionOfPath(PathRepo.generateLinePath(20, 5, 7), 6, 15, 2);
         //work
         //work (not perfectly but still)
-        PointF[] mob5Pattern = PathRepo.generateLoopedPath(Constants.FRAME_PER_SEC, new Point(0, 0), new Point(0, 5), 7, 0);//un tour a la seconde
+        //PointF[] mob5Pattern = PathRepo.generateLoopedPath(Constants.FRAME_PER_SEC, new Point(0, 0), new Point(0, 5), 7, 0);//un tour a la seconde
+        Pair<PointF,PointF[]> mob5Pattern = PathRepo.generateCirclePath(Constants.FRAME_PER_SEC*4, new PointF(512, 256),64, 0);//un tour a la seconde
+
         //seems to work
         PointF[] mob6Pattern = PathRepo.generateLinePath(1, 4, 4);
 
@@ -86,9 +89,9 @@ public class EntityRepo {
         GameMob yellowMob = mobBuilder.setMovePattern(mob6Pattern).
                 setSpecialMove(moveRepo.getMoveById(SpecialMoveRepo.MULTIPLIE))
                 .build();
-        mobBuilder = new GameMob.MobBuilder("programmedMob5", bitmapId4, 250, 250);
-        GameMob orangeMob = mobBuilder.setMovePattern(mob5Pattern).
-                setSize(40).
+        mobBuilder = new GameMob.MobBuilder("programmedMob5", bitmapId4, mob5Pattern.first.x, mob5Pattern.first.y);
+        GameMob orangeMob = mobBuilder.setMovePattern(mob5Pattern.second).
+                setSize(64).
                 setDefaultHealth(20).
                 setSpecialMove(moveRepo.getMoveById(SpecialMoveRepo.AUTO_HURT_EXPLODING)).
                 setTouchedMove(touchedMoveRepo.getMoveById(TouchedMoveRepo.HEAL))
