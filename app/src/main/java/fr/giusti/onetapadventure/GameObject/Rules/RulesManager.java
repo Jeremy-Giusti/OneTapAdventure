@@ -105,10 +105,12 @@ public class RulesManager implements OnBoardEventListener {
             case MOB_DEATH:
                 onMobDeath(mob);
                 onMobCountDown(mob);
+                onScorePlus(mob.getScoreValue());
                 break;
             case MOB_AWAY:
                 onMobGetAway(mob);
                 onMobCountDown(mob);
+                onScoreMinus(mob.getScoreValue());
                 break;
             case NEW_MOB:
                 onNewMob(mob);

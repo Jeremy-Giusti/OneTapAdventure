@@ -206,6 +206,10 @@ public class GameMob extends Entity {
         this.mState = mState;
     }
 
+    public int getScoreValue() {
+        return mScoreValue;
+    }
+
     public int getAnimationState() {
         return mAnimationState;
     }
