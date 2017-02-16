@@ -26,12 +26,13 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import fr.giusti.onetapadventure.gameObject.moves.SpecialMove;
-import fr.giusti.onetapadventure.gameObject.moves.TouchedMove;
 import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapengine.entity.GameMob;
-import fr.giusti.onetapadventure.repository.PathRepo;
+
 import fr.giusti.onetapadventure.repository.entities.EntityRepo;
+import fr.giusti.onetapengine.entity.moves.SpecialMove;
+import fr.giusti.onetapengine.entity.moves.TouchedMove;
+import fr.giusti.onetapengine.repository.PathRepo;
 import fr.giusti.onetapengine.repository.SpecialMoveRepo;
 import fr.giusti.onetapengine.repository.SpriteRepo;
 import fr.giusti.onetapengine.repository.TouchedMoveRepo;
