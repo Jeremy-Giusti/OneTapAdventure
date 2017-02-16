@@ -12,17 +12,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import fr.giusti.onetapadventure.R;
-import fr.giusti.onetapadventure.UI.customView.DrawingView;
-import fr.giusti.onetapadventure.callback.OnBoardEventListener;
-import fr.giusti.onetapadventure.commons.GameConstant;
-import fr.giusti.onetapadventure.gameObject.GameBoard;
-import fr.giusti.onetapadventure.gameObject.entities.GameMob;
-import fr.giusti.onetapadventure.gameObject.rules.IRuleProgressListener;
-import fr.giusti.onetapadventure.callback.OnGameEndListener;
-import fr.giusti.onetapadventure.gameObject.rules.eConditionType;
-import fr.giusti.onetapadventure.gameObject.rules.eConditions;
+import fr.giusti.onetapengine.ui.DrawingView;
+import fr.giusti.onetapengine.commons.GameConstant;
+import fr.giusti.onetapengine.GameBoard;
+import fr.giusti.onetapengine.rules.IRuleProgressListener;
+import fr.giusti.onetapengine.callback.OnGameEndListener;
+import fr.giusti.onetapengine.rules.eConditionType;
 import fr.giusti.onetapadventure.repository.GameRepo;
-import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 
 /**
  * classe qui contient tout une "partie"

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapadventure.UI.fragment.AreaFragment;
-import fr.giusti.onetapadventure.commons.GameConstant;
+import fr.giusti.onetapengine.commons.GameConstant;
 
 /**
  * Created by jérémy on 22/09/2016.

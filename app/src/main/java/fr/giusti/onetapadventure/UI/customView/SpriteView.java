@@ -5,8 +5,8 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-import fr.giusti.onetapadventure.repository.SpriteRepo;
-import fr.giusti.onetapadventure.commons.Constants;
+import fr.giusti.onetapengine.repository.SpriteRepo;
+import fr.giusti.onetapengine.commons.Constants;
 
 /**
  * Created by giusti on 31/03/2015.

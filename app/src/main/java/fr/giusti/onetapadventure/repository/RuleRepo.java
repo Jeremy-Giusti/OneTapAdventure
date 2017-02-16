@@ -2,13 +2,13 @@ package fr.giusti.onetapadventure.repository;
 
 import java.util.ArrayList;
 
-import fr.giusti.onetapadventure.callback.OnGameEndListener;
-import fr.giusti.onetapadventure.callback.OnRuleAccomplishedListener;
-import fr.giusti.onetapadventure.commons.GameConstant;
-import fr.giusti.onetapadventure.gameObject.rules.Rule;
-import fr.giusti.onetapadventure.gameObject.rules.RulesManager;
-import fr.giusti.onetapadventure.gameObject.rules.eConditionType;
-import fr.giusti.onetapadventure.gameObject.rules.eConditions;
+import fr.giusti.onetapengine.callback.OnGameEndListener;
+import fr.giusti.onetapengine.callback.OnRuleAccomplishedListener;
+import fr.giusti.onetapengine.commons.GameConstant;
+import fr.giusti.onetapengine.rules.Rule;
+import fr.giusti.onetapengine.rules.RulesManager;
+import fr.giusti.onetapengine.rules.eConditionType;
+import fr.giusti.onetapengine.rules.eConditions;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl2Constant;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl3Constant;

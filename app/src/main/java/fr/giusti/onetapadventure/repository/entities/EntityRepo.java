@@ -13,25 +13,26 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import fr.giusti.onetapadventure.R;
-import fr.giusti.onetapadventure.commons.Constants;
-import fr.giusti.onetapadventure.commons.GameConstant;
-import fr.giusti.onetapadventure.gameObject.entities.Entity;
-import fr.giusti.onetapadventure.gameObject.entities.GameMob;
-import fr.giusti.onetapadventure.gameObject.entities.Particule;
-import fr.giusti.onetapadventure.gameObject.entities.Scenery;
-import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.ParticuleHolder;
-import fr.giusti.onetapadventure.gameObject.moves.TouchedMove;
+import fr.giusti.onetapengine.commons.Constants;
+import fr.giusti.onetapengine.commons.GameConstant;
+import fr.giusti.onetapengine.entity.Entity;
+import fr.giusti.onetapengine.entity.GameMob;
+import fr.giusti.onetapengine.entity.Particule;
+import fr.giusti.onetapengine.entity.Scenery;
 import fr.giusti.onetapadventure.repository.DB.ModelConverter;
 import fr.giusti.onetapadventure.repository.DB.model.MobDB;
 import fr.giusti.onetapadventure.repository.DB.model.PathDB;
 import fr.giusti.onetapadventure.repository.DB.persister.MobPersister;
 import fr.giusti.onetapadventure.repository.DB.persister.PathPersister;
-import fr.giusti.onetapadventure.repository.PathRepo;
-import fr.giusti.onetapadventure.repository.SpecialMoveRepo;
-import fr.giusti.onetapadventure.repository.SpriteRepo;
-import fr.giusti.onetapadventure.repository.TouchedMoveRepo;
+import fr.giusti.onetapengine.entity.distribution.ParticuleHolder;
+import fr.giusti.onetapengine.entity.moves.TouchedMove;
+import fr.giusti.onetapengine.repository.SpecialMoveRepo;
+import fr.giusti.onetapengine.repository.ParticuleRepo;
+import fr.giusti.onetapengine.repository.SpriteRepo;
+import fr.giusti.onetapengine.repository.TouchedMoveRepo;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl2Constant;
+import fr.giusti.onetapengine.repository.PathRepo;
 
 public class EntityRepo {
 

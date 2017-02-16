@@ -6,19 +6,20 @@ import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 
 import fr.giusti.onetapadventure.R;
-import fr.giusti.onetapadventure.callback.OnGameEndListener;
-import fr.giusti.onetapadventure.commons.Constants;
-import fr.giusti.onetapadventure.commons.GameConstant;
-import fr.giusti.onetapadventure.gameObject.GameBoard;
-import fr.giusti.onetapadventure.gameObject.interactions.TouchDispenser;
-import fr.giusti.onetapadventure.gameObject.rules.IRuleProgressListener;
-import fr.giusti.onetapadventure.gameObject.rules.RulesManager;
+import fr.giusti.onetapengine.callback.OnGameEndListener;
+import fr.giusti.onetapengine.commons.Constants;
+import fr.giusti.onetapengine.commons.GameConstant;
+import fr.giusti.onetapengine.GameBoard;
+import fr.giusti.onetapengine.interaction.TouchDispenser;
+import fr.giusti.onetapengine.rules.IRuleProgressListener;
+import fr.giusti.onetapengine.rules.RulesManager;
 import fr.giusti.onetapadventure.repository.entities.EntityRepo;
 import fr.giusti.onetapadventure.repository.entities.EntitySpawnerRepo;
-import fr.giusti.onetapadventure.repository.entities.ParticuleRepo;
+import fr.giusti.onetapengine.repository.ParticuleRepo;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl2Constant;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl3Constant;
+import fr.giusti.onetapengine.repository.SpriteRepo;
 
 public class GameRepo {
     public static final String LVL_TEST = "lvl test";

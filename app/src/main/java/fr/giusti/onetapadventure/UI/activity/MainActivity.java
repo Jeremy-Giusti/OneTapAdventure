@@ -8,9 +8,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import fr.giusti.onetapadventure.R;
-import fr.giusti.onetapadventure.commons.GameConstant;
+import fr.giusti.onetapengine.commons.GameConstant;
 import fr.giusti.onetapadventure.repository.GameRepo;
-import fr.giusti.onetapadventure.repository.SpriteRepo;
+import fr.giusti.onetapengine.repository.SpriteRepo;
 
 /**
  * ecran menu

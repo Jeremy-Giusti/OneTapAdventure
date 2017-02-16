@@ -4,13 +4,13 @@ import android.graphics.PointF;
 
 import java.util.ArrayList;
 
-import fr.giusti.onetapadventure.gameObject.GameBoard;
-import fr.giusti.onetapadventure.gameObject.entities.GameMob;
+import fr.giusti.onetapengine.GameBoard;
+import fr.giusti.onetapengine.entity.GameMob;
 import fr.giusti.onetapadventure.repository.DB.model.BoardDB;
 import fr.giusti.onetapadventure.repository.DB.model.MobDB;
 import fr.giusti.onetapadventure.repository.DB.model.PathDB;
-import fr.giusti.onetapadventure.repository.SpecialMoveRepo;
-import fr.giusti.onetapadventure.repository.TouchedMoveRepo;
+import fr.giusti.onetapengine.repository.SpecialMoveRepo;
+import fr.giusti.onetapengine.repository.TouchedMoveRepo;
 
 /**
  * Created by giusti on 17/03/2015.

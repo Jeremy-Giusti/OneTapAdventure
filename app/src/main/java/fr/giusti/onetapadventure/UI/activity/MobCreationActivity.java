@@ -29,16 +29,16 @@ import android.widget.Toast;
 import fr.giusti.onetapadventure.gameObject.moves.SpecialMove;
 import fr.giusti.onetapadventure.gameObject.moves.TouchedMove;
 import fr.giusti.onetapadventure.R;
-import fr.giusti.onetapadventure.gameObject.entities.GameMob;
+import fr.giusti.onetapengine.entity.GameMob;
 import fr.giusti.onetapadventure.repository.PathRepo;
 import fr.giusti.onetapadventure.repository.entities.EntityRepo;
-import fr.giusti.onetapadventure.repository.SpecialMoveRepo;
-import fr.giusti.onetapadventure.repository.SpriteRepo;
-import fr.giusti.onetapadventure.repository.TouchedMoveRepo;
+import fr.giusti.onetapengine.repository.SpecialMoveRepo;
+import fr.giusti.onetapengine.repository.SpriteRepo;
+import fr.giusti.onetapengine.repository.TouchedMoveRepo;
 import fr.giusti.onetapadventure.UI.customView.PathDrawingView;
 import fr.giusti.onetapadventure.UI.customView.SpriteView;
-import fr.giusti.onetapadventure.commons.Constants;
-import fr.giusti.onetapadventure.commons.FileUtils;
+import fr.giusti.onetapengine.commons.Constants;
+import fr.giusti.onetapengine.commons.FileUtils;
 
 /**
  * gere une grande partie de ce qui a traité la creation de mob

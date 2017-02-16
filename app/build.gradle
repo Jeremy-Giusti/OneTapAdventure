@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "fr.giusti.onetapadventure"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
@@ -23,4 +23,5 @@ dependencies {
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.android.support:support-v13:24.2.1'
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile project(path: ':onetapengine')
 }

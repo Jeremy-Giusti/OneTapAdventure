@@ -2,10 +2,10 @@ package fr.giusti.onetapadventure.repository.entities;
 
 import android.content.Context;
 
-import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.EntitySpawner;
-import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.EntitySpawnerManager;
-import fr.giusti.onetapadventure.gameObject.entities.entityDistribution.eEntityDistributionMode;
-import fr.giusti.onetapadventure.gameObject.rules.eConditions;
+import fr.giusti.onetapengine.entity.distribution.EntitySpawner;
+import fr.giusti.onetapengine.entity.distribution.EntitySpawnerManager;
+import fr.giusti.onetapengine.entity.distribution.eEntityDistributionMode;
+import fr.giusti.onetapengine.rules.eConditions;
 
 /**
  * Created by jérémy on 10/09/2016.
