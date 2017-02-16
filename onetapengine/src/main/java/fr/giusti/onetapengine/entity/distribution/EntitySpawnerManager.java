@@ -3,12 +3,13 @@ package fr.giusti.onetapengine.entity.distribution;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import fr.giusti.onetapadventure.callback.OnBoardEventListener;
-import fr.giusti.onetapadventure.callback.SpawnerListener;
-import fr.giusti.onetapadventure.gameObject.GameBoard;
-import fr.giusti.onetapadventure.gameObject.rules.eConditions;
+
+import fr.giusti.onetapengine.GameBoard;
+import fr.giusti.onetapengine.callback.OnBoardEventListener;
+import fr.giusti.onetapengine.callback.SpawnerListener;
 import fr.giusti.onetapengine.entity.Entity;
 import fr.giusti.onetapengine.entity.GameMob;
+import fr.giusti.onetapengine.rules.eConditions;
 
 /**
  * Created by jgiusti on 26/09/2016.

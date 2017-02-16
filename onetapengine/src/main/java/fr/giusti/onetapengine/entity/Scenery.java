@@ -5,10 +5,10 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
+import fr.giusti.onetapengine.GameBoard;
 import fr.giusti.onetapengine.commons.GameConstant;
 import fr.giusti.onetapengine.commons.Utils;
-import fr.giusti.onetapadventure.gameObject.GameBoard;
-import fr.giusti.onetapadventure.gameObject.moves.TouchedMove;
+import fr.giusti.onetapengine.entity.moves.TouchedMove;
 import fr.giusti.onetapengine.repository.SpriteRepo;
 
 /**

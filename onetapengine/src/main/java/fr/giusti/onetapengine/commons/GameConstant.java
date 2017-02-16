@@ -1,8 +1,7 @@
 package fr.giusti.onetapengine.commons;
 
-import android.graphics.Rect;
+import fr.giusti.onetapengine.R;
 
-import fr.giusti.onetapadventure.R;
 
 /**
  * Created by jérémy on 22/09/2016.
@@ -27,7 +26,6 @@ public class GameConstant {
     public static final String getLevelId(int world, int lvl) {
         return "" + world + "x" + lvl;
     }
-
 
 
 }

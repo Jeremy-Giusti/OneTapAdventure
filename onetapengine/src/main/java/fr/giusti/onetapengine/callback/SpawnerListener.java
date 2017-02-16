@@ -1,7 +1,8 @@
 package fr.giusti.onetapengine.callback;
 
-import fr.giusti.onetapengine.entity.EntitySpawner;
-import fr.giusti.onetapengine.entity.eEntityDistributionMode;
+
+import fr.giusti.onetapengine.entity.distribution.EntitySpawner;
+import fr.giusti.onetapengine.entity.distribution.eEntityDistributionMode;
 
 /**
  * Created by jgiusti on 26/09/2016.

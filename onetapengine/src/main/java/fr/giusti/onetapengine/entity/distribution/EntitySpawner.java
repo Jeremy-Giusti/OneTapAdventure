@@ -2,8 +2,8 @@ package fr.giusti.onetapengine.entity.distribution;
 
 import java.util.ArrayList;
 
-import fr.giusti.onetapadventure.callback.SpawnerListener;
-import fr.giusti.onetapadventure.gameObject.rules.eConditions;
+import fr.giusti.onetapengine.callback.SpawnerListener;
+import fr.giusti.onetapengine.rules.eConditions;
 import fr.giusti.onetapengine.entity.Entity;
 
 /**

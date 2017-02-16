@@ -6,9 +6,10 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
+import fr.giusti.onetapengine.GameBoard;
 import fr.giusti.onetapengine.commons.Constants;
 import fr.giusti.onetapengine.commons.Utils;
-import fr.giusti.onetapadventure.gameObject.GameBoard;
+import fr.giusti.onetapengine.entity.distribution.ParticuleHolder;
 import fr.giusti.onetapengine.repository.SpriteRepo;
 import fr.giusti.onetapengine.repository.PathRepo;
 

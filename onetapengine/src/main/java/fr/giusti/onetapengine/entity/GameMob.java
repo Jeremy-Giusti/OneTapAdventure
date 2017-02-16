@@ -7,17 +7,17 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
+import fr.giusti.onetapengine.GameBoard;
 import fr.giusti.onetapengine.commons.Constants;
 import fr.giusti.onetapengine.commons.GameConstant;
 import fr.giusti.onetapengine.commons.Utils;
-import fr.giusti.onetapadventure.gameObject.GameBoard;
-import fr.giusti.onetapadventure.gameObject.moves.SpecialMove;
-import fr.giusti.onetapadventure.gameObject.moves.TouchedMove;
+import fr.giusti.onetapengine.entity.moves.SpecialMove;
+import fr.giusti.onetapengine.entity.moves.TouchedMove;
+import fr.giusti.onetapengine.repository.SpecialMoveRepo;
 import fr.giusti.onetapengine.repository.SpriteRepo;
-import fr.giusti.onetapadventure.repository.TouchedMoveRepo;
 
-import fr.giusti.onetapadventure.repository.SpecialMoveRepo;
 import fr.giusti.onetapengine.repository.PathRepo;
+import fr.giusti.onetapengine.repository.TouchedMoveRepo;
 
 public class GameMob extends Entity {
     private static final String TAG = GameMob.class.getName();

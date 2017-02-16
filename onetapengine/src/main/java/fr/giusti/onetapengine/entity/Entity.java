@@ -5,7 +5,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
-import fr.giusti.onetapadventure.gameObject.GameBoard;
+
+import fr.giusti.onetapengine.GameBoard;
 import fr.giusti.onetapengine.repository.SpriteRepo;
 
 /**

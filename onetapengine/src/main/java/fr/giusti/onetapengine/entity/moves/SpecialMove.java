@@ -1,6 +1,6 @@
 package fr.giusti.onetapengine.entity.moves;
 
-import fr.giusti.onetapadventure.gameObject.GameBoard;
+import fr.giusti.onetapengine.GameBoard;
 import fr.giusti.onetapengine.entity.GameMob;
 
 /**
