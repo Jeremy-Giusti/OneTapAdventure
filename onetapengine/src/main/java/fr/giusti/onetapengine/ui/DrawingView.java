@@ -1,17 +1,14 @@
 //http://obviam.net/index.php/the-android-game-loop/
 package fr.giusti.onetapengine.ui;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 
 import fr.giusti.onetapengine.GameBoard;
 
@@ -21,9 +18,6 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback, 
     private TickingThread mDrawThread;
     private Paint mBrush = new Paint();
     private GameBoard mMap;
-    //    private float mMapRatioX = 0.5f;
-//    private float mMapRatioY = 0.5f;
-    final Handler handler = new Handler();
 
     public DrawingView(Context context) {
         super(context);
@@ -35,7 +29,6 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback, 
         // mDrawThread = new TickingThread(getHolder(), mContext, this);
         mBrush.setColor(mContext.getResources().getColor(android.R.color.darker_gray));
         mBrush.setStrokeWidth(5);
-        initEvent();
 
     }
 
@@ -49,24 +42,15 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback, 
         // mDrawThread = new TickingThread(getHolder(), mContext, this);
         mBrush.setColor(mContext.getResources().getColor(android.R.color.darker_gray));
         mBrush.setStrokeWidth(5);
-        initEvent();
 
     }
 
-    /**
-     * event listeners
-     */
-    @SuppressLint("ClickableViewAccessibility")
-    private void initEvent() {
-        this.setOnTouchListener(new OnTouchListener() {
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                //     event.setLocation(event.getX() / mMapRatioX, event.getY() / mMapRatioY);
-                mMap.touchEvent(event);
-                return false;
-            }
-        });
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (mMap != null) mMap.touchEvent(event);
+
+        return true;
     }
 
     public void startGame(GameBoard map) {
@@ -74,10 +58,8 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback, 
         mDrawThread = new TickingThread(this);
         mMap = map;
         this.resize();
-//        mMapRatioX = this.getWidth() / mMap.mBoardWidth;
-//        mMapRatioY = this.getHeight() / mMap.mBoardHeight;
         mDrawThread.setRunning(true);
-        Log.d(TAG,"Drawing view ready, starting drawing thread");
+        Log.d(TAG, "Drawing view ready, starting drawing thread");
 
         mDrawThread.start();
     }

@@ -191,42 +191,4 @@ public class SpriteRepo {
         mMobSpriteList.get(mSpritesId).resizeAllFrame(width,height);
     }
 
-    ///////////////////////////////////////////Scaling/////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////
-
-//    /**
-//     * @param imageKey
-//     * @param ratio    le 'ratio brut' pour redimensionner les images
-//     * @return le 'ratio arrondit' utilis� pour redimensionner les images en les deformant au minimum (l'id�e est de garder un spritesheet divisible par le nb de sprites)
-//     */
-//    public double getBestRatioForSpriteSheet(String imageKey, double ratio) {
-//        if (mBitmapList.containsKey(imageKey)) {
-//            int bitmapHeight = mBitmapList.get(imageKey).getHeight();
-//
-//            //SCIENCE !
-//            double roundedRatio = Utils.findInversOfNearestDivider(bitmapHeight, Constants.SPRITESHEETHEIGHT, ratio);
-//            return roundedRatio;
-//        } else {
-//            return -1;
-//        }
-//    }
-
-
-//
-//    /**
-//     * creé une spritesheet a l'echelle des diemnsions du mob
-//     * @param spritSheetId
-//     * @param mobHeight
-//     * @param mobWidth
-//     * @return id de la nouvelle spritsheet
-//     */
-//    public String scaleSpritesheetXY(String spritSheetId, int mobHeight, int mobWidth) {
-//        int dstWidth = mobWidth * Constants.SPRITESHEETWIDTH;
-//        int dstHeight = mobHeight * Constants.SPRITESHEETHEIGHT;
-//        String newBitmapId = spritSheetId + Constants.SPRITE_SCALED_XY_SUFFIXE;
-//
-//        this.addSpriteSheetWithIdCheck(Bitmap.createScaledBitmap(mBitmapList.get(spritSheetId), dstWidth, dstHeight, false), newBitmapId);
-//        return newBitmapId;
-//    }
-
 }

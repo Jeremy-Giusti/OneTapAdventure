@@ -88,7 +88,7 @@ public class GameBoard {
      */
     public GameBoard(EntitySpawnerManager entityManager, String backgroundBitmapId, int boardWidth, int boardHeight, Rect drawedBounds, RulesManager rulesManager, TouchDispenser touchDisp) {
         super();
-        onNewEntities(entityManager.getInitialList());//should be called first to prevent board event will game isn't running
+        onNewEntities(entityManager.getInitialList());//should be called first to prevent board event while game isn't running
         this.mEntityManager = entityManager;
         this.mTouchDisp = touchDisp;
         entityManager.setBoard(this);
@@ -235,12 +235,19 @@ public class GameBoard {
      * action touch
      */
     public void touchEvent(MotionEvent event) {
-        switch (event.getAction()) {
+        // get pointer index from the event object
+        int pointerIndex = event.getActionIndex();
+
+        // get masked (not specific to a pointer) action
+        int maskedAction = event.getActionMasked();
+
+        switch (maskedAction) {
             case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_POINTER_DOWN:
                 if (mTouchDisp == null)
-                    mTouchPoints.add(new TouchPoint(event.getX(), event.getY(), GameConstant.TOUCH_STROKE));
+                    mTouchPoints.add(new TouchPoint(event.getX(pointerIndex), event.getY(pointerIndex), GameConstant.TOUCH_STROKE));
                 else
-                    mTouchPoints.add(mTouchDisp.generateTouchPoint(event.getX(), event.getY()));
+                    mTouchPoints.add(mTouchDisp.generateTouchPoint(event.getX(pointerIndex), event.getY(pointerIndex)));
                 break;
             case MotionEvent.ACTION_MOVE:
                 // todo
@@ -372,11 +379,11 @@ public class GameBoard {
         timerRunable = new Runnable() {
             @Override
             public void run() {
+                timerHandler.postDelayed(this, TIME_PROGRESS_FREQUENCY);
                 synchronized (timeProgressed) {
                     timeProgress += TIME_PROGRESS_FREQUENCY;
                     timeProgressed = true;
                 }
-                timerHandler.postDelayed(this, TIME_PROGRESS_FREQUENCY);
             }
         };
         timerHandler.postDelayed(timerRunable, TIME_PROGRESS_FREQUENCY);
