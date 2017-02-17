@@ -3,8 +3,8 @@ package fr.giusti.onetapengine.entity.distribution;
 import java.util.ArrayList;
 
 import fr.giusti.onetapengine.callback.SpawnerListener;
-import fr.giusti.onetapengine.rules.eConditions;
 import fr.giusti.onetapengine.entity.Entity;
+import fr.giusti.onetapengine.rules.eConditions;
 
 /**
  * Created by jgiusti on 26/09/2016.
@@ -15,37 +15,44 @@ import fr.giusti.onetapengine.entity.Entity;
 
 public class EntitySpawner {
 
+    /**
+     * more like an id work as the condition type in wich this spawner should be notified on a change
+     */
     public final eConditions conditionType;
+
+    /**
+     * the way entity will be choosen (by goup/by order/randomly)
+     */
     public final eEntityDistributionMode distibutionMode;
 
     /**
-     * once reached by progress trigger entity spawn <br>
+     * the condition goal if the progress match this value, a entity spawn will be triggered
      * and reset progress to initialValue
      */
-    private final int conditionGoalValue;
-    private final int initialProgressValue;
-    private int conditionProgress = -1;
-
-
-    private int groupeSize = 5;
-    private boolean useSharedMobList = false;
-    private boolean infinitePop = false;
-
-    private ArrayList<Entity> entityList;
-    private int mobIndex = 0;
-
-    private SpawnerListener listener;
-
-
+    protected final int conditionGoalValue;
     /**
-     * more like an id work as the condition type in wich this spawner should be notified on a change
-     * <br> the condition goal if the progress match this value, a entity spawn will be triggered
-     * <br> the initial progress
-     * <br>if true then this spawner will never run out of mob
-     * <br>the way entity will be choosed (by goup/by order/randomly)
-     * <br>the entiies to spawn if null request listener to spawn entity
+     * the initial progress
      */
-    private EntitySpawner(EntitySpawnerBuilder builder) {
+    protected final int initialProgressValue;
+    protected int conditionProgress = -1;
+
+
+    protected int groupeSize = 5;
+    protected boolean useSharedMobList = false;
+    /**
+     * if true then this spawner will never run out of mob
+     */
+    protected boolean infinitePop = false;
+    /**
+     * the entiies to spawn if null do spawnRequest from listener
+     */
+    protected ArrayList<Entity> entityList;
+    protected int mobIndex = 0;
+
+    protected SpawnerListener listener;
+
+
+    protected EntitySpawner(EntitySpawnerBuilder builder) {
         this.conditionType = builder.conditionType;
         this.conditionGoalValue = builder.conditionGoalValue;
         this.initialProgressValue = builder.initialProgressValue;
@@ -94,6 +101,12 @@ public class EntitySpawner {
         this.listener = listener;
     }
 
+    /**
+     * the spawner condition evoluted, a check is done to choose whether or not a spawn is in order
+     *
+     * @param cdtProgress condition evolution
+     * @return nothing || a list of entity to spawn || nothing but call listener.onSpawnRequested for a custom spawning event (shared entity list notably)
+     */
     public ArrayList<Entity> onConditionProgress(int cdtProgress) {
         if (!useSharedMobList && entityList.isEmpty()) {
             listener.onSpawnerEmpty(this);
@@ -114,6 +127,11 @@ public class EntitySpawner {
         return null;
     }
 
+    /**
+     * spawn condition met, depending on spawner attribut choose the best way to distribute the newly spawned entity(s)
+     *
+     * @return nothing || a list of entity to spawn || nothing but call listener.onSpawnRequested for a custom spawning event (shared entity list notably)
+     */
     private ArrayList<Entity> onConditionMet() {
         if (useSharedMobList) {
             listener.onSpawnRequested(infinitePop, distibutionMode, groupeSize);
@@ -172,10 +190,10 @@ public class EntitySpawner {
                 case GROUPED_RANDOM:
                     for (int i = 0; i < groupeSize; i++) {
                         mobIndex = (int) (Math.random() * entityList.size());
-                        if (!infinitePop){
+                        if (!infinitePop) {
                             result.add(entityList.get(mobIndex));
                             entityList.remove(mobIndex);
-                        }else{
+                        } else {
                             result.add(entityList.get(mobIndex).clone());
                         }
                     }

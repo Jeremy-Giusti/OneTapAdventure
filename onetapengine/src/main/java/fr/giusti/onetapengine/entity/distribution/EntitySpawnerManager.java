@@ -16,10 +16,13 @@ import fr.giusti.onetapengine.rules.eConditions;
  */
 
 public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListener {
-    private HashMap<eConditions, ArrayList<EntitySpawner>> entitySpawnerList = new HashMap<>();
+    //an indexed list of spawners, each spawner is notified when it's associated condition has an evolution
+    protected HashMap<eConditions, ArrayList<EntitySpawner>> entitySpawnerList = new HashMap<>();
     private GameBoard board;
 
-    private ArrayList<Entity> initialList;
+    //list of entities that sould appear on the board at start
+    protected ArrayList<Entity> initialList;
+    //a list that can be used by different spawner to spawn mob from the same base
     private ArrayList<Entity> sharedList;
     private int sharedMobIndex = 0;
 
@@ -79,9 +82,6 @@ public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListen
                 onMobGetAway(mob);
                 onMobCountDown(mob);
                 break;
-//            case NEW_MOB:
-//                onNewMob(mob);
-//                break;
         }
 
         //find if a rule is linked to the condition and test it
@@ -93,15 +93,6 @@ public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListen
         }
     }
 
-    //should be avoided to prevent stack overflow/infiniteloop
-//    private void onNewMob(GameMob mob) {
-//        ArrayList<EntitySpawner> spawnerList = entitySpawnerList.get(eConditions.NEW_MOB);
-//        EntitySpawner spawner;
-//        for (int i = 0; i < spawnerList.size(); i++) {
-//            spawner = spawnerList.get(i);
-//            board.onNewEntities(spawner.onConditionProgress(1));
-//        }
-//    }
 
     private void onMobGetAway(GameMob mob) {
         ArrayList<EntitySpawner> spawnerList = entitySpawnerList.get(eConditions.MOB_AWAY);
