@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <fr.giusti.onetapadventure.UI.CustomView.DrawingView
+    <fr.giusti.onetapengine.ui.DrawingView
         android:id="@+id/GameBoard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

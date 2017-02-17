@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 
 import fr.giusti.onetapadventure.R;
-import fr.giusti.onetapadventure.UI.Activity.GameActivity;
 import fr.giusti.onetapadventure.UI.LvlButtonAdapter;
-import fr.giusti.onetapadventure.commons.GameConstant;
+import fr.giusti.onetapadventure.UI.activity.GameActivity;
+import fr.giusti.onetapengine.commons.GameConstant;
 
 /**
  * Created by jérémy on 22/09/2016.
