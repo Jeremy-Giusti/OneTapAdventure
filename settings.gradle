@@ -1,1 +1,1 @@
-include ':app', ':onetapengine'
+include ':app', ':onetapengine', ':spritesheetgenerator'
