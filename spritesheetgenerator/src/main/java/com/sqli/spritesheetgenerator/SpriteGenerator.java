@@ -2,6 +2,7 @@ package com.sqli.spritesheetgenerator;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 
@@ -29,6 +30,8 @@ public class SpriteGenerator {
         int spriteWidth = spritSheetModel.getSpriteWidth();
 
         Bitmap result = Bitmap.createBitmap(spritSheetModel.getmSpriteColumnNb() * spriteWidth, spritSheetModel.getmSpriteRowNb() * spriteHeight, Bitmap.Config.ARGB_8888);
+        result.eraseColor(Color.TRANSPARENT);
+
         Canvas canvas = new Canvas(result);
         Paint paint = new Paint();
 
