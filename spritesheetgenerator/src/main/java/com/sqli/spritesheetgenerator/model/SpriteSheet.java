@@ -17,6 +17,12 @@ public class SpriteSheet {
 
     private ArrayList<Sprite> mSpriteList = new ArrayList<>();
 
+    /**
+     *
+     * @param mSpriteHeight
+     * @param mSpriteWidth
+     * @param spriteList [x][y][z] position
+     */
     public SpriteSheet(int mSpriteHeight, int mSpriteWidth, Bitmap[][][] spriteList) {
         this.mSpriteHeight = mSpriteHeight;
         this.mSpriteWidth = mSpriteWidth;
@@ -30,18 +36,30 @@ public class SpriteSheet {
         }
     }
 
+    /**
+     *
+     * @param mSpriteHeight
+     * @param mSpriteWidth
+     * @param animLength
+     * @param spriteList array of array[z] bitmap
+     */
     public SpriteSheet(int mSpriteHeight, int mSpriteWidth, int animLength, Bitmap[]... spriteList) {
 
         initWith(mSpriteHeight, mSpriteWidth, animLength, spriteList);
     }
 
+    /**
+     *
+     * @param animLength
+     * @param spriteList array of array[z] bitmap
+     */
     public SpriteSheet(int animLength, Bitmap[]... spriteList) {
         int height = spriteList[0][0].getHeight();
         int width = spriteList[0][0].getWidth();
         initWith(height, width, animLength, spriteList);
     }
 
-    private void initWith(int mSpriteHeight, int mSpriteWidth, int animLength, Bitmap[][] spriteList) {
+    private void initWith(int mSpriteHeight, int mSpriteWidth, int animLength, Bitmap[]... spriteList) {
         this.mSpriteHeight = mSpriteHeight;
         this.mSpriteWidth = mSpriteWidth;
 

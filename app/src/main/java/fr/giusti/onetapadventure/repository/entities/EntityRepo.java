@@ -198,7 +198,7 @@ public class EntityRepo {
         int hitboxBottom = Lvl1Constant.HOLE1_DIMENS.bottom - Lvl1Constant.HOLE_HITBOX_MARGIN;
         RectF hitbox = new RectF(hitboxLeft, hitboxTop, hitboxRight, hitboxBottom);
 
-        Scenery hole1 = new Scenery("holes1", Lvl1Constant.HOLE1_DIMENS.left, Lvl1Constant.HOLE1_DIMENS.top, Lvl1Constant.HOLE1_DIMENS.width(), Lvl1Constant.HOLE1_DIMENS.height(), hitbox, touchedMoveRepo.getMoveById(TouchedMoveRepo.MOB_AWAY_MOVE), bitmapId);
+        Scenery hole1 = new Scenery("holes1", Lvl1Constant.HOLE1_DIMENS.left, Lvl1Constant.HOLE1_DIMENS.top, Lvl1Constant.HOLE1_DIMENS.width(), Lvl1Constant.HOLE1_DIMENS.height(), hitbox, touchedMoveRepo.getMoveById(TouchedMoveRepo.DISAPEAR), bitmapId);
         entityList.add(hole1);
 
         Particule glassParticule1 = ParticuleHolder.getAvailableParticule(ParticuleRepo.GLASS_PARTICULE, Lvl1Constant.HOLE1_DIMENS.centerX(), Lvl1Constant.HOLE1_DIMENS.centerY() - Lvl1Constant.HOLE1_DIMENS.width() / 2, Lvl1Constant.HOLE1_DIMENS.width(), Lvl1Constant.HOLE1_DIMENS.width(), false, new PointF[]{new PointF(0, 6)});
@@ -285,7 +285,7 @@ public class EntityRepo {
         int hitboxBottom = Lvl2Constant.HOLE1_DIMENS.bottom - Lvl2Constant.HOLE_HITBOX_MARGIN;
         RectF hitbox = new RectF(hitboxLeft, hitboxTop, hitboxRight, hitboxBottom);
 
-        Scenery hole1 = new Scenery("holes1", Lvl2Constant.HOLE1_DIMENS.left, Lvl2Constant.HOLE1_DIMENS.top, Lvl2Constant.HOLE1_DIMENS.width(), Lvl2Constant.HOLE1_DIMENS.height(), hitbox, touchedMoveRepo.getMoveById(TouchedMoveRepo.MOB_AWAY_MOVE), bitmapId);
+        Scenery hole1 = new Scenery("holes1", Lvl2Constant.HOLE1_DIMENS.left, Lvl2Constant.HOLE1_DIMENS.top, Lvl2Constant.HOLE1_DIMENS.width(), Lvl2Constant.HOLE1_DIMENS.height(), hitbox, touchedMoveRepo.getMoveById(TouchedMoveRepo.DISAPEAR), bitmapId);
         entityList.add(hole1);
 
         Particule glassParticule = ParticuleHolder.getAvailableParticule(ParticuleRepo.GLASS_PARTICULE, Lvl2Constant.HOLE1_DIMENS.centerX(), Lvl2Constant.HOLE1_DIMENS.centerY(), Lvl2Constant.HOLE1_DIMENS.width(), Lvl2Constant.HOLE1_DIMENS.height(), false, new PointF[]{new PointF(0, 6)});

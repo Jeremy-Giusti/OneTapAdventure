@@ -238,7 +238,7 @@ public class SpecialMoveRepo {
                 if (remainingIteration == 0) {
                     int sceneryHeight = (int) currentMob.mPosition.height() * 2;
                     int sceneryWidth = (int) currentMob.mPosition.width() * 2;
-                    board.onNewScenery(new Scenery("brokenglass" + currentMob.getIdName(), (int) currentMob.mPosition.centerX() - sceneryWidth / 2, (int) currentMob.mPosition.centerY() - sceneryHeight / 2, sceneryWidth, sceneryHeight, 1, TouchedMoveRepo.getMoveById(TouchedMoveRepo.MOB_AWAY_MOVE), GameConstant.HOLE_FRONT_SPRITE_ID));
+                    board.onNewScenery(new Scenery("brokenglass" + currentMob.getIdName(), (int) currentMob.mPosition.centerX() - sceneryWidth / 2, (int) currentMob.mPosition.centerY() - sceneryHeight / 2, sceneryWidth, sceneryHeight, 1, TouchedMoveRepo.getMoveById(TouchedMoveRepo.DISAPEAR), GameConstant.HOLE_FRONT_SPRITE_ID));
                     currentMob.setHealth(0);
                     currentMob.setState(GameMob.eMobState.DYING);
                     lastUse = 0;

@@ -613,10 +613,10 @@ public class GameMob extends Entity {
 
     public enum eMobState {
 
-        MOVING_LEFT(0),
+        MOVING_DOWN(0),
         MOVING_UP(1),
         MOVING_RIGHT(2),
-        MOVING_DOWN(3),
+        MOVING_LEFT(3),
         HURT(4),
         DYING(5),
         SPE1(6),

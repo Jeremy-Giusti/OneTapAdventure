@@ -24,7 +24,7 @@ public class TouchedMoveRepo {
     public static final String TELEPORT = "teleport";
     public static final String HEAL = "heal";
     public static final String BAIT = "bait";
-    public static final String MOB_AWAY_MOVE = "mob_away";
+    public static final String DISAPEAR = "mob_away";
 
 
     public static TouchedMove default_touched_move = new TouchedMove() {
@@ -166,7 +166,7 @@ public class TouchedMoveRepo {
     public static TouchedMove mobAwayMove = new TouchedMove() {
         @Override
         public String getId() {
-            return MOB_AWAY_MOVE;
+            return DISAPEAR;
         }
 
         @Override

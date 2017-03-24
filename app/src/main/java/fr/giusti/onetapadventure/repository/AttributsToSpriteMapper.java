@@ -1,10 +1,15 @@
 package fr.giusti.onetapadventure.repository;
 
-import java.util.HashMap;
-import java.util.Map;
+import android.content.Context;
+import android.support.annotation.NonNull;
 
-import fr.giusti.onetapadventure.R;
-import fr.giusti.onetapengine.repository.SpecialMoveRepo;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
+import fr.giusti.onetapengine.commons.Constants;
+import fr.giusti.onetapengine.entity.GameMob;
 
 /**
  * Created by jgiusti on 22/03/2017.
@@ -12,91 +17,142 @@ import fr.giusti.onetapengine.repository.SpecialMoveRepo;
 
 public class AttributsToSpriteMapper {
 
-    // ------------------------------------------------- Movement Sprite / Wings -------------------------------------------------------//
+    private final static String SPRITE_BASE_ASSET_PATH = "sprites/";
 
-    private static final Map<String, Integer[]> movementSpriteList = createMovementSpriteList();
+    private final static String SPRITE_WINGS_ASSET_PATH = "wings/";
+    private final static String SPRITE_BODY_COLOR_ASSET_PATH = "bodycolor/";
+    private final static String SPRITE_BODY_OVERLAY_ASSET_PATH = "bodyoverlay1/";
+    private final static String SPRITE_BODY_OVERLAY_2_ASSET_PATH = "bodyoverlay2/";
+    private final static String SPRITE_BODY_OVERLAY_3_ASSET_PATH = "bodyoverlay3/";
 
-    private static Map<String, Integer[]> createMovementSpriteList() {
-        Map<String, Integer[]> myMap = new HashMap<String, Integer[]>();
-        myMap.put("line", {R.drawable.wing_line1, R.drawable.wing_line2, R.drawable.wing_line3});
-        myMap.put("curve", {R.drawable.wing_curve1, R.drawable.wing_curve2, R.drawable.wing_curve3});
-        myMap.put("loop", {R.drawable.wing_loop1, R.drawable.wing_loop2, R.drawable.wing_loop3});
-        myMap.put("circle", {R.drawable.wing_circle1, R.drawable.wing_circle2, R.drawable.wing_circle3});
-        myMap.put("spiral", {R.drawable.wing_spiral1, R.drawable.wing_spiral2, R.drawable.wing_spiral3});
-        myMap.put("random", {R.drawable.wing_random1, R.drawable.wing_random2, R.drawable.wing_random3});
-        return myMap;
+    private final static String WINGS_LINE = "line/";
+    private final static String WINGS_CURVE = "curve/";
+    private final static String WINGS_CIRCLE = "circle/";
+    private final static String WINGS_LOOP = "loop/";
+    private final static String WINGS_RANDOM = "random/";
+    private final static String WINGS_SPIRAL = "spiral/";
+
+    private final static String BODY1_BREAKGLASS = "breakglass/";
+    private final static String BODY1_EXPLODE = "explode/";
+    private final static String BODY1_GHOST = "ghost/";
+    private final static String BODY1_HEAL = "heal/";
+    private final static String BODY1_MULTIPLIE = "multiplie/";
+    private final static String BODY1_SMOKE = "smoke/";
+    private final static String BODY1_SWAPE = "swape/";
+    private final static String BODY1_TP = "tp/";
+
+    private final static String BODY2_TP = "tp/";
+    private final static String BODY2_BAIT = "bait/";
+    private final static String BODY2_BLEED = "bleed/";
+    private final static String BODY2_DISAPEAR = "disapear/";
+    private final static String BODY2_HEAL = "heal/";
+    private final static String BODY2_HURT = "hurt/";
+
+
+    private HashMap<Integer, String> healthMap = getHealthMap();
+
+    private HashMap<Integer, String> getHealthMap() {
+        HashMap<Integer, String> healthMap = new HashMap<>();
+        healthMap.put(2, BODY3_health2);
+        healthMap.put(4, BODY3_health4);
+        healthMap.put(6, BODY3_health6);
+        healthMap.put(8, BODY3_health8);
+        healthMap.put(10, BODY3_health10);
+        return healthMap;
     }
 
-    public static Integer[] getMovementSpritesAsRessource(String movementType) {
-        return movementSpriteList.get(movementType);
-    }
+    private final static String BODY3_health2 = "health2/";
+    private final static String BODY3_health4 = "health4/";
+    private final static String BODY3_health6 = "health6/";
+    private final static String BODY3_health8 = "health8/";
+    private final static String BODY3_health10 = "health10/";
 
-    // ------------------------------------------------- Alignement Sprite / Body  color -------------------------------------------------------//
 
-    private static final Map<Integer, Integer[]> alignementSpriteList = createAlignementSpriteList();
-
-    private static Map<Integer, Integer[]> createAlignementSpriteList() {
-        Map<Integer, Integer[]> myMap = new HashMap<Integer, Integer[]>();
-        myMap.put(1, {R.drawable.body_1color1, R.drawable.body_1color2, R.drawable.body_1color3});
-        myMap.put(2, {R.drawable.body_2color1, R.drawable.body_2color2, R.drawable.body_2color3});
-        myMap.put(3, {R.drawable.body_3color1, R.drawable.body_3color2, R.drawable.body_3color3});
-        myMap.put(4, {R.drawable.body_4color1, R.drawable.body_4color2, R.drawable.body_4color3});
-        myMap.put(5, {R.drawable.body_5color1, R.drawable.body_5color2, R.drawable.body_5color3});
-        myMap.put(6, {R.drawable.body_6color1, R.drawable.body_6color2, R.drawable.body_6color3});
-        myMap.put(7, {R.drawable.body_7color1, R.drawable.body_7color2, R.drawable.body_7color3});
-        myMap.put(8, {R.drawable.body_8color1, R.drawable.body_8color2, R.drawable.body_8color3});
-        return myMap;
-    }
-
-    public static Integer[] getAlignementSpritesAsRessource(Integer alignement) {
-        return specialSpriteList.containsKey(alignement) ? specialSpriteList.get(alignement) : {R.drawable.body_0color1, R.drawable.body_0color2, R.drawable.body_0color3};
+    private AttributsToSpriteMapper() {
 
     }
 
-    // ------------------------------------------------- Special Sprite / Body2 overlay -------------------------------------------------------//
+    private static AttributsToSpriteMapper instance;
 
-    private static final Map<String, Integer[]> specialSpriteList = createSpecialSpriteList();
-
-    private static Map<String, Integer[]> createSpecialSpriteList() {
-        Map<String, Integer[]> myMap = new HashMap<String, Integer[]>();
-        myMap.put(SpecialMoveRepo.AUTO_HEAL, {R.drawable.body2_heal1, R.drawable.body2_heal2, R.drawable.body2_heal3});
-        myMap.put(SpecialMoveRepo.AUTO_HURT_EXPLODING, {R.drawable.body2_explode1, R.drawable.body2_explode2, R.drawable.body2_explode3});
-        myMap.put(SpecialMoveRepo.BREAK_GLASS, {R.drawable.body2_breakglass1, R.drawable.body2_breakglass2, R.drawable.body2_breakglass3});
-        myMap.put(SpecialMoveRepo.GHOST_MOVE, {R.drawable.body2_ghost1, R.drawable.body2_ghost2, R.drawable.body2_ghost3});
-        myMap.put(SpecialMoveRepo.MULTIPLIE, {R.drawable.body2_multiplie1, R.drawable.body2_multiplie2, R.drawable.body2_multiplie3});
-        myMap.put(SpecialMoveRepo.SMOKE_TRAIL, {R.drawable.body2_smoke1, R.drawable.body2_smoke2, R.drawable.body2_smoke3});
-        myMap.put(SpecialMoveRepo.SWAP, {R.drawable.body2_swape1, R.drawable.body2_swape2, R.drawable.body2_swape3});
-        myMap.put(SpecialMoveRepo.TELEPORT, {R.drawable.body2_tp1, R.drawable.body2_tp2, R.drawable.body2_tp3});
-        myMap.put(SpecialMoveRepo.NO_MOVE, new Integer[0]);
-        return myMap;
-    }
-
-    public static Integer[] getSpecialSpritesAsRessource(String specialType) {
-        return specialSpriteList.get(specialType);
-    }
-
-
-    // ------------------------------------------------- touch Sprite / Body2 overlay -------------------------------------------------------//
-
-    private static final Map<String, Integer[]> specialSpriteList = createSpecialSpriteList();
-
-    private static Map<String, Integer[]> createSpecialSpriteList() {
-        Map<String, Integer[]> myMap = new HashMap<String, Integer[]>();
-        myMap.put(SpecialMoveRepo.AUTO_HEAL, {R.drawable.body2_heal1, R.drawable.body2_heal2, R.drawable.body2_heal3});
-        myMap.put(SpecialMoveRepo.AUTO_HURT_EXPLODING, {R.drawable.body2_explode1, R.drawable.body2_explode2, R.drawable.body2_explode3});
-        myMap.put(SpecialMoveRepo.BREAK_GLASS, {R.drawable.body2_breakglass1, R.drawable.body2_breakglass2, R.drawable.body2_breakglass3});
-        myMap.put(SpecialMoveRepo.GHOST_MOVE, {R.drawable.body2_ghost1, R.drawable.body2_ghost2, R.drawable.body2_ghost3});
-        myMap.put(SpecialMoveRepo.MULTIPLIE, {R.drawable.body2_multiplie1, R.drawable.body2_multiplie2, R.drawable.body2_multiplie3});
-        myMap.put(SpecialMoveRepo.SMOKE_TRAIL, {R.drawable.body2_smoke1, R.drawable.body2_smoke2, R.drawable.body2_smoke3});
-        myMap.put(SpecialMoveRepo.SWAP, {R.drawable.body2_swape1, R.drawable.body2_swape2, R.drawable.body2_swape3});
-        myMap.put(SpecialMoveRepo.TELEPORT, {R.drawable.body2_tp1, R.drawable.body2_tp2, R.drawable.body2_tp3});
-        myMap.put(SpecialMoveRepo.NO_MOVE, new Integer[0]);
-        return myMap;
-    }
-
-    public static Integer[] getSpecialSpritesAsRessource(String specialType) {
-        return specialSpriteList.get(specialType);
+    public static AttributsToSpriteMapper getInstance() {
+        if (instance == null) {
+            instance = new AttributsToSpriteMapper();
+        }
+        return instance;
     }
 
 
+    public String[] getMovementSpritesAssetPath(Context context, GameMob.eMobState state, String movementType) throws IOException {
+
+        String assetCategoryFolder = SPRITE_BASE_ASSET_PATH + SPRITE_WINGS_ASSET_PATH;
+        String[] movementSpitesAnim = getAssetsStrings(context, state, movementType, assetCategoryFolder);
+        return movementSpitesAnim;
+    }
+
+    public String[] getAlignementSpritesAsRessource(Context context, GameMob.eMobState state, Integer alignement) throws IOException {
+        String[] selectedSpriteAssets = new String[Constants.NB_FRAME_ON_ANIMATION];
+        String assetCategoryFolder = SPRITE_BASE_ASSET_PATH + SPRITE_BODY_COLOR_ASSET_PATH;
+
+        List<String> color = Arrays.asList(context.getAssets().list(assetCategoryFolder));
+        for (int frame = 0; frame < Constants.NB_FRAME_ON_ANIMATION; frame++) {
+            selectedSpriteAssets[frame] = assetCategoryFolder + "/" + alignement; //yep always the same
+        }
+        return selectedSpriteAssets;
+    }
+
+    public String[] getSpecialSpritesAsRessource(Context context, GameMob.eMobState state, String specialType) throws IOException {
+        String assetCategoryFolder = SPRITE_BASE_ASSET_PATH + SPRITE_BODY_OVERLAY_ASSET_PATH;
+        String[] specialSpitesAnim = getAssetsStrings(context, state, specialType, assetCategoryFolder);
+        return specialSpitesAnim;
+    }
+
+    public String[] getTouchSpritesAsRessource(Context context, GameMob.eMobState state, String touchType) throws IOException {
+        String assetCategoryFolder = SPRITE_BASE_ASSET_PATH + SPRITE_BODY_OVERLAY_2_ASSET_PATH;
+        String[] touchSpitesAnim = getAssetsStrings(context, state, touchType, assetCategoryFolder);
+        return touchSpitesAnim;
+    }
+
+
+    public String[] getHealthSpritesAsRessource(GameMob.eMobState state, Integer health) {
+        if (healthSpriteList.containsKey(health)) {
+            return healthSpriteList.get(health).spriteRessources[state.index];
+        } else {
+            for (Integer category : healthSpriteList.keySet()) {
+                if (health < category) {
+                    return healthSpriteList.get(category).spriteRessources[state.index];
+                }
+            }
+        }
+        return new Integer[0];
+    }
+
+    /**
+     * @param context
+     * @param state               mob state concerned by the requested assets sprites
+     * @param type                assets type => for wings type are: line/curve/loop etc...
+     * @param assetCategoryFolder asset category folder "/sprite/wings" for exemple
+     * @return
+     * @throws IOException
+     */
+    @NonNull
+    private String[] getAssetsStrings(Context context, GameMob.eMobState state, String type, String assetCategoryFolder) throws IOException {
+        String assetRepo = assetCategoryFolder + "/" + type;
+
+        List<String> assetList = Arrays.asList(context.getAssets().list(assetRepo));
+
+
+        String[] selectedSpriteAssets = new String[Constants.NB_FRAME_ON_ANIMATION];
+        String fileName;
+        for (int frame = 0; frame < Constants.NB_FRAME_ON_ANIMATION; frame++) {
+            fileName = "" + frame + state.index;
+            if (assetList.contains(fileName)) {
+                selectedSpriteAssets[frame] = assetRepo + "/" + fileName;
+            } else if (assetList.contains("" + frame + 0)) {
+                selectedSpriteAssets[frame] = assetRepo + "/" + "" + frame + 0;//default (no mob state consideration)
+            } else {
+                selectedSpriteAssets[frame] = assetCategoryFolder + "/" + frame + 0;//default (no type/state consideration)
+            }
+        }
+        return selectedSpriteAssets;
+    }
 }
