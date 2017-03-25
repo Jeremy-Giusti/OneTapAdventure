@@ -1,9 +1,10 @@
-package fr.giusti.onetapadventure.repository;
+package fr.giusti.onetapadventure.repository.spritesheet;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -79,6 +80,43 @@ public class AttributsToSpriteMapper {
             instance = new AttributsToSpriteMapper();
         }
         return instance;
+    }
+
+    /**
+     *
+     * @param context
+     * @param mob
+     * @param mobMovementhType
+     * @return
+     * @throws IOException
+     */
+    public String[][][] getMobMap(Context context, GameMob mob, String mobMovementhType) throws IOException {
+        ArrayList<GameMob.eMobState> mobAnimatedState = GameMob.eMobState.getAnimatedState();
+        String[][][] result = new String[Constants.NB_FRAME_ON_ANIMATION][mobAnimatedState.size()][5];
+        String[][] animationLayers = new String[5][];//for each layer (z) each animation (x)
+        for (int y = 0; y < mobAnimatedState.size(); y++) {
+            GameMob.eMobState mobState = mobAnimatedState.get(y);
+            if (mobState != GameMob.eMobState.MOVING_UP) {
+                animationLayers[0] = getMovementSpritesAssetPath(context, mobState, mobMovementhType);
+                animationLayers[1] = getAlignementSpritesAsRessource(context, mobState, mob.getAlignement());
+                animationLayers[2] = getSpecialSpritesAsRessource(context, mobState, mob.getmSpecialMove1().getId());
+                animationLayers[3] = getTouchSpritesAsRessource(context, mobState, mob.getmTouchedMove().getId());
+                animationLayers[4] = getHealthSpritesAsRessource(context, mobState, mob.getHealth());
+            } else {
+                animationLayers[4] = getMovementSpritesAssetPath(context, mobState, mobMovementhType);
+                animationLayers[0] = getAlignementSpritesAsRessource(context, mobState, mob.getAlignement());
+                animationLayers[1] = getSpecialSpritesAsRessource(context, mobState, mob.getmSpecialMove1().getId());
+                animationLayers[2] = getTouchSpritesAsRessource(context, mobState, mob.getmTouchedMove().getId());
+                animationLayers[3] = getHealthSpritesAsRessource(context, mobState, mob.getHealth());
+            }
+
+            for (int z = 0; z < animationLayers.length; z++) {
+                for (int x = 0; x < Constants.NB_FRAME_ON_ANIMATION; x++) {
+                    result[x][y][z] = animationLayers[z][x];
+                }
+            }
+        }
+        return result;
     }
 
 

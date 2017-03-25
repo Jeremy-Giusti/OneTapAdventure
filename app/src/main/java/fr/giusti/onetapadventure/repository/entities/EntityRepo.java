@@ -1,6 +1,7 @@
 package fr.giusti.onetapadventure.repository.entities;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.PointF;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import fr.giusti.onetapadventure.R;
+import fr.giusti.onetapadventure.repository.spritesheet.SpriteSheetRepository;
 import fr.giusti.onetapengine.commons.Constants;
 import fr.giusti.onetapengine.commons.GameConstant;
 import fr.giusti.onetapengine.entity.Entity;
@@ -180,7 +182,7 @@ public class EntityRepo {
     }
 
 
-    public static ArrayList<Entity> getLvl1x1InitList(Context context) {
+    public static ArrayList<Entity> getLvl1x1InitList(Context context) throws IOException {
         ArrayList<Entity> entityList = new ArrayList<>();
 
         SpecialMoveRepo moveRepo = new SpecialMoveRepo();
@@ -207,9 +209,10 @@ public class EntityRepo {
         entityList.add(glassParticule2);
 
         String mob1sptsheetId = "tier1Mob";
-        SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet), mob1sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
-
         GameMob mob1 = generateSimpleRandomizedMob("firstMob1", context, new RectF(startPos.x - 5, startPos.y + 45, startPos.x + 5, startPos.y + 55), hitbox, (int) (Constants.FRAME_PER_SEC * 4.5));
+        Bitmap tier1MoobSpritesheet = new SpriteSheetRepository().getMobSpriteSheet(context,mob1,"line");
+        SpriteRepo.addSpriteSheet(tier1MoobSpritesheet, mob1sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+
         GameMob mob2 = generateSimpleRandomizedMob("firstMob2", context, new RectF(startPos.x - 5, startPos.y - 55, startPos.x + 5, startPos.y - 45), hitbox, (int) (Constants.FRAME_PER_SEC * 4.5));
 
         entityList.add(mob1);

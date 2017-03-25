@@ -7,16 +7,18 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import fr.giusti.onetapengine.GameBoard;
 import fr.giusti.onetapengine.commons.Constants;
 import fr.giusti.onetapengine.commons.GameConstant;
 import fr.giusti.onetapengine.commons.Utils;
 import fr.giusti.onetapengine.entity.moves.SpecialMove;
 import fr.giusti.onetapengine.entity.moves.TouchedMove;
+import fr.giusti.onetapengine.repository.PathRepo;
 import fr.giusti.onetapengine.repository.SpecialMoveRepo;
 import fr.giusti.onetapengine.repository.SpriteRepo;
-
-import fr.giusti.onetapengine.repository.PathRepo;
 import fr.giusti.onetapengine.repository.TouchedMoveRepo;
 
 public class GameMob extends Entity {
@@ -613,20 +615,38 @@ public class GameMob extends Entity {
 
     public enum eMobState {
 
-        MOVING_DOWN(0),
-        MOVING_UP(1),
-        MOVING_RIGHT(2),
-        MOVING_LEFT(3),
-        HURT(4),
-        DYING(5),
-        SPE1(6),
-        SPE2(7),
-        GOING_AWAY(8);
+        MOVING_DOWN(0, true),
+        MOVING_UP(1, true),
+        MOVING_RIGHT(2, true),
+        MOVING_LEFT(3, true),
+        HURT(4, true),
+        DYING(5, true),
+        SPE1(6, true),
+        SPE2(7, true),
+        GOING_AWAY(8, false);
 
         public final int index;
+        public final boolean animated;
 
-        eMobState(int index) {
+        private static ArrayList<eMobState> animatedState = null;
+
+
+        eMobState(int index, boolean animated) {
             this.index = index;
+            this.animated = animated;
+        }
+
+        public static ArrayList<eMobState> getAnimatedState() {
+            if (animatedState == null) {
+                animatedState = new ArrayList<eMobState>(Arrays.asList(eMobState.values()));
+                for (int i = 0; i < animatedState.size(); i++) {
+                    if (!animatedState.get(i).animated) {
+                        animatedState.remove(i);
+                        i--;
+                    }
+                }
+            }
+            return animatedState;
         }
     }
 
