@@ -85,8 +85,7 @@ public class AttributsToSpriteMapper {
     public String[] getMovementSpritesAssetPath(Context context, GameMob.eMobState state, String movementType) throws IOException {
 
         String assetCategoryFolder = SPRITE_BASE_ASSET_PATH + SPRITE_WINGS_ASSET_PATH;
-        String[] movementSpitesAnim = getAssetsStrings(context, state, movementType, assetCategoryFolder);
-        return movementSpitesAnim;
+        return getAssetsStrings(context, state, movementType, assetCategoryFolder);
     }
 
     public String[] getAlignementSpritesAsRessource(Context context, GameMob.eMobState state, Integer alignement) throws IOException {
@@ -102,28 +101,28 @@ public class AttributsToSpriteMapper {
 
     public String[] getSpecialSpritesAsRessource(Context context, GameMob.eMobState state, String specialType) throws IOException {
         String assetCategoryFolder = SPRITE_BASE_ASSET_PATH + SPRITE_BODY_OVERLAY_ASSET_PATH;
-        String[] specialSpitesAnim = getAssetsStrings(context, state, specialType, assetCategoryFolder);
-        return specialSpitesAnim;
+        return getAssetsStrings(context, state, specialType, assetCategoryFolder);
     }
 
     public String[] getTouchSpritesAsRessource(Context context, GameMob.eMobState state, String touchType) throws IOException {
         String assetCategoryFolder = SPRITE_BASE_ASSET_PATH + SPRITE_BODY_OVERLAY_2_ASSET_PATH;
-        String[] touchSpitesAnim = getAssetsStrings(context, state, touchType, assetCategoryFolder);
-        return touchSpitesAnim;
+        return getAssetsStrings(context, state, touchType, assetCategoryFolder);
     }
 
 
-    public String[] getHealthSpritesAsRessource(GameMob.eMobState state, Integer health) {
-        if (healthSpriteList.containsKey(health)) {
-            return healthSpriteList.get(health).spriteRessources[state.index];
+    public String[] getHealthSpritesAsRessource(Context context, GameMob.eMobState state, Integer health) throws IOException {
+
+        String assetCategoryFolder = SPRITE_BASE_ASSET_PATH + SPRITE_BODY_OVERLAY_3_ASSET_PATH;
+        if (healthMap.containsKey(health)) {
+            return getAssetsStrings(context, state, healthMap.get(health), assetCategoryFolder);
         } else {
-            for (Integer category : healthSpriteList.keySet()) {
+            for (Integer category : healthMap.keySet()) {
                 if (health < category) {
-                    return healthSpriteList.get(category).spriteRessources[state.index];
+                    return getAssetsStrings(context, state, healthMap.get(category), assetCategoryFolder);
                 }
             }
         }
-        return new Integer[0];
+        return new String[0];
     }
 
     /**
