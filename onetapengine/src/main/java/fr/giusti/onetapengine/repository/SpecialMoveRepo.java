@@ -23,14 +23,14 @@ import fr.giusti.onetapengine.interaction.TouchPoint;
 public class SpecialMoveRepo {
     //TODO limited range tp/switch
     public static final String NO_MOVE = "noMove";
-    public static final String AUTO_HEAL = "autoHeal";
-    public static final String AUTO_HURT_EXPLODING = "autoHurtExploding";
+    public static final String AUTO_HEAL = "heal";
+    public static final String AUTO_HURT_EXPLODING = "explode";
     public static final String MULTIPLIE = "multiplie";
     public static final String TELEPORT = "teleport";
     public static final String SWAP = "swap";
-    public static final String BREAK_GLASS = "broke_glass";
-    public static final String SMOKE_TRAIL = "smoke_trail";
-    public static final String GHOST_MOVE = "ghost_move";
+    public static final String BREAK_GLASS = "breakglass";
+    public static final String SMOKE_TRAIL = "smoke";
+    public static final String GHOST_MOVE = "ghost";
 
 
     private static SpecialMove noMove = new SpecialMove() {

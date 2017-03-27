@@ -40,9 +40,9 @@ public class AttributsToSpriteMapper {
     private final static String BODY1_MULTIPLIE = "multiplie/";
     private final static String BODY1_SMOKE = "smoke/";
     private final static String BODY1_SWAPE = "swape/";
-    private final static String BODY1_TP = "tp/";
+    private final static String BODY1_TP = "teleport/";
 
-    private final static String BODY2_TP = "tp/";
+    private final static String BODY2_TP = "teleport/";
     private final static String BODY2_BAIT = "bait/";
     private final static String BODY2_BLEED = "bleed/";
     private final static String BODY2_DISAPEAR = "disapear/";

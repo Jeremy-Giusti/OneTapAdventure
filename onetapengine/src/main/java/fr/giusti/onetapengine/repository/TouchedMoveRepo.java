@@ -19,12 +19,12 @@ import fr.giusti.onetapengine.entity.moves.TouchedMove;
  */
 public class TouchedMoveRepo {
 
-    public static final String DEFAULT_MOVE = "touched";
+    public static final String DEFAULT_MOVE = "hurt";
     public static final String BLEED = "bleed";
     public static final String TELEPORT = "teleport";
     public static final String HEAL = "heal";
     public static final String BAIT = "bait";
-    public static final String DISAPEAR = "mob_away";
+    public static final String DISAPEAR = "disapear";
 
 
     public static TouchedMove default_touched_move = new TouchedMove() {
