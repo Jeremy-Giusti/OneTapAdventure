@@ -475,12 +475,6 @@ public class GameMob extends Entity {
 
     @Override
     public void resize(float ratio) {
-//        float oldWidth = getWidth();
-//        float newWidth = oldWidth * ratio;
-//        float oldHeight = getHeight();
-//        float newHeight = oldHeight * ratio;
-//        float diffHeight = (oldHeight - newHeight) / 2;
-//        float diffWidth = (oldWidth -newWidth ) / 2;
 
         mPosition = new RectF(mPosition.left * ratio, mPosition.top * ratio, mPosition.right * ratio, mPosition.bottom * ratio);
         movePattern = PathRepo.createScalePath(ratio, movePattern);
@@ -615,10 +609,10 @@ public class GameMob extends Entity {
 
     public enum eMobState {
 
-        MOVING_DOWN(0, true),
+        MOVING_LEFT(0, true),
         MOVING_UP(1, true),
         MOVING_RIGHT(2, true),
-        MOVING_LEFT(3, true),
+        MOVING_DOWN(3, true),
         HURT(4, true),
         DYING(5, true),
         SPE1(6, true),
@@ -636,6 +630,9 @@ public class GameMob extends Entity {
             this.animated = animated;
         }
 
+        /**
+         * @return the list of state that can be displayed with sprites.
+         */
         public static ArrayList<eMobState> getAnimatedState() {
             if (animatedState == null) {
                 animatedState = new ArrayList<eMobState>(Arrays.asList(eMobState.values()));

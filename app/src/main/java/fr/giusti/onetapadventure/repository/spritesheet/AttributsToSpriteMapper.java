@@ -83,7 +83,6 @@ public class AttributsToSpriteMapper {
     }
 
     /**
-     *
      * @param context
      * @param mob
      * @param mobMovementhType
@@ -93,7 +92,7 @@ public class AttributsToSpriteMapper {
     public String[][][] getMobMap(Context context, GameMob mob, String mobMovementhType) throws IOException {
         ArrayList<GameMob.eMobState> mobAnimatedState = GameMob.eMobState.getAnimatedState();
         String[][][] result = new String[Constants.NB_FRAME_ON_ANIMATION][mobAnimatedState.size()][5];
-        String[][] animationLayers = new String[5][];//for each layer (z) each animation (x)
+        String[][] animationLayers = new String[5][];//animation list (x) ordered by layer (z) so string[z][x]
         for (int y = 0; y < mobAnimatedState.size(); y++) {
             GameMob.eMobState mobState = mobAnimatedState.get(y);
             if (mobState != GameMob.eMobState.MOVING_UP) {
@@ -103,11 +102,11 @@ public class AttributsToSpriteMapper {
                 animationLayers[3] = getTouchSpritesAsRessource(context, mobState, mob.getmTouchedMove().getId());
                 animationLayers[4] = getHealthSpritesAsRessource(context, mobState, mob.getHealth());
             } else {
-                animationLayers[4] = getMovementSpritesAssetPath(context, mobState, mobMovementhType);
                 animationLayers[0] = getAlignementSpritesAsRessource(context, mobState, mob.getAlignement());
                 animationLayers[1] = getSpecialSpritesAsRessource(context, mobState, mob.getmSpecialMove1().getId());
                 animationLayers[2] = getTouchSpritesAsRessource(context, mobState, mob.getmTouchedMove().getId());
                 animationLayers[3] = getHealthSpritesAsRessource(context, mobState, mob.getHealth());
+                animationLayers[4] = getMovementSpritesAssetPath(context, mobState, mobMovementhType);
             }
 
             for (int z = 0; z < animationLayers.length; z++) {
@@ -181,15 +180,27 @@ public class AttributsToSpriteMapper {
         String[] selectedSpriteAssets = new String[Constants.NB_FRAME_ON_ANIMATION];
         String fileName;
         for (int frame = 0; frame < Constants.NB_FRAME_ON_ANIMATION; frame++) {
-            fileName = "" + frame + state.index;
+            fileName = "" + state.index + frame; //for the sake of folder readability x and y is inversed in filename (so 01 is the file with frame number 1 and state index 0)
             if (assetList.contains(fileName)) {
                 selectedSpriteAssets[frame] = assetRepo + "/" + fileName;
-            } else if (assetList.contains("" + frame + 0)) {
-                selectedSpriteAssets[frame] = assetRepo + "/" + "" + frame + 0;//default (no mob state consideration)
+            } else if (assetList.contains("" + 0 + frame)) {
+                selectedSpriteAssets[frame] = assetRepo + "/" + "" + 0 + frame;//default (no mob state consideration)
             } else {
-                selectedSpriteAssets[frame] = assetCategoryFolder + "/" + frame + 0;//default (no type/state consideration)
+                selectedSpriteAssets[frame] = findDefaultAssetSprit(context, state, frame, assetCategoryFolder);//default (no type/state consideration)
             }
         }
         return selectedSpriteAssets;
+    }
+
+    private String findDefaultAssetSprit(Context context, GameMob.eMobState state, int frame, String assetCategoryFolder) throws IOException {
+        List<String> defaultAssetList = Arrays.asList(context.getAssets().list(assetCategoryFolder));
+        if (defaultAssetList.contains("" + state.index + frame)) {
+            return assetCategoryFolder + "/" + state.index + frame; //default
+        } else if (defaultAssetList.contains("0" + frame)) {
+            return assetCategoryFolder + "0" + frame; //default no state
+        } else if (defaultAssetList.contains("" + state.index + 0)) {
+            return assetCategoryFolder + "/" + state + 0; //default no frame
+        }
+        return assetCategoryFolder + "00";//no frame no state
     }
 }
