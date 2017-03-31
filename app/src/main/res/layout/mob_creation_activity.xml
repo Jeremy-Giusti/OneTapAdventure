@@ -38,7 +38,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/mca_speMoveSpinner"
         android:layout_toLeftOf="@+id/mca_marginCenter"
-        android:text="select a spriteSheet" />
+        android:text="select a spriteSheetTemplate" />
 
     <fr.giusti.onetapadventure.UI.customView.SpriteView
         android:id="@+id/mca_mobSkinImage"

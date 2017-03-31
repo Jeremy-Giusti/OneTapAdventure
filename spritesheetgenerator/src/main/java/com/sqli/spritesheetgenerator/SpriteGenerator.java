@@ -6,10 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 
-import com.sqli.spritesheetgenerator.model.Sprite;
-import com.sqli.spritesheetgenerator.model.SpriteSheet;
-
-import java.util.ArrayList;
+import com.sqli.spritesheetgenerator.model.SpriteSheetTemplate;
 
 /**
  * Created by jgiusti on 20/03/2017.
@@ -24,7 +21,7 @@ public class SpriteGenerator {
      * @param spritSheetModel model with all data needed to make the bitmap
      * @return
      */
-    public static Bitmap generateSpriteSheet(SpriteSheet spritSheetModel) {
+    public static Bitmap generateSpriteSheet(SpriteSheetTemplate spritSheetModel) {
 
         int spriteHeight = spritSheetModel.getSpriteHeight();
         int spriteWidth = spritSheetModel.getSpriteWidth();
@@ -35,34 +32,34 @@ public class SpriteGenerator {
         Canvas canvas = new Canvas(result);
         Paint paint = new Paint();
 
-        ArrayList<Sprite> spriteList = spritSheetModel.getSpriteList();
-
-
-        for (Sprite sprite : spriteList) {
-            Bitmap[] spriteLayers = sprite.getLayers();
-            for (Bitmap bitmap : spriteLayers) {
-                canvas.drawBitmap(bitmap, sprite.getmXposition() * spriteWidth, sprite.getmYposition() * spriteHeight, paint);
+        Bitmap[][][] spriteBitmaps = spritSheetModel.getSpriteBitmap();
+        Bitmap sprite;
+        for (int x = 0; x < spriteBitmaps.length; x++) {
+            for (int y = 0; y < spriteBitmaps[0].length; y++) {
+                for (int z = 0; z < spriteBitmaps[0][0].length; z++) {
+                    sprite = spriteBitmaps[x][y][z];
+                    if (sprite != null)
+                        canvas.drawBitmap(sprite, x * spriteWidth, y * spriteHeight, paint);
+                }
             }
         }
-
-
         return result;
     }
 
     /**
      * generate spritesheet(s) in an async task
      *
-     * @param spriteSheetModelList
-     * @param callback             for progress update and result (in main thread)
+     * @param spriteSheetTemplateModelList
+     * @param callback                     for progress update and result (in main thread)
      */
-    public static void generateSpriteSheetAsync(final SpriteSheetGenerationListener callback, final SpriteSheet... spriteSheetModelList) {
+    public static void generateSpriteSheetAsync(final SpriteSheetGenerationListener callback, final SpriteSheetTemplate... spriteSheetTemplateModelList) {
         new AsyncTask<String, Integer, Bitmap[]>() {
             @Override
             protected Bitmap[] doInBackground(String... params) {
-                Bitmap[] spritesheetResults = new Bitmap[spriteSheetModelList.length];
-                for (int i = 0; i < spriteSheetModelList.length; i++) {
-                    spritesheetResults[i] = generateSpriteSheet(spriteSheetModelList[i]);
-                    publishProgress((int) ((i / (float) (spriteSheetModelList.length)) * 100));
+                Bitmap[] spritesheetResults = new Bitmap[spriteSheetTemplateModelList.length];
+                for (int i = 0; i < spriteSheetTemplateModelList.length; i++) {
+                    spritesheetResults[i] = generateSpriteSheet(spriteSheetTemplateModelList[i]);
+                    publishProgress((int) ((i / (float) (spriteSheetTemplateModelList.length)) * 100));
                 }
                 return spritesheetResults;
             }

@@ -3,6 +3,8 @@ package fr.giusti.onetapadventure.repository.spritesheet;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.sqli.spritesheetgenerator.model.SpriteSheetTemplate;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +20,8 @@ import fr.giusti.onetapengine.entity.GameMob;
 
 public class AttributsToSpriteMapper {
 
+
+    private final static int LAYER_NUMBER = 5;
     private final static String SPRITE_BASE_ASSET_PATH = "sprites/";
 
     private final static String SPRITE_WINGS_ASSET_PATH = "wings/";
@@ -89,10 +93,13 @@ public class AttributsToSpriteMapper {
      * @return
      * @throws IOException
      */
-    public String[][][] getMobMap(Context context, GameMob mob, String mobMovementhType) throws IOException {
+    public SpriteSheetTemplate getMobMap(Context context, GameMob mob, String mobMovementhType) throws IOException {
+
+
         ArrayList<GameMob.eMobState> mobAnimatedState = GameMob.eMobState.getAnimatedState();
-        String[][][] result = new String[Constants.NB_FRAME_ON_ANIMATION][mobAnimatedState.size()][5];
-        String[][] animationLayers = new String[5][];//animation list (x) ordered by layer (z) so string[z][x]
+        SpriteSheetTemplate spriteSheetTemplate = new SpriteSheetTemplate(Constants.NB_FRAME_ON_ANIMATION, mobAnimatedState.size(), LAYER_NUMBER);
+
+        String[][] animationLayers = new String[LAYER_NUMBER][];//animation list (x) ordered by layer (z) so string[z][x]
         for (int y = 0; y < mobAnimatedState.size(); y++) {
             GameMob.eMobState mobState = mobAnimatedState.get(y);
             if (mobState != GameMob.eMobState.MOVING_UP) {
@@ -111,11 +118,11 @@ public class AttributsToSpriteMapper {
 
             for (int z = 0; z < animationLayers.length; z++) {
                 for (int x = 0; x < Constants.NB_FRAME_ON_ANIMATION; x++) {
-                    result[x][y][z] = animationLayers[z][x];
+                    spriteSheetTemplate.setSpriteAsset(x, y, z, animationLayers[z][x]);
                 }
             }
         }
-        return result;
+        return spriteSheetTemplate;
     }
 
 

@@ -6,11 +6,10 @@ import android.os.AsyncTask;
 import android.util.Pair;
 
 import com.sqli.spritesheetgenerator.SpriteGenerator;
-import com.sqli.spritesheetgenerator.model.SpriteSheet;
+import com.sqli.spritesheetgenerator.model.SpriteSheetTemplate;
 
 import java.io.IOException;
 
-import fr.giusti.onetapadventure.commons.AssetsHelper;
 import fr.giusti.onetapengine.entity.GameMob;
 
 /**
@@ -21,23 +20,10 @@ public class SpriteSheetRepository {
 
 
     public Bitmap getMobSpriteSheet(Context context, GameMob mob, String mobMovementType) throws IOException {
-        String[][][] assetString = AttributsToSpriteMapper.getInstance().getMobMap(context, mob, mobMovementType);
-        int animationFrameNb = assetString.length;
-        int categoryNb = assetString[0].length;
-        int layerNb = assetString[0][0].length;
+        SpriteSheetTemplate spriteSheetTemplate = AttributsToSpriteMapper.getInstance().getMobMap(context, mob, mobMovementType);
 
-
-        Bitmap[][][] spriteList = new Bitmap[animationFrameNb][categoryNb][layerNb];
-        for (int x = 0; x < animationFrameNb; x++) {
-            for (int y = 0; y < categoryNb; y++) {
-                for (int z = 0; z < layerNb; z++) {
-                    spriteList[x][y][z] = AssetsHelper.getBitmapFromAsset(context, assetString[x][y][z]);
-                }
-            }
-        }
-
-        SpriteSheet spriteSheet = new SpriteSheet(spriteList);
-        return SpriteGenerator.generateSpriteSheet(spriteSheet);
+        spriteSheetTemplate.loadBitmaps(context);
+        return SpriteGenerator.generateSpriteSheet(spriteSheetTemplate);
     }
 
     public void getMobListSpriteSheetAsync(final Context context, final SpriteSheetGenerationListener listener, final Pair<GameMob, String>... mobAndMovementType) throws IOException {
