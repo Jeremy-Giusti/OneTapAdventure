@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,13 +13,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import fr.giusti.onetapadventure.R;
-import fr.giusti.onetapengine.ui.DrawingView;
-import fr.giusti.onetapengine.commons.GameConstant;
-import fr.giusti.onetapengine.GameBoard;
-import fr.giusti.onetapengine.rules.IRuleProgressListener;
-import fr.giusti.onetapengine.callback.OnGameEndListener;
-import fr.giusti.onetapengine.rules.eConditionType;
 import fr.giusti.onetapadventure.repository.GameRepo;
+import fr.giusti.onetapengine.GameBoard;
+import fr.giusti.onetapengine.callback.OnGameEndListener;
+import fr.giusti.onetapengine.commons.GameConstant;
+import fr.giusti.onetapengine.rules.IRuleProgressListener;
+import fr.giusti.onetapengine.rules.eConditionType;
+import fr.giusti.onetapengine.ui.DrawingView;
 
 /**
  * classe qui contient tout une "partie"
@@ -27,7 +28,7 @@ import fr.giusti.onetapadventure.repository.GameRepo;
  *
  * @author giusti
  */
-public class GameActivity extends Activity implements OnGameEndListener, IRuleProgressListener {
+public class GameActivity extends Activity implements OnGameEndListener, IRuleProgressListener, GameRepo.BoardGenerationCallback {
     private static final String TAG = GameActivity.class.getSimpleName();
     private DrawingView mDrawingSurface;
     private Button mPauseButton;
@@ -83,7 +84,7 @@ public class GameActivity extends Activity implements OnGameEndListener, IRulePr
 //                new Handler().postDelayed(new Runnable() {
 //                    @Override
 //                    public void run() {
-                startNewGame();
+                startNewGameLoading();
 //
 //                    }
 //                },1000);
@@ -136,7 +137,7 @@ public class GameActivity extends Activity implements OnGameEndListener, IRulePr
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            startNewGame();
+            startNewGameLoading();
 
         }
     };
@@ -144,29 +145,9 @@ public class GameActivity extends Activity implements OnGameEndListener, IRulePr
     /**
      * launch new game on the surface
      */
-    private void startNewGame() {
-        try {
-            //GameBoard board=mRepo.generateSampleBoard(this);
-            //board.setBoardEventListener(this);
+    private void startNewGameLoading() {
 
-//           GameBoard board = mRepo.generateLvl_1x1(this, this);
-//            board.getRulesManager().setRuleListener(Lvl1Constant.ESCAPING_MOB_RULE, this);
-//            board.getRulesManager().setRuleListener(Lvl1Constant.LEVEL_END_RULE, this);
-
-            GameBoard board = mRepo.getBoardByLvlId(this, currentLvl, this, this);
-
-            if (board == null) {
-                Toast.makeText(this, R.string.error_level_generation, Toast.LENGTH_SHORT).show();
-                this.finish();
-            }
-
-            Log.d(TAG, "Board created");
-
-            mDrawingSurface.startGame(board);
-        } catch (CloneNotSupportedException e) {
-            Toast.makeText(this, "error clonning sample mob list", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
+        mRepo.getBoardByLvlIdAsync(this, currentLvl, this, this, this);
     }
 
     @Override
@@ -181,12 +162,13 @@ public class GameActivity extends Activity implements OnGameEndListener, IRulePr
 
 
     String firstRuleid = null;
+
     @Override
     public void onRuleProgress(final String ruleId, final String displayableProgress) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                if(firstRuleid==null) firstRuleid=ruleId;
+                if (firstRuleid == null) firstRuleid = ruleId;
                 if (firstRuleid.equals(ruleId)) {
                     mRule1.setText(displayableProgress);
                 } else {
@@ -195,5 +177,28 @@ public class GameActivity extends Activity implements OnGameEndListener, IRulePr
             }
         });
 
+    }
+
+    @Override
+    public void onGameBoardGenerated(GameBoard board) {
+        if (board == null) {
+            Toast.makeText(this, R.string.error_level_generation, Toast.LENGTH_SHORT).show();
+            this.finish();
+        }
+
+        Log.d(TAG, "Board created");
+
+        mDrawingSurface.startGame(board);
+    }
+
+    @Override
+    public void onGameBoardGenerationError(String message, Exception e) {
+        if (TextUtils.isEmpty(message)) message = getString(R.string.error_board_loading);
+        Log.e(TAG, message, e);
+    }
+
+    @Override
+    public void onGameBoardGenerationProgress(int progress) {
+        //TODO dialog
     }
 }

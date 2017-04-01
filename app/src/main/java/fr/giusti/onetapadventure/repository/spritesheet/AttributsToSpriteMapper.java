@@ -22,13 +22,14 @@ public class AttributsToSpriteMapper {
 
 
     private final static int LAYER_NUMBER = 5;
+    private final static String SPRITE_ASSET_FILE_SUFFIX = ".png";
     private final static String SPRITE_BASE_ASSET_PATH = "sprites/";
 
-    private final static String SPRITE_WINGS_ASSET_PATH = "wings/";
-    private final static String SPRITE_BODY_COLOR_ASSET_PATH = "bodycolor/";
-    private final static String SPRITE_BODY_OVERLAY_ASSET_PATH = "bodyoverlay1/";
-    private final static String SPRITE_BODY_OVERLAY_2_ASSET_PATH = "bodyoverlay2/";
-    private final static String SPRITE_BODY_OVERLAY_3_ASSET_PATH = "bodyoverlay3/";
+    private final static String SPRITE_WINGS_ASSET_PATH = "wings";
+    private final static String SPRITE_BODY_COLOR_ASSET_PATH = "bodycolor";
+    private final static String SPRITE_BODY_OVERLAY_ASSET_PATH = "bodyoverlay1";
+    private final static String SPRITE_BODY_OVERLAY_2_ASSET_PATH = "bodyoverlay2";
+    private final static String SPRITE_BODY_OVERLAY_3_ASSET_PATH = "bodyoverlay3";
 
     private final static String WINGS_LINE = "line/";
     private final static String WINGS_CURVE = "curve/";
@@ -137,8 +138,16 @@ public class AttributsToSpriteMapper {
         String assetCategoryFolder = SPRITE_BASE_ASSET_PATH + SPRITE_BODY_COLOR_ASSET_PATH;
 
         List<String> color = Arrays.asList(context.getAssets().list(assetCategoryFolder));
+        String alignementAssetPath = assetCategoryFolder + "/" + alignement + SPRITE_ASSET_FILE_SUFFIX;
+
+        if (GameMob.eMobState.HURT == state) {
+            alignementAssetPath = assetCategoryFolder + "/" + state.index + "0" + SPRITE_ASSET_FILE_SUFFIX;
+        } else if (!color.contains(alignement)) {
+            alignementAssetPath = assetCategoryFolder + "/" + "1" + SPRITE_ASSET_FILE_SUFFIX;
+        }
+
         for (int frame = 0; frame < Constants.NB_FRAME_ON_ANIMATION; frame++) {
-            selectedSpriteAssets[frame] = assetCategoryFolder + "/" + alignement; //yep always the same
+            selectedSpriteAssets[frame] = alignementAssetPath; //yep always the same
         }
         return selectedSpriteAssets;
     }
@@ -179,19 +188,19 @@ public class AttributsToSpriteMapper {
      */
     @NonNull
     private String[] getAssetsStrings(Context context, GameMob.eMobState state, String type, String assetCategoryFolder) throws IOException {
-        String assetRepo = assetCategoryFolder + "/" + type;
+        String assetFolder = assetCategoryFolder + "/" + type;
 
-        List<String> assetList = Arrays.asList(context.getAssets().list(assetRepo));
+        List<String> assetList = Arrays.asList(context.getAssets().list(assetFolder));
 
 
         String[] selectedSpriteAssets = new String[Constants.NB_FRAME_ON_ANIMATION];
         String fileName;
         for (int frame = 0; frame < Constants.NB_FRAME_ON_ANIMATION; frame++) {
-            fileName = "" + state.index + frame; //for the sake of folder readability x and y is inversed in filename (so 01 is the file with frame number 1 and state index 0)
+            fileName = "" + state.index + frame + SPRITE_ASSET_FILE_SUFFIX; //for the sake of folder readability x and y is inversed in filename (so 01 is the file with frame number 1 and state index 0)
             if (assetList.contains(fileName)) {
-                selectedSpriteAssets[frame] = assetRepo + "/" + fileName;
-            } else if (assetList.contains("" + 0 + frame)) {
-                selectedSpriteAssets[frame] = assetRepo + "/" + "" + 0 + frame;//default (no mob state consideration)
+                selectedSpriteAssets[frame] = assetFolder + "/" + fileName;
+            } else if (assetList.contains("" + 0 + frame + SPRITE_ASSET_FILE_SUFFIX)) {
+                selectedSpriteAssets[frame] = assetFolder + "/" + "" + 0 + frame + SPRITE_ASSET_FILE_SUFFIX;//default (no mob state consideration)
             } else {
                 selectedSpriteAssets[frame] = findDefaultAssetSprit(context, state, frame, assetCategoryFolder);//default (no type/state consideration)
             }
@@ -201,13 +210,13 @@ public class AttributsToSpriteMapper {
 
     private String findDefaultAssetSprit(Context context, GameMob.eMobState state, int frame, String assetCategoryFolder) throws IOException {
         List<String> defaultAssetList = Arrays.asList(context.getAssets().list(assetCategoryFolder));
-        if (defaultAssetList.contains("" + state.index + frame)) {
-            return assetCategoryFolder + "/" + state.index + frame; //default
-        } else if (defaultAssetList.contains("0" + frame)) {
-            return assetCategoryFolder + "0" + frame; //default no state
-        } else if (defaultAssetList.contains("" + state.index + 0)) {
-            return assetCategoryFolder + "/" + state + 0; //default no frame
+        if (defaultAssetList.contains("" + state.index + frame + SPRITE_ASSET_FILE_SUFFIX)) {
+            return assetCategoryFolder + "/" + state.index + frame + SPRITE_ASSET_FILE_SUFFIX; //default
+        } else if (defaultAssetList.contains("0" + frame + SPRITE_ASSET_FILE_SUFFIX)) {
+            return assetCategoryFolder + "/" + "0" + frame + SPRITE_ASSET_FILE_SUFFIX; //default no state
+        } else if (defaultAssetList.contains("" + state.index + 0 + SPRITE_ASSET_FILE_SUFFIX)) {
+            return assetCategoryFolder + "/" + state.index + 0 + SPRITE_ASSET_FILE_SUFFIX; //default no frame
         }
-        return assetCategoryFolder + "00";//no frame no state
+        return assetCategoryFolder + "/" + "00" + SPRITE_ASSET_FILE_SUFFIX;//no frame no state
     }
 }

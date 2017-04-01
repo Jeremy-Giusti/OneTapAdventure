@@ -2,6 +2,8 @@ package fr.giusti.onetapadventure.repository.entities;
 
 import android.content.Context;
 
+import java.io.IOException;
+
 import fr.giusti.onetapengine.entity.distribution.EntitySpawner;
 import fr.giusti.onetapengine.entity.distribution.EntitySpawnerManager;
 import fr.giusti.onetapengine.entity.distribution.eEntityDistributionMode;
@@ -12,7 +14,7 @@ import fr.giusti.onetapengine.rules.eConditions;
  */
 public class EntitySpawnerRepo {
 
-    public static EntitySpawnerManager getLvl1_1SpawnerManager(Context context) {
+    public static EntitySpawnerManager getLvl1_1SpawnerManager(Context context) throws IOException {
         EntitySpawnerManager result = new EntitySpawnerManager(EntityRepo.getLvl1x1InitList(context), EntityRepo.getLvl1x1BackupList(context));
 
         result.addSpawner(new EntitySpawner.EntitySpawnerBuilder(eEntityDistributionMode.ONE_BY_ONE_ORDERED, eConditions.MOB_COUNT, 1, 0).setUseSharedList().build());

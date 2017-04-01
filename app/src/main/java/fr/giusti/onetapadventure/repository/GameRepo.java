@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 
+import java.io.IOException;
+
 import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapadventure.repository.entities.EntityRepo;
 import fr.giusti.onetapadventure.repository.entities.EntitySpawnerRepo;
@@ -47,7 +49,9 @@ public class GameRepo {
                 try {
                     return getBoardByLvlId(context, lvlId, endListener, ruleProgressListener);
                 } catch (CloneNotSupportedException e) {
-                    callback.onGameBoardGenerationError(e);
+                    callback.onGameBoardGenerationError("",e);//TODO message
+                } catch (IOException e) {
+                    callback.onGameBoardGenerationError("",e);//TODO message
                 }
                 return null;
             }
@@ -67,7 +71,7 @@ public class GameRepo {
     }
 
 
-    private GameBoard getBoardByLvlId(Context context, String lvlId, OnGameEndListener endListener, IRuleProgressListener ruleProgressListener) throws CloneNotSupportedException {
+    private GameBoard getBoardByLvlId(Context context, String lvlId, OnGameEndListener endListener, IRuleProgressListener ruleProgressListener) throws CloneNotSupportedException, IOException {
         GameBoard result = null;
         switch (lvlId) {
             case LVL_TEST:
@@ -107,7 +111,7 @@ public class GameRepo {
         return board;
     }
 
-    public GameBoard generateLvl_1x1(Context context, OnGameEndListener gameListener, IRuleProgressListener ruleProgressListener) throws CloneNotSupportedException {
+    public GameBoard generateLvl_1x1(Context context, OnGameEndListener gameListener, IRuleProgressListener ruleProgressListener) throws CloneNotSupportedException, IOException {
         ParticuleRepo.initCache(context);
         String backGameBoard = "background1x1";
         Bitmap fullSizedBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.lvl1x1_back);
@@ -179,7 +183,7 @@ public class GameRepo {
     public interface BoardGenerationCallback {
         void onGameBoardGenerated(GameBoard board);
 
-        void onGameBoardGenerationError(Exception e);
+        void onGameBoardGenerationError(String message, Exception e);
 
         void onGameBoardGenerationProgress(int progress);
     }

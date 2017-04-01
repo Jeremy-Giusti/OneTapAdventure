@@ -39,6 +39,8 @@ public class SpriteSheetTemplate {
                 }
             }
         }
+        this.mSpriteHeight = spriteBitmap[0][0][0].getHeight();
+        this.mSpriteWidth = spriteBitmap[0][0][0].getWidth();
     }
 
     public String[][][] getSpriteAssets() {
