@@ -21,7 +21,7 @@ import fr.giusti.onetapadventure.repository.DB.persister.MobPersister;
 import fr.giusti.onetapadventure.repository.DB.persister.PathPersister;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl2Constant;
-import fr.giusti.onetapadventure.repository.spritesheet.SpriteSheetRepository;
+import fr.giusti.onetapadventure.repository.spritesheet.SpriteSheetFactory;
 import fr.giusti.onetapengine.commons.Constants;
 import fr.giusti.onetapengine.commons.GameConstant;
 import fr.giusti.onetapengine.entity.Entity;
@@ -47,7 +47,7 @@ public class EntityRepo {
      * @return
      * @throws CloneNotSupportedException
      */
-    public static ArrayList<GameMob> getSampleMobList(Context mContext) throws CloneNotSupportedException {//
+    public static ArrayList<GameMob> getSampleMobList(Context mContext) throws CloneNotSupportedException, IOException {
 
         ArrayList<GameMob> returnList = new ArrayList<GameMob>();
 
@@ -226,7 +226,7 @@ public class EntityRepo {
      * @param context
      * @return
      */
-    public static ArrayList<Entity> getLvl1x1BackupList(Context context) {
+    public static ArrayList<Entity> getLvl1x1BackupList(Context context) throws IOException {
         ArrayList<Entity> backupList = new ArrayList<>();
         int tierMobNb = Lvl1Constant.MIXED_TIER_MOB_NB;
 
@@ -293,8 +293,6 @@ public class EntityRepo {
         Particule glassParticule = ParticuleHolder.getAvailableParticule(ParticuleRepo.GLASS_PARTICULE, Lvl2Constant.HOLE1_DIMENS.centerX(), Lvl2Constant.HOLE1_DIMENS.centerY(), Lvl2Constant.HOLE1_DIMENS.width(), Lvl2Constant.HOLE1_DIMENS.height(), false, new PointF[]{new PointF(0, 6)});
         entityList.add(glassParticule);
 
-        String mob1sptsheetId = "tier1Mob";
-        SpriteRepo.addSpritesheetIfDoesntExist(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet), mob1sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
 
         RectF rectDest = new RectF(posDest.x, posDest.y, posDest.x + 1, posDest.y + 1);
         // PointF[] mob1Pattern = PathRepo.generateLineToDest(new PointF(10, 10), posDest, Constants.FRAME_PER_SEC * 4);
@@ -373,7 +371,7 @@ public class EntityRepo {
     }
 
 
-    public static GameMob getMobFromSeed(Context context, int difficulty, int seed, PointF posDest, String id, int x, int y, int width, int height) {
+    public static GameMob getMobFromSeed(Context context, int difficulty, int seed, PointF posDest, String id, int x, int y, int width, int height) throws IOException {
         SpecialMoveRepo moveRepo = new SpecialMoveRepo();
         TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
         TouchedMove touchedMove = touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE);
@@ -381,15 +379,14 @@ public class EntityRepo {
         String spriteId;
 
         String mob1sptsheetId = "tier1Mob";
-        SpriteRepo.addSpritesheetIfDoesntExist(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet), mob1sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
         String mob2sptsheetId = "tier2Mob";
-        SpriteRepo.addSpritesheetIfDoesntExist(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet_yellow), mob2sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
         String mob3sptsheetId = "tier3Mob";
-        SpriteRepo.addSpritesheetIfDoesntExist(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet4), mob3sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+        int alignement;
 
 
         if (difficulty < 2) {
             spriteId = mob1sptsheetId;
+            alignement = 1;
             path = PathRepo.generateLineToDest(new PointF(x, y), posDest, Constants.FRAME_PER_SEC * 3);
         } else {
             if (seed % 4 > 2) {
@@ -399,15 +396,20 @@ public class EntityRepo {
                 path = PathRepo.generateCurvedPath(new PointF(x, y), posDest, 200, (seed % 2 == 1), (int) (Constants.FRAME_PER_SEC * 3.75));
             }
             spriteId = (difficulty == 2) ? mob2sptsheetId : mob3sptsheetId;
+            alignement= (difficulty == 2) ? 2 : 3;
         }
-        return new GameMob.MobBuilder(id, spriteId, x, y)
+       GameMob result =  new GameMob.MobBuilder(id, spriteId, x, y)
                 .setWidth(width)
                 .setHeight(height)
+                .setAlignement(alignement)
                 .setMovePattern(path)
                 .setTouchedMove(touchedMove)
                 .setDefaultHealth(difficulty * GameConstant.TOUCH_DAMAGE)
                 .build();
-        //    GameMob(id, x, y, width, height, path, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMove, spriteId, difficulty * GameConstant.TOUCH_DAMAGE, 1);
+
+        Bitmap mobSprite = new SpriteSheetFactory().getMobSpriteSheet(context, result, "line");
+        SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, spriteId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+        return result;
     }
 
     public static GameMob generateSimpleRandomizedMob(String id, Context context, RectF startPos, RectF destPos, int travelTimeOnTick) throws IOException {
@@ -423,44 +425,53 @@ public class EntityRepo {
 
         String mob1sptsheetId = "tier1Mob";
 
-        GameMob result = new GameMob.MobBuilder(id, mob1sptsheetId, startX, startY).setMovePattern(path).build();
-        Bitmap mobSprite = new SpriteSheetRepository().getMobSpriteSheet(context, result, "line");
+        GameMob result = new GameMob.MobBuilder(id, mob1sptsheetId, startX, startY).setAlignement(1).setMovePattern(path).build();
+        Bitmap mobSprite = new SpriteSheetFactory().getMobSpriteSheet(context, result, "line");
         SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, mob1sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
 
 
         return result;
     }
 
-    public static GameMob getRapidScanMob(String id, Context context, Point startPos, int health) {
+    public static GameMob getRapidScanMob(String id, Context context, Point startPos, int health) throws IOException {
         SpecialMoveRepo moveRepo = new SpecialMoveRepo();
         TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
         int lastMobDirection = (Math.random() < 0.5) ? -1 : 1;
         String lastMobsptsheetId = "rapideMob";
-        SpriteRepo.addSpritesheetIfDoesntExist(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet3), lastMobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
-        return new GameMob.MobBuilder(id, lastMobsptsheetId, startPos.x, startPos.y)
+
+
+        GameMob result = new GameMob.MobBuilder(id, lastMobsptsheetId, startPos.x, startPos.y)
                 .setMovePattern(new PointF[]{new PointF(-4, 15 * lastMobDirection)})
                 .setDefaultHealth(health)
+                .setAlignement(6)
                 .build();
-        //     GameMob(id, startPos.x, startPos.y, GameConstant.DEFAULT_MOB_SIZE, GameConstant.DEFAULT_MOB_SIZE, new PointF[]{new PointF(-4, 15 * lastMobDirection)}, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), lastMobsptsheetId, health, 1);
+        Bitmap mobSprite = new SpriteSheetFactory().getMobSpriteSheet(context, result, "line");
+        SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, lastMobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+
+        return result;
     }
 
-    private static GameMob getTeleportMob(String id, Context context, PointF startPoint, PointF destPoint, int health) {
-        SpecialMoveRepo moveRepo = new SpecialMoveRepo();
+    private static GameMob getTeleportMob(String id, Context context, PointF startPoint, PointF destPoint, int health) throws IOException {
         TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
 
         PointF[] path = PathRepo.generateLineToDest(startPoint, destPoint, 3 * Constants.FRAME_PER_SEC);
         String mobsptsheetId = "tpMob";
-        SpriteRepo.addSpritesheetIfDoesntExist(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet_purple), mobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
-        return new GameMob.MobBuilder(id, mobsptsheetId, startPoint.x, startPoint.y)
+
+        GameMob result = new GameMob.MobBuilder(id, mobsptsheetId, startPoint.x, startPoint.y)
                 .setMovePattern(path)
                 .setTouchedMove(touchedMoveRepo.getMoveById(TouchedMoveRepo.TELEPORT))
                 .setHealth(health)
+                .setAlignement(4)
                 .build();
-        //    GameMob(id, startPoint.x, startPoint.y, GameConstant.DEFAULT_MOB_SIZE, GameConstant.DEFAULT_MOB_SIZE, path, moveRepo.getMoveById(SpecialMoveRepo.NO_MOVE), touchedMoveRepo.getMoveById(TouchedMoveRepo.TELEPORT), mobsptsheetId, health, 1);
+        Bitmap mobSprite = new SpriteSheetFactory().getMobSpriteSheet(context, result, "line");
+        SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, mobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+
+
+        return result;
 
     }
 
-    private static GameMob getHoleMakerMob(String id, Context context, Point startPoint, Point destPoint, int tickToDest, int health) {
+    private static GameMob getHoleMakerMob(String id, Context context, Point startPoint, Point destPoint, int tickToDest, int health) throws IOException {
 
 
         String bitmapId = GameConstant.HOLE_FRONT_SPRITE_ID;
@@ -468,9 +479,19 @@ public class EntityRepo {
 
         PointF[] path = PathRepo.generateLineToDest(new PointF(startPoint), new PointF(destPoint), tickToDest);
         String mobsptsheetId = "holemakermob";
-        SpriteRepo.addSpritesheetIfDoesntExist(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet2), mobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
-        return new GameMob.MobBuilder(id, mobsptsheetId, startPoint.x, startPoint.y).setMovePattern(path).setSpecialMove(SpecialMoveRepo.getMoveById(SpecialMoveRepo.BREAK_GLASS)).setDefaultHealth(health).build();
-        //       new GameMob(id, startPoint.x, startPoint.y, GameConstant.DEFAULT_MOB_SIZE, GameConstant.DEFAULT_MOB_SIZE, path, SpecialMoveRepo.getMoveById(SpecialMoveRepo.BREAK_GLASS), TouchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mobsptsheetId, health, 1);
+      //  SpriteRepo.addSpritesheetIfDoesntExist(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet2), mobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+
+        GameMob result = new GameMob.MobBuilder(id, mobsptsheetId, startPoint.x, startPoint.y)
+                .setMovePattern(path)
+                .setSpecialMove(SpecialMoveRepo.getMoveById(SpecialMoveRepo.BREAK_GLASS))
+                .setAlignement(5)
+                .setDefaultHealth(health).build();
+
+        Bitmap mobSprite = new SpriteSheetFactory().getMobSpriteSheet(context, result, "line");
+        SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, mobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+
+
+        return result;
 
     }
 
@@ -480,7 +501,6 @@ public class EntityRepo {
         String mobsptsheetId = "ghostmob";
         SpriteRepo.addSpritesheetIfDoesntExist(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheetghost), mobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
         return new GameMob.MobBuilder(id, mobsptsheetId, startPoint.x, startPoint.y).setMovePattern(path).setSpecialMove(SpecialMoveRepo.getMoveById(SpecialMoveRepo.GHOST_MOVE)).setDefaultHealth(health).build();
-        //     GameMob(id, startPoint.x, startPoint.y, GameConstant.DEFAULT_MOB_SIZE, GameConstant.DEFAULT_MOB_SIZE, path, SpecialMoveRepo.getMoveById(SpecialMoveRepo.GHOST_MOVE), TouchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE), mobsptsheetId, health, 1);
 
     }
 

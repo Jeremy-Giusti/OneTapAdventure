@@ -16,7 +16,7 @@ import fr.giusti.onetapengine.entity.GameMob;
  * Created by jérémy on 25/03/2017.
  */
 
-public class SpriteSheetRepository {
+public class SpriteSheetFactory {
 
 
     public Bitmap getMobSpriteSheet(Context context, GameMob mob, String mobMovementType) throws IOException {

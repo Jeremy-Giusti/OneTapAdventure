@@ -97,7 +97,7 @@ public class GameRepo {
      * @return
      * @throws CloneNotSupportedException
      */
-    public GameBoard generateSampleBoard(Context context) throws CloneNotSupportedException {
+    public GameBoard generateSampleBoard(Context context) throws CloneNotSupportedException, IOException {
         ParticuleRepo.initCache(context);
         String backGameBoard = "background";
         Bitmap fullSizedBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.grid512);

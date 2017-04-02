@@ -31,29 +31,6 @@ public class AttributsToSpriteMapper {
     private final static String SPRITE_BODY_OVERLAY_2_ASSET_PATH = "bodyoverlay2";
     private final static String SPRITE_BODY_OVERLAY_3_ASSET_PATH = "bodyoverlay3";
 
-    private final static String WINGS_LINE = "line/";
-    private final static String WINGS_CURVE = "curve/";
-    private final static String WINGS_CIRCLE = "circle/";
-    private final static String WINGS_LOOP = "loop/";
-    private final static String WINGS_RANDOM = "random/";
-    private final static String WINGS_SPIRAL = "spiral/";
-
-    private final static String BODY1_BREAKGLASS = "breakglass/";
-    private final static String BODY1_EXPLODE = "explode/";
-    private final static String BODY1_GHOST = "ghost/";
-    private final static String BODY1_HEAL = "heal/";
-    private final static String BODY1_MULTIPLIE = "multiplie/";
-    private final static String BODY1_SMOKE = "smoke/";
-    private final static String BODY1_SWAPE = "swape/";
-    private final static String BODY1_TP = "teleport/";
-
-    private final static String BODY2_TP = "teleport/";
-    private final static String BODY2_BAIT = "bait/";
-    private final static String BODY2_BLEED = "bleed/";
-    private final static String BODY2_DISAPEAR = "disapear/";
-    private final static String BODY2_HEAL = "heal/";
-    private final static String BODY2_HURT = "hurt/";
-
 
     private HashMap<Integer, String> healthMap = getHealthMap();
 
@@ -63,9 +40,10 @@ public class AttributsToSpriteMapper {
         healthMap.put(4, BODY3_health4);
         healthMap.put(6, BODY3_health6);
         healthMap.put(8, BODY3_health8);
-        healthMap.put(10, BODY3_health10);
+        healthMap.put(HEALTH_MAP_DEFAULT_VALUE, BODY3_health10);
         return healthMap;
     }
+    private static final Integer HEALTH_MAP_DEFAULT_VALUE = 10;
 
     private final static String BODY3_health2 = "health2/";
     private final static String BODY3_health4 = "health4/";
@@ -146,7 +124,6 @@ public class AttributsToSpriteMapper {
             selectedSpriteAssets = getAssetsStrings(context, state, "" + alignement, assetCategoryFolder);
         }
 
-
         return selectedSpriteAssets;
     }
 
@@ -173,7 +150,7 @@ public class AttributsToSpriteMapper {
                 }
             }
         }
-        return new String[0];
+        return getAssetsStrings(context, state, healthMap.get(HEALTH_MAP_DEFAULT_VALUE), assetCategoryFolder);
     }
 
     /**
@@ -199,6 +176,8 @@ public class AttributsToSpriteMapper {
                 selectedSpriteAssets[frame] = assetFolder + "/" + fileName;
             } else if (assetList.contains("" + 0 + frame + SPRITE_ASSET_FILE_SUFFIX)) {
                 selectedSpriteAssets[frame] = assetFolder + "/" + "" + 0 + frame + SPRITE_ASSET_FILE_SUFFIX;//default (no mob state consideration)
+            } else if (assetList.contains("00" + SPRITE_ASSET_FILE_SUFFIX)) {
+                selectedSpriteAssets[frame] = assetFolder + "/00" + SPRITE_ASSET_FILE_SUFFIX;//default (no mob state/frame consideration)
             } else {
                 selectedSpriteAssets[frame] = findDefaultAssetSprit(context, state, frame, assetCategoryFolder);//default (no type/state consideration)
             }
