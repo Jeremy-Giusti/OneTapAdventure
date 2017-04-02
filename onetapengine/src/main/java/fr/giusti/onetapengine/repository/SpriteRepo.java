@@ -48,8 +48,9 @@ public class SpriteRepo {
      * @param bitmapId
      */
     public static void addSpriteSheet(Bitmap bmp, String bitmapId, int nbColumn, int nbLine) {
-        GameMobSpriteHolder newHolder = new GameMobSpriteHolder(bmp, nbColumn, nbLine);
-        mMobSpriteList.put(bitmapId, newHolder);
+            GameMobSpriteHolder newHolder = new GameMobSpriteHolder(bmp, nbColumn, nbLine);
+            mMobSpriteList.put(bitmapId, newHolder);
+
     }
 
     /**
@@ -78,7 +79,7 @@ public class SpriteRepo {
      * @param bitmapId
      * @return true if the id is found on the spriteSheet list
      */
-    public static boolean addSpritesheetIfDoesntExist(String bitmapId, Bitmap bmp, int nbColumn, int nbLine) {
+    public static boolean addSpritesheetIfDoesntExist( Bitmap bmp,String bitmapId, int nbColumn, int nbLine) {
         if (!mMobSpriteList.containsKey(bitmapId)) {
             addSpriteSheet(bmp, bitmapId, nbColumn, nbLine);
             return true;
@@ -141,7 +142,7 @@ public class SpriteRepo {
         if (!destFile.exists()) {
             FileUtils.copyFile(pictureUrl, destFile.getAbsolutePath());
         }
-        addSpritesheetIfDoesntExist(id, FileUtils.fileToBitmap(pictureUrl), nbColumn, nbLine);
+        addSpritesheetIfDoesntExist( FileUtils.fileToBitmap(pictureUrl),id, nbColumn, nbLine);
 
         return mMobSpriteList.get(id).getFrameDimens();
 
@@ -161,7 +162,7 @@ public class SpriteRepo {
             FileUtils.copyFile(pictureUrl, destFile.getAbsolutePath());
         }
         Bitmap picture = FileUtils.fileToBitmap(pictureUrl);
-        addSpritesheetIfDoesntExist(id, picture, nbColumn, nbLine);
+        addSpritesheetIfDoesntExist(picture,id, nbColumn, nbLine);
         if (alsoPutOnPictureList) addPicture(id, picture);
         return mMobSpriteList.get(id).getFrameDimens();
     }
@@ -177,18 +178,18 @@ public class SpriteRepo {
      */
     public static Point loadSpriteSheetFromId(Context context, String id, int nbColumn, int nbLine) throws IOException {
         File pictureFile = new File(Constants.getSpriteRepoFolder(context), id);
-        addSpritesheetIfDoesntExist(id, FileUtils.fileToBitmap(pictureFile.getAbsolutePath()), nbColumn, nbLine);
+        addSpritesheetIfDoesntExist( FileUtils.fileToBitmap(pictureFile.getAbsolutePath()),id, nbColumn, nbLine);
         return mMobSpriteList.get(id).getFrameDimens();
     }
 
     public static void resizePicture(String id, float ratio) {
         Bitmap picture = mPictureList.get(id);
-        picture = Bitmap.createScaledBitmap(picture,(int)(picture.getWidth()*ratio), (int)(picture.getHeight()*ratio), true);
-        mPictureList.put(id,picture);
+        picture = Bitmap.createScaledBitmap(picture, (int) (picture.getWidth() * ratio), (int) (picture.getHeight() * ratio), true);
+        mPictureList.put(id, picture);
     }
 
     public static void resizeSprites(String mSpritesId, int width, int height) {
-        mMobSpriteList.get(mSpritesId).resizeAllFrame(width,height);
+        mMobSpriteList.get(mSpritesId).resizeAllFrame(width, height);
     }
 
 }

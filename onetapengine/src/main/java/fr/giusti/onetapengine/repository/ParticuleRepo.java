@@ -112,7 +112,7 @@ public class ParticuleRepo {
         int particuleWidth = bm.getWidth() / Constants.PARTICULE_NB_FRAME_ON_ANIMATION;
         int particuleHeight = bm.getHeight();
 
-        SpriteRepo.addSpritesheetIfDoesntExist(id, bm, Constants.PARTICULE_NB_FRAME_ON_ANIMATION, 1);
+        SpriteRepo.addSpritesheetIfDoesntExist( bm,id, Constants.PARTICULE_NB_FRAME_ON_ANIMATION, 1);
 
         return new Particule(id, 0, 0, particuleWidth, particuleHeight, new PointF[]{new PointF(0, 0)}, id, false);
     }

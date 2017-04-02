@@ -134,7 +134,7 @@ public class GameRepo {
         return board;
     }
 
-    private GameBoard generateLvl_1x2(Context context, OnGameEndListener endListener, IRuleProgressListener ruleProgressListener) {
+    private GameBoard generateLvl_1x2(Context context, OnGameEndListener endListener, IRuleProgressListener ruleProgressListener) throws IOException {
         ParticuleRepo.initCache(context);
         String backGameBoard = "background1x2";
         Bitmap fullSizedBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.lvl1x2_back);
@@ -157,7 +157,7 @@ public class GameRepo {
         return board;
     }
 
-    private GameBoard generateLvl_1x3(Context context, OnGameEndListener endListener, IRuleProgressListener ruleProgressListener) {
+    private GameBoard generateLvl_1x3(Context context, OnGameEndListener endListener, IRuleProgressListener ruleProgressListener) throws IOException {
         ParticuleRepo.initCache(context);
         String backGameBoard = "background1x3";
         Bitmap fullSizedBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.lvl1x2_back);//TODO change background

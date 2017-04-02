@@ -137,18 +137,16 @@ public class AttributsToSpriteMapper {
         String[] selectedSpriteAssets = new String[Constants.NB_FRAME_ON_ANIMATION];
         String assetCategoryFolder = SPRITE_BASE_ASSET_PATH + SPRITE_BODY_COLOR_ASSET_PATH;
 
-        List<String> color = Arrays.asList(context.getAssets().list(assetCategoryFolder));
-        String alignementAssetPath = assetCategoryFolder + "/" + alignement + SPRITE_ASSET_FILE_SUFFIX;
-
         if (GameMob.eMobState.HURT == state) {
-            alignementAssetPath = assetCategoryFolder + "/" + state.index + "0" + SPRITE_ASSET_FILE_SUFFIX;
-        } else if (!color.contains(alignement)) {
-            alignementAssetPath = assetCategoryFolder + "/" + "1" + SPRITE_ASSET_FILE_SUFFIX;
+            String alignementAssetPath = assetCategoryFolder + "/" + state.index + "0" + SPRITE_ASSET_FILE_SUFFIX;
+            for (int frame = 0; frame < Constants.NB_FRAME_ON_ANIMATION; frame++) {
+                selectedSpriteAssets[frame] = alignementAssetPath; //yep always the same
+            }
+        } else {
+            selectedSpriteAssets = getAssetsStrings(context, state, "" + alignement, assetCategoryFolder);
         }
 
-        for (int frame = 0; frame < Constants.NB_FRAME_ON_ANIMATION; frame++) {
-            selectedSpriteAssets[frame] = alignementAssetPath; //yep always the same
-        }
+
         return selectedSpriteAssets;
     }
 

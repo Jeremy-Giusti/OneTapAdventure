@@ -70,7 +70,7 @@ public class GameMob extends Entity {
 
     /**
      * stat<4 = normal,
-     * 0=left, 1 haut, 2 bas, 3 droite
+     * 0-3 orientation
      * 4= touché, 5 mourant, 6 spe1, 7 spe2
      */
     protected eMobState mState = eMobState.MOVING_UP;
@@ -609,10 +609,10 @@ public class GameMob extends Entity {
 
     public enum eMobState {
 
-        MOVING_LEFT(0, true),
+        MOVING_DOWN(0, true),
         MOVING_UP(1, true),
         MOVING_RIGHT(2, true),
-        MOVING_DOWN(3, true),
+        MOVING_LEFT(3, true),
         HURT(4, true),
         DYING(5, true),
         SPE1(6, true),

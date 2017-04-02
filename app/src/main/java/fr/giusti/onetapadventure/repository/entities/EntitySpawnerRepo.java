@@ -24,7 +24,7 @@ public class EntitySpawnerRepo {
         return result;
     }
 
-    public static EntitySpawnerManager getLvl1_2SpawnerManager(Context context) {
+    public static EntitySpawnerManager getLvl1_2SpawnerManager(Context context) throws IOException {
         EntitySpawnerManager result = new EntitySpawnerManager(EntityRepo.getLvl1x2InitList(context), EntityRepo.getLvl1x2BackupList(context));
 
         result.addSpawner(new EntitySpawner.EntitySpawnerBuilder(eEntityDistributionMode.GROUPED_SEMIRANDOM, eConditions.TIMER, 2000, 0)
@@ -40,7 +40,7 @@ public class EntitySpawnerRepo {
         return result;
     }
 
-    public static EntitySpawnerManager getLvl1_3SpawnerManager(Context context) {
+    public static EntitySpawnerManager getLvl1_3SpawnerManager(Context context) throws IOException {
         //TODO
         EntitySpawnerManager result = new EntitySpawnerManager(EntityRepo.getLvl1x2InitList(context), EntityRepo.getLvl1x2BackupList(context));
 
