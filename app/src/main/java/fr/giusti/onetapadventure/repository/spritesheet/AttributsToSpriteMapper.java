@@ -43,6 +43,7 @@ public class AttributsToSpriteMapper {
         healthMap.put(HEALTH_MAP_DEFAULT_VALUE, BODY3_health10);
         return healthMap;
     }
+
     private static final Integer HEALTH_MAP_DEFAULT_VALUE = 10;
 
     private final static String BODY3_health2 = "health2/";
@@ -176,6 +177,8 @@ public class AttributsToSpriteMapper {
                 selectedSpriteAssets[frame] = assetFolder + "/" + fileName;
             } else if (assetList.contains("" + 0 + frame + SPRITE_ASSET_FILE_SUFFIX)) {
                 selectedSpriteAssets[frame] = assetFolder + "/" + "" + 0 + frame + SPRITE_ASSET_FILE_SUFFIX;//default (no mob state consideration)
+            } else if (assetList.contains("" + state.index + 0 + SPRITE_ASSET_FILE_SUFFIX)) {
+                selectedSpriteAssets[frame] = assetFolder + "/" + "" + state.index + 0 + SPRITE_ASSET_FILE_SUFFIX;//default (no mob frame consideration)
             } else if (assetList.contains("00" + SPRITE_ASSET_FILE_SUFFIX)) {
                 selectedSpriteAssets[frame] = assetFolder + "/00" + SPRITE_ASSET_FILE_SUFFIX;//default (no mob state/frame consideration)
             } else {

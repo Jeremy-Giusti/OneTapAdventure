@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import fr.giusti.onetapengine.GameBoard;
 import fr.giusti.onetapengine.commons.Constants;
 import fr.giusti.onetapengine.commons.GameConstant;
-import fr.giusti.onetapengine.GameBoard;
 import fr.giusti.onetapengine.entity.GameMob;
 import fr.giusti.onetapengine.entity.Particule;
 import fr.giusti.onetapengine.entity.Scenery;
@@ -128,8 +128,8 @@ public class SpecialMoveRepo {
                     //EXPLOSION !
                     int particuleWidth = (int) currentMob.getWidth() * 2;
                     int particuleHeight = (int) currentMob.getHeight() * 2;
-                    int particuleX =  currentMob.getPositionX();
-                    int particuleY =  currentMob.getPositionY();
+                    int particuleX = currentMob.getPositionX();
+                    int particuleY = currentMob.getPositionY();
 
                     Particule explosionParticule = ParticuleHolder.getAvailableParticule(ParticuleRepo.EXPLOSION_PARTICULE, particuleX, particuleY, particuleWidth, particuleHeight, false, null);
 
@@ -262,7 +262,7 @@ public class SpecialMoveRepo {
 
         @Override
         public void doSpecialMove(GameBoard board, GameMob currentMob) {
-            if (currentMob.isJustMoving() && this.lastUse > 120) {
+            if (currentMob.isJustMoving() && this.lastUse > 120 && board.getMobs().size() > 1) {
                 List<GameMob> mobList = board.getMobs();
                 lastUse = 0;
                 ParticuleRepo particuleRepo = new ParticuleRepo();

@@ -16,7 +16,7 @@ public class GameConstant {
     public static final String BACKGROUND = "background";
     public static final String LVL_COUNT = "lvl count";
     public static final String AREA = "area";
-    public static final int DEFAULT_MOB_SIZE = 48;
+    public static final int DEFAULT_MOB_SIZE = 56;
     public static final int SHORT_TP_MAX_RANGE = 144;
     public static final int SHORT_TP_MIN_RANGE = 72;
     public static final String HOLE_FRONT_SPRITE_ID = "hole front";
