@@ -2,6 +2,8 @@ package fr.giusti.onetapengine.repository;
 
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.Rect;
+import android.graphics.RectF;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -197,13 +199,17 @@ public class SpecialMoveRepo {
                 int width = (int) currentMob.getWidth() * 2;
                 int height = (int) currentMob.getHeight() * 2;
 
-                Particule firstParticule = ParticuleHolder.getAvailableParticule(ParticuleRepo.TP_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), width, height, false, null);
-                Particule secondParticule = ParticuleHolder.getAvailableParticule(ParticuleRepo.TP_PARTICULE, newX, newY, width, height, true, null);
+//                Particule firstParticule = ParticuleHolder.getAvailableParticule(ParticuleRepo.TP_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), width, height, false, null);
+//                Particule secondParticule = ParticuleHolder.getAvailableParticule(ParticuleRepo.TP_PARTICULE, newX, newY, width, height, true, null);
+
+                board.addParticules(ParticuleHolder.getAvailableParticuleGroupe(ParticuleRepo.GROUPE_TP_SPARK_PARTICULE, currentMob.mPosition, new PointF(0, 0), 20));
+                board.addParticules(ParticuleHolder.getAvailableParticuleGroupe(ParticuleRepo.GROUPE_TP_SPARK_PARTICULE, new RectF((float)newX,(float)newY,(float)newX+width,(float)newY+height), new PointF(0, 0), 20));
+
 
                 currentMob.setPositionFromXY(newX, newY);
-
-                board.addParticule(firstParticule);
-                board.addParticule(secondParticule);
+//
+//                board.addParticule(firstParticule);
+//                board.addParticule(secondParticule);
             } else {
                 lastUse++;
             }

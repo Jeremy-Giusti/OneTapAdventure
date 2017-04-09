@@ -42,8 +42,15 @@ public class ParticuleRepo {
     public final static String PLASMA_SPARK3_PARTICULE = "plasmaSpark3Particule";
     public final static String PLASMA_SPARK4_PARTICULE = "plasmaSpark4Particule";
 
+    public final static String TP_SPARK0_PARTICULE = "tpSpark0Particule";
+    public final static String TP_SPARK1_PARTICULE = "tpSpark1Particule";
+    public final static String TP_SPARK2_PARTICULE = "tpSpark2Particule";
+    public final static String TP_SPARK3_PARTICULE = "tpSpark3Particule";
+    public final static String TP_SPARK4_PARTICULE = "tpSpark4Particule";
+
     public final static String GROUPE_SPARK_PARTICULE = "groupspark";
     public final static String GROUPE_PLASMA_SPARK_PARTICULE = "groupPlasmaSpark";
+    public final static String GROUPE_TP_SPARK_PARTICULE = "groupTpSpark";
 
 
     private static HashMap<String, Particule> mTemplateParticuleList = new HashMap<String, Particule>();
@@ -76,6 +83,11 @@ public class ParticuleRepo {
             mTemplateParticuleList.put(PLASMA_SPARK2_PARTICULE, initParticule(context, R.drawable.plasma_spark_particule2, PLASMA_SPARK2_PARTICULE));
             mTemplateParticuleList.put(PLASMA_SPARK3_PARTICULE, initParticule(context, R.drawable.plasma_spark_particule3, PLASMA_SPARK3_PARTICULE));
             mTemplateParticuleList.put(PLASMA_SPARK4_PARTICULE, initParticule(context, R.drawable.plasma_spark_particule4, PLASMA_SPARK4_PARTICULE));
+            mTemplateParticuleList.put(TP_SPARK0_PARTICULE, initParticule(context, R.drawable.tp_spark_particule, TP_SPARK0_PARTICULE));
+            mTemplateParticuleList.put(TP_SPARK1_PARTICULE, initParticule(context, R.drawable.tp_spark_particule1, TP_SPARK1_PARTICULE));
+            mTemplateParticuleList.put(TP_SPARK2_PARTICULE, initParticule(context, R.drawable.tp_spark_particule2, TP_SPARK2_PARTICULE));
+            mTemplateParticuleList.put(TP_SPARK3_PARTICULE, initParticule(context, R.drawable.tp_spark_particule3, TP_SPARK3_PARTICULE));
+            mTemplateParticuleList.put(TP_SPARK4_PARTICULE, initParticule(context, R.drawable.tp_spark_particule4, TP_SPARK4_PARTICULE));
         }
 
         ArrayList<String> sparkPartIdList = new ArrayList<>();
@@ -95,6 +107,15 @@ public class ParticuleRepo {
         plasmaSparkPartIdList.add(PLASMA_SPARK4_PARTICULE);
 
         mParticuleGroupIdList.put( GROUPE_PLASMA_SPARK_PARTICULE, plasmaSparkPartIdList);
+
+        ArrayList<String> tpSparkPartIdList = new ArrayList<>();
+        tpSparkPartIdList.add(TP_SPARK0_PARTICULE);
+        tpSparkPartIdList.add(TP_SPARK1_PARTICULE);
+        tpSparkPartIdList.add(TP_SPARK2_PARTICULE);
+        tpSparkPartIdList.add(TP_SPARK3_PARTICULE);
+        tpSparkPartIdList.add(TP_SPARK4_PARTICULE);
+
+        mParticuleGroupIdList.put( GROUPE_TP_SPARK_PARTICULE, tpSparkPartIdList);
 
     }
 

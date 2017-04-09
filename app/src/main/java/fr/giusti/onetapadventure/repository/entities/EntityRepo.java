@@ -57,8 +57,6 @@ public class EntityRepo {
         SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.fly_spritesheet_yellow), bitmapId2, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
         String bitmapId3 = "spritesheetTest3";
         SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.fly_spritesheet3), bitmapId3, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
-        String bitmapId4 = "spritesheetTest4";
-        SpriteRepo.addSpriteSheet(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.fly_spritesheet4), bitmapId4, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
         //work
         PointF[] mob1Pattern = PathRepo.mergePaths(PathRepo.generateCurvedPath(20, 7, 0, 0, 5), PathRepo.generateCurvedPath(20, 7, 0, 0, -5));
         //work
@@ -68,7 +66,7 @@ public class EntityRepo {
         //work
         //work (not perfectly but still)
         //PointF[] mob5Pattern = PathRepo.generateLoopedPath(Constants.FRAME_PER_SEC, new Point(0, 0), new Point(0, 5), 7, 0);//un tour a la seconde
-        Pair<PointF, PointF[]> mob5Pattern = PathRepo.generateSpiralePath(Constants.FRAME_PER_SEC * 5, new PointF(512, 256), 240, 0, 4);//un tour a la seconde
+        Pair<PointF, PointF[]> mob5Pattern = PathRepo.generateSpiralePath(Constants.FRAME_PER_SEC * 10, new PointF(512, 256), 240, 0, 4);//un tour a la seconde
         //  Pair<PointF,PointF[]> mob5Pattern = PathRepo.generateCirclePath(Constants.FRAME_PER_SEC, new PointF(512, 256),240, 0);//un tour a la seconde
 
         //seems to work
@@ -76,7 +74,7 @@ public class EntityRepo {
 
         SpecialMoveRepo moveRepo = new SpecialMoveRepo();
         TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
-        GameMob.MobBuilder mobBuilder = new GameMob.MobBuilder("programmedMob1", bitmapId4, 1, 250);
+        GameMob.MobBuilder mobBuilder = new GameMob.MobBuilder("programmedMob1", bitmapId, 1, 250);
         GameMob blueMob = mobBuilder.setSize(32).
                 setDefaultHealth(50).
                 setMovePattern(mob1Pattern).
@@ -93,13 +91,21 @@ public class EntityRepo {
         GameMob yellowMob = mobBuilder.setMovePattern(mob6Pattern).
                 setSpecialMove(moveRepo.getMoveById(SpecialMoveRepo.MULTIPLIE))
                 .build();
+
+
+        String bitmapId4 = "spritesheetTest4";
+
+
         mobBuilder = new GameMob.MobBuilder("programmedMob5", bitmapId4, mob5Pattern.first.x, mob5Pattern.first.y);
         GameMob orangeMob = mobBuilder.setMovePattern(mob5Pattern.second).
                 setSize(64).
-                setDefaultHealth(20).
-                setSpecialMove(moveRepo.getMoveById(SpecialMoveRepo.AUTO_HURT_EXPLODING)).
-                setTouchedMove(touchedMoveRepo.getMoveById(TouchedMoveRepo.HEAL))
+                setDefaultHealth(30).
+                setSpecialMove(moveRepo.getMoveById(SpecialMoveRepo.TELEPORT)).
+                setTouchedMove(touchedMoveRepo.getMoveById(TouchedMoveRepo.TELEPORT))
                 .build();
+
+        Bitmap mobSprite = new SpriteSheetFactory().getMobSpriteSheet(mContext, orangeMob, "circle");
+        SpriteRepo.addSpriteSheet(mobSprite, bitmapId4, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
 
 
         returnList.add(blueMob);
@@ -396,9 +402,9 @@ public class EntityRepo {
                 path = PathRepo.generateCurvedPath(new PointF(x, y), posDest, 200, (seed % 2 == 1), (int) (Constants.FRAME_PER_SEC * 3.75));
             }
             spriteId = (difficulty == 2) ? mob2sptsheetId : mob3sptsheetId;
-            alignement= (difficulty == 2) ? 2 : 3;
+            alignement = (difficulty == 2) ? 2 : 3;
         }
-       GameMob result =  new GameMob.MobBuilder(id, spriteId, x, y)
+        GameMob result = new GameMob.MobBuilder(id, spriteId, x, y)
                 .setWidth(width)
                 .setHeight(height)
                 .setAlignement(alignement)
@@ -479,7 +485,7 @@ public class EntityRepo {
 
         PointF[] path = PathRepo.generateLineToDest(new PointF(startPoint), new PointF(destPoint), tickToDest);
         String mobsptsheetId = "holemakermob";
-      //  SpriteRepo.addSpritesheetIfDoesntExist(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet2), mobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+        //  SpriteRepo.addSpritesheetIfDoesntExist(BitmapFactory.decodeResource(context.getResources(), R.drawable.fly_spritesheet2), mobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
 
         GameMob result = new GameMob.MobBuilder(id, mobsptsheetId, startPoint.x, startPoint.y)
                 .setMovePattern(path)
