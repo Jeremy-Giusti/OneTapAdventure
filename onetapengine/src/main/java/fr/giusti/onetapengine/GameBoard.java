@@ -32,11 +32,12 @@ import fr.giusti.onetapengine.rules.eConditions;
  * gere les evenement lié au jeu (update on tick/on touch/...)
  */
 public class GameBoard {
-    public static final int TIME_PROGRESS_FREQUENCY = 500;// 0.5sec
     private int timeProgress = 0;
     private Boolean timeProgressed = false;
     private Handler timerHandler = new Handler();
     private Runnable timerRunable;
+
+    private EventsHolder mEventsHolder = new EventsHolder();
 
     private TouchDispenser mTouchDisp;
     private EntitySpawnerManager mEntityManager;
@@ -98,6 +99,8 @@ public class GameBoard {
         this.mRulesManager = rulesManager;
     }
 
+
+    // ------------------------------ ACCESSORS -------------------------------//
 
     /**
      * @return la liste de mob de ce plateau
@@ -184,16 +187,23 @@ public class GameBoard {
         this.mRulesManager = mRulesManager;
     }
 
+
+    // ------------------------------ LIFECYCLE -------------------------------//
+
+
     /**
      * met a jour la carte après un tick
      */
-    public void update() {
+    public void update(long timeSinceStart) {
+
         if (!started && getRulesManager() != null) {
             mRulesManager.firstUpdate();
             mEntityManager.firstUpdate();
-            startTimer();
             started = true;
         }
+
+        mEventsHolder.elapsedTime = timeSinceStart;
+        dispatchEvents();
 
         synchronized (timeProgressed) {
             if (timeProgressed) {
@@ -215,7 +225,6 @@ public class GameBoard {
             }
         }
 
-
         for (TouchPoint touch : mTouchPoints) {
             if (touch.isEnded()) {
                 mTouchPoints.remove(touch);
@@ -227,116 +236,6 @@ public class GameBoard {
         for (Scenery scenery : mSceneries) {
             scenery.update(this);
 
-        }
-
-    }
-
-    /**
-     * action touch
-     */
-    public void touchEvent(MotionEvent event) {
-        // get pointer index from the event object
-        int pointerIndex = event.getActionIndex();
-
-        // get masked (not specific to a pointer) action
-        int maskedAction = event.getActionMasked();
-
-        switch (maskedAction) {
-            case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_POINTER_DOWN:
-                if (mTouchDisp == null)
-                    mTouchPoints.add(new TouchPoint(event.getX(pointerIndex), event.getY(pointerIndex), GameConstant.TOUCH_STROKE));
-                else
-                    mTouchPoints.add(mTouchDisp.generateTouchPoint(event.getX(pointerIndex), event.getY(pointerIndex)));
-                break;
-            case MotionEvent.ACTION_MOVE:
-                // todo
-                break;
-            case MotionEvent.ACTION_POINTER_UP:
-                // todo
-                break;
-
-            default:
-                break;
-
-        }
-    }
-
-    public void onMobDeath(GameMob mob) {
-
-        if (mRulesManager != null) {
-            mRulesManager.onMobCountChange(mMobs.size() - 1, eConditions.MOB_DEATH, mob);
-        }
-        if (mEntityManager != null) {
-            mEntityManager.onMobCountChange(mMobs.size() - 1, eConditions.MOB_DEATH, mob);
-        }
-
-        mMobs.remove(mob);
-    }
-
-    public void onMobAway(GameMob mob) {
-        if (mRulesManager != null) {
-            mRulesManager.onMobCountChange(mMobs.size() - 1, eConditions.MOB_AWAY, mob);
-        }
-        if (mEntityManager != null) {
-            mEntityManager.onMobCountChange(mMobs.size() - 1, eConditions.MOB_AWAY, mob);
-        }
-        mMobs.remove(mob);
-    }
-
-    public void onNewMob(GameMob mob) {
-        mMobs.add(mob);
-
-        if (mRulesManager != null) {
-            mRulesManager.onMobCountChange(mMobs.size(), eConditions.NEW_MOB, mob);
-        }
-        if (mEntityManager != null) {
-            mEntityManager.onMobCountChange(mMobs.size(), eConditions.NEW_MOB, mob);
-        }
-    }
-
-    public void onNewMobs(List<GameMob> mobList) {
-        int i = 1;
-        for (GameMob mob : mobList) {
-            if (mRulesManager != null) {
-                mRulesManager.onMobCountChange(mMobs.size() + i, eConditions.NEW_MOB, mob);
-            }
-            if (mEntityManager != null) {
-                mEntityManager.onMobCountChange(mMobs.size() + i, eConditions.NEW_MOB, mob);
-            }
-        }
-        i++;
-
-        mMobs.addAll(mobList);
-    }
-
-    public void onNewEntities(ArrayList<Entity> entities) {
-        if (entities == null) return;
-        for (Entity entity : entities) {
-            if (entity instanceof GameMob) {
-                onNewMob((GameMob) entity);
-            } else if (entity instanceof Particule) {
-                mParticules.add((Particule) entity);
-            } else if (entity instanceof Scenery) {
-                mSceneries.add((Scenery) entity);
-            }
-        }
-    }
-
-    public void onScore(int score) {
-        if (mRulesManager != null) {
-            if (score < 0) {
-                mRulesManager.onScoreMinus(-score);
-            } else {
-                mRulesManager.onScorePlus(score);
-            }
-        }
-        if (mEntityManager != null) {
-            if (score < 0) {
-                mEntityManager.onScoreMinus(-score);
-            } else {
-                mEntityManager.onScorePlus(score);
-            }
         }
     }
 
@@ -375,24 +274,122 @@ public class GameBoard {
         mBrush.setAlpha(255);
     }
 
-    private void startTimer() {
-        timerRunable = new Runnable() {
-            @Override
-            public void run() {
-                timerHandler.postDelayed(this, TIME_PROGRESS_FREQUENCY);
-                synchronized (timeProgressed) {
-                    timeProgress += TIME_PROGRESS_FREQUENCY;
-                    timeProgressed = true;
-                }
+    /**
+     * communicate the events to the rule manager and the entityManager
+     */
+    public void dispatchEvents() {
+        /*--SETTUP_EVENT--*/
+        mEventsHolder.mobCount = mMobs.size();
+
+        //prevent conflict if mEntityManager add mob
+        mEventsHolder.oldMobEvents = mEventsHolder.mobEvents;
+        mEventsHolder.mobEvents = new ArrayList<>();
+
+        /*--BASE_EVENTS--*/
+        if (mRulesManager != null) {
+            mRulesManager.onMobCountChange(mEventsHolder.mobCount);
+            mRulesManager.onScoreChange(mEventsHolder.score);
+            mRulesManager.onTimeProgress(mEventsHolder.elapsedTime/100);
+        }
+        if (mEntityManager != null) {
+            mEntityManager.onMobCountChange(mEventsHolder.mobCount);
+            mEntityManager.onScoreChange(mEventsHolder.score);
+            mRulesManager.onTimeProgress(mEventsHolder.elapsedTime);
+        }
+
+        /*--MOB_EVENT--*/
+        for (EventsHolder.MobEvent mobEvent : mEventsHolder.oldMobEvents) {
+            if (mEntityManager != null) {
+                mEntityManager.onMobEvent(mobEvent.reason, mobEvent.mob);
             }
-        };
-        timerHandler.postDelayed(timerRunable, TIME_PROGRESS_FREQUENCY);
+            if (mRulesManager != null) {
+                mRulesManager.onMobEvent(mobEvent.reason, mobEvent.mob);
+            }
+        }
+
     }
 
-    private void stopTimer() {
-        timerHandler.removeCallbacks(timerRunable);
+    // ------------------------------ EVENT HANDLING -------------------------------//
+
+    /**
+     * action touch
+     */
+    public void touchEvent(MotionEvent event) {
+        // get pointer index from the event object
+        int pointerIndex = event.getActionIndex();
+
+        // get masked (not specific to a pointer) action
+        int maskedAction = event.getActionMasked();
+
+        switch (maskedAction) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_POINTER_DOWN:
+                if (mTouchDisp == null)
+                    mTouchPoints.add(new TouchPoint(event.getX(pointerIndex), event.getY(pointerIndex), GameConstant.TOUCH_STROKE));
+                else
+                    mTouchPoints.add(mTouchDisp.generateTouchPoint(event.getX(pointerIndex), event.getY(pointerIndex)));
+                break;
+            case MotionEvent.ACTION_MOVE:
+                // todo
+                break;
+            case MotionEvent.ACTION_POINTER_UP:
+                // todo
+                break;
+
+            default:
+                break;
+
+        }
     }
 
+    public void onMobDeath(GameMob mob) {
+
+        mEventsHolder.mobEvents.add(new EventsHolder.MobEvent(mob, eConditions.MOB_DEATH));
+        mEventsHolder.score += mob.getScoreValue();
+        mMobs.remove(mob);
+    }
+
+    public void onMobAway(GameMob mob) {
+        mEventsHolder.mobEvents.add(new EventsHolder.MobEvent(mob, eConditions.MOB_AWAY));
+        mEventsHolder.score -= mob.getScoreValue();
+        mMobs.remove(mob);
+    }
+
+    public void onNewMob(GameMob mob) {
+        mMobs.add(mob);
+        mEventsHolder.mobEvents.add(new EventsHolder.MobEvent(mob, eConditions.NEW_MOB));
+
+    }
+
+    public void onNewMobs(List<GameMob> mobList) {
+        for (GameMob mob : mobList) {
+            mEventsHolder.mobEvents.add(new EventsHolder.MobEvent(mob, eConditions.NEW_MOB));
+        }
+        mMobs.addAll(mobList);
+    }
+
+    public void onNewEntities(ArrayList<Entity> entities) {
+        if (entities == null) return;
+        for (Entity entity : entities) {
+            if (entity instanceof GameMob) {
+                onNewMob((GameMob) entity);
+            } else if (entity instanceof Particule) {
+                mParticules.add((Particule) entity);
+            } else if (entity instanceof Scenery) {
+                mSceneries.add((Scenery) entity);
+            }
+        }
+    }
+
+    public void onNewScenery(Scenery blab) {
+        mSceneries.add(blab);
+    }
+
+    public void onScore(int score) {
+        mEventsHolder.score += score;
+    }
+
+    // ------------------------------ RESIZE -------------------------------//
 
     /**
      * first calculate how to adapt the camera bound to the screen size (border are the empty border that will result)<br>
@@ -455,10 +452,5 @@ public class GameBoard {
             mEntityManager.resize(ratio);
         }
 
-    }
-
-
-    public void onNewScenery(Scenery blab) {
-        mSceneries.add(blab);
     }
 }

@@ -17,6 +17,13 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback, 
     private Context mContext;
     private TickingThread mDrawThread;
     private Paint mBrush = new Paint();
+
+    /**
+     * used to calculate in game time since game start
+     */
+    private Long mLastTime = null;
+    private long mElapsedTime = 0;
+
     private GameBoard mMap;
 
     public DrawingView(Context context) {
@@ -104,7 +111,6 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback, 
         // thread.join()
     }
 
-
     /**
      * draw and update map
      *
@@ -152,8 +158,13 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback, 
      *
      */
     public void update() {
-        mMap.update();
+        long time = System.currentTimeMillis();
+        if (mLastTime != null) {
+            mElapsedTime += (time - mLastTime);
+        }
+        mLastTime = time;
 
+        mMap.update(mElapsedTime);
     }
 
 
@@ -164,6 +175,10 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback, 
 
     public void onSystemeResume() {
         if (mMap != null) {
+
+            //prevent taking paused time a game time
+            mLastTime = System.currentTimeMillis();
+
             // restart after just pausing
             mDrawThread.onResume();
         }

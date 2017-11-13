@@ -107,7 +107,7 @@ public class EntitySpawner {
      * @param cdtProgress condition evolution
      * @return nothing || a list of entity to spawn || nothing but call listener.onSpawnRequested for a custom spawning event (shared entity list notably)
      */
-    public ArrayList<Entity> onConditionProgress(int cdtProgress) {
+    public ArrayList<Entity> onConditionProgress(long cdtProgress) {
         if (!useSharedMobList && entityList.isEmpty()) {
             listener.onSpawnerEmpty(this);
             return null;

@@ -71,7 +71,7 @@ public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListen
     }
 
     @Override
-    public void onMobCountChange(int count, eConditions reason, GameMob mob) {
+    public void onMobEvent(eConditions reason, GameMob mob){
         //dispatch event.
         switch (reason) {
             case MOB_DEATH:
@@ -83,7 +83,10 @@ public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListen
                 onMobCountDown(mob);
                 break;
         }
+    }
 
+    @Override
+    public void onMobCountChange(int count) {
         //find if a rule is linked to the condition and test it
         ArrayList<EntitySpawner> spawnerList = entitySpawnerList.get(eConditions.MOB_COUNT);
         EntitySpawner spawner;
@@ -122,7 +125,7 @@ public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListen
     }
 
     @Override
-    public void onScorePlus(int add) {
+    public void onScoreChange(int add) {
         ArrayList<EntitySpawner> spawnerList = entitySpawnerList.get(eConditions.SCORE);
         EntitySpawner spawner;
         for (int i = 0; i < spawnerList.size(); i++) {
@@ -132,17 +135,7 @@ public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListen
     }
 
     @Override
-    public void onScoreMinus(int remove) {
-        ArrayList<EntitySpawner> spawnerList = entitySpawnerList.get(eConditions.SCORE);
-        EntitySpawner spawner;
-        for (int i = 0; i < spawnerList.size(); i++) {
-            spawner = spawnerList.get(i);
-            board.onNewEntities(spawner.onConditionProgress(-remove));
-        }
-    }
-
-    @Override
-    public void onTimeProgress(int progress) {
+    public void onTimeProgress(long progress) {
         ArrayList<EntitySpawner> spawnerList = entitySpawnerList.get(eConditions.TIMER);
         EntitySpawner spawner;
         for (int i = 0; i < spawnerList.size(); i++) {

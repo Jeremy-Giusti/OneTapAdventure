@@ -87,7 +87,7 @@ public class RulesManager implements OnBoardEventListener {
     }
 
     @Override
-    public void onTimeProgress(int progress) {
+    public void onTimeProgress(long progress) {
         if (timerRule == null) return;
         //find if a rule is linked to the condition and test it
         eConditionType result;
@@ -99,24 +99,25 @@ public class RulesManager implements OnBoardEventListener {
     }
 
     @Override
-    public void onMobCountChange(int count, eConditions reason, GameMob mob) {
+    public void onMobEvent(eConditions reason, GameMob mob){
         //dispatch event.
         switch (reason) {
             case MOB_DEATH:
                 onMobDeath(mob);
                 onMobCountDown(mob);
-                onScorePlus(mob.getScoreValue());
                 break;
             case MOB_AWAY:
                 onMobGetAway(mob);
                 onMobCountDown(mob);
-                onScoreMinus(mob.getScoreValue());
                 break;
             case NEW_MOB:
                 onNewMob(mob);
                 break;
         }
+    }
 
+    @Override
+    public void onMobCountChange(int count) {
         //find if a rule is linked to the condition and test it
         ArrayList<Rule> conditionRule = indexedRuleList.get(eConditions.MOB_COUNT);
         Rule rule;
@@ -198,29 +199,13 @@ public class RulesManager implements OnBoardEventListener {
     }
 
     @Override
-    public void onScorePlus(int add) {
+    public void onScoreChange(int add) {
         ArrayList<Rule> conditionRule = indexedRuleList.get(eConditions.SCORE);
         Rule rule;
         eConditionType result;
         for (int i = 0; i < conditionRule.size(); i++) {
             rule = conditionRule.get(i);
             result = rule.ruleProgress(add);
-            if (result != eConditionType.NULL) {
-                conditionRule.remove(rule);
-                i--;
-                onRuleAccomplished(rule);
-            }
-        }
-    }
-
-    @Override
-    public void onScoreMinus(int remove) {
-        ArrayList<Rule> conditionRule = indexedRuleList.get(eConditions.SCORE);
-        Rule rule;
-        eConditionType result;
-        for (int i = 0; i < conditionRule.size(); i++) {
-            rule = conditionRule.get(i);
-            result = rule.ruleProgress(remove);
             if (result != eConditionType.NULL) {
                 conditionRule.remove(rule);
                 i--;

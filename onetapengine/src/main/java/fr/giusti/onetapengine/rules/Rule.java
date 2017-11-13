@@ -8,8 +8,8 @@ public class Rule {
     public final eConditionType type;
     public final eConditions condition;
     public boolean isNumericalCondition = true;
-    private int valueInt = 0;
-    private int goalInt = 0;
+    private long valueInt = 0;
+    private long goalInt = 0;
     private String goalStr = "";
     private IRuleProgressListener listener;
 
@@ -47,7 +47,7 @@ public class Rule {
     }
 
 
-    public eConditionType ruleProgress(int value) {
+    public eConditionType ruleProgress(long value) {
         if (condition == eConditions.MOB_COUNT)
             return (value == goalInt) ? type : eConditionType.NULL;
         if (condition == eConditions.TIMER) {
