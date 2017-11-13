@@ -289,12 +289,12 @@ public class GameBoard {
         if (mRulesManager != null) {
             mRulesManager.onMobCountChange(mEventsHolder.mobCount);
             mRulesManager.onScoreChange(mEventsHolder.score);
-            mRulesManager.onTimeProgress(mEventsHolder.elapsedTime/100);
+            mRulesManager.onTimeProgress(mEventsHolder.elapsedTime);
         }
         if (mEntityManager != null) {
             mEntityManager.onMobCountChange(mEventsHolder.mobCount);
             mEntityManager.onScoreChange(mEventsHolder.score);
-            mRulesManager.onTimeProgress(mEventsHolder.elapsedTime);
+            mEntityManager.onTimeProgress(mEventsHolder.elapsedTime);
         }
 
         /*--MOB_EVENT--*/
