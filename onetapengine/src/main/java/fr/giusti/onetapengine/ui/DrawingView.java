@@ -21,8 +21,8 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback, 
     /**
      * used to calculate in game time since game start
      */
-    private Long mLastTime = null;
-    private long mElapsedTime = 0;
+    private Long mStoppingTime = null;
+    private long mStartingTime = System.currentTimeMillis();
 
     private GameBoard mMap;
 
@@ -159,25 +159,24 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback, 
      */
     public void update() {
         long time = System.currentTimeMillis();
-        if (mLastTime != null) {
-            mElapsedTime += (time - mLastTime);
-        }
-        mLastTime = time;
-
-        mMap.update(mElapsedTime);
+        time -= mStartingTime;
+        mMap.update(time);
     }
 
 
     public void onSystemePause() throws InterruptedException {
         mDrawThread.onPause();
-
+        mStoppingTime = System.currentTimeMillis();
     }
 
     public void onSystemeResume() {
         if (mMap != null) {
 
             //prevent taking paused time a game time
-            mLastTime = System.currentTimeMillis();
+            long pausedTime = System.currentTimeMillis() - mStoppingTime;
+            mStartingTime += pausedTime;
+            mStoppingTime = null;
+
 
             // restart after just pausing
             mDrawThread.onResume();

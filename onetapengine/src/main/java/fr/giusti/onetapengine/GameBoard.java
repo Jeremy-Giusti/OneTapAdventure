@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -32,10 +31,16 @@ import fr.giusti.onetapengine.rules.eConditions;
  * gere les evenement lié au jeu (update on tick/on touch/...)
  */
 public class GameBoard {
-    private int timeProgress = 0;
-    private Boolean timeProgressed = false;
-    private Handler timerHandler = new Handler();
-    private Runnable timerRunable;
+
+    /**
+     * the frequency at which the elapsed time event will be dispatched
+     */
+    private final static long ELAPSED_TIME_GRANULARITY = 250;
+
+    /**
+     * The last value dispatched, prevent sending 2 time the same value
+     */
+    private long lastDispatchedElapsedTime = -1;
 
     private EventsHolder mEventsHolder = new EventsHolder();
 
@@ -202,16 +207,9 @@ public class GameBoard {
             started = true;
         }
 
-        mEventsHolder.elapsedTime = timeSinceStart;
+        mEventsHolder.elapsedTime = timeSinceStart - (timeSinceStart % ELAPSED_TIME_GRANULARITY);
         dispatchEvents();
 
-        synchronized (timeProgressed) {
-            if (timeProgressed) {
-                mRulesManager.onTimeProgress(timeProgress);
-                mEntityManager.onTimeProgress(timeProgress);
-                timeProgressed = false;
-            }
-        }
 
         for (GameMob mob : Collections.synchronizedList(mMobs)) {
             mob.update(this);
@@ -278,8 +276,14 @@ public class GameBoard {
      * communicate the events to the rule manager and the entityManager
      */
     public void dispatchEvents() {
+
+
         /*--SETTUP_EVENT--*/
         mEventsHolder.mobCount = mMobs.size();
+
+
+        boolean dispatchTime = lastDispatchedElapsedTime != mEventsHolder.elapsedTime;
+        if (dispatchTime) lastDispatchedElapsedTime = mEventsHolder.elapsedTime;
 
         //prevent conflict if mEntityManager add mob
         mEventsHolder.oldMobEvents = mEventsHolder.mobEvents;
@@ -289,12 +293,12 @@ public class GameBoard {
         if (mRulesManager != null) {
             mRulesManager.onMobCountChange(mEventsHolder.mobCount);
             mRulesManager.onScoreChange(mEventsHolder.score);
-            mRulesManager.onTimeProgress(mEventsHolder.elapsedTime);
+            if (dispatchTime) mRulesManager.onTimeProgress(mEventsHolder.elapsedTime);
         }
         if (mEntityManager != null) {
             mEntityManager.onMobCountChange(mEventsHolder.mobCount);
             mEntityManager.onScoreChange(mEventsHolder.score);
-            mEntityManager.onTimeProgress(mEventsHolder.elapsedTime);
+            if (dispatchTime) mEntityManager.onTimeProgress(mEventsHolder.elapsedTime);
         }
 
         /*--MOB_EVENT--*/
