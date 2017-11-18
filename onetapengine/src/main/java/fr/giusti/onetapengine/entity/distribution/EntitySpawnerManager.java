@@ -20,7 +20,7 @@ public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListen
     protected HashMap<eConditions, ArrayList<EntitySpawner>> entitySpawnerList = new HashMap<>();
     private GameBoard board;
 
-    //list of entities that sould appear on the board at start
+    //list of entities that should appear on the board at start
     protected ArrayList<Entity> initialList;
     //a list that can be used by different spawner to spawn mob from the same base
     private ArrayList<Entity> sharedList;

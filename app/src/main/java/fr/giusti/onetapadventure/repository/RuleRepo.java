@@ -8,7 +8,6 @@ import fr.giusti.onetapadventure.repository.levelsData.Lvl3Constant;
 import fr.giusti.onetapengine.callback.OnGameEndListener;
 import fr.giusti.onetapengine.callback.OnRuleAccomplishedListener;
 import fr.giusti.onetapengine.commons.GameConstant;
-import fr.giusti.onetapengine.rules.OldRule;
 import fr.giusti.onetapengine.rules.Rule;
 import fr.giusti.onetapengine.rules.RuleFactory;
 import fr.giusti.onetapengine.rules.RulesManager;
@@ -17,6 +16,7 @@ import fr.giusti.onetapengine.rules.eRuleResult;
 
 /**
  * Created by jérémy on 09/09/2016.
+ * Create specific ruleManagers with their set of rules
  */
 public class RuleRepo {
 

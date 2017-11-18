@@ -9,6 +9,8 @@ import fr.giusti.onetapengine.entity.GameMob;
 
 /**
  * Created by jérémy on 08/09/2016.
+ * administrate a set of rules,<br>
+ * notify them with corresponding event/progress
  */
 public class RulesManager implements OnBoardEventListener {
     private HashMap<eConditions, ArrayList<Rule>> indexedRuleList = new HashMap<>();

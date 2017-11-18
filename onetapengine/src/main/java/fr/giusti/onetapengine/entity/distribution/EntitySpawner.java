@@ -8,15 +8,15 @@ import fr.giusti.onetapengine.rules.eConditions;
 
 /**
  * Created by jgiusti on 26/09/2016.
- * either hold a list of entity
+ * if it hold a list of entity
  * will distribute those entities depending on it condition mProgress <br>
- * or use the entity list of its listener
+ * else use the entity list of its listener
  */
 
 public class EntitySpawner {
 
     /**
-     * more like an id work as the condition ruleResult in wich this spawner should be notified on a change
+     * more like an id work as the condition ruleResult in which this spawner should be notified on a change
      */
     public final eConditions conditionType;
 

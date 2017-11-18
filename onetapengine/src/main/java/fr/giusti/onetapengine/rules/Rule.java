@@ -2,6 +2,7 @@ package fr.giusti.onetapengine.rules;
 
 /**
  * Created by jérémy on 18/11/2017.
+ * Listen to board events and lauch event when event specificities are met
  */
 
 public abstract class Rule<T> {
@@ -25,14 +26,28 @@ public abstract class Rule<T> {
         this.listener = listener;
     }
 
+    /**
+     * test is conditions are met and notify listener
+     * @param progress
+     * @return
+     */
     public eRuleResult ruleProgress(T progress) {
         eRuleResult progressResult = processRuleProgress(progress);
         listener.onRuleProgress(idName, getDisplayableProgress());
         return progressResult;
     }
 
+    /**
+     * to override, used to detrminate how condition can be met.
+     * @param progress
+     * @return
+     */
     protected abstract eRuleResult processRuleProgress(T progress);
 
+    /**
+     * to override, used to make a displayable progress of this rule
+     * @return
+     */
     protected abstract String getDisplayableProgress();
 
     public void setListener(IRuleProgressListener listener) {
