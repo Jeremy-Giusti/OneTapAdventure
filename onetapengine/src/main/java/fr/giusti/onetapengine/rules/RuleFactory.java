@@ -21,10 +21,10 @@ public class RuleFactory {
         };
     }
 
-    public Rule<Long> getIncrementaleRule(String ruleId, eConditions condition, eRuleResult result, long goal) {
-        return new Rule<Long>(Long.class, ruleId, result, condition, goal, 0l) {
+    public Rule<Integer> getIncrementaleRule(String ruleId, eConditions condition, eRuleResult result, Integer goal) {
+        return new Rule<Integer>(Integer.class, ruleId, result, condition, goal, 0) {
             @Override
-            protected eRuleResult processRuleProgress(Long progress) {
+            protected eRuleResult processRuleProgress(Integer progress) {
                 mProgress += progress;
                 return (mProgress > mGoal) ? ruleResult : eRuleResult.NULL;
             }
