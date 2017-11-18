@@ -18,7 +18,7 @@ import fr.giusti.onetapengine.GameBoard;
 import fr.giusti.onetapengine.callback.OnGameEndListener;
 import fr.giusti.onetapengine.commons.GameConstant;
 import fr.giusti.onetapengine.rules.IRuleProgressListener;
-import fr.giusti.onetapengine.rules.eConditionType;
+import fr.giusti.onetapengine.rules.eRuleResult;
 import fr.giusti.onetapengine.ui.DrawingView;
 
 /**
@@ -151,7 +151,7 @@ public class GameActivity extends Activity implements OnGameEndListener, IRulePr
     }
 
     @Override
-    public void onGameEnd(final eConditionType gameResult, String gameId, final int score) {
+    public void onGameEnd(final eRuleResult gameResult, String gameId, final int score) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {

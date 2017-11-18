@@ -3,7 +3,7 @@ package fr.giusti.onetapengine.rules;
 /**
  * Created by jérémy on 08/09/2016.
  */
-public enum eConditionType {
+public enum eRuleResult {
     VICTORY,
     NULL,
     FAIL,

@@ -157,7 +157,7 @@ public class AttributsToSpriteMapper {
     /**
      * @param context
      * @param state               mob state concerned by the requested assets sprites
-     * @param type                assets type => for wings type are: line/curve/loop etc...
+     * @param type                assets ruleResult => for wings ruleResult are: line/curve/loop etc...
      * @param assetCategoryFolder asset category folder "/sprite/wings" for exemple
      * @return
      * @throws IOException
@@ -182,7 +182,7 @@ public class AttributsToSpriteMapper {
             } else if (assetList.contains("00" + SPRITE_ASSET_FILE_SUFFIX)) {
                 selectedSpriteAssets[frame] = assetFolder + "/00" + SPRITE_ASSET_FILE_SUFFIX;//default (no mob state/frame consideration)
             } else {
-                selectedSpriteAssets[frame] = findDefaultAssetSprit(context, state, frame, assetCategoryFolder);//default (no type/state consideration)
+                selectedSpriteAssets[frame] = findDefaultAssetSprit(context, state, frame, assetCategoryFolder);//default (no ruleResult/state consideration)
             }
         }
         return selectedSpriteAssets;

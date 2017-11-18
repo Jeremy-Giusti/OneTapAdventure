@@ -9,14 +9,14 @@ import fr.giusti.onetapengine.rules.eConditions;
 /**
  * Created by jgiusti on 26/09/2016.
  * either hold a list of entity
- * will distribute those entities depending on it condition progress <br>
+ * will distribute those entities depending on it condition mProgress <br>
  * or use the entity list of its listener
  */
 
 public class EntitySpawner {
 
     /**
-     * more like an id work as the condition type in wich this spawner should be notified on a change
+     * more like an id work as the condition ruleResult in wich this spawner should be notified on a change
      */
     public final eConditions conditionType;
 
@@ -26,12 +26,12 @@ public class EntitySpawner {
     public final eEntityDistributionMode distibutionMode;
 
     /**
-     * the condition goal if the progress match this value, a entity spawn will be triggered
-     * and reset progress to initialValue
+     * the condition mGoal if the mProgress match this value, a entity spawn will be triggered
+     * and reset mProgress to initialValue
      */
     protected final int conditionGoalValue;
     /**
-     * the initial progress
+     * the initial mProgress
      */
     protected final int initialProgressValue;
     protected int conditionProgress = -1;

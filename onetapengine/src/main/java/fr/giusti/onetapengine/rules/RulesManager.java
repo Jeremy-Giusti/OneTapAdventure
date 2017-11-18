@@ -50,7 +50,7 @@ public class RulesManager implements OnBoardEventListener {
 
     public boolean setRuleListener(String ruleName, IRuleProgressListener ruleListener) {
 
-        if(timerRule!=null && timerRule.getIdName().equals(ruleName)){
+        if (timerRule != null && timerRule.getIdName().equals(ruleName)) {
             timerRule.setListener(ruleListener);
             return true;
         }
@@ -72,7 +72,7 @@ public class RulesManager implements OnBoardEventListener {
         }
         if (rule.equals(timerRule)) {
             listener.onTimerEnded(rule, timerRule, accomplishedRules);
-        } else if (rule.type == eConditionType.END || rule.type == eConditionType.END_DEFEAT) {
+        } else if (rule.ruleResult == eRuleResult.END || rule.ruleResult == eRuleResult.END_DEFEAT) {
             accomplishedRules.add(rule);
             listener.onGameEnded(rule, timerRule, accomplishedRules);
         } else {
@@ -90,16 +90,16 @@ public class RulesManager implements OnBoardEventListener {
     public void onTimeProgress(long progress) {
         if (timerRule == null) return;
         //find if a rule is linked to the condition and test it
-        eConditionType result;
+        eRuleResult result;
         result = timerRule.ruleProgress(progress);
 
-        if (result != eConditionType.NULL) {
+        if (result != eRuleResult.NULL) {
             onRuleAccomplished(timerRule);
         }
     }
 
     @Override
-    public void onMobEvent(eConditions reason, GameMob mob){
+    public void onMobEvent(eConditions reason, GameMob mob) {
         //dispatch event.
         switch (reason) {
             case MOB_DEATH:
@@ -121,12 +121,12 @@ public class RulesManager implements OnBoardEventListener {
         //find if a rule is linked to the condition and test it
         ArrayList<Rule> conditionRule = indexedRuleList.get(eConditions.MOB_COUNT);
         Rule rule;
-        eConditionType result;
+        eRuleResult result;
         for (int i = 0; i < conditionRule.size(); i++) {
             rule = conditionRule.get(i);
             result = rule.ruleProgress(count);
 
-            if (result != eConditionType.NULL) {
+            if (result != eRuleResult.NULL) {
                 conditionRule.remove(rule);
                 i--;
                 onRuleAccomplished(rule);
@@ -137,12 +137,12 @@ public class RulesManager implements OnBoardEventListener {
     public void onMobDeath(GameMob deadMob) {
         ArrayList<Rule> conditionRule = indexedRuleList.get(eConditions.MOB_DEATH);
         Rule rule;
-        eConditionType result;
+        eRuleResult result;
         for (int i = 0; i < conditionRule.size(); i++) {
             rule = conditionRule.get(i);
-            if (rule.isNumericalCondition) result = rule.ruleProgress(1);
+            if (! rule.ruleType.equals(String.class)) result = rule.ruleProgress(1);
             else result = rule.ruleProgress(deadMob.getIdName());
-            if (result != eConditionType.NULL) {
+            if (result != eRuleResult.NULL) {
                 conditionRule.remove(rule);
                 i--;
                 onRuleAccomplished(rule);
@@ -153,12 +153,12 @@ public class RulesManager implements OnBoardEventListener {
     public void onNewMob(GameMob deadMob) {
         ArrayList<Rule> conditionRule = indexedRuleList.get(eConditions.NEW_MOB);
         Rule rule;
-        eConditionType result;
+        eRuleResult result;
         for (int i = 0; i < conditionRule.size(); i++) {
             rule = conditionRule.get(i);
-            if (rule.isNumericalCondition) result = rule.ruleProgress(1);
+            if (! rule.ruleType.equals(String.class)) result = rule.ruleProgress(1);
             else result = rule.ruleProgress(deadMob.getIdName());
-            if (result != eConditionType.NULL) {
+            if (result != eRuleResult.NULL) {
                 conditionRule.remove(rule);
                 i--;
                 onRuleAccomplished(rule);
@@ -170,12 +170,12 @@ public class RulesManager implements OnBoardEventListener {
     public void onMobGetAway(GameMob mobAway) {
         ArrayList<Rule> conditionRule = indexedRuleList.get(eConditions.MOB_AWAY);
         Rule rule;
-        eConditionType result;
+        eRuleResult result;
         for (int i = 0; i < conditionRule.size(); i++) {
             rule = conditionRule.get(i);
-            if (rule.isNumericalCondition) result = rule.ruleProgress(1);
+            if (! rule.ruleType.equals(String.class)) result = rule.ruleProgress(1);
             else result = rule.ruleProgress(mobAway.getIdName());
-            if (result != eConditionType.NULL) {
+            if (result != eRuleResult.NULL) {
                 conditionRule.remove(rule);
                 i--;
                 onRuleAccomplished(rule);
@@ -186,11 +186,11 @@ public class RulesManager implements OnBoardEventListener {
     public void onMobCountDown(GameMob mob) {
         ArrayList<Rule> conditionRule = indexedRuleList.get(eConditions.MOB_COUNTDOWN);
         Rule rule;
-        eConditionType result;
+        eRuleResult result;
         for (int i = 0; i < conditionRule.size(); i++) {
             rule = conditionRule.get(i);
             result = rule.ruleProgress(-1);
-            if (result != eConditionType.NULL) {
+            if (result != eRuleResult.NULL) {
                 conditionRule.remove(rule);
                 i--;
                 onRuleAccomplished(rule);
@@ -202,11 +202,11 @@ public class RulesManager implements OnBoardEventListener {
     public void onScoreChange(int add) {
         ArrayList<Rule> conditionRule = indexedRuleList.get(eConditions.SCORE);
         Rule rule;
-        eConditionType result;
+        eRuleResult result;
         for (int i = 0; i < conditionRule.size(); i++) {
             rule = conditionRule.get(i);
             result = rule.ruleProgress(add);
-            if (result != eConditionType.NULL) {
+            if (result != eRuleResult.NULL) {
                 conditionRule.remove(rule);
                 i--;
                 onRuleAccomplished(rule);
