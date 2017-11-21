@@ -191,7 +191,7 @@ public class RulesManager implements OnBoardEventListener {
         eRuleResult result;
         for (int i = 0; i < conditionRule.size(); i++) {
             rule = conditionRule.get(i);
-            result = rule.ruleProgress(-1);
+            result = rule.ruleProgress(1);
             if (result != eRuleResult.NULL) {
                 conditionRule.remove(rule);
                 i--;
