@@ -104,9 +104,10 @@ public class EntityRepo {
                 setTouchedMove(touchedMoveRepo.getMoveById(TouchedMoveRepo.TELEPORT))
                 .build();
 
-        Bitmap mobSprite = new SpriteSheetFactory().getMobSpriteSheet(mContext, orangeMob, "circle");
-        SpriteRepo.addSpriteSheet(mobSprite, bitmapId4, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
-
+        if(!SpriteRepo.hasSprite(bitmapId4)) {
+            Bitmap mobSprite = new SpriteSheetFactory().getMobSpriteSheet(mContext, orangeMob, "circle");
+            SpriteRepo.addSpriteSheet(mobSprite, bitmapId4, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+        }
 
         returnList.add(blueMob);
         returnList.add(greenMob);
@@ -413,8 +414,10 @@ public class EntityRepo {
                 .setDefaultHealth(difficulty * GameConstant.TOUCH_DAMAGE)
                 .build();
 
-        Bitmap mobSprite = new SpriteSheetFactory().getMobSpriteSheet(context, result, "line");
-        SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, spriteId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+        if(!SpriteRepo.hasSprite(spriteId)) {
+            Bitmap mobSprite = new SpriteSheetFactory().getMobSpriteSheet(context, result, "line");
+            SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, spriteId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+        }
         return result;
     }
 
@@ -432,8 +435,10 @@ public class EntityRepo {
         String mob1sptsheetId = "tier1Mob";
 
         GameMob result = new GameMob.MobBuilder(id, mob1sptsheetId, startX, startY).setAlignement(1).setMovePattern(path).build();
-        Bitmap mobSprite = new SpriteSheetFactory().getMobSpriteSheet(context, result, "line");
-        SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, mob1sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+        if(!SpriteRepo.hasSprite(mob1sptsheetId)) {
+            Bitmap mobSprite = SpriteSheetFactory.getMobSpriteSheet(context, result, "line");
+            SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, mob1sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+        }
 
 
         return result;
@@ -451,9 +456,10 @@ public class EntityRepo {
                 .setDefaultHealth(health)
                 .setAlignement(6)
                 .build();
-        Bitmap mobSprite = new SpriteSheetFactory().getMobSpriteSheet(context, result, "line");
-        SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, lastMobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
-
+        if(!SpriteRepo.hasSprite(lastMobsptsheetId)) {
+            Bitmap mobSprite = new SpriteSheetFactory().getMobSpriteSheet(context, result, "line");
+            SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, lastMobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+        }
         return result;
     }
 
@@ -469,9 +475,10 @@ public class EntityRepo {
                 .setHealth(health)
                 .setAlignement(4)
                 .build();
-        Bitmap mobSprite = new SpriteSheetFactory().getMobSpriteSheet(context, result, "line");
-        SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, mobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
-
+        if(!SpriteRepo.hasSprite(mobsptsheetId)) {
+            Bitmap mobSprite = new SpriteSheetFactory().getMobSpriteSheet(context, result, "line");
+            SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, mobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+        }
 
         return result;
 
@@ -493,9 +500,10 @@ public class EntityRepo {
                 .setAlignement(5)
                 .setDefaultHealth(health).build();
 
-        Bitmap mobSprite = new SpriteSheetFactory().getMobSpriteSheet(context, result, "line");
-        SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, mobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
-
+        if(!SpriteRepo.hasSprite(mobsptsheetId)) {
+            Bitmap mobSprite = SpriteSheetFactory.getMobSpriteSheet(context, result, "line");
+            SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, mobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+        }
 
         return result;
 

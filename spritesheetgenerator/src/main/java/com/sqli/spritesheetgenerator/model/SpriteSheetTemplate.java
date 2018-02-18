@@ -8,7 +8,9 @@ import com.sqli.spritesheetgenerator.commons.AssetsHelper;
 import java.io.IOException;
 
 /**
- * Created by jgiusti on 20/03/2017.
+ * Created by jgiusti on 20/03/2017. <br>
+ * Data holding file used to keep everything needed to generate a sprite sheet <br>
+ * spriteBitmap attribut need to be loaded with loadBitmaps(ctx) method
  */
 
 public class SpriteSheetTemplate {

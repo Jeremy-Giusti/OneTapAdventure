@@ -192,4 +192,7 @@ public class SpriteRepo {
         mMobSpriteList.get(mSpritesId).resizeAllFrame(width, height);
     }
 
+    public static boolean hasSprite(String spriteId) {
+        return mMobSpriteList.containsKey(spriteId);
+    }
 }

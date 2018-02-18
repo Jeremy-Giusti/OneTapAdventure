@@ -16,7 +16,6 @@ public class SpriteGenerator {
 
     /**
      * generate a single bitmap spritesheet from the spriteSheet model data <br>
-     * TODO optimizations if needed
      *
      * @param spritSheetModel model with all data needed to make the bitmap
      * @return
