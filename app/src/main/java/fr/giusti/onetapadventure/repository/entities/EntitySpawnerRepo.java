@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.io.IOException;
 
+import fr.giusti.onetapengine.entity.distribution.EntitySpawnerInt;
 import fr.giusti.onetapengine.entity.distribution.EntitySpawnerLong;
 import fr.giusti.onetapengine.entity.distribution.EntitySpawnerManager;
 import fr.giusti.onetapengine.entity.distribution.eEntityDistributionMode;
@@ -17,9 +18,9 @@ public class EntitySpawnerRepo {
     public static EntitySpawnerManager getLvl1_1SpawnerManager(Context context) throws IOException {
         EntitySpawnerManager result = new EntitySpawnerManager(EntityRepo.getLvl1x1InitList(context), EntityRepo.getLvl1x1BackupList(context));
 
-        result.addSpawner(new EntitySpawnerLong.EntitySpawnerBuilder(eEntityDistributionMode.ONE_BY_ONE_ORDERED, 1l, 0l, eConditions.MOB_COUNT).setUseSharedList().build());
+        result.addSpawner(new EntitySpawnerInt.EntitySpawnerBuilder(eEntityDistributionMode.ONE_BY_ONE_ORDERED, 1, 0, eConditions.MOB_COUNT).setUseSharedList().build());
         result.addSpawner(new EntitySpawnerLong.EntitySpawnerBuilder(eEntityDistributionMode.ONE_BY_ONE_ORDERED, 3000l, 0l, eConditions.TIMER).setUseSharedList().build());
-        result.addSpawner(new EntitySpawnerLong.EntitySpawnerBuilder(eEntityDistributionMode.ALL_AT_ONCE, 0l, -1l, eConditions.MOB_COUNT).setEntityList(EntityRepo.getLvl1x1LastWave(context)).build());
+        result.addSpawner(new EntitySpawnerInt.EntitySpawnerBuilder(eEntityDistributionMode.ALL_AT_ONCE, 0, -1, eConditions.MOB_COUNT).setEntityList(EntityRepo.getLvl1x1LastWave(context)).build());
 
         return result;
     }
@@ -32,7 +33,7 @@ public class EntitySpawnerRepo {
                 .setUseSharedList()
                 .build());
 
-        result.addSpawner(new EntitySpawnerLong.EntitySpawnerBuilder(eEntityDistributionMode.ONE_BY_ONE_RANDOM, 0l, 0l, eConditions.MOB_COUNT)
+        result.addSpawner(new EntitySpawnerInt.EntitySpawnerBuilder(eEntityDistributionMode.ONE_BY_ONE_RANDOM, 0, 0, eConditions.MOB_COUNT)
                 .setSpawnerInfinite()
                 .setEntityList(EntityRepo.getLvl1x2SpecialList(context))
                 .build());
@@ -49,7 +50,7 @@ public class EntitySpawnerRepo {
 //                .setUseSharedList()
 //                .build());
 //
-        result.addSpawner(new EntitySpawnerLong.EntitySpawnerBuilder(eEntityDistributionMode.ONE_BY_ONE_ORDERED, 3000l, 0l, eConditions.TIMER)
+        result.addSpawner(new EntitySpawnerLong.EntitySpawnerBuilder(eEntityDistributionMode.ONE_BY_ONE_ORDERED, 3000l, 0l,eConditions.TIMER)
                 .setSpawnerInfinite()
                 .setEntityList(EntityRepo.getLvl1x3SpecialList(context))
                 .build());
