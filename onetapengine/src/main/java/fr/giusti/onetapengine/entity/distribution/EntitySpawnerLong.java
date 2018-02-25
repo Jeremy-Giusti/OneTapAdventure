@@ -29,16 +29,16 @@ public class EntitySpawnerLong extends EntitySpawner<Long>{
      * @param cdtProgress condition evolution
      * @return nothing || a list of entity to spawn || nothing but call listener.onSpawnRequested for a custom spawning event (shared entity list notably)
      */
-    public ArrayList<Entity> onConditionProgress(Long cdtProgress) {
+    public ArrayList<Entity> onConditionProgress(Long cdtProgress, eConditions conditionsType) {
         if (!useSharedMobList && entityList.isEmpty()) {
             listener.onSpawnerEmpty(this);
             return null;
         }
 
-        if (conditionTypes[0] == eConditions.MOB_COUNT)
+        if (conditionsType == eConditions.MOB_COUNT)
             return (cdtProgress == conditionGoalValue) ? onConditionMet() : null;
 
-        if (conditionTypes[0] == eConditions.TIMER)
+        if (conditionsType == eConditions.TIMER)
             return ((cdtProgress % conditionGoalValue) == 0) ? onConditionMet() : null;
 
         conditionProgress += cdtProgress;
@@ -54,8 +54,8 @@ public class EntitySpawnerLong extends EntitySpawner<Long>{
      * @param cdtProgress
      * @return
      */
-    public ArrayList<Entity> onConditionProgress(int cdtProgress) {
-        return onConditionProgress(Long.valueOf(cdtProgress));
+    public ArrayList<Entity> onConditionProgress(int cdtProgress, eConditions conditionType) {
+        return onConditionProgress(Long.valueOf(cdtProgress),conditionType);
     }
 
         @Deprecated

@@ -99,7 +99,7 @@ public abstract class EntitySpawner<T> {
      * @param cdtProgress condition evolution
      * @return nothing || a list of entity to spawn || nothing but call listener.onSpawnRequested for a custom spawning event (shared entity list notably)
      */
-    public abstract ArrayList<Entity> onConditionProgress(T cdtProgress) ;
+    public abstract ArrayList<Entity> onConditionProgress(T cdtProgress,eConditions conditionType) ;
 
     /**
      * spawn condition met, depending on spawner attribut choose the best way to distribute the newly spawned entity(s)
