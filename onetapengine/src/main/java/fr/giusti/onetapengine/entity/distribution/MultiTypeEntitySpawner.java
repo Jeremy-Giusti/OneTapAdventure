@@ -10,7 +10,7 @@ import fr.giusti.onetapengine.rules.eConditions;
 
 /**
  * Created by giusti on 24/02/2018.<br>
- * this can be used to follow events of two different type (such as timer:long and mobCount:int)<br>
+ * this can be used to follow events of two different type (such as timer:long and mobCount:int)<br><br>
  * implementation:<br>
  * <pre class="prettyprint">
  * private class mobCountTimerSpawner extends MultiTypeEntitySpawner&lt;Long, Integer&gt; {
@@ -20,9 +20,11 @@ import fr.giusti.onetapengine.rules.eConditions;
  *         conditionProgress += cdtProgress;
  *         return null;
  *     }
- *      // /!\ this second type of onConditionProgress absoltely need to be explicitely implemented
- *      // also only one of the 2 onConditionProgress need to be able to send result
- *      //otherwise the result may be sent 2 time on the same tick
+ *
+ * //   /!\ this second type of onConditionProgress absoltely need to be explicitely implemented
+ * //  also only one of the 2 onConditionProgress need to be able to send result
+ * //  otherwise the result may be sent 2 time on the same tick
+ *
  *     public ArrayList<Entity> onConditionProgress(Int cdtProgress,eConditions conditionType) ;
  *         conditionProgress2 += cdtProgress2;
  *
@@ -32,10 +34,7 @@ import fr.giusti.onetapengine.rules.eConditions;
  *         }else{
  *          return null;
  *         }
- *
  *     }
- *
- *
  * }
  * </pre>
  */
