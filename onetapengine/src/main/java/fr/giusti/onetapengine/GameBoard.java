@@ -182,10 +182,6 @@ public class GameBoard {
         this.mCameraBounds = mCameraBounds;
     }
 
-    public CopyOnWriteArrayList<TouchPoint> getmTouchPoints() {
-        return mTouchPoints;
-    }
-
     /**
      * @param eventListener called when a mob die
      */
