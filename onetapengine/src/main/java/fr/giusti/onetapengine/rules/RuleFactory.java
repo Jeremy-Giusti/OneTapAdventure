@@ -59,7 +59,7 @@ public class RuleFactory {
     }
 
     /**
-     * just a dumb rule that compare 2 numerical value (progress and goal, if progress = goal => result)
+     * just a dumb rule that compare 2 text value (progress and goal, if progress = goal => result)
      *
      * @param ruleId must be unique on the board
      * @param condition which king of event this rule will listen to

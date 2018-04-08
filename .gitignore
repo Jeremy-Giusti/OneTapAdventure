@@ -12,3 +12,5 @@ OneTapAdventure\.iml
 onetapengine/onetapengine\.iml
 
 spritesheetgenerator/spritesheetgenerator\.iml
+
+*.iml

@@ -16,13 +16,21 @@ import fr.giusti.onetapengine.rules.eConditions;
  */
 
 public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListener {
-    //an indexed list of spawners, each spawner is notified when it's associated condition has an evolution
-    protected HashMap<eConditions, ArrayList<EntitySpawner>> entitySpawnerList = new HashMap<>();
+
     private GameBoard board;
 
-    //list of entities that should appear on the board at start
+    /**
+     *     an indexed list of spawners, each spawner is notified when it's associated condition has an evolution
+     */
+    protected HashMap<eConditions, ArrayList<EntitySpawner>> entitySpawnerList = new HashMap<>();
+
+    /**
+     *     list of entities that should appear on the board at start
+     */
     protected ArrayList<Entity> initialList;
-    //a list that can be used by different spawner to spawn mob from the same base
+    /**
+     *     a list that can be used by different spawner to spawn mob from the same pool
+     */
     private ArrayList<Entity> sharedList;
     private int sharedMobIndex = 0;
 
@@ -34,26 +42,14 @@ public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListen
         }
     }
 
-    public EntitySpawnerManager(ArrayList<EntitySpawner> spawnerList, ArrayList<Entity> initList, ArrayList<Entity> sharedList) {
-        this.initialList = initList;
-        this.sharedList = sharedList;
-        for (eConditions conditions : eConditions.values()) {
-            entitySpawnerList.put(conditions, new ArrayList<EntitySpawner>());
-        }
-
-        for (EntitySpawner spawner : spawnerList) {
-            entitySpawnerList.get(spawner.conditionType).add(spawner);
-            spawner.setListener(this);
-        }
-
-    }
-
     public void setSharedList(ArrayList<Entity> sharedList) {
         this.sharedList = sharedList;
     }
 
     public void addSpawner(EntitySpawner spawner) {
-        entitySpawnerList.get(spawner.conditionType).add(spawner);
+        for(eConditions spawnerCondition:spawner.conditionTypes){
+            entitySpawnerList.get(spawnerCondition).add(spawner);
+        }
         spawner.setListener(this);
     }
 
@@ -92,7 +88,7 @@ public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListen
         EntitySpawner spawner;
         for (int i = 0; i < spawnerList.size(); i++) {
             spawner = spawnerList.get(i);
-            board.onNewEntities(spawner.onConditionProgress(count));
+            board.onNewEntities(spawner.onConditionProgress(count,eConditions.MOB_COUNT));
         }
     }
 
@@ -102,7 +98,7 @@ public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListen
         EntitySpawner spawner;
         for (int i = 0; i < spawnerList.size(); i++) {
             spawner = spawnerList.get(i);
-            board.onNewEntities(spawner.onConditionProgress(1));
+            board.onNewEntities(spawner.onConditionProgress(1,eConditions.MOB_AWAY));
         }
     }
 
@@ -111,7 +107,7 @@ public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListen
         EntitySpawner spawner;
         for (int i = 0; i < spawnerList.size(); i++) {
             spawner = spawnerList.get(i);
-            board.onNewEntities(spawner.onConditionProgress(1));
+            board.onNewEntities(spawner.onConditionProgress(1,eConditions.MOB_AWAY));
         }
     }
 
@@ -120,7 +116,7 @@ public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListen
         EntitySpawner spawner;
         for (int i = 0; i < spawnerList.size(); i++) {
             spawner = spawnerList.get(i);
-            board.onNewEntities(spawner.onConditionProgress(1));
+            board.onNewEntities(spawner.onConditionProgress(1,eConditions.MOB_DEATH));
         }
     }
 
@@ -130,7 +126,7 @@ public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListen
         EntitySpawner spawner;
         for (int i = 0; i < spawnerList.size(); i++) {
             spawner = spawnerList.get(i);
-            board.onNewEntities(spawner.onConditionProgress(add));
+            board.onNewEntities(spawner.onConditionProgress(add,eConditions.SCORE));
         }
     }
 
@@ -140,13 +136,15 @@ public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListen
         EntitySpawner spawner;
         for (int i = 0; i < spawnerList.size(); i++) {
             spawner = spawnerList.get(i);
-            board.onNewEntities(spawner.onConditionProgress(progress));
+            board.onNewEntities(spawner.onConditionProgress(progress,eConditions.TIMER));
         }
     }
 
     @Override
-    public void onSpawnerEmpty(EntitySpawner popper) {
-        entitySpawnerList.get(popper.conditionType).remove(popper);
+    public void onSpawnerEmpty(EntitySpawner spawner) {
+        for(eConditions spawnerCondition:spawner.conditionTypes){
+            entitySpawnerList.get(spawnerCondition).remove(spawner);
+        }
     }
 
     @Override

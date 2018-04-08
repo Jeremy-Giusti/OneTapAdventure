@@ -42,9 +42,15 @@ public class GameBoard {
      */
     private long lastDispatchedElapsedTime = -1;
 
+    /**
+     * holds board event
+     */
     private EventsHolder mEventsHolder = new EventsHolder();
 
     private TouchDispenser mTouchDisp;
+    /**
+     * keep track of the event and manage when entity should spawn
+     */
     private EntitySpawnerManager mEntityManager;
     private RulesManager mRulesManager;
 
@@ -238,7 +244,12 @@ public class GameBoard {
     }
 
     /**
-     * dessine la map puis les mob
+     * Draw in order:<br>
+     *     - background<br>
+     *     - scenery <br>
+     *     - mobs<br>
+     *     - particles<br>
+     *     - touch
      *
      * @param canvas
      * @param mBrush
@@ -273,7 +284,8 @@ public class GameBoard {
     }
 
     /**
-     * communicate the events to the rule manager and the entityManager
+     * communicate the events to the rule manager and the entityManager<br>
+     * use a "buffer" for mob event to prevent unreliable mob event (recursive trigger)
      */
     public void dispatchEvents() {
 
