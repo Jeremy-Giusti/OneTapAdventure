@@ -4,3 +4,13 @@
 /.idea
 .DS_Store
 /build
+
+app/app\.iml
+
+OneTapAdventure\.iml
+
+onetapengine/onetapengine\.iml
+
+spritesheetgenerator/spritesheetgenerator\.iml
+
+*.iml
