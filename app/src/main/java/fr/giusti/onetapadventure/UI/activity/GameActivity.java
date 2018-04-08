@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import fr.giusti.onetapadventure.R;
+import fr.giusti.onetapadventure.UI.dialog.PercentLoadingDialog;
 import fr.giusti.onetapadventure.repository.GameRepo;
 import fr.giusti.onetapengine.GameBoard;
 import fr.giusti.onetapengine.callback.OnGameEndListener;
@@ -30,6 +31,8 @@ import fr.giusti.onetapengine.ui.DrawingView;
  */
 public class GameActivity extends Activity implements OnGameEndListener, IRuleProgressListener, GameRepo.BoardGenerationCallback {
     private static final String TAG = GameActivity.class.getSimpleName();
+    private static final String LOADING_DIALOG_TAG = "loadingDialog";
+
     private DrawingView mDrawingSurface;
     private Button mPauseButton;
     private Button mRestartButton;
@@ -38,7 +41,8 @@ public class GameActivity extends Activity implements OnGameEndListener, IRulePr
     private boolean running = false;
     private boolean paused = false;
     private GameRepo mRepo;
-    private String currentLvl;
+    private String mSelectedLvlName;
+    private PercentLoadingDialog mLoadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +58,7 @@ public class GameActivity extends Activity implements OnGameEndListener, IRulePr
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE);
 
-        currentLvl = getIntent().getStringExtra(GameConstant.LEVEL_NAME);
+        mSelectedLvlName = getIntent().getStringExtra(GameConstant.LEVEL_NAME);
         initViews();
         initEvents();
     }
@@ -81,13 +85,7 @@ public class GameActivity extends Activity implements OnGameEndListener, IRulePr
                     mRepo = new GameRepo(mDrawingSurface.getWidth(), mDrawingSurface.getHeight());
                 }
                 Log.d(TAG, "starting board init");
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
                 startNewGameLoading();
-//
-//                    }
-//                },1000);
                 running = true;
             }
         }
@@ -95,18 +93,13 @@ public class GameActivity extends Activity implements OnGameEndListener, IRulePr
 
     @Override
     protected void onPause() {
-        try {
-            mDrawingSurface.onSystemePause();
-        } catch (InterruptedException e) {
-            Toast.makeText(this, "thread interuption exception", Toast.LENGTH_SHORT);
-            e.printStackTrace();
-        }
+        mDrawingSurface.stopGame();
         super.onPause();
     }
 
     @Override
     protected void onResume() {
-        mDrawingSurface.onSystemeResume();
+        mDrawingSurface.resumeGameIfPossible();
         super.onResume();
     }
 
@@ -116,12 +109,11 @@ public class GameActivity extends Activity implements OnGameEndListener, IRulePr
         public void onClick(View v) {
             // TODO faire une vrai interraction avec la surface (bloquer les click listener/rester en pause si on quitte et reprend l'appli)
             if (!paused) {
-                onPause();
+                mDrawingSurface.stopGame();
                 paused = true;
                 ((Button) v).setText("Reprendre");
             } else {
-
-                onResume();
+                mDrawingSurface.resumeGameIfPossible();
                 paused = false;
                 ((Button) v).setText("Stop");
             }
@@ -132,11 +124,7 @@ public class GameActivity extends Activity implements OnGameEndListener, IRulePr
 
         @Override
         public void onClick(View v) {
-            try {
-                mDrawingSurface.stopGame();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            mDrawingSurface.stopGame();
             startNewGameLoading();
 
         }
@@ -147,7 +135,7 @@ public class GameActivity extends Activity implements OnGameEndListener, IRulePr
      */
     private void startNewGameLoading() {
 
-        mRepo.getBoardByLvlIdAsync(this, currentLvl, this, this, this);
+        mRepo.getBoardByLvlIdAsync(this, mSelectedLvlName, this, this, this);
     }
 
     @Override
@@ -188,17 +176,45 @@ public class GameActivity extends Activity implements OnGameEndListener, IRulePr
 
         Log.d(TAG, "Board created");
 
+        if (mLoadingDialog != null && mLoadingDialog.isAdded()) {
+            mLoadingDialog.dismiss();
+        }
+
         mDrawingSurface.startGame(board);
     }
 
     @Override
-    public void onGameBoardGenerationError(String message, Exception e) {
-        if (TextUtils.isEmpty(message)) message = getString(R.string.error_board_loading);
-        Log.e(TAG, message, e);
+    public void onGameBoardGenerationError(final String message, final Exception e) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if (TextUtils.isEmpty(message)) {
+                    Log.e(TAG, getString(R.string.error_board_loading), e);
+                } else {
+                    Log.e(TAG, message, e);
+                }
+            }
+        });
+
+
     }
 
     @Override
-    public void onGameBoardGenerationProgress(int progress) {
-        //TODO dialog
+    public void onGameBoardGenerationProgress(final int progress) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Log.v(TAG, " board generation progress: " + progress);
+                if (mLoadingDialog == null) {
+                    mLoadingDialog = PercentLoadingDialog.newInstance(getString(R.string.generating_lvl));
+                }
+                if (!mLoadingDialog.isAdded()) {
+                    mLoadingDialog.show(getFragmentManager(), LOADING_DIALOG_TAG);
+                }
+                mLoadingDialog.setProgress(progress);
+            }
+        });
+
+
     }
 }

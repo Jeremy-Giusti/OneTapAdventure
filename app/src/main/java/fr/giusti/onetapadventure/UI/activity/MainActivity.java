@@ -84,4 +84,10 @@ public class MainActivity extends PermissionAskerActivity {
 
     }
 
+    public void onClickInfiniteLevel(View view) {
+        Log.d(TAG, "infinite lvl clicked");
+        Intent myIntent = new Intent(MainActivity.this, GameActivity.class);
+        myIntent.putExtra(GameConstant.LEVEL_NAME, GameRepo.LVL_INFINITE);
+        MainActivity.this.startActivity(myIntent);
+    }
 }

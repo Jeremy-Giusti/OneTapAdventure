@@ -26,6 +26,8 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback, 
 
     private GameBoard mMap;
 
+
+    // --------------------------- LifeCycle ---------------------------------//
     public DrawingView(Context context) {
         super(context);
         // adding the callback (this) to the surface holder to intercept events
@@ -33,7 +35,6 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback, 
         // make the GamePanel focusable so it can handle events
         mContext = context;
         setFocusable(true);
-        // mDrawThread = new TickingThread(getHolder(), mContext, this);
         mBrush.setColor(mContext.getResources().getColor(android.R.color.darker_gray));
         mBrush.setStrokeWidth(5);
 
@@ -46,20 +47,38 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback, 
         // make the GamePanel focusable so it can handle events
         setFocusable(true);
         mContext = context;
-        // mDrawThread = new TickingThread(getHolder(), mContext, this);
         mBrush.setColor(mContext.getResources().getColor(android.R.color.darker_gray));
         mBrush.setStrokeWidth(5);
 
     }
 
-
+    /**
+     * start back a game if a board is found
+     *
+     * @param holder
+     */
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (mMap != null) mMap.touchEvent(event);
-
-        return true;
+    public void surfaceCreated(SurfaceHolder holder) {
+        resumeGameIfPossible();
     }
 
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        //Auto-generated method stub
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        mDrawThread.setRunning(false);
+    }
+
+    // --------------------------- start/stop events ---------------------------------//
+
+    /**
+     * start the board continuous updates
+     *
+     * @param map
+     */
     public void startGame(GameBoard map) {
 
         mDrawThread = new TickingThread(this);
@@ -71,44 +90,45 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback, 
         mDrawThread.start();
     }
 
-    private void resize() {
-        getLayoutParams().width = mMap.getmCameraBounds().width();
-        getLayoutParams().height = mMap.getmCameraBounds().height();
-    }
+//    /**
+//     * pause the thread execution <br>
+//     * beware, it don't allow background pausing
+//     *
+//     * @throws InterruptedException
+//     */
+//    public void pauseGame() throws InterruptedException {
+//        mDrawThread.onPause();
+//        mStoppingTime = System.currentTimeMillis();
+//    }
 
     /**
      * put an end to the thread execution
      *
      * @throws InterruptedException
      */
-    public void stopGame() throws InterruptedException {
-        mDrawThread.setRunning(false);
-    }
-
-
-    @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-        if (mMap != null) {
-            // restart after being destroyed
-            if (mDrawThread.getState() == Thread.State.TERMINATED) {
-                mDrawThread = new TickingThread(this);
-                mDrawThread.setRunning(true);
-                mDrawThread.start();
-            }
+    public void stopGame() {
+        if (mDrawThread != null) {
+            mDrawThread.setRunning(false);
+            mStoppingTime = System.currentTimeMillis();
         }
-
     }
 
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        //Auto-generated method stub
+    /**
+     * resume the game if a board is found
+     */
+    public void resumeGameIfPossible() {
+        if (mMap != null) {
 
-    }
+            //prevent taking paused time a game time
+            long pausedTime = System.currentTimeMillis() - mStoppingTime;
+            mStartingTime += pausedTime;
+            mStoppingTime = null;
 
-    @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
-        mDrawThread.setRunning(false);
-        // thread.join()
+            // restart after just pausing
+            if (mDrawThread != null && mDrawThread.getState() != Thread.State.TERMINATED)
+                mDrawThread.onResume();
+            else startGame(mMap);
+        }
     }
 
     /**
@@ -150,12 +170,18 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback, 
         this.update();
     }
 
+    /**
+     * draw map on the canvas
+     *
+     * @param canvas
+     */
+
     public void doDraw(Canvas canvas) {
         mMap.draw(canvas, mBrush);
     }
 
     /**
-     *
+     * update board (make a logic tick)
      */
     public void update() {
         long time = System.currentTimeMillis();
@@ -163,25 +189,25 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback, 
         mMap.update(time);
     }
 
+    /**
+     * Touch event handling
+     *
+     * @param event
+     * @return
+     */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (mMap != null) mMap.touchEvent(event);
 
-    public void onSystemePause() throws InterruptedException {
-        mDrawThread.onPause();
-        mStoppingTime = System.currentTimeMillis();
+        return true;
     }
 
-    public void onSystemeResume() {
-        if (mMap != null) {
-
-            //prevent taking paused time a game time
-            long pausedTime = System.currentTimeMillis() - mStoppingTime;
-            mStartingTime += pausedTime;
-            mStoppingTime = null;
-
-
-            // restart after just pausing
-            mDrawThread.onResume();
-        }
-
+    /**
+     * update view size depending on board camera size
+     */
+    private void resize() {
+        getLayoutParams().width = mMap.getmCameraBounds().width();
+        getLayoutParams().height = mMap.getmCameraBounds().height();
     }
 
 

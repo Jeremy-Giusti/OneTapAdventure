@@ -405,7 +405,7 @@ public class EntityRepo {
             spriteId = (difficulty == 2) ? mob2sptsheetId : mob3sptsheetId;
             alignement = (difficulty == 2) ? 2 : 3;
         }
-        GameMob result = new GameMob.MobBuilder(id, spriteId, x, y)
+        GameMob mobResult = new GameMob.MobBuilder(id, spriteId, x, y)
                 .setWidth(width)
                 .setHeight(height)
                 .setAlignement(alignement)
@@ -415,10 +415,10 @@ public class EntityRepo {
                 .build();
 
         if(!SpriteRepo.hasSprite(spriteId)) {
-            Bitmap mobSprite = new SpriteSheetFactory().getMobSpriteSheet(context, result, "line");
+            Bitmap mobSprite = new SpriteSheetFactory().getMobSpriteSheet(context, mobResult, "line");
             SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, spriteId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
         }
-        return result;
+        return mobResult;
     }
 
     public static GameMob generateSimpleRandomizedMob(String id, Context context, RectF startPos, RectF destPos, int travelTimeOnTick) throws IOException {

@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
-import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.util.Log;
 
 import java.io.IOException;
 
@@ -18,6 +20,7 @@ import fr.giusti.onetapengine.GameBoard;
 import fr.giusti.onetapengine.callback.OnGameEndListener;
 import fr.giusti.onetapengine.commons.Constants;
 import fr.giusti.onetapengine.commons.GameConstant;
+import fr.giusti.onetapengine.entity.distribution.EntitySpawnerManager;
 import fr.giusti.onetapengine.interaction.TouchDispenser;
 import fr.giusti.onetapengine.repository.ParticuleRepo;
 import fr.giusti.onetapengine.repository.SpriteRepo;
@@ -28,6 +31,8 @@ public class GameRepo {
     public static final String LVL_TEST = "lvl test";
     public static final String LVL_1 = "1x1";
     public static final String LVL_2 = "1x2";
+    public static final String LVL_INFINITE = "inifinite_level";
+    private static final String TAG = GameRepo.class.getSimpleName();
 
     private int mScreenWidth;
     private int mScreenHeight;
@@ -41,53 +46,36 @@ public class GameRepo {
 
     public void getBoardByLvlIdAsync(final Context context, final String lvlId, final OnGameEndListener endListener, final IRuleProgressListener ruleProgressListener, final BoardGenerationCallback callback) {
 
-        new AsyncTask<String, Integer, GameBoard>() {
-
-
-            @Override
-            protected GameBoard doInBackground(String... strings) {
-                try {
-                    return getBoardByLvlId(context, lvlId, endListener, ruleProgressListener);
-                } catch (CloneNotSupportedException e) {
-                    callback.onGameBoardGenerationError("",e);//TODO message
-                } catch (IOException e) {
-                    callback.onGameBoardGenerationError("",e);//TODO message
-                }
-                return null;
+        new Thread(new Runnable() {
+            public void run() {
+                getBoardByLvlId(context, callback, lvlId, endListener, ruleProgressListener);
             }
-
-            @Override
-            protected void onPostExecute(GameBoard gameBoard) {
-                callback.onGameBoardGenerated(gameBoard);
-            }
-
-            @Override
-            protected void onProgressUpdate(Integer... values) {
-                callback.onGameBoardGenerationProgress(values[0]);
-            }
-        }.execute();
-
+        }).start();
 
     }
 
-
-    private GameBoard getBoardByLvlId(Context context, String lvlId, OnGameEndListener endListener, IRuleProgressListener ruleProgressListener) throws CloneNotSupportedException, IOException {
-        GameBoard result = null;
+    private void getBoardByLvlId(Context context, final BoardGenerationCallback callback, String lvlId, OnGameEndListener endListener, IRuleProgressListener ruleProgressListener) {
         switch (lvlId) {
             case LVL_TEST:
-                result = generateSampleBoard(context);
+                generateSampleBoard(context, callback);
                 break;
             case LVL_1:
                 //FIXME /not a dynamic detection\
-                result = generateLvl_1x1(context, endListener, ruleProgressListener);
+                generateLvl_1x1(context, callback, endListener, ruleProgressListener);
                 break;
             case LVL_2:
                 //FIXME /not a dynamic detection\
-                result = generateLvl_1x2(context, endListener, ruleProgressListener);
+                generateLvl_1x2(context, callback, endListener, ruleProgressListener);
+                break;
+            case LVL_INFINITE:
+                genereteInfiniteLvl(context, callback, endListener, ruleProgressListener);
                 break;
         }
+    }
 
-        return result;
+    private GameBoard genereteInfiniteLvl(Context context, final BoardGenerationCallback callback, OnGameEndListener endListener, IRuleProgressListener ruleProgressListener) {
+        //TODO
+        return null;
     }
 
 
@@ -97,7 +85,7 @@ public class GameRepo {
      * @return
      * @throws CloneNotSupportedException
      */
-    public GameBoard generateSampleBoard(Context context) throws CloneNotSupportedException, IOException {
+    public void generateSampleBoard(Context context, BoardGenerationCallback callback) {
         ParticuleRepo.initCache(context);
         String backGameBoard = "background";
         Bitmap fullSizedBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.grid512);
@@ -106,35 +94,77 @@ public class GameRepo {
         int boardWidth = fullSizedBackground.getWidth();
 
         SpriteRepo.addPicture(backGameBoard, fullSizedBackground);
-        GameBoard board = new GameBoard(EntityRepo.getSampleMobList(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight));
+        GameBoard board = null;
+
+        callback.onGameBoardGenerationProgress(5);
+
+        try {
+            board = new GameBoard(EntityRepo.getSampleMobList(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight));
+        } catch (CloneNotSupportedException e) {
+            Log.e(TAG, "generateSampleBoard: ", e);
+            callback.onGameBoardGenerationError("", e);
+        } catch (IOException e) {
+            Log.e(TAG, "generateSampleBoard: ", e);
+            callback.onGameBoardGenerationError("", e);
+        }
+
+        callback.onGameBoardGenerationProgress(66);
+
+
         board.resize(mScreenWidth, mScreenHeight);
-        return board;
+
+        if (board != null) callback.onGameBoardGenerated(board);
+        else callback.onGameBoardGenerationError("generateSampleBoard", null);
     }
 
-    public GameBoard generateLvl_1x1(Context context, OnGameEndListener gameListener, IRuleProgressListener ruleProgressListener) throws CloneNotSupportedException, IOException {
-        ParticuleRepo.initCache(context);
+    public void generateLvl_1x1(Context context, BoardGenerationCallback callback, OnGameEndListener gameListener, IRuleProgressListener ruleProgressListener) {
         String backGameBoard = "background1x1";
-        Bitmap fullSizedBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.lvl1x1_back);
 
+        //particules
+        ParticuleRepo.initCache(context);
+
+        //background
+        Bitmap fullSizedBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.lvl1x1_back);
         int boardHeight = fullSizedBackground.getHeight();
         int boardWidth = fullSizedBackground.getWidth();
         SpriteRepo.addPicture(backGameBoard, fullSizedBackground);
 
+        callback.onGameBoardGenerationProgress(5);
+
+        //rules
         RulesManager rulesManager = RuleRepo.getLvl_1x1_Rules(gameListener);
 
+        //touch event
         String touchSpriteID = "touchSprite";
         Bitmap touchSprite = BitmapFactory.decodeResource(context.getResources(), R.drawable.touch1);
         SpriteRepo.addSpriteSheet(touchSprite, touchSpriteID, Constants.PARTICULE_NB_FRAME_ON_ANIMATION, 1);
         TouchDispenser touchDisp = new TouchDispenser(GameConstant.TOUCH_STROKE * 2, touchSpriteID, GameConstant.TOUCH_DAMAGE);
 
-        GameBoard board = new GameBoard(EntitySpawnerRepo.getLvl1_1SpawnerManager(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight), rulesManager, touchDisp);
+        callback.onGameBoardGenerationProgress(15);
+
+        //Entity
+        EntitySpawnerManager lvl1_1SpawnerManager = null;
+        try {
+            lvl1_1SpawnerManager = EntitySpawnerRepo.getLvl1_1SpawnerManager(context);
+        } catch (IOException e) {
+            Log.e(TAG, "generateLvl_1x1: ", e);
+            callback.onGameBoardGenerationError("", e);
+        }
+        callback.onGameBoardGenerationProgress(66);
+
+        //board
+        GameBoard board = new GameBoard(lvl1_1SpawnerManager, backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight), rulesManager, touchDisp);
         board.resize(mScreenWidth, mScreenHeight);
+
+        //board listeners binding
         board.getRulesManager().setRuleListener(Lvl1Constant.ESCAPING_MOB_RULE, ruleProgressListener);
         board.getRulesManager().setRuleListener(Lvl1Constant.LEVEL_END_RULE, ruleProgressListener);
-        return board;
+
+        if (board != null) callback.onGameBoardGenerated(board);
+        else callback.onGameBoardGenerationError("generateLvl_1x1", null);
     }
 
-    private GameBoard generateLvl_1x2(Context context, OnGameEndListener endListener, IRuleProgressListener ruleProgressListener) throws IOException {
+    private void generateLvl_1x2(Context context, BoardGenerationCallback callback, OnGameEndListener endListener, IRuleProgressListener ruleProgressListener) {
         ParticuleRepo.initCache(context);
         String backGameBoard = "background1x2";
         Bitmap fullSizedBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.lvl1x2_back);
@@ -143,6 +173,8 @@ public class GameRepo {
         int boardWidth = fullSizedBackground.getWidth();
         SpriteRepo.addPicture(backGameBoard, fullSizedBackground);
 
+        callback.onGameBoardGenerationProgress(5);
+
         RulesManager rulesManager = RuleRepo.getLvl_1x2_Rules(endListener);
 
         String touchSpriteID = "touchSprite";
@@ -150,11 +182,24 @@ public class GameRepo {
         SpriteRepo.addSpriteSheet(touchSprite, touchSpriteID, Constants.PARTICULE_NB_FRAME_ON_ANIMATION, 1);
         TouchDispenser touchDisp = new TouchDispenser(GameConstant.TOUCH_STROKE * 2, touchSpriteID, GameConstant.TOUCH_DAMAGE);
 
-        GameBoard board = new GameBoard(EntitySpawnerRepo.getLvl1_2SpawnerManager(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight), rulesManager, touchDisp);
+        callback.onGameBoardGenerationProgress(15);
+
+        GameBoard board = null;
+        try {
+            board = new GameBoard(EntitySpawnerRepo.getLvl1_2SpawnerManager(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight), rulesManager, touchDisp);
+        } catch (IOException e) {
+            Log.e(TAG, "generateLvl_1x2: ", e);
+            callback.onGameBoardGenerationError("", e);
+        }
+
+        callback.onGameBoardGenerationProgress(66);
+
         board.resize(mScreenWidth, mScreenHeight);
         board.getRulesManager().setRuleListener(Lvl2Constant.ESCAPING_MOB_RULE, ruleProgressListener);
         board.getRulesManager().setRuleListener(Lvl2Constant.TIMER_RULE, ruleProgressListener);
-        return board;
+
+        if (board != null) callback.onGameBoardGenerated(board);
+        else callback.onGameBoardGenerationError("generateLvl_1x2", null);
     }
 
     private GameBoard generateLvl_1x3(Context context, OnGameEndListener endListener, IRuleProgressListener ruleProgressListener) throws IOException {

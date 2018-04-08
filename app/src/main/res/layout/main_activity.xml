@@ -10,30 +10,37 @@
         android:gravity="center"
         android:orientation="vertical">
 
-    <Button
-        android:id="@+id/ma_game_screen_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="open Game screen" />
+        <Button
+            android:id="@+id/ma_infinit_lvl_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClickInfiniteLevel"
+            android:text="Flush all caches" />
 
-    <Button
-        android:id="@+id/ma_test_screen_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="open mob test screen" />
+        <Button
+            android:id="@+id/ma_game_screen_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="open Game screen" />
 
-    <Button
-        android:id="@+id/ma_create_mob_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="open mob creation screen" />
+        <Button
+            android:id="@+id/ma_test_screen_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="open mob test screen" />
+
+        <Button
+            android:id="@+id/ma_create_mob_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="open mob creation screen" />
 
 
-    <Button
-        android:id="@+id/ma_flush_all_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Flush all caches" />
+        <Button
+            android:id="@+id/ma_flush_all_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Flush all caches" />
 
     </LinearLayout>
 
