@@ -52,7 +52,7 @@ public class PercentLoadingDialog extends DialogFragment {
     public void setProgress(int progressPercent) {
         if (mProgressBar != null) {
             ObjectAnimator animation = ObjectAnimator.ofInt(mProgressBar, "progress", progressPercent);
-            animation.setDuration(200);
+            animation.setDuration(400);
             animation.setInterpolator(new LinearInterpolator());
             animation.start();
         }

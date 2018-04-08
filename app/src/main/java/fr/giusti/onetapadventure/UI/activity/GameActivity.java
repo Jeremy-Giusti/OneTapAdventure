@@ -61,6 +61,10 @@ public class GameActivity extends Activity implements OnGameEndListener, IRulePr
         mSelectedLvlName = getIntent().getStringExtra(GameConstant.LEVEL_NAME);
         initViews();
         initEvents();
+
+        if (mLoadingDialog == null) {
+            mLoadingDialog = PercentLoadingDialog.newInstance(getString(R.string.generating_lvl));
+        }
     }
 
     private void initViews() {
@@ -134,7 +138,9 @@ public class GameActivity extends Activity implements OnGameEndListener, IRulePr
      * launch new game on the surface
      */
     private void startNewGameLoading() {
-
+        if (!mLoadingDialog.isAdded()) {
+            mLoadingDialog.show(getFragmentManager(), LOADING_DIALOG_TAG);
+        }
         mRepo.getBoardByLvlIdAsync(this, mSelectedLvlName, this, this, this);
     }
 
@@ -205,13 +211,11 @@ public class GameActivity extends Activity implements OnGameEndListener, IRulePr
             @Override
             public void run() {
                 Log.v(TAG, " board generation progress: " + progress);
-                if (mLoadingDialog == null) {
-                    mLoadingDialog = PercentLoadingDialog.newInstance(getString(R.string.generating_lvl));
+
+                if (mLoadingDialog != null && mLoadingDialog.isAdded()) {
+                    mLoadingDialog.setProgress(progress);
                 }
-                if (!mLoadingDialog.isAdded()) {
-                    mLoadingDialog.show(getFragmentManager(), LOADING_DIALOG_TAG);
-                }
-                mLoadingDialog.setProgress(progress);
+
             }
         });
 

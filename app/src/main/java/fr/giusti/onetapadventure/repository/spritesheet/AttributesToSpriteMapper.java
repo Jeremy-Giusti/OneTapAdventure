@@ -2,7 +2,6 @@ package fr.giusti.onetapadventure.repository.spritesheet;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.sqli.spritesheetgenerator.model.SpriteSheetTemplate;
 
@@ -87,18 +86,18 @@ public class AttributesToSpriteMapper {
             GameMob.eMobState mobState = mobAnimatedState.get(y);
 
             if (mobState != GameMob.eMobState.MOVING_UP) {
-                Log.v(TAG, "Sprite mapping 1" + mob.getBitmapId());
+//                Log.v(TAG, "Sprite mapping 1" + mob.getBitmapId());
                 animationLayers[0] = getMovementSpritesAssetPath(context, mobState, mobMovementhType);
-                Log.v(TAG, "Sprite mapping 2" + mob.getBitmapId());
+//                Log.v(TAG, "Sprite mapping 2" + mob.getBitmapId());
                 animationLayers[1] = getAlignementSpritesAsRessource(context, mobState, mob.getAlignement());
-                Log.v(TAG, "Sprite mapping 3" + mob.getBitmapId());
+//                Log.v(TAG, "Sprite mapping 3" + mob.getBitmapId());
                 animationLayers[2] = getSpecialSpritesAsRessource(context, mobState, mob.getmSpecialMove1().getId());
-                Log.v(TAG, "Sprite mapping 4" + mob.getBitmapId());
+//                  Log.v(TAG, "Sprite mapping 4" + mob.getBitmapId());
                 animationLayers[3] = getTouchSpritesAsRessource(context, mobState, mob.getmTouchedMove().getId());
-                // removed health sprite indication to put it back set LAYER_NUMBER++
-                Log.v(TAG, "Sprite mapping 5" + mob.getBitmapId());
+//                 removed health sprite indication to put it back set LAYER_NUMBER++
+//                  Log.v(TAG, "Sprite mapping 5" + mob.getBitmapId());
                 animationLayers[4] = getHealthSpritesAsRessource(context, mobState, mob.getHealth());
-                Log.v(TAG, "Sprite mapping end" + mob.getBitmapId());
+//                   Log.v(TAG, "Sprite mapping end" + mob.getBitmapId());
             } else {
                 animationLayers[0] = getAlignementSpritesAsRessource(context, mobState, mob.getAlignement());
                 animationLayers[1] = getSpecialSpritesAsRessource(context, mobState, mob.getmSpecialMove1().getId());

@@ -96,7 +96,7 @@ public class GameRepo {
         SpriteRepo.addPicture(backGameBoard, fullSizedBackground);
         GameBoard board = null;
 
-        callback.onGameBoardGenerationProgress(5);
+        callback.onGameBoardGenerationProgress(66);
 
         try {
             board = new GameBoard(EntityRepo.getSampleMobList(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight));
@@ -108,7 +108,7 @@ public class GameRepo {
             callback.onGameBoardGenerationError("", e);
         }
 
-        callback.onGameBoardGenerationProgress(66);
+        callback.onGameBoardGenerationProgress(90);
 
 
         board.resize(mScreenWidth, mScreenHeight);
@@ -129,7 +129,7 @@ public class GameRepo {
         int boardWidth = fullSizedBackground.getWidth();
         SpriteRepo.addPicture(backGameBoard, fullSizedBackground);
 
-        callback.onGameBoardGenerationProgress(5);
+        callback.onGameBoardGenerationProgress(15);
 
         //rules
         RulesManager rulesManager = RuleRepo.getLvl_1x1_Rules(gameListener);
@@ -140,7 +140,7 @@ public class GameRepo {
         SpriteRepo.addSpriteSheet(touchSprite, touchSpriteID, Constants.PARTICULE_NB_FRAME_ON_ANIMATION, 1);
         TouchDispenser touchDisp = new TouchDispenser(GameConstant.TOUCH_STROKE * 2, touchSpriteID, GameConstant.TOUCH_DAMAGE);
 
-        callback.onGameBoardGenerationProgress(15);
+        callback.onGameBoardGenerationProgress(66);
 
         //Entity
         EntitySpawnerManager lvl1_1SpawnerManager = null;
@@ -150,7 +150,7 @@ public class GameRepo {
             Log.e(TAG, "generateLvl_1x1: ", e);
             callback.onGameBoardGenerationError("", e);
         }
-        callback.onGameBoardGenerationProgress(66);
+        callback.onGameBoardGenerationProgress(90);
 
         //board
         GameBoard board = new GameBoard(lvl1_1SpawnerManager, backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight), rulesManager, touchDisp);
@@ -173,7 +173,7 @@ public class GameRepo {
         int boardWidth = fullSizedBackground.getWidth();
         SpriteRepo.addPicture(backGameBoard, fullSizedBackground);
 
-        callback.onGameBoardGenerationProgress(5);
+        callback.onGameBoardGenerationProgress(15);
 
         RulesManager rulesManager = RuleRepo.getLvl_1x2_Rules(endListener);
 
@@ -182,7 +182,7 @@ public class GameRepo {
         SpriteRepo.addSpriteSheet(touchSprite, touchSpriteID, Constants.PARTICULE_NB_FRAME_ON_ANIMATION, 1);
         TouchDispenser touchDisp = new TouchDispenser(GameConstant.TOUCH_STROKE * 2, touchSpriteID, GameConstant.TOUCH_DAMAGE);
 
-        callback.onGameBoardGenerationProgress(15);
+        callback.onGameBoardGenerationProgress(66);
 
         GameBoard board = null;
         try {
@@ -192,7 +192,7 @@ public class GameRepo {
             callback.onGameBoardGenerationError("", e);
         }
 
-        callback.onGameBoardGenerationProgress(66);
+        callback.onGameBoardGenerationProgress(90);
 
         board.resize(mScreenWidth, mScreenHeight);
         board.getRulesManager().setRuleListener(Lvl2Constant.ESCAPING_MOB_RULE, ruleProgressListener);

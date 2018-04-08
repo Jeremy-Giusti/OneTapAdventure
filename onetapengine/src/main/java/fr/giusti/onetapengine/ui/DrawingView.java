@@ -69,7 +69,7 @@ public class DrawingView extends SurfaceView implements SurfaceHolder.Callback, 
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        mDrawThread.setRunning(false);
+        if (mDrawThread != null) mDrawThread.setRunning(false);
     }
 
     // --------------------------- start/stop events ---------------------------------//
