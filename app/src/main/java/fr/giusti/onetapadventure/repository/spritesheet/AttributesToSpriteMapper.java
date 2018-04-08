@@ -2,6 +2,7 @@ package fr.giusti.onetapadventure.repository.spritesheet;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.sqli.spritesheetgenerator.model.SpriteSheetTemplate;
 
@@ -15,11 +16,13 @@ import fr.giusti.onetapengine.commons.Constants;
 import fr.giusti.onetapengine.entity.GameMob;
 
 /**
- * Created by jgiusti on 22/03/2017.
+ * Created by jgiusti on 22/03/2017.<br>
+ * used to make correspondences between mob features and sprite parts
  */
 
-public class AttributsToSpriteMapper {
+public class AttributesToSpriteMapper {
 
+    private static final String TAG = AttributesToSpriteMapper.class.getSimpleName();
 
     private final static int LAYER_NUMBER = 5;
     private final static String SPRITE_ASSET_FILE_SUFFIX = ".png";
@@ -30,7 +33,6 @@ public class AttributsToSpriteMapper {
     private final static String SPRITE_BODY_OVERLAY_ASSET_PATH = "bodyoverlay1";
     private final static String SPRITE_BODY_OVERLAY_2_ASSET_PATH = "bodyoverlay2";
     private final static String SPRITE_BODY_OVERLAY_3_ASSET_PATH = "bodyoverlay3";
-
 
     private HashMap<Integer, String> healthMap = getHealthMap();
 
@@ -53,28 +55,29 @@ public class AttributsToSpriteMapper {
     private final static String BODY3_health10 = "health10/";
 
 
-    private AttributsToSpriteMapper() {
+    private AttributesToSpriteMapper() {
 
     }
 
-    private static AttributsToSpriteMapper instance;
+    private static AttributesToSpriteMapper instance;
 
-    public static AttributsToSpriteMapper getInstance() {
+    public static AttributesToSpriteMapper getInstance() {
         if (instance == null) {
-            instance = new AttributsToSpriteMapper();
+            instance = new AttributesToSpriteMapper();
         }
         return instance;
     }
 
     /**
+     * generate three-dimensional array of assets based on mob features
+     *
      * @param context
-     * @param mob
-     * @param mobMovementhType
-     * @return
+     * @param mob              mob used to determine which sprite will be used
+     * @param mobMovementhType since the movement type is not held by the mob we need to pass it
+     * @return not yet loaded SpriteSheetTemplate (only contain sprite assets
      * @throws IOException
      */
     public SpriteSheetTemplate getMobMap(Context context, GameMob mob, String mobMovementhType) throws IOException {
-
 
         ArrayList<GameMob.eMobState> mobAnimatedState = GameMob.eMobState.getAnimatedState();
         SpriteSheetTemplate spriteSheetTemplate = new SpriteSheetTemplate(Constants.NB_FRAME_ON_ANIMATION, mobAnimatedState.size(), LAYER_NUMBER);
@@ -82,12 +85,20 @@ public class AttributsToSpriteMapper {
         String[][] animationLayers = new String[LAYER_NUMBER][];//animation list (x) ordered by layer (z) so string[z][x]
         for (int y = 0; y < mobAnimatedState.size(); y++) {
             GameMob.eMobState mobState = mobAnimatedState.get(y);
+
             if (mobState != GameMob.eMobState.MOVING_UP) {
+                Log.v(TAG, "Sprite mapping 1" + mob.getBitmapId());
                 animationLayers[0] = getMovementSpritesAssetPath(context, mobState, mobMovementhType);
+                Log.v(TAG, "Sprite mapping 2" + mob.getBitmapId());
                 animationLayers[1] = getAlignementSpritesAsRessource(context, mobState, mob.getAlignement());
+                Log.v(TAG, "Sprite mapping 3" + mob.getBitmapId());
                 animationLayers[2] = getSpecialSpritesAsRessource(context, mobState, mob.getmSpecialMove1().getId());
+                Log.v(TAG, "Sprite mapping 4" + mob.getBitmapId());
                 animationLayers[3] = getTouchSpritesAsRessource(context, mobState, mob.getmTouchedMove().getId());
+                // removed health sprite indication to put it back set LAYER_NUMBER++
+                Log.v(TAG, "Sprite mapping 5" + mob.getBitmapId());
                 animationLayers[4] = getHealthSpritesAsRessource(context, mobState, mob.getHealth());
+                Log.v(TAG, "Sprite mapping end" + mob.getBitmapId());
             } else {
                 animationLayers[0] = getAlignementSpritesAsRessource(context, mobState, mob.getAlignement());
                 animationLayers[1] = getSpecialSpritesAsRessource(context, mobState, mob.getmSpecialMove1().getId());
@@ -139,19 +150,41 @@ public class AttributsToSpriteMapper {
     }
 
 
+    /**
+     * dumbed down version of health sprite mapping (don't change depending of health qty)<br>
+     * (see commented code for full feature implementation)
+     *
+     * @param context
+     * @param state
+     * @param health
+     * @return
+     * @throws IOException
+     */
     public String[] getHealthSpritesAsRessource(Context context, GameMob.eMobState state, Integer health) throws IOException {
 
         String assetCategoryFolder = SPRITE_BASE_ASSET_PATH + SPRITE_BODY_OVERLAY_3_ASSET_PATH;
-        if (healthMap.containsKey(health)) {
-            return getAssetsStrings(context, state, healthMap.get(health), assetCategoryFolder);
+//        if (healthMap.containsKey(health)) {
+//            return getAssetsStrings(context, state, healthMap.get(health), assetCategoryFolder);
+//        } else {
+//            for (Integer category : healthMap.keySet()) {
+//                if (health < category) {
+//                    return getAssetsStrings(context, state, healthMap.get(category), assetCategoryFolder);
+//                }
+//            }
+//        }
+// return getAssetsStrings(context, state, healthMap.get(HEALTH_MAP_DEFAULT_VALUE), assetCategoryFolder);
+        if (state.index != 5) {
+            String selectedAsset = assetCategoryFolder + "/" + state.index + "0.png";
+            return new String[]{
+                    selectedAsset, selectedAsset, selectedAsset
+            };
         } else {
-            for (Integer category : healthMap.keySet()) {
-                if (health < category) {
-                    return getAssetsStrings(context, state, healthMap.get(category), assetCategoryFolder);
-                }
-            }
+            return new String[]{
+                    assetCategoryFolder + "/00.png", assetCategoryFolder + "/51.png", assetCategoryFolder + "/52.png"
+            };
         }
-        return getAssetsStrings(context, state, healthMap.get(HEALTH_MAP_DEFAULT_VALUE), assetCategoryFolder);
+
+
     }
 
     /**

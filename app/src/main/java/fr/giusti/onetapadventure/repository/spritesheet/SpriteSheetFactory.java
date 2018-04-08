@@ -24,18 +24,23 @@ public class SpriteSheetFactory {
     private static final String TAG = SpriteSheetFactory.class.getSimpleName();
 
     /**
+     * generate a spritesheet using mob features
+     *
      * @param context
-     * @param mob
-     * @param mobMovementType
-     * @return
+     * @param mob             desired mob
+     * @param mobMovementType since the movement type is not held by the mob we need to pass it
+     * @return the desired spritsheet
      * @throws IOException
      */
     public static Bitmap getMobSpriteSheet(Context context, GameMob mob, String mobMovementType) throws IOException {
-        Log.v(TAG, "Starting Sprite generation for " + mob.getBitmapId());
-        SpriteSheetTemplate spriteSheetTemplate = AttributsToSpriteMapper.getInstance().getMobMap(context, mob, mobMovementType);
+
+        Log.v(TAG, "Sprite mapping for " + mob.getBitmapId());
+        SpriteSheetTemplate spriteSheetTemplate = AttributesToSpriteMapper.getInstance().getMobMap(context, mob, mobMovementType);
+        Log.v(TAG, "Sprite loading for " + mob.getBitmapId());
         spriteSheetTemplate.loadBitmaps(context);
+        Log.v(TAG, "SpriteSheet generation for " + mob.getBitmapId());
         Bitmap spriteSheetResult = SpriteGenerator.generateSpriteSheet(spriteSheetTemplate);
-        Log.v(TAG, "Ended Sprite generation for " + mob.getBitmapId());
+        Log.v(TAG, "SpriteSheet ready for " + mob.getBitmapId());
         return spriteSheetResult;
     }
 
