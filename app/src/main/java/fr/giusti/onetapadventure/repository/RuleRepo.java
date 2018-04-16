@@ -2,6 +2,7 @@ package fr.giusti.onetapadventure.repository;
 
 import java.util.ArrayList;
 
+import fr.giusti.onetapadventure.repository.levelsData.infinitelvl.InfiniteLvlConstant;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl2Constant;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl3Constant;
@@ -19,6 +20,18 @@ import fr.giusti.onetapengine.rules.eRuleResult;
  * Create specific ruleManagers with their set of rules
  */
 public class RuleRepo {
+
+
+    public static RulesManager getInfiniteLvlRules(OnGameEndListener endListener) {
+        RuleFactory ruleFactory = new RuleFactory();
+        Rule masterRule = ruleFactory.getNumericaleRule(InfiniteLvlConstant.MASTER_RULE, eConditions.MOB_COUNT, eRuleResult.END, InfiniteLvlConstant.MASTER_RULE_VALUE);
+
+
+        String gameId = GameConstant.getLevelId(0, 0);
+        OnRuleAccomplishedListener accomplishedBehavior = getDefaultBehavior(endListener, gameId);
+        return new RulesManager(masterRule, accomplishedBehavior);
+    }
+
 
     public static RulesManager getLvl_1x1_Rules(final OnGameEndListener gameEndListener) {
 

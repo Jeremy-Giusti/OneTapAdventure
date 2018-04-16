@@ -21,6 +21,7 @@ import fr.giusti.onetapadventure.repository.DB.persister.MobPersister;
 import fr.giusti.onetapadventure.repository.DB.persister.PathPersister;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl2Constant;
+import fr.giusti.onetapadventure.repository.levelsData.infinitelvl.InfiniteLvlConstant;
 import fr.giusti.onetapadventure.repository.spritesheet.SpriteSheetFactory;
 import fr.giusti.onetapengine.commons.Constants;
 import fr.giusti.onetapengine.commons.GameConstant;
@@ -35,6 +36,8 @@ import fr.giusti.onetapengine.repository.PathRepo;
 import fr.giusti.onetapengine.repository.SpecialMoveRepo;
 import fr.giusti.onetapengine.repository.SpriteRepo;
 import fr.giusti.onetapengine.repository.TouchedMoveRepo;
+
+import static fr.giusti.onetapadventure.repository.levelsData.infinitelvl.InfiniteLvlConstant.POOL1_MOB_SIZE;
 
 public class EntityRepo {
 
@@ -104,7 +107,7 @@ public class EntityRepo {
                 setTouchedMove(touchedMoveRepo.getMoveById(TouchedMoveRepo.TELEPORT))
                 .build();
 
-        if(!SpriteRepo.hasSprite(bitmapId4)) {
+        if (!SpriteRepo.hasSprite(bitmapId4)) {
             Bitmap mobSprite = new SpriteSheetFactory().getMobSpriteSheet(mContext, orangeMob, "circle");
             SpriteRepo.addSpriteSheet(mobSprite, bitmapId4, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
         }
@@ -377,8 +380,62 @@ public class EntityRepo {
         return null;
     }
 
+    public static ArrayList<Entity> getInfiniteLvlInitList(Context context) {
+        //TODO
+        return new ArrayList<>();
+    }
 
-    public static GameMob getMobFromSeed(Context context, int difficulty, int seed, PointF posDest, String id, int x, int y, int width, int height) throws IOException {
+    public static ArrayList<Entity> getInfiniteLvlBackupList(Context context) {
+        //TODO
+        return new ArrayList<>();
+    }
+
+    public static ArrayList<Entity> getInfiniteLvlPool1(Context context) throws IOException {
+        ArrayList<Entity> pool1 = new ArrayList<>(50);
+
+        String mob1sptsheetId = "tier1Mob";
+        Random r = new Random();
+
+        for (int i = 0; i < 50; i++) {
+            String mobId = "pool1_mob" + i;
+
+            float startX = r.nextInt(InfiniteLvlConstant.BOARD_WITDH - 1) + 1;
+            float startY = r.nextInt(InfiniteLvlConstant.BOARD_HEIGHT - 1) + 1;
+
+            //always full
+            int fullValue = r.nextBoolean() ? 5 : -5;
+            //range from -5 to 5
+            int randomValue = r.nextInt(11) - 5;
+            //full value is either x or y
+            PointF step = r.nextBoolean() ? new PointF(fullValue, randomValue) : new PointF(randomValue, fullValue);
+            PointF[] path = new PointF[]{step};
+
+            GameMob result = new GameMob.MobBuilder(mobId, mob1sptsheetId, startX, startY).setSize(POOL1_MOB_SIZE).setAlignement(1).setMovePattern(path).build();
+            pool1.add(result);
+
+            if (!SpriteRepo.hasSprite(mob1sptsheetId)) {
+                Bitmap mobSprite = SpriteSheetFactory.getMobSpriteSheet(context, result, "line");
+                SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, mob1sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+            }
+        }
+        return pool1;
+    }
+
+
+    /**
+     * @param context    explicit
+     * @param difficulty nb of pv, if >1 smoke on touch or curved path
+     * @param seed       seed % 4 > 2 smoke touch else seed % 2 == 1 = curve orientation
+     * @param posDest    where the mob is aiming
+     * @param id         mob id should be unique
+     * @param x          initial position
+     * @param y          initial position
+     * @param width      size
+     * @param height     size
+     * @return generated mob
+     * @throws IOException
+     */
+    private static GameMob getMobFromSeed(Context context, int difficulty, int seed, PointF posDest, String id, int x, int y, int width, int height) throws IOException {
         SpecialMoveRepo moveRepo = new SpecialMoveRepo();
         TouchedMoveRepo touchedMoveRepo = new TouchedMoveRepo();
         TouchedMove touchedMove = touchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE);
@@ -414,12 +471,13 @@ public class EntityRepo {
                 .setDefaultHealth(difficulty * GameConstant.TOUCH_DAMAGE)
                 .build();
 
-        if(!SpriteRepo.hasSprite(spriteId)) {
+        if (!SpriteRepo.hasSprite(spriteId)) {
             Bitmap mobSprite = new SpriteSheetFactory().getMobSpriteSheet(context, mobResult, "line");
             SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, spriteId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
         }
         return mobResult;
     }
+
 
     public static GameMob generateSimpleRandomizedMob(String id, Context context, RectF startPos, RectF destPos, int travelTimeOnTick) throws IOException {
 
@@ -435,7 +493,7 @@ public class EntityRepo {
         String mob1sptsheetId = "tier1Mob";
 
         GameMob result = new GameMob.MobBuilder(id, mob1sptsheetId, startX, startY).setAlignement(1).setMovePattern(path).build();
-        if(!SpriteRepo.hasSprite(mob1sptsheetId)) {
+        if (!SpriteRepo.hasSprite(mob1sptsheetId)) {
             Bitmap mobSprite = SpriteSheetFactory.getMobSpriteSheet(context, result, "line");
             SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, mob1sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
         }
@@ -456,7 +514,7 @@ public class EntityRepo {
                 .setDefaultHealth(health)
                 .setAlignement(6)
                 .build();
-        if(!SpriteRepo.hasSprite(lastMobsptsheetId)) {
+        if (!SpriteRepo.hasSprite(lastMobsptsheetId)) {
             Bitmap mobSprite = new SpriteSheetFactory().getMobSpriteSheet(context, result, "line");
             SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, lastMobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
         }
@@ -475,7 +533,7 @@ public class EntityRepo {
                 .setHealth(health)
                 .setAlignement(4)
                 .build();
-        if(!SpriteRepo.hasSprite(mobsptsheetId)) {
+        if (!SpriteRepo.hasSprite(mobsptsheetId)) {
             Bitmap mobSprite = new SpriteSheetFactory().getMobSpriteSheet(context, result, "line");
             SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, mobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
         }
@@ -500,7 +558,7 @@ public class EntityRepo {
                 .setAlignement(5)
                 .setDefaultHealth(health).build();
 
-        if(!SpriteRepo.hasSprite(mobsptsheetId)) {
+        if (!SpriteRepo.hasSprite(mobsptsheetId)) {
             Bitmap mobSprite = SpriteSheetFactory.getMobSpriteSheet(context, result, "line");
             SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, mobsptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
         }
@@ -517,6 +575,5 @@ public class EntityRepo {
         return new GameMob.MobBuilder(id, mobsptsheetId, startPoint.x, startPoint.y).setMovePattern(path).setSpecialMove(SpecialMoveRepo.getMoveById(SpecialMoveRepo.GHOST_MOVE)).setDefaultHealth(health).build();
 
     }
-
 
 }

@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onClickInfiniteLevel"
-            android:text="Flush all caches" />
+            android:text="Infinite lvl" />
 
         <Button
             android:id="@+id/ma_game_screen_button"

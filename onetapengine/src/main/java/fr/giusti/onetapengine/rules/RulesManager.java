@@ -119,7 +119,7 @@ public class RulesManager implements OnBoardEventListener {
     }
 
     @Override
-    public void onMobCountChange(int count) {
+    public void onMobCountChange(long count) {
         //find if a rule is linked to the condition and test it
         ArrayList<Rule> conditionRule = indexedRuleList.get(eConditions.MOB_COUNT);
         Rule rule;
@@ -201,7 +201,7 @@ public class RulesManager implements OnBoardEventListener {
     }
 
     @Override
-    public void onScoreChange(int add) {
+    public void onScoreChange(long add) {
         ArrayList<Rule> conditionRule = indexedRuleList.get(eConditions.SCORE);
         Rule rule;
         eRuleResult result;

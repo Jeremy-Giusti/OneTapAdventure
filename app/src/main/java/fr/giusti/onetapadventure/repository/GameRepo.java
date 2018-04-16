@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.util.Log;
 
 import java.io.IOException;
@@ -16,6 +14,7 @@ import fr.giusti.onetapadventure.repository.entities.EntitySpawnerRepo;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl2Constant;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl3Constant;
+import fr.giusti.onetapadventure.repository.levelsData.infinitelvl.InfiniteLvlConstant;
 import fr.giusti.onetapengine.GameBoard;
 import fr.giusti.onetapengine.callback.OnGameEndListener;
 import fr.giusti.onetapengine.commons.Constants;
@@ -73,9 +72,56 @@ public class GameRepo {
         }
     }
 
-    private GameBoard genereteInfiniteLvl(Context context, final BoardGenerationCallback callback, OnGameEndListener endListener, IRuleProgressListener ruleProgressListener) {
-        //TODO
-        return null;
+    /**
+     * end rule: mobcount = 25
+     *
+     * @param context
+     * @param callback
+     * @param endListener
+     * @param ruleProgressListener
+     * @return
+     */
+    private void genereteInfiniteLvl(Context context, final BoardGenerationCallback callback, OnGameEndListener endListener, IRuleProgressListener ruleProgressListener) {
+        String backGameBoard = "backgroundInfiniteLvl";
+
+        //particules
+        ParticuleRepo.initCache(context);
+
+        //TODO infinite background
+        Bitmap fullSizedBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.lvl1x2_back);
+        SpriteRepo.addPicture(backGameBoard, fullSizedBackground);
+
+        callback.onGameBoardGenerationProgress(15);
+
+        //rules
+        RulesManager rulesManager = RuleRepo.getInfiniteLvlRules(endListener);
+
+        //touch event
+        String touchSpriteID = "touchSprite";
+        Bitmap touchSprite = BitmapFactory.decodeResource(context.getResources(), R.drawable.touch1);
+        SpriteRepo.addSpriteSheet(touchSprite, touchSpriteID, Constants.PARTICULE_NB_FRAME_ON_ANIMATION, 1);
+        TouchDispenser touchDisp = new TouchDispenser(GameConstant.TOUCH_STROKE * 2, touchSpriteID, GameConstant.TOUCH_DAMAGE);
+
+        callback.onGameBoardGenerationProgress(66);
+
+        EntitySpawnerManager infiniteLvlSpawnerManager = null;
+        try {
+            infiniteLvlSpawnerManager = EntitySpawnerRepo.getInfiniteSpawnerManager(context);
+        } catch (IOException e) {
+            Log.e(TAG, "generateInfiniteLvl: ", e);
+            callback.onGameBoardGenerationError("", e);
+        }
+        callback.onGameBoardGenerationProgress(90);
+
+        //board
+        GameBoard board = new GameBoard(infiniteLvlSpawnerManager, backGameBoard, InfiniteLvlConstant.BOARD_WITDH, InfiniteLvlConstant.BOARD_HEIGHT, new Rect(0, 0, InfiniteLvlConstant.BOARD_WITDH, InfiniteLvlConstant.BOARD_HEIGHT), rulesManager, touchDisp);
+        board.resize(mScreenWidth, mScreenHeight);
+
+        //board listeners binding
+        board.getRulesManager().setRuleListener(InfiniteLvlConstant.MASTER_RULE, ruleProgressListener);
+
+        if (board != null) callback.onGameBoardGenerated(board);
+        else callback.onGameBoardGenerationError("generateInfiniteLvl", null);
     }
 
 

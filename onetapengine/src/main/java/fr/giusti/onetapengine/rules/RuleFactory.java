@@ -33,6 +33,21 @@ public class RuleFactory {
         };
     }
 
+    public Rule<Integer> getNumericaleIntRule(String ruleId, eConditions condition, eRuleResult result, int goal) {
+        return new Rule<Integer>(Integer.class, ruleId, result, condition, goal, 0) {
+            @Override
+            protected eRuleResult processRuleProgress(Integer progress) {
+                mProgress = progress;
+                return (mProgress > mGoal) ? ruleResult : eRuleResult.NULL;
+            }
+
+            @Override
+            protected String getDisplayableProgress() {
+                return "" + mProgress + "/" + mGoal;
+            }
+        };
+    }
+
     /**
      *
      * rule that addition each progress until it equal or exceed the goal

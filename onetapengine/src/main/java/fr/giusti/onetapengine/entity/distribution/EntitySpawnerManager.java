@@ -82,7 +82,7 @@ public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListen
     }
 
     @Override
-    public void onMobCountChange(int count) {
+    public void onMobCountChange(long count) {
         //find if a rule is linked to the condition and test it
         ArrayList<EntitySpawner> spawnerList = entitySpawnerList.get(eConditions.MOB_COUNT);
         EntitySpawner spawner;
@@ -121,7 +121,7 @@ public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListen
     }
 
     @Override
-    public void onScoreChange(int add) {
+    public void onScoreChange(long add) {
         ArrayList<EntitySpawner> spawnerList = entitySpawnerList.get(eConditions.SCORE);
         EntitySpawner spawner;
         for (int i = 0; i < spawnerList.size(); i++) {

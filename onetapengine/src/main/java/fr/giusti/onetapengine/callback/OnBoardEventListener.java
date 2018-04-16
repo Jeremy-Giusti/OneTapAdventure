@@ -9,9 +9,9 @@ public interface OnBoardEventListener {
 
     void onMobEvent(eConditions reason, GameMob mob);
 
-    void onMobCountChange(int count);
+    void onMobCountChange(long count);
 
-    void onScoreChange(int score);
+    void onScoreChange(long score);
 
     void onTimeProgress(long progress);
 }
