@@ -21,6 +21,11 @@ public class RuleFactory {
     public Rule<Long> getNumericaleRule(String ruleId, eConditions condition, eRuleResult result, long goal) {
         return new Rule<Long>(Long.class, ruleId, result, condition, goal, 0l) {
             @Override
+            protected double getCompletionValue() {
+                return mProgress/ (double)mGoal;
+            }
+
+            @Override
             protected eRuleResult processRuleProgress(Long progress) {
                 mProgress = progress;
                 return (mProgress > mGoal) ? ruleResult : eRuleResult.NULL;
@@ -28,13 +33,20 @@ public class RuleFactory {
 
             @Override
             protected String getDisplayableProgress() {
-                return "" + mProgress + "/" + mGoal;
+
+                return (mGoal==Long.MAX_VALUE) ? mProgress.toString() : "" + mProgress + "/" + mGoal;
             }
         };
     }
 
     public Rule<Integer> getNumericaleIntRule(String ruleId, eConditions condition, eRuleResult result, int goal) {
         return new Rule<Integer>(Integer.class, ruleId, result, condition, goal, 0) {
+
+            @Override
+            protected double getCompletionValue() {
+                return mProgress / (double)mGoal;
+            }
+
             @Override
             protected eRuleResult processRuleProgress(Integer progress) {
                 mProgress = progress;
@@ -60,6 +72,12 @@ public class RuleFactory {
      */
     public Rule<Integer> getIncrementaleRule(String ruleId, eConditions condition, eRuleResult result, Integer goal) {
         return new Rule<Integer>(Integer.class, ruleId, result, condition, goal, 0) {
+
+            @Override
+            protected double getCompletionValue() {
+                return mProgress/(double) mGoal;
+            }
+
             @Override
             protected eRuleResult processRuleProgress(Integer progress) {
                 mProgress += progress;
@@ -84,6 +102,12 @@ public class RuleFactory {
      */
     public Rule<String> getStringRule(String ruleId, eConditions condition, eRuleResult result, String goal) {
         return new Rule<String>(String.class, ruleId, result, condition, goal, "") {
+
+            @Override
+            protected double getCompletionValue() {
+                return 0;
+            }
+
             @Override
             protected eRuleResult processRuleProgress(String progress) {
                 mProgress = progress;

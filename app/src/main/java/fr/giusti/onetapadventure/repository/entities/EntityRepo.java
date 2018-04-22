@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import fr.giusti.onetapadventure.R;
+import fr.giusti.onetapadventure.commons.GameUtils;
 import fr.giusti.onetapadventure.repository.DB.ModelConverter;
 import fr.giusti.onetapadventure.repository.DB.model.MobDB;
 import fr.giusti.onetapadventure.repository.DB.model.PathDB;
@@ -37,7 +38,7 @@ import fr.giusti.onetapengine.repository.SpecialMoveRepo;
 import fr.giusti.onetapengine.repository.SpriteRepo;
 import fr.giusti.onetapengine.repository.TouchedMoveRepo;
 
-import static fr.giusti.onetapadventure.repository.levelsData.infinitelvl.InfiniteLvlConstant.POOL1_MOB_SIZE;
+import static fr.giusti.onetapadventure.repository.levelsData.infinitelvl.InfiniteLvlConstant.DEFAULT_MOB_SIZE;
 
 public class EntityRepo {
 
@@ -402,15 +403,15 @@ public class EntityRepo {
             float startX = r.nextInt(InfiniteLvlConstant.BOARD_WITDH - 1) + 1;
             float startY = r.nextInt(InfiniteLvlConstant.BOARD_HEIGHT - 1) + 1;
 
-            //always full
-            int fullValue = r.nextBoolean() ? 5 : -5;
-            //range from -5 to 5
-            int randomValue = r.nextInt(11) - 5;
-            //full value is either x or y
-            PointF step = r.nextBoolean() ? new PointF(fullValue, randomValue) : new PointF(randomValue, fullValue);
-            PointF[] path = new PointF[]{step};
+            int mobSpeed = GameUtils.getSpeedInPxPerTic(InfiniteLvlConstant.POOL1_MOB_SPEED);
+            PointF[] path = PathRepo.getRandomDirectionStraightPath(mobSpeed);
 
-            GameMob result = new GameMob.MobBuilder(mobId, mob1sptsheetId, startX, startY).setSize(POOL1_MOB_SIZE).setAlignement(1).setMovePattern(path).build();
+            GameMob result = new GameMob.MobBuilder(mobId, mob1sptsheetId, startX, startY)
+                    .setSize(DEFAULT_MOB_SIZE)
+                    .setAlignement(1)
+                    .setMovePattern(path)
+                    .setScore(InfiniteLvlConstant.POOL1_MOB_SCORE)
+                    .build();
             pool1.add(result);
 
             if (!SpriteRepo.hasSprite(mob1sptsheetId)) {
@@ -421,30 +422,29 @@ public class EntityRepo {
         return pool1;
     }
 
-    public static ArrayList<Entity> getInfiniteLvlPool2(Context context) {
+    public static ArrayList<Entity> getInfiniteLvlPool2(Context context) throws IOException {
         //TODO add 10 eggsMob latter
         //TODO add 10 dividing mobs latter
-        ArrayList<Entity> pool1 = new ArrayList<>(20);
+        ArrayList<Entity> pool2 = new ArrayList<>(20);
 
         String mob1sptsheetId = "pool2_multiplie_sprite";
         Random r = new Random();
         for (int i = 0; i < 10; i++) {
             String mobId = "pool2_multiplie_mob" + i;
 
-        .
             float startX = r.nextInt(InfiniteLvlConstant.BOARD_WITDH - 1) + 1;
             float startY = r.nextInt(InfiniteLvlConstant.BOARD_HEIGHT - 1) + 1;
 
-            //always full
-            int fullValue = r.nextBoolean() ? 5 : -5;
-            //range from -5 to 5
-            int randomValue = r.nextInt(11) - 5;
-            //full value is either x or y
-            PointF step = r.nextBoolean() ? new PointF(fullValue, randomValue) : new PointF(randomValue, fullValue);
-            PointF[] path = new PointF[]{step};
+            int mobSpeed = GameUtils.getSpeedInPxPerTic(InfiniteLvlConstant.POOL2_MOB_SPEED);
+            PointF[] path = PathRepo.getRandomDirectionStraightPath(mobSpeed);
 
-            GameMob result = new GameMob.MobBuilder(mobId, mob1sptsheetId, startX, startY).setSize(POOL1_MOB_SIZE).setAlignement(2).setMovePattern(path).build();
-            pool1.add(result);
+            GameMob result = new GameMob.MobBuilder(mobId, mob1sptsheetId, startX, startY).setSize(DEFAULT_MOB_SIZE)
+                    .setAlignement(2)
+                    .setMovePattern(path)
+                    .setScore(InfiniteLvlConstant.POOL2_MOB_SCORE)
+                    .setSpecialMove(SpecialMoveRepo.getMoveById(SpecialMoveRepo.MULTIPLIE))
+                    .build();
+            pool2.add(result);
 
             if (!SpriteRepo.hasSprite(mob1sptsheetId)) {
                 Bitmap mobSprite = SpriteSheetFactory.getMobSpriteSheet(context, result, "line");
@@ -452,10 +452,9 @@ public class EntityRepo {
             }
         }
 
-
         //TODO add 10 heal on touch
 
-        return pool1;
+        return pool2;
     }
 
 

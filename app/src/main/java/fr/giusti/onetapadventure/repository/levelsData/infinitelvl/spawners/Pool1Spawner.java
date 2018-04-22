@@ -2,6 +2,7 @@ package fr.giusti.onetapadventure.repository.levelsData.infinitelvl.spawners;
 
 import java.util.ArrayList;
 
+import fr.giusti.onetapadventure.repository.levelsData.infinitelvl.InfiniteLvlConstant;
 import fr.giusti.onetapengine.entity.Entity;
 import fr.giusti.onetapengine.entity.distribution.EntitySpawner;
 import fr.giusti.onetapengine.entity.distribution.eEntityDistributionMode;
@@ -12,9 +13,6 @@ import fr.giusti.onetapengine.rules.eConditions;
  */
 
 public class Pool1Spawner extends EntitySpawner<Long> {
-    private static final long LONG_INTEVALE_OF_SPAWN = 1500;
-    private static final long SHORT_INTEVALE_OF_SPAWN = 750;
-    private static final int MOB_COUNT_FOR_INTERVAL_SELECTION = 10;
 
     private long lastTimeOfSpawn = 0;
 
@@ -38,7 +36,7 @@ public class Pool1Spawner extends EntitySpawner<Long> {
     @Override
     public ArrayList<Entity> onConditionProgress(Long cdtProgress, eConditions conditionType) {
         if (conditionType == eConditions.TIMER) {
-            long selectedInterval = (conditionProgress < MOB_COUNT_FOR_INTERVAL_SELECTION) ? SHORT_INTEVALE_OF_SPAWN : LONG_INTEVALE_OF_SPAWN;
+            long selectedInterval = (conditionProgress < InfiniteLvlConstant.MOB_COUNT_FOR_INTERVAL_SELECTION) ? InfiniteLvlConstant.SHORT_INTEVALE_OF_SPAWN : InfiniteLvlConstant.LONG_INTEVALE_OF_SPAWN;
             if ((cdtProgress - lastTimeOfSpawn) > selectedInterval) {
                 lastTimeOfSpawn = cdtProgress;
                 return getEntityListOnConditionMet();

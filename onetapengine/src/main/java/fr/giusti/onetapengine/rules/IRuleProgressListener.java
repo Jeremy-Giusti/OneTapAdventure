@@ -5,5 +5,11 @@ package fr.giusti.onetapengine.rules;
  */
 public interface IRuleProgressListener {
 
-    void onRuleProgress(String ruleId,String displayableProgress);
+    /**
+     *
+     * @param ruleId rule name/index
+     * @param displayableProgress a string value that can be shown or logged
+     * @param ruleCompletionPercent rule completion from 0 to 1
+     */
+    void onRuleProgress(String ruleId, String displayableProgress, double ruleCompletionPercent);
 }

@@ -33,9 +33,11 @@ public abstract class Rule<T> {
      */
     public eRuleResult ruleProgress(T progress) {
         eRuleResult progressResult = processRuleProgress(progress);
-        listener.onRuleProgress(idName, getDisplayableProgress());
+        listener.onRuleProgress(idName, getDisplayableProgress(), getCompletionValue());
         return progressResult;
     }
+
+    protected abstract double getCompletionValue();
 
     /**
      * to override, used to detrminate how condition can be met.
@@ -52,7 +54,7 @@ public abstract class Rule<T> {
 
     public void setListener(IRuleProgressListener listener) {
         this.listener = listener;
-        listener.onRuleProgress(idName, getDisplayableProgress());
+        listener.onRuleProgress(idName, getDisplayableProgress(), getCompletionValue());
     }
 
     public String getIdName() {

@@ -2,6 +2,7 @@ package fr.giusti.onetapadventure.repository.levelsData.infinitelvl.spawners;
 
 import java.util.ArrayList;
 
+import fr.giusti.onetapadventure.repository.levelsData.infinitelvl.InfiniteLvlConstant;
 import fr.giusti.onetapengine.entity.Entity;
 import fr.giusti.onetapengine.entity.distribution.EntitySpawner;
 import fr.giusti.onetapengine.entity.distribution.eEntityDistributionMode;
@@ -14,13 +15,6 @@ import static fr.giusti.onetapadventure.repository.levelsData.infinitelvl.Infini
  */
 
 public class Pool2Spawner extends EntitySpawner<Long> {
-    /**
-     * value at which the SHORTEST_INTEVALE_OF_SPAWN is used.
-     */
-    private static final long SCORE_INTERVAL_CAP = 15000;
-    private static final long SHORTEST_INTEVALE_OF_SPAWN = 750;
-    private static final long MAX_INTERVALE_OF_SPAWN = 1500;
-    private static final int MAX_SPAWN_GROUP_SIZE = 7;
 
 
     private long lastScoreOnSpawn = 0;
@@ -36,7 +30,7 @@ public class Pool2Spawner extends EntitySpawner<Long> {
     }
 
     /**
-     * spawn every at a changing interval depending on score (min is {@link #SHORTEST_INTEVALE_OF_SPAWN} at {@link #SCORE_INTERVAL_CAP} score) max is {@link #MAX_INTERVALE_OF_SPAWN}
+     * spawn every at a changing interval depending on score (min is {@link InfiniteLvlConstant#MIN_INTEVALE_OF_SPAWN} at {@link InfiniteLvlConstant#SCORE_INTERVAL_CAP} score) max is {@link InfiniteLvlConstant#MAX_INTERVALE_OF_SPAWN}
      *
      * @param cdtProgress   condition evolution
      * @param conditionType mobcount or score
@@ -45,7 +39,7 @@ public class Pool2Spawner extends EntitySpawner<Long> {
     @Override
     public ArrayList<Entity> onConditionProgress(Long cdtProgress, eConditions conditionType) {
         if (conditionType == eConditions.SCORE) {
-            long selectedInterval = (cdtProgress < SCORE_INTERVAL_CAP) ? getInterval(cdtProgress) : SHORTEST_INTEVALE_OF_SPAWN;
+            long selectedInterval = (cdtProgress < InfiniteLvlConstant.SCORE_INTERVAL_CAP) ? getInterval(cdtProgress) : InfiniteLvlConstant.MIN_INTEVALE_OF_SPAWN;
             if ((cdtProgress - lastScoreOnSpawn) > selectedInterval) {
                 lastScoreOnSpawn = cdtProgress;
                 return getEntityListOnConditionMet();
@@ -60,15 +54,15 @@ public class Pool2Spawner extends EntitySpawner<Long> {
 
     /**
      * @param mobCount mobCount on board
-     * @return 0-{@link #MAX_SPAWN_GROUP_SIZE} depending on how close mobCount is to {@link fr.giusti.onetapadventure.repository.levelsData.infinitelvl.InfiniteLvlConstant#MAX_NUMBER_OF_MOB}
+     * @return 0-{@link InfiniteLvlConstant#MAX_SPAWN_GROUP_SIZE} depending on how close mobCount is to {@link fr.giusti.onetapadventure.repository.levelsData.infinitelvl.InfiniteLvlConstant#MAX_NUMBER_OF_MOB}
      */
     private int getGroupSizeCalculatedValue(Long mobCount) {
-        return (int) ((MAX_NUMBER_OF_MOB - mobCount) / MAX_NUMBER_OF_MOB) * MAX_SPAWN_GROUP_SIZE;
+        return (int) (((MAX_NUMBER_OF_MOB - mobCount) / (double)MAX_NUMBER_OF_MOB) * InfiniteLvlConstant.MAX_SPAWN_GROUP_SIZE);
     }
 
 
     private long getInterval(Long currentScore) {
-        return (MAX_INTERVALE_OF_SPAWN - SHORTEST_INTEVALE_OF_SPAWN) / (SCORE_INTERVAL_CAP - currentScore);
+        return (long)( InfiniteLvlConstant.MAX_INTERVALE_OF_SPAWN - ((currentScore/(double) InfiniteLvlConstant.SCORE_INTERVAL_CAP)* InfiniteLvlConstant.MIN_INTEVALE_OF_SPAWN));
     }
 
 }

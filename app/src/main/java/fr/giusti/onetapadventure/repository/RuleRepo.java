@@ -25,11 +25,11 @@ public class RuleRepo {
     public static RulesManager getInfiniteLvlRules(OnGameEndListener endListener) {
         RuleFactory ruleFactory = new RuleFactory();
         Rule masterRule = ruleFactory.getNumericaleRule(InfiniteLvlConstant.MASTER_RULE, eConditions.MOB_COUNT, eRuleResult.END, InfiniteLvlConstant.MAX_NUMBER_OF_MOB);
-
+        Rule scoreRule = ruleFactory.getNumericaleRule(InfiniteLvlConstant.SCORE_RULE,eConditions.SCORE,eRuleResult.NULL,Long.MAX_VALUE);
 
         String gameId = GameConstant.getLevelId(0, 0);
         OnRuleAccomplishedListener accomplishedBehavior = getDefaultBehavior(endListener, gameId);
-        return new RulesManager(masterRule, accomplishedBehavior);
+        return new RulesManager(masterRule, accomplishedBehavior,scoreRule);
     }
 
 

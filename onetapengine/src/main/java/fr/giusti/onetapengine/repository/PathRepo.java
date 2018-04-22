@@ -6,8 +6,26 @@ import android.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 public class PathRepo {
+
+
+    /**
+     * return a path going into a random direction
+     * @param speed
+     * @return
+     */
+    public static PointF[] getRandomDirectionStraightPath(int speed){
+        Random r = new Random();
+        //always full
+        int fullValue = r.nextBoolean() ? speed : -speed;
+        //range from -5 to 5
+        int randomValue = r.nextInt((speed*2)+1) - speed;
+        //full value is either x or y
+        PointF step = r.nextBoolean() ? new PointF(fullValue, randomValue) : new PointF(randomValue, fullValue);
+        return new PointF[]{step};
+    }
 
     /**
      * @param originalPath the original path

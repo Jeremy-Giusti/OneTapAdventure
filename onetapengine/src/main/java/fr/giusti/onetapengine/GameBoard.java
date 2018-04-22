@@ -124,6 +124,10 @@ public class GameBoard {
         this.mMobs = new CopyOnWriteArrayList<>(mobs);
     }
 
+    /**
+     *     @Deprecated use onNewMob(GameMob mob) now
+     * @param mob
+     */
     @Deprecated
     public void addMob(GameMob mob) {
         this.mMobs.add(mob);

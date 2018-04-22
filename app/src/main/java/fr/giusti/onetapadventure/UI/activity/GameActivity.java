@@ -1,6 +1,8 @@
 package fr.giusti.onetapadventure.UI.activity;
 
 import android.app.Activity;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -169,12 +171,16 @@ public class GameActivity extends Activity implements OnGameEndListener, IRulePr
     String firstRuleid = null;
 
     @Override
-    public void onRuleProgress(final String ruleId, final String displayableProgress) {
+    public void onRuleProgress(final String ruleId, final String displayableProgress, final double completionPercent) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 if (firstRuleid == null) firstRuleid = ruleId;
                 if (firstRuleid.equals(ruleId)) {
+                    //TODO ne doit pas rester ici,
+                    //faire un override de game activity pour utiliser un comportment specifique a chaque cas
+                    int color = Color.rgb((int) (0 + 255 * completionPercent), (int) (255 - 255 * completionPercent), 0);
+                    mRule1.setTextColor(color);
                     mRule1.setText(displayableProgress);
                 } else {
                     mRule2.setText(displayableProgress);

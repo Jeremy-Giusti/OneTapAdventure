@@ -164,7 +164,7 @@ public class SpecialMoveRepo {
                 lastUse = 0;
                 currentMob.setState(GameMob.eMobState.SPE1);
                 currentMob.setAnimationState(0);
-                board.addMob(currentMob.clone());
+                board.onNewMob(currentMob.clone());
                 currentMob.setxAlteration(-currentMob.getxAlteration());
                 currentMob.setyAlteration(-currentMob.getyAlteration());
             } else {

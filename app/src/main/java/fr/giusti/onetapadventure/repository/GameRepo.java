@@ -119,6 +119,7 @@ public class GameRepo {
 
         //board listeners binding
         board.getRulesManager().setRuleListener(InfiniteLvlConstant.MASTER_RULE, ruleProgressListener);
+        board.getRulesManager().setRuleListener(InfiniteLvlConstant.SCORE_RULE, ruleProgressListener);
 
         if (board != null) callback.onGameBoardGenerated(board);
         else callback.onGameBoardGenerationError("generateInfiniteLvl", null);
