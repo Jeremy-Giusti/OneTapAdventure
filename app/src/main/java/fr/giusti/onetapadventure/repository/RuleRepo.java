@@ -24,7 +24,7 @@ public class RuleRepo {
 
     public static RulesManager getInfiniteLvlRules(OnGameEndListener endListener) {
         RuleFactory ruleFactory = new RuleFactory();
-        Rule masterRule = ruleFactory.getNumericaleRule(InfiniteLvlConstant.MASTER_RULE, eConditions.MOB_COUNT, eRuleResult.END, InfiniteLvlConstant.MASTER_RULE_VALUE);
+        Rule masterRule = ruleFactory.getNumericaleRule(InfiniteLvlConstant.MASTER_RULE, eConditions.MOB_COUNT, eRuleResult.END, InfiniteLvlConstant.MAX_NUMBER_OF_MOB);
 
 
         String gameId = GameConstant.getLevelId(0, 0);

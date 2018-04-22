@@ -41,7 +41,7 @@ public class Pool1Spawner extends EntitySpawner<Long> {
             long selectedInterval = (conditionProgress < MOB_COUNT_FOR_INTERVAL_SELECTION) ? SHORT_INTEVALE_OF_SPAWN : LONG_INTEVALE_OF_SPAWN;
             if ((cdtProgress - lastTimeOfSpawn) > selectedInterval) {
                 lastTimeOfSpawn = cdtProgress;
-                return onConditionMet();
+                return getEntityListOnConditionMet();
             }
         } else {
             conditionProgress = cdtProgress;

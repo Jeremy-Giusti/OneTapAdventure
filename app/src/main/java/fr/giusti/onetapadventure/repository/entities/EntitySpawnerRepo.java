@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import fr.giusti.onetapadventure.repository.levelsData.infinitelvl.spawners.Pool1Spawner;
+import fr.giusti.onetapadventure.repository.levelsData.infinitelvl.spawners.Pool2Spawner;
 import fr.giusti.onetapengine.entity.Entity;
 import fr.giusti.onetapengine.entity.GameMob;
 import fr.giusti.onetapengine.entity.distribution.EntitySpawnerFactory;
@@ -31,7 +32,8 @@ public class EntitySpawnerRepo {
         //multiplying mobs (duplication, egg flies, heal on touch, multiplie into smaller version on touch, shield ?)
         //Spawn each 10 kill OR make them spawn more often with bigger group as time pass (with a capping) ?
         //spawn on group with this calcul groupSize = ((25(=maxmobsNb) - count)/maxmob) * 7 (maxgroupsize)
-        //result.addSpawner(new EntitySpawnerLong.EntitySpawnerBuilder(eEntityDistributionMode.ONE_BY_ONE_ORDERED, 3000l, 0l, eConditions.TIMER).setUseSharedList().build());
+        ArrayList<Entity> pool2 = EntityRepo.getInfiniteLvlPool2(context);
+        result.addSpawner(new Pool2Spawner(pool2));
         //TODO POOL 3
         //helping mobs (zombie, eating, gravity?)
         //spawn onMobdeath

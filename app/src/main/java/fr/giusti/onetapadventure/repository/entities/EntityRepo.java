@@ -393,7 +393,7 @@ public class EntityRepo {
     public static ArrayList<Entity> getInfiniteLvlPool1(Context context) throws IOException {
         ArrayList<Entity> pool1 = new ArrayList<>(50);
 
-        String mob1sptsheetId = "tier1Mob";
+        String mob1sptsheetId = "pool1_mob_sprite";
         Random r = new Random();
 
         for (int i = 0; i < 50; i++) {
@@ -418,6 +418,43 @@ public class EntityRepo {
                 SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, mob1sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
             }
         }
+        return pool1;
+    }
+
+    public static ArrayList<Entity> getInfiniteLvlPool2(Context context) {
+        //TODO add 10 eggsMob latter
+        //TODO add 10 dividing mobs latter
+        ArrayList<Entity> pool1 = new ArrayList<>(20);
+
+        String mob1sptsheetId = "pool2_multiplie_sprite";
+        Random r = new Random();
+        for (int i = 0; i < 10; i++) {
+            String mobId = "pool2_multiplie_mob" + i;
+
+        .
+            float startX = r.nextInt(InfiniteLvlConstant.BOARD_WITDH - 1) + 1;
+            float startY = r.nextInt(InfiniteLvlConstant.BOARD_HEIGHT - 1) + 1;
+
+            //always full
+            int fullValue = r.nextBoolean() ? 5 : -5;
+            //range from -5 to 5
+            int randomValue = r.nextInt(11) - 5;
+            //full value is either x or y
+            PointF step = r.nextBoolean() ? new PointF(fullValue, randomValue) : new PointF(randomValue, fullValue);
+            PointF[] path = new PointF[]{step};
+
+            GameMob result = new GameMob.MobBuilder(mobId, mob1sptsheetId, startX, startY).setSize(POOL1_MOB_SIZE).setAlignement(2).setMovePattern(path).build();
+            pool1.add(result);
+
+            if (!SpriteRepo.hasSprite(mob1sptsheetId)) {
+                Bitmap mobSprite = SpriteSheetFactory.getMobSpriteSheet(context, result, "line");
+                SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, mob1sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+            }
+        }
+
+
+        //TODO add 10 heal on touch
+
         return pool1;
     }
 
@@ -575,5 +612,4 @@ public class EntityRepo {
         return new GameMob.MobBuilder(id, mobsptsheetId, startPoint.x, startPoint.y).setMovePattern(path).setSpecialMove(SpecialMoveRepo.getMoveById(SpecialMoveRepo.GHOST_MOVE)).setDefaultHealth(health).build();
 
     }
-
 }

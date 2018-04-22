@@ -22,15 +22,15 @@ public class EntitySpawnerFactory {
                 }
 
                 if (conditionType == eConditions.MOB_COUNT)
-                    return (cdtProgress == conditionGoalValue) ? onConditionMet() : null;
+                    return (cdtProgress == conditionGoalValue) ? getEntityListOnConditionMet() : null;
 
                 if (conditionType == eConditions.TIMER)
-                    return ((cdtProgress % conditionGoalValue) == 0) ? onConditionMet() : null;
+                    return ((cdtProgress % conditionGoalValue) == 0) ? getEntityListOnConditionMet() : null;
 
                 conditionProgress += cdtProgress;
                 if (conditionProgress == conditionGoalValue) {
                     conditionProgress = initialProgressValue;
-                    return onConditionMet();
+                    return getEntityListOnConditionMet();
                 }
                 return null;            }
         };

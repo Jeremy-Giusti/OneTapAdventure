@@ -36,15 +36,15 @@ public class EntitySpawnerInt extends EntitySpawner<Integer>{
         }
 
         if (conditionsType == eConditions.MOB_COUNT)
-            return (cdtProgress == conditionGoalValue) ? onConditionMet() : null;
+            return (cdtProgress == conditionGoalValue) ? getEntityListOnConditionMet() : null;
 
         if (conditionsType == eConditions.TIMER)
-            return ((cdtProgress % conditionGoalValue) == 0) ? onConditionMet() : null;
+            return ((cdtProgress % conditionGoalValue) == 0) ? getEntityListOnConditionMet() : null;
 
         conditionProgress += cdtProgress;
         if (conditionProgress == conditionGoalValue) {
             conditionProgress = initialProgressValue;
-            return onConditionMet();
+            return getEntityListOnConditionMet();
         }
         return null;
     }

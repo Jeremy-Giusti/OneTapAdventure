@@ -106,7 +106,7 @@ public abstract class EntitySpawner<T> {
      *
      * @return nothing || a list of entity to spawn || nothing but call listener.onSpawnRequested for a custom spawning event (shared entity list notably)
      */
-    protected ArrayList<Entity> onConditionMet() {
+    protected ArrayList<Entity> getEntityListOnConditionMet() {
         if (useSharedMobList) {
             listener.onSpawnRequested(infinitePop, distibutionMode, groupeSize);
             return null;
