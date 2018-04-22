@@ -519,6 +519,13 @@ public class GameMob extends Entity {
         }
     }
 
+    /**
+     * @return true if state = spe1 and animationState = animationDuration
+     */
+    public boolean isFinishingSpeMoveAnimation() {
+        return mState == GameMob.eMobState.SPE1 && mAnimationState == Constants.COMPLETE_ANIMATION_DURATION;
+    }
+
 
     public static class MobBuilder {
         protected String idName;

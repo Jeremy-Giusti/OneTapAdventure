@@ -2,7 +2,6 @@ package fr.giusti.onetapengine.repository;
 
 import android.graphics.Point;
 import android.graphics.PointF;
-import android.graphics.Rect;
 import android.graphics.RectF;
 
 import java.util.ArrayList;
@@ -161,9 +160,11 @@ public class SpecialMoveRepo {
         @Override
         public void doSpecialMove(GameBoard board, GameMob currentMob) {
             if (currentMob.isJustMoving() && this.lastUse > 450) {
-                lastUse = 0;
                 currentMob.setState(GameMob.eMobState.SPE1);
                 currentMob.setAnimationState(0);
+
+            } else if (currentMob.isFinishingSpeMoveAnimation()) {
+                lastUse = 0;
                 board.onNewMob(currentMob.clone());
                 currentMob.setxAlteration(-currentMob.getxAlteration());
                 currentMob.setyAlteration(-currentMob.getyAlteration());
@@ -203,7 +204,7 @@ public class SpecialMoveRepo {
 //                Particule secondParticule = ParticuleHolder.getAvailableParticule(ParticuleRepo.TP_PARTICULE, newX, newY, width, height, true, null);
 
                 board.addParticules(ParticuleHolder.getAvailableParticuleGroupe(ParticuleRepo.GROUPE_TP_SPARK_PARTICULE, currentMob.mPosition, new PointF(0, 0), 20));
-                board.addParticules(ParticuleHolder.getAvailableParticuleGroupe(ParticuleRepo.GROUPE_TP_SPARK_PARTICULE, new RectF((float)newX,(float)newY,(float)newX+width,(float)newY+height), new PointF(0, 0), 20));
+                board.addParticules(ParticuleHolder.getAvailableParticuleGroupe(ParticuleRepo.GROUPE_TP_SPARK_PARTICULE, new RectF((float) newX, (float) newY, (float) newX + width, (float) newY + height), new PointF(0, 0), 20));
 
 
                 currentMob.setPositionFromXY(newX, newY);

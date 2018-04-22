@@ -37,6 +37,7 @@ public class TouchedMoveRepo {
         @Override
         public void doTouchedMove(GameBoard board, GameMob currentMob, int damage) {
             int mobHealth = currentMob.getHealth();
+            currentMob.setAnimationState(0);
             if (mobHealth > damage) {
                 mobHealth -= damage;
                 currentMob.setHealth(mobHealth);
@@ -45,7 +46,6 @@ public class TouchedMoveRepo {
                 currentMob.setHealth(0);
                 currentMob.setState(GameMob.eMobState.DYING);
             }
-            currentMob.setAnimationState(0);
         }
 
     };
@@ -85,7 +85,7 @@ public class TouchedMoveRepo {
             if (mobHealth < (9 * GameConstant.TOUCH_DAMAGE)) {//9 de vie max
                 currentMob.setHealth(mobHealth + GameConstant.TOUCH_DAMAGE);
             }
-            currentMob.setState(GameMob.eMobState.SPE1);
+            currentMob.setState(GameMob.eMobState.HURT);
             currentMob.setAnimationState(0);
         }
 

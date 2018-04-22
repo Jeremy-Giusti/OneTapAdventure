@@ -179,8 +179,8 @@ public class GameActivity extends Activity implements OnGameEndListener, IRulePr
                 if (firstRuleid.equals(ruleId)) {
                     //TODO ne doit pas rester ici,
                     //faire un override de game activity pour utiliser un comportment specifique a chaque cas
-                    int color = Color.rgb((int) (0 + 255 * completionPercent), (int) (255 - 255 * completionPercent), 0);
-                    mRule1.setTextColor(color);
+                    int color = Color.argb(200,(int) (0 + 255 * completionPercent), (int) (255 - 255 * completionPercent), 0);
+                    mRule1.setBackgroundColor(color);
                     mRule1.setText(displayableProgress);
                 } else {
                     mRule2.setText(displayableProgress);

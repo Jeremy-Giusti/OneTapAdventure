@@ -408,7 +408,7 @@ public class EntityRepo {
 
             GameMob result = new GameMob.MobBuilder(mobId, mob1sptsheetId, startX, startY)
                     .setSize(DEFAULT_MOB_SIZE)
-                    .setAlignement(1)
+                    .setAlignement(0)
                     .setMovePattern(path)
                     .setScore(InfiniteLvlConstant.POOL1_MOB_SCORE)
                     .build();
@@ -439,7 +439,7 @@ public class EntityRepo {
             PointF[] path = PathRepo.getRandomDirectionStraightPath(mobSpeed);
 
             GameMob result = new GameMob.MobBuilder(mobId, mob1sptsheetId, startX, startY).setSize(DEFAULT_MOB_SIZE)
-                    .setAlignement(2)
+                    .setAlignement(0)
                     .setMovePattern(path)
                     .setScore(InfiniteLvlConstant.POOL2_MOB_SCORE)
                     .setSpecialMove(SpecialMoveRepo.getMoveById(SpecialMoveRepo.MULTIPLIE))

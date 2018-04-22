@@ -28,7 +28,7 @@ public class EntitySpawnerRepo {
         // spawn every 1.5sec or 0.75 if count<10)
         ArrayList<Entity> pool1 = EntityRepo.getInfiniteLvlPool1(context);
         result.addSpawner(new Pool1Spawner(pool1));
-        //TODO POOL 2
+        //TODO END POOL 2
         //multiplying mobs (duplication, egg flies, heal on touch, multiplie into smaller version on touch, shield ?)
         //Spawn each 10 kill OR make them spawn more often with bigger group as time pass (with a capping) ?
         //spawn on group with this calcul groupSize = ((25(=maxmobsNb) - count)/maxmob) * 7 (maxgroupsize)
