@@ -8,10 +8,8 @@ import android.graphics.PointF;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
 import fr.giusti.onetapengine.R;
 import fr.giusti.onetapengine.commons.Constants;
-
 import fr.giusti.onetapengine.entity.Particule;
 
 
@@ -106,7 +104,7 @@ public class ParticuleRepo {
         plasmaSparkPartIdList.add(PLASMA_SPARK3_PARTICULE);
         plasmaSparkPartIdList.add(PLASMA_SPARK4_PARTICULE);
 
-        mParticuleGroupIdList.put( GROUPE_PLASMA_SPARK_PARTICULE, plasmaSparkPartIdList);
+        mParticuleGroupIdList.put(GROUPE_PLASMA_SPARK_PARTICULE, plasmaSparkPartIdList);
 
         ArrayList<String> tpSparkPartIdList = new ArrayList<>();
         tpSparkPartIdList.add(TP_SPARK0_PARTICULE);
@@ -115,7 +113,7 @@ public class ParticuleRepo {
         tpSparkPartIdList.add(TP_SPARK3_PARTICULE);
         tpSparkPartIdList.add(TP_SPARK4_PARTICULE);
 
-        mParticuleGroupIdList.put( GROUPE_TP_SPARK_PARTICULE, tpSparkPartIdList);
+        mParticuleGroupIdList.put(GROUPE_TP_SPARK_PARTICULE, tpSparkPartIdList);
 
     }
 
@@ -130,10 +128,10 @@ public class ParticuleRepo {
 
         Bitmap bm = BitmapFactory.decodeResource(context.getResources(), ressourceId);
 
-        int particuleWidth = bm.getWidth() / Constants.PARTICULE_NB_FRAME_ON_ANIMATION;
-        int particuleHeight = bm.getHeight();
+        int particuleWidth = (bm.getWidth() / Constants.PARTICULE_NB_FRAME_ON_ANIMATION) * 2;
+        int particuleHeight = (bm.getHeight()) * 2;
 
-        SpriteRepo.addSpritesheetIfDoesntExist( bm,id, Constants.PARTICULE_NB_FRAME_ON_ANIMATION, 1);
+        SpriteRepo.addSpritesheetIfDoesntExist(bm, id, Constants.PARTICULE_NB_FRAME_ON_ANIMATION, 1);
 
         return new Particule(id, 0, 0, particuleWidth, particuleHeight, new PointF[]{new PointF(0, 0)}, id, false);
     }
