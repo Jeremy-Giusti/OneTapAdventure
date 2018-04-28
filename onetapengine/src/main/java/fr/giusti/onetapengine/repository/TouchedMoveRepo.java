@@ -205,7 +205,7 @@ public class TouchedMoveRepo {
                 int xDIrection = (Math.random() < 0.5) ? 1 : -1;
                 int yDIrection = (Math.random() < 0.5) ? 1 : -1;
 
-                Random r = new Random();
+                Random r = new Random(System.currentTimeMillis());
 
                 int XTP = r.nextInt(GameConstant.SHORT_TP_MAX_RANGE - GameConstant.SHORT_TP_MIN_RANGE) + GameConstant.SHORT_TP_MIN_RANGE;
                 int YTP = r.nextInt(GameConstant.SHORT_TP_MAX_RANGE - GameConstant.SHORT_TP_MIN_RANGE) + GameConstant.SHORT_TP_MIN_RANGE;

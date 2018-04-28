@@ -30,7 +30,7 @@ public abstract class EntitySpawner<T> {
      * the initial mProgress
      */
     protected final T initialProgressValue;
-    protected T conditionProgress ;
+    protected T conditionProgress;
 
 
     protected int groupeSize = 5;
@@ -46,13 +46,14 @@ public abstract class EntitySpawner<T> {
     protected int mobIndex = 0;
 
     protected SpawnerListener listener;
+    private boolean mIsResized = false;
 
 
-    public EntitySpawner(eConditions[] conditionTypes, eEntityDistributionMode distibutionMode, T conditionGoalValue, T initialProgressValue){
+    public EntitySpawner(eConditions[] conditionTypes, eEntityDistributionMode distibutionMode, T conditionGoalValue, T initialProgressValue) {
         this.conditionTypes = conditionTypes;
-        this.distibutionMode =distibutionMode;
-        this.conditionGoalValue=conditionGoalValue;
-        this.initialProgressValue=initialProgressValue;
+        this.distibutionMode = distibutionMode;
+        this.conditionGoalValue = conditionGoalValue;
+        this.initialProgressValue = initialProgressValue;
         this.conditionProgress = initialProgressValue;
     }
 
@@ -99,7 +100,7 @@ public abstract class EntitySpawner<T> {
      * @param cdtProgress condition evolution
      * @return nothing || a list of entity to spawn || nothing but call listener.onSpawnRequested for a custom spawning event (shared entity list notably)
      */
-    public abstract ArrayList<Entity> onConditionProgress(T cdtProgress,eConditions conditionType) ;
+    public abstract ArrayList<Entity> onConditionProgress(T cdtProgress, eConditions conditionType);
 
     /**
      * spawn condition met, depending on spawner attribut choose the best way to distribute the newly spawned entity(s)
@@ -189,10 +190,11 @@ public abstract class EntitySpawner<T> {
     }
 
     public void resize(float ratio) {
-        if (!useSharedMobList) {
+        if (!useSharedMobList && !mIsResized) {
             for (Entity entity : entityList) {
                 entity.resize(ratio);
             }
         }
+        this.mIsResized = true;
     }
 }

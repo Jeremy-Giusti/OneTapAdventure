@@ -17,7 +17,7 @@ public class PathRepo {
      * @return
      */
     public static PointF[] getRandomDirectionStraightPath(int speed){
-        Random r = new Random();
+        Random r = new Random(System.currentTimeMillis());
         //always full
         int fullValue = r.nextBoolean() ? speed : -speed;
         //range from -5 to 5

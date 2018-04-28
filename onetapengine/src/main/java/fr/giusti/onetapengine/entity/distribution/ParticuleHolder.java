@@ -72,7 +72,7 @@ public class ParticuleHolder {
 
         ArrayList<Particule> availablePool;
         Particule particule = null;
-        Random random = new Random();
+        Random random = new Random(System.currentTimeMillis());
 
 
         for (int i = 0; i < particulNb; i++) {

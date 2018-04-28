@@ -3,6 +3,7 @@ package fr.giusti.onetapengine.repository;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -162,8 +163,7 @@ public class SpecialMoveRepo {
             if (currentMob.isJustMoving() && this.lastUse > 450) {
                 currentMob.setState(GameMob.eMobState.SPE1);
                 currentMob.setAnimationState(0);
-
-            } else if (currentMob.isFinishingSpeMoveAnimation()) {
+            } else if (currentMob.isFinishingSpeMoveAnimation() && this.lastUse > 450) {
                 lastUse = 0;
                 board.onNewMob(currentMob.clone());
                 currentMob.setxAlteration(-currentMob.getxAlteration());

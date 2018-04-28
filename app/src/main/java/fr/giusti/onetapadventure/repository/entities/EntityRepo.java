@@ -38,7 +38,8 @@ import fr.giusti.onetapengine.repository.SpecialMoveRepo;
 import fr.giusti.onetapengine.repository.SpriteRepo;
 import fr.giusti.onetapengine.repository.TouchedMoveRepo;
 
-import static fr.giusti.onetapadventure.repository.levelsData.infinitelvl.InfiniteLvlConstant.DEFAULT_MOB_SIZE;
+import static fr.giusti.onetapadventure.repository.levelsData.infinitelvl.InfiniteLvlConstant.POOL1_MOB_SIZE;
+import static fr.giusti.onetapadventure.repository.levelsData.infinitelvl.InfiniteLvlConstant.POOL2_MOB_SIZE;
 
 public class EntityRepo {
 
@@ -395,7 +396,7 @@ public class EntityRepo {
         ArrayList<Entity> pool1 = new ArrayList<>(50);
 
         String mob1sptsheetId = "pool1_mob_sprite";
-        Random r = new Random();
+        Random r = new Random(System.currentTimeMillis());
 
         for (int i = 0; i < 50; i++) {
             String mobId = "pool1_mob" + i;
@@ -406,8 +407,9 @@ public class EntityRepo {
             int mobSpeed = GameUtils.getSpeedInPxPerTic(InfiniteLvlConstant.POOL1_MOB_SPEED);
             PointF[] path = PathRepo.getRandomDirectionStraightPath(mobSpeed);
 
+            Log.v("pool1", "startXY= " + startX + " - " + startY + " path= " + path[0]);
             GameMob result = new GameMob.MobBuilder(mobId, mob1sptsheetId, startX, startY)
-                    .setSize(DEFAULT_MOB_SIZE)
+                    .setSize(POOL1_MOB_SIZE)
                     .setAlignement(0)
                     .setMovePattern(path)
                     .setScore(InfiniteLvlConstant.POOL1_MOB_SCORE)
@@ -428,7 +430,7 @@ public class EntityRepo {
         ArrayList<Entity> pool2 = new ArrayList<>(20);
 
         String mob1sptsheetId = "pool2_multiplie_sprite";
-        Random r = new Random();
+        Random r = new Random(System.currentTimeMillis());
         for (int i = 0; i < 10; i++) {
             String mobId = "pool2_multiplie_mob" + i;
 
@@ -438,9 +440,10 @@ public class EntityRepo {
             int mobSpeed = GameUtils.getSpeedInPxPerTic(InfiniteLvlConstant.POOL2_MOB_SPEED);
             PointF[] path = PathRepo.getRandomDirectionStraightPath(mobSpeed);
 
-            GameMob result = new GameMob.MobBuilder(mobId, mob1sptsheetId, startX, startY).setSize(DEFAULT_MOB_SIZE)
+            GameMob result = new GameMob.MobBuilder(mobId, mob1sptsheetId, startX, startY).setSize(POOL2_MOB_SIZE)
                     .setAlignement(0)
                     .setMovePattern(path)
+                    .setHealth(20)
                     .setScore(InfiniteLvlConstant.POOL2_MOB_SCORE)
                     .setSpecialMove(SpecialMoveRepo.getMoveById(SpecialMoveRepo.MULTIPLIE))
                     .build();
@@ -517,7 +520,7 @@ public class EntityRepo {
 
     public static GameMob generateSimpleRandomizedMob(String id, Context context, RectF startPos, RectF destPos, int travelTimeOnTick) throws IOException {
 
-        Random r = new Random();
+        Random r = new Random(System.currentTimeMillis());
 
         float startX = r.nextInt((int) (startPos.right - startPos.left)) + startPos.left;
         float startY = r.nextInt((int) (startPos.bottom - startPos.top)) + startPos.top;
