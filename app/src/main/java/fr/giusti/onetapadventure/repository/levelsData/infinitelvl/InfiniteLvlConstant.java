@@ -20,9 +20,8 @@ public class InfiniteLvlConstant {
     public static final int POOL1_MOB_SPEED = 200;
     public static final int POOL1_MOB_SCORE = 15;
     // ------- SPAWNER VALUES
-    public static final long LONG_INTEVALE_OF_SPAWN = 1200;
-    public static final long SHORT_INTEVALE_OF_SPAWN = 600;
-    public static final int MOB_COUNT_FOR_INTERVAL_SELECTION = 15;
+    public static final long POOL1_LONG_INTEVALE_OF_SPAWN = 2000;
+    public static final long POOL1_SHORT_INTEVALE_OF_SPAWN = 500;
 
 
     // ---------------------------- pool 2 ----------------------------//

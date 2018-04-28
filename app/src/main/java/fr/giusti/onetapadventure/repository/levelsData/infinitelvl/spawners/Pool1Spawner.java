@@ -15,6 +15,8 @@ import fr.giusti.onetapengine.rules.eConditions;
 public class Pool1Spawner extends EntitySpawner<Long> {
 
     private long lastTimeOfSpawn = 0;
+    private long selectedInterval = 500;
+    private final long INTERVAL_DIFFERENCE_SHORT_LONG = InfiniteLvlConstant.POOL1_LONG_INTEVALE_OF_SPAWN - InfiniteLvlConstant.POOL1_SHORT_INTEVALE_OF_SPAWN;
 
 
     public Pool1Spawner(ArrayList<Entity> entityList) {
@@ -36,13 +38,17 @@ public class Pool1Spawner extends EntitySpawner<Long> {
     @Override
     public ArrayList<Entity> onConditionProgress(Long cdtProgress, eConditions conditionType) {
         if (conditionType == eConditions.TIMER) {
-            long selectedInterval = (conditionProgress < InfiniteLvlConstant.MOB_COUNT_FOR_INTERVAL_SELECTION) ? InfiniteLvlConstant.SHORT_INTEVALE_OF_SPAWN : InfiniteLvlConstant.LONG_INTEVALE_OF_SPAWN;
             if ((cdtProgress - lastTimeOfSpawn) > selectedInterval) {
                 lastTimeOfSpawn = cdtProgress;
                 return getEntityListOnConditionMet();
             }
         } else {
-            conditionProgress = cdtProgress;
+            //MOB COUNT
+            if (conditionProgress != cdtProgress) {
+                //intervale  tend vers LongInterval quand count tend vers maxMob
+                conditionProgress = cdtProgress;
+                selectedInterval =(long) (InfiniteLvlConstant.POOL1_SHORT_INTEVALE_OF_SPAWN +((cdtProgress /(double) InfiniteLvlConstant.MAX_NUMBER_OF_MOB)*(INTERVAL_DIFFERENCE_SHORT_LONG)));
+            }
         }
 
         return null;
