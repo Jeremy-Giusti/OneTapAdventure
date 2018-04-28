@@ -507,7 +507,7 @@ public class EntityRepo {
                 .setAlignement(alignement)
                 .setMovePattern(path)
                 .setTouchedMove(touchedMove)
-                .setDefaultHealth(difficulty * GameConstant.TOUCH_DAMAGE)
+                .setDefaultHealth(difficulty * GameConstant.BASE_DAMAGE)
                 .build();
 
         if (!SpriteRepo.hasSprite(spriteId)) {

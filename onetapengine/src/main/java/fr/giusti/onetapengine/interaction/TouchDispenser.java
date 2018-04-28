@@ -11,7 +11,7 @@ import fr.giusti.onetapengine.commons.GameConstant;
 public class TouchDispenser {
     private int touchStrock = GameConstant.TOUCH_STROKE;
     private String spriteId = null;
-    private int damageDone = GameConstant.TOUCH_DAMAGE;
+    private int damageDone = GameConstant.BASE_DAMAGE;
 
     public TouchDispenser(int touchStrock, String spriteId, int damageDone) {
         this.touchStrock = touchStrock;

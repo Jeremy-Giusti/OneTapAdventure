@@ -138,7 +138,7 @@ public class GameMob extends Entity {
 
 
     /**
-     * methode potentielement lourde
+     * ressource intensive
      *
      * @param tickInFuture
      * @return
@@ -159,6 +159,23 @@ public class GameMob extends Entity {
         }
 
         return new Point(futureX, futureY);
+    }
+
+    /**
+     * @param healthToRemove explicit
+     * @return true if the mob is killed by damage
+     */
+    public boolean hurt(int healthToRemove) {
+        setAnimationState(0);
+        if (mHealth > healthToRemove) {
+            mHealth -= healthToRemove;
+            setState(GameMob.eMobState.HURT);
+            return false;
+        } else {
+            mHealth = 0;
+            setState(GameMob.eMobState.DYING);
+            return true;
+        }
     }
 
 
@@ -534,8 +551,8 @@ public class GameMob extends Entity {
         private int alignement = 0;
         private SpecialMove mSpecialMove1 = SpecialMoveRepo.getMoveById(SpecialMoveRepo.NO_MOVE);
         private TouchedMove mTouchedMove = TouchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE);
-        private int mHealth = GameConstant.TOUCH_DAMAGE;
-        private int mDefaultHealth = GameConstant.TOUCH_DAMAGE;
+        private int mHealth = GameConstant.BASE_DAMAGE;
+        private int mDefaultHealth = GameConstant.BASE_DAMAGE;
         public RectF mPosition = new RectF();
         public eMobState mState = eMobState.MOVING_DOWN;
         public int scoreValue = 50;

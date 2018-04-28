@@ -26,7 +26,7 @@ public class TouchPoint {
     private boolean actionDone = false;
     private String spriteId = null;
     private int stroke = GameConstant.TOUCH_STROKE;
-    private int damage = GameConstant.TOUCH_DAMAGE;
+    private int damage = GameConstant.BASE_DAMAGE;
 
 
     public TouchPoint(float x, float y, int stroke) {

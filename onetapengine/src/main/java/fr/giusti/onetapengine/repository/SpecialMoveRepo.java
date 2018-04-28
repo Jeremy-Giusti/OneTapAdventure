@@ -23,7 +23,8 @@ import fr.giusti.onetapengine.interaction.TouchPoint;
  * Created by giusti on 20/03/2015.
  */
 public class SpecialMoveRepo {
-    //TODO limited range tp/switch
+    private static final String TAG = SpecialMoveRepo.class.getSimpleName();
+
     public static final String NO_MOVE = "noMove";
     public static final String AUTO_HEAL = "heal";
     public static final String AUTO_HURT_EXPLODING = "explode";
@@ -33,7 +34,30 @@ public class SpecialMoveRepo {
     public static final String BREAK_GLASS = "breakglass";
     public static final String SMOKE_TRAIL = "smoke";
     public static final String GHOST_MOVE = "ghost";
+    public static final String EAT_MOVE = "eat";
 
+    private final static HashMap<String, SpecialMove> specialeMoveList;
+
+    /**
+     *
+     * @param id required special move id
+     * @return a new instance of the special move asked for
+     */
+    public static SpecialMove getMoveById(String id) {
+        try {
+            return SpecialMoveRepo.specialeMoveList.get(id).getClass().newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            Log.e(TAG, "error instantiating move :" + id, e);
+            return null;
+        }
+    }
+
+    public static ArrayList<String> getMoveIdList() {
+        return new ArrayList<>(specialeMoveList.keySet());
+    }
+
+
+    //----------------------------- Special move implementations ------------------------------//
 
     private static SpecialMove noMove = new SpecialMove() {
         @Override
@@ -46,16 +70,50 @@ public class SpecialMoveRepo {
         }
     };
 
+    private static SpecialMove eatMove = new SpecialMove() {
+        private static final int CHECK_FREQ = 3;
+        private static final int EAT_FREQ = Constants.FRAME_PER_SEC * 2;
+        private int ticSinceLastMeal = EAT_FREQ / 2;
+
+        @Override
+        public void doSpecialMove(GameBoard board, GameMob currentMob) {
+            if (ticSinceLastMeal >= EAT_FREQ && ticSinceLastMeal % CHECK_FREQ == 0) {
+                int alignement = currentMob.getAlignement();
+
+                for (GameMob mob : board.getMobs()) {
+                    //mob is a different alignment and intersect
+                    if (mob.getAlignement() == alignement && mob.mPosition.intersect(currentMob.mPosition)) {
+                        mob.hurt(GameConstant.BASE_DAMAGE);
+                        currentMob.mPosition.offset(1, 1);
+
+                        currentMob.setState(GameMob.eMobState.SPE1);
+                        currentMob.setHealth(currentMob.getHealth() + GameConstant.BASE_DAMAGE / 2);
+                        currentMob.setAnimationState(0);
+
+                        ticSinceLastMeal = 0;
+                    }
+                }
+            } else {
+                ticSinceLastMeal++;
+            }
+        }
+
+        @Override
+        public String getId() {
+            return EAT_MOVE;
+        }
+    };
+
     private static SpecialMove autoHeal = new SpecialMove() {
         private int lastUse = 0;
 
         @Override
         public void doSpecialMove(GameBoard board, GameMob currentMob) {
             int currentHealth = currentMob.getHealth();
-            if (currentMob.isJustMoving() && this.lastUse > 180 && currentHealth < (5 * GameConstant.TOUCH_DAMAGE)) {
+            if (currentMob.isJustMoving() && this.lastUse > 180 && currentHealth < (5 * GameConstant.BASE_DAMAGE)) {
                 lastUse = 0;
                 currentMob.setState(GameMob.eMobState.SPE1);
-                currentMob.setHealth(currentHealth + GameConstant.TOUCH_DAMAGE);
+                currentMob.setHealth(currentHealth + GameConstant.BASE_DAMAGE);
                 currentMob.setAnimationState(0);
             } else {
                 lastUse++;
@@ -99,27 +157,20 @@ public class SpecialMoveRepo {
             if (lastUse >= Constants.FRAME_PER_SEC * 2) {
                 lastUse = 0;
                 int mobHealth = currentMob.getHealth();
-                if (mobHealth > GameConstant.TOUCH_DAMAGE) {
-                    mobHealth -= GameConstant.TOUCH_DAMAGE;
+                if (mobHealth > GameConstant.BASE_DAMAGE) {
+                    mobHealth -= GameConstant.BASE_DAMAGE;
                     currentMob.setHealth(mobHealth);
                     currentMob.setState(GameMob.eMobState.HURT);
-                    switch (mobHealth) {
-                        case 3:
-                            break;
-                        case 2:
-                            break;
-                        case 1:
-                            break;
-                    }
-                    if (mobHealth <= GameConstant.TOUCH_DAMAGE && lastShowed != 1) {
+
+                    if (mobHealth <= GameConstant.BASE_DAMAGE && lastShowed != 1) {
                         lastShowed = 1;
                         Particule numberParicule = ParticuleHolder.getAvailableParticule(ParticuleRepo.NUMBER1_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), currentMob.mPosition.width(), currentMob.mPosition.height(), false, new PointF[]{new PointF(0, 2)});
                         board.addParticule(numberParicule);
-                    } else if (mobHealth <= (2 * GameConstant.TOUCH_DAMAGE) && lastShowed != 2) {
+                    } else if (mobHealth <= (2 * GameConstant.BASE_DAMAGE) && lastShowed != 2) {
                         lastShowed = 2;
                         Particule numberParicule = ParticuleHolder.getAvailableParticule(ParticuleRepo.NUMBER2_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), currentMob.mPosition.width(), currentMob.mPosition.height(), false, new PointF[]{new PointF(0, 2)});
                         board.addParticule(numberParicule);
-                    } else if (mobHealth <= (3 * GameConstant.TOUCH_DAMAGE) && lastShowed != 3) {
+                    } else if (mobHealth <= (3 * GameConstant.BASE_DAMAGE) && lastShowed != 3) {
                         lastShowed = 3;
                         Particule numberParicule = ParticuleHolder.getAvailableParticule(ParticuleRepo.NUMBER3_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), currentMob.mPosition.width(), currentMob.mPosition.height(), false, new PointF[]{new PointF(0, 2)});
                         board.addParticule(numberParicule);
@@ -348,8 +399,12 @@ public class SpecialMoveRepo {
     };
 
 
-    private final static HashMap<String, SpecialMove> specialeMoveList;
+//----------------------------- Special move list instantiation ------------------------------//
 
+
+    /*
+     * this must happen on end of file (static declaration)
+     */
     static {
         specialeMoveList = new HashMap<String, SpecialMove>();
         specialeMoveList.put(autoHeal.getId(), autoHeal);
@@ -362,21 +417,5 @@ public class SpecialMoveRepo {
         specialeMoveList.put(breakGlassMove.getId(), breakGlassMove);
         specialeMoveList.put(ghostMove.getId(), ghostMove);
 
-
-    }
-
-
-    public static SpecialMove getMoveById(String id) {
-        try {
-            return SpecialMoveRepo.specialeMoveList.get(id).getClass().newInstance();
-        } catch (InstantiationException e) {
-            return null;
-        } catch (IllegalAccessException e) {
-            return null;
-        }
-    }
-
-    public static ArrayList<String> getMoveIdList() {
-        return new ArrayList<String>(specialeMoveList.keySet());
     }
 }

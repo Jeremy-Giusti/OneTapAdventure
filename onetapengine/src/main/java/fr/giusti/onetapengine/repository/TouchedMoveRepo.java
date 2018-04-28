@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import fr.giusti.onetapengine.commons.GameConstant;
 import fr.giusti.onetapengine.GameBoard;
+import fr.giusti.onetapengine.commons.GameConstant;
 import fr.giusti.onetapengine.entity.GameMob;
 import fr.giusti.onetapengine.entity.Particule;
 import fr.giusti.onetapengine.entity.distribution.ParticuleHolder;
@@ -36,16 +36,7 @@ public class TouchedMoveRepo {
 
         @Override
         public void doTouchedMove(GameBoard board, GameMob currentMob, int damage) {
-            int mobHealth = currentMob.getHealth();
-            currentMob.setAnimationState(0);
-            if (mobHealth > damage) {
-                mobHealth -= damage;
-                currentMob.setHealth(mobHealth);
-                currentMob.setState(GameMob.eMobState.HURT);
-            } else {
-                currentMob.setHealth(0);
-                currentMob.setState(GameMob.eMobState.DYING);
-            }
+            currentMob.hurt(damage);
         }
 
     };
@@ -58,16 +49,7 @@ public class TouchedMoveRepo {
 
         @Override
         public void doTouchedMove(GameBoard board, GameMob currentMob, int damage) {
-            int mobHealth = currentMob.getHealth();
-            if (mobHealth > damage) {
-                mobHealth -= damage;
-                currentMob.setHealth(mobHealth);
-                currentMob.setState(GameMob.eMobState.HURT);
-            } else {
-                currentMob.setHealth(0);
-                currentMob.setState(GameMob.eMobState.DYING);
-            }
-            currentMob.setAnimationState(0);
+            currentMob.hurt(damage);
             board.getmParticules().add(ParticuleHolder.getAvailableParticule(ParticuleRepo.BLOOD_PARTICULE, currentMob.getPositionX(), currentMob.getPositionY(), currentMob.getWidth(), currentMob.getHeight(), false, new PointF[]{currentMob.getCurrentMove()}));
 
         }
@@ -82,8 +64,8 @@ public class TouchedMoveRepo {
         @Override
         public void doTouchedMove(GameBoard board, GameMob currentMob, int damage) {
             int mobHealth = currentMob.getHealth();
-            if (mobHealth < (9 * GameConstant.TOUCH_DAMAGE)) {//9 de vie max
-                currentMob.setHealth(mobHealth + GameConstant.TOUCH_DAMAGE);
+            if (mobHealth < (9 * GameConstant.BASE_DAMAGE)) {//9 de vie max
+                currentMob.setHealth(mobHealth + GameConstant.BASE_DAMAGE);
             }
             currentMob.setState(GameMob.eMobState.HURT);
             currentMob.setAnimationState(0);
@@ -100,11 +82,7 @@ public class TouchedMoveRepo {
 
         @Override
         public void doTouchedMove(GameBoard board, GameMob currentMob, int damage) {
-            int mobHealth = currentMob.getHealth();
-            if (mobHealth > damage) {
-                mobHealth -= damage;
-                currentMob.setHealth(mobHealth);
-                currentMob.setState(GameMob.eMobState.HURT);
+            if (!currentMob.hurt(damage)) {
                 //creer des leurres
                 int particuleWidth = (int) currentMob.getWidth() * 2;
                 int particuleHeight = (int) currentMob.getHeight() * 2;
@@ -116,25 +94,6 @@ public class TouchedMoveRepo {
 
                 //Change la direction du mob
                 currentMob.setCurrentMove(0);
-                //random 4 direction
-//                switch ((int) (Math.random() * 4)) {
-//                    case 1:
-//                        currentMob.setxAlteration(-1);
-//                        currentMob.setyAlteration(1);
-//                        break;
-//                    case 2:
-//                        currentMob.setxAlteration(1);
-//                        currentMob.setyAlteration(-1);
-//                        break;
-//                    case 3:
-//                        currentMob.setxAlteration(-1);
-//                        currentMob.setyAlteration(-1);
-//                        break;
-//                    default:
-//                        currentMob.setxAlteration(1);
-//                        currentMob.setyAlteration(1);
-//                        break;
-//            }
 
                 //just  inverse direction
                 currentMob.setxAlteration(currentMob.getxAlteration() * -1);
@@ -149,14 +108,8 @@ public class TouchedMoveRepo {
                         null);
                 board.addParticule(particule1);
 
-            } else
-
-            {
-                currentMob.setHealth(0);
-                currentMob.setState(GameMob.eMobState.DYING);
             }
 
-            currentMob.setAnimationState(0);
         }
 
 

@@ -30,12 +30,12 @@ public class InfiniteLvlConstant {
     public static final int POOL2_MOB_SCORE = 75;
     // ------- SPAWNER VALUES
     /**
-     * value at which the MIN_INTEVALE_OF_SPAWN is used.
+     * value at which the POOL2_MIN_INTEVALE_OF_SPAWN is used.
      */
-    public static final long SCORE_INTERVAL_CAP = 15000;
-    public static final long MIN_INTEVALE_OF_SPAWN = 750;
-    public static final long MAX_INTERVALE_OF_SPAWN = 1250;
-    public static final int MAX_SPAWN_GROUP_SIZE = 6;
+    public static final long POOL2_TIME_INTERVAL_CAP = 60000;
+    public static final long POOL2_MIN_INTEVALE_OF_SPAWN = 7500;
+    public static final long POOL2_MAX_INTERVALE_OF_SPAWN = 15000;
+    public static final int POOL2_SPAWN_GROUP_SIZE = 5;
 
 
 }

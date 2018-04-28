@@ -100,7 +100,7 @@ public class GameRepo {
         String touchSpriteID = "touchSprite";
         Bitmap touchSprite = BitmapFactory.decodeResource(context.getResources(), R.drawable.touch1);
         SpriteRepo.addSpriteSheet(touchSprite, touchSpriteID, Constants.PARTICULE_NB_FRAME_ON_ANIMATION, 1);
-        TouchDispenser touchDisp = new TouchDispenser(GameConstant.TOUCH_STROKE * 2, touchSpriteID, GameConstant.TOUCH_DAMAGE);
+        TouchDispenser touchDisp = new TouchDispenser(GameConstant.TOUCH_STROKE * 2, touchSpriteID, GameConstant.BASE_DAMAGE);
 
         callback.onGameBoardGenerationProgress(66);
 
@@ -185,7 +185,7 @@ public class GameRepo {
         String touchSpriteID = "touchSprite";
         Bitmap touchSprite = BitmapFactory.decodeResource(context.getResources(), R.drawable.touch1);
         SpriteRepo.addSpriteSheet(touchSprite, touchSpriteID, Constants.PARTICULE_NB_FRAME_ON_ANIMATION, 1);
-        TouchDispenser touchDisp = new TouchDispenser(GameConstant.TOUCH_STROKE * 2, touchSpriteID, GameConstant.TOUCH_DAMAGE);
+        TouchDispenser touchDisp = new TouchDispenser(GameConstant.TOUCH_STROKE * 2, touchSpriteID, GameConstant.BASE_DAMAGE);
 
         callback.onGameBoardGenerationProgress(66);
 
@@ -227,7 +227,7 @@ public class GameRepo {
         String touchSpriteID = "touchSprite";
         Bitmap touchSprite = BitmapFactory.decodeResource(context.getResources(), R.drawable.touch1);
         SpriteRepo.addSpriteSheet(touchSprite, touchSpriteID, Constants.PARTICULE_NB_FRAME_ON_ANIMATION, 1);
-        TouchDispenser touchDisp = new TouchDispenser(GameConstant.TOUCH_STROKE * 2, touchSpriteID, GameConstant.TOUCH_DAMAGE);
+        TouchDispenser touchDisp = new TouchDispenser(GameConstant.TOUCH_STROKE * 2, touchSpriteID, GameConstant.BASE_DAMAGE);
 
         callback.onGameBoardGenerationProgress(66);
 
@@ -263,7 +263,7 @@ public class GameRepo {
         String touchSpriteID = "touchSprite";
         Bitmap touchSprite = BitmapFactory.decodeResource(context.getResources(), R.drawable.touch1);
         SpriteRepo.addSpriteSheet(touchSprite, touchSpriteID, Constants.PARTICULE_NB_FRAME_ON_ANIMATION, 1);
-        TouchDispenser touchDisp = new TouchDispenser(GameConstant.TOUCH_STROKE * 2, touchSpriteID, GameConstant.TOUCH_DAMAGE);
+        TouchDispenser touchDisp = new TouchDispenser(GameConstant.TOUCH_STROKE * 2, touchSpriteID, GameConstant.BASE_DAMAGE);
 
         GameBoard board = new GameBoard(EntitySpawnerRepo.getLvl1_3SpawnerManager(context), backGameBoard, boardWidth, boardHeight, new Rect(0, 0, boardWidth, boardHeight), rulesManager, touchDisp);
         board.resize(mScreenWidth, mScreenHeight);
