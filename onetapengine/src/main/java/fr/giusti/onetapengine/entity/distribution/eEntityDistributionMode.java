@@ -13,10 +13,28 @@ package fr.giusti.onetapengine.entity.distribution;
  * GROUPED_SEMIRANDOM picks a group of following entity from an random index of the list<br>
  */
 public enum eEntityDistributionMode {
+    /**
+     * release everything at once
+     */
     ALL_AT_ONCE,
+    /**
+     * release one at a time starting from the beginning of the list
+     */
     ONE_BY_ONE_ORDERED,
+    /**
+     * release groupSize at a time starting from the beginning of the list
+     */
     GROUPED_ORDERED,
+    /**
+     * release groupSize at a chunk of the list which is a multiple of groupSize
+     */
     GROUPED_SEMIRANDOM,
+    /**
+     * release groupSize picked from anywhere in the list (one by one)
+     */
     GROUPED_RANDOM,
+    /**
+     *  release one at a time picked from anywhere in the list
+     */
     ONE_BY_ONE_RANDOM;
 }

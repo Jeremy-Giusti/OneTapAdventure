@@ -41,9 +41,9 @@ public class EntitySpawnerLong extends EntitySpawner<Long>{
         if (conditionsType == eConditions.TIMER)
             return ((cdtProgress % conditionGoalValue) == 0) ? getEntityListOnConditionMet() : null;
 
-        conditionProgress += cdtProgress;
-        if (conditionProgress == conditionGoalValue) {
-            conditionProgress = initialProgressValue;
+        mConditionProgress += cdtProgress;
+        if (mConditionProgress == conditionGoalValue) {
+            mConditionProgress = initialProgressValue;
             return getEntityListOnConditionMet();
         }
         return null;

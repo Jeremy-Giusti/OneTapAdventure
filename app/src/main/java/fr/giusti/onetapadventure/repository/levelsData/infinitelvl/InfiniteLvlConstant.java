@@ -9,7 +9,7 @@ public class InfiniteLvlConstant {
     public static final String SCORE_RULE = "score rule";
 
     public static final int MAX_NUMBER_OF_MOB = 20;
-    public static final int DEFAULT_MOB_SIZE = 48;
+    public static final int DEFAULT_MOB_SIZE = 68;
     public static final int BOARD_WITDH = 1024;
     public static final int BOARD_HEIGHT = 512;
 
@@ -38,6 +38,13 @@ public class InfiniteLvlConstant {
     public static final int POOL2_SPAWN_GROUP_SIZE = 5;
 
 
+    // ---------------------------- pool 2 ----------------------------//
+
+
+    // ------- SPAWNER VALUES
+    public static final int POOL3_GROUP_SIZE = 2;
+    public static final int POOL3_MOB_SCORE = 100;
+    public static final int POOL3_MOB_SPEED = 300;
 }
 
 

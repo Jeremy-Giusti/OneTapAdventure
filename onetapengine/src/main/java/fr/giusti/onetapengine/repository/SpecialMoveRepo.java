@@ -39,7 +39,6 @@ public class SpecialMoveRepo {
     private final static HashMap<String, SpecialMove> specialeMoveList;
 
     /**
-     *
      * @param id required special move id
      * @return a new instance of the special move asked for
      */
@@ -78,18 +77,20 @@ public class SpecialMoveRepo {
         @Override
         public void doSpecialMove(GameBoard board, GameMob currentMob) {
             if (ticSinceLastMeal >= EAT_FREQ && ticSinceLastMeal % CHECK_FREQ == 0) {
-                int alignement = currentMob.getAlignement();
+                int alignement = currentMob.getmAlignement();
 
+                RectF collisionRect;
                 for (GameMob mob : board.getMobs()) {
+                    collisionRect= new RectF(mob.mPosition);
                     //mob is a different alignment and intersect
-                    if (mob.getAlignement() == alignement && mob.mPosition.intersect(currentMob.mPosition)) {
+                    if (mob.getmAlignement() != alignement && collisionRect.intersect(currentMob.mPosition)) {
                         mob.hurt(GameConstant.BASE_DAMAGE);
                         currentMob.mPosition.offset(1, 1);
 
                         currentMob.setState(GameMob.eMobState.SPE1);
                         currentMob.setHealth(currentMob.getHealth() + GameConstant.BASE_DAMAGE / 2);
+                        currentMob.setScoreValue(currentMob.getScoreValue() + mob.getScoreValue() / 2);
                         currentMob.setAnimationState(0);
-
                         ticSinceLastMeal = 0;
                     }
                 }
@@ -416,6 +417,7 @@ public class SpecialMoveRepo {
         specialeMoveList.put(smoke_trail.getId(), smoke_trail);
         specialeMoveList.put(breakGlassMove.getId(), breakGlassMove);
         specialeMoveList.put(ghostMove.getId(), ghostMove);
+        specialeMoveList.put(eatMove.getId(), eatMove);
 
     }
 }

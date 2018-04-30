@@ -259,14 +259,14 @@ public class EntityRepo {
 
             int seed = (int) (Math.random() * (float) Lvl1Constant.MOB_POP_Y_MAX_VAlUE);
             GameMob mob = getMobFromSeed(context, currentTier, seed, posDest, mobaseNameID + i, Lvl1Constant.MOB_POP_X, seed, Lvl1Constant.MOB_SIZE, Lvl1Constant.MOB_SIZE);
-            mob.setAlignement(currentTier);
+            mob.setmAlignement(currentTier);
             backupList.add(mob);
         }
 
         //--------------------Last mob --------------------------
         Point startPos = new Point(Lvl1Constant.MOB_POP_X, Lvl1Constant.MOB_POP_Y_MAX_VAlUE / 2);
         GameMob lastMob = getRapidScanMob("lastMob", context, startPos, 30);
-        lastMob.setAlignement(4);
+        lastMob.setmAlignement(4);
         backupList.add(lastMob);
         // -----------------------------------------------------
 
@@ -427,6 +427,7 @@ public class EntityRepo {
     public static ArrayList<Entity> getInfiniteLvlPool2(Context context) throws IOException {
         //TODO add 10 eggsMob latter
         //TODO add 10 dividing mobs latter
+        //TODO add 10 heal on touch
         ArrayList<Entity> pool2 = new ArrayList<>(20);
 
         String mob1sptsheetId = "pool2_multiplie_sprite";
@@ -455,9 +456,39 @@ public class EntityRepo {
             }
         }
 
-        //TODO add 10 heal on touch
 
         return pool2;
+    }
+
+    public static ArrayList<Entity> getInfiniteLvlPool3(Context context) throws IOException {
+        ArrayList<Entity> pool3 = new ArrayList<>(20);
+
+        String mob1sptsheetId = "pool3_eat_sprite";
+        Random r = new Random(System.currentTimeMillis());
+        for (int i = 0; i < 10; i++) {
+            String mobId = "pool3_eat_mob" + i;
+
+            float startX = r.nextInt(InfiniteLvlConstant.BOARD_WITDH - 1) + 1;
+            float startY = r.nextInt(InfiniteLvlConstant.BOARD_HEIGHT - 1) + 1;
+
+            int mobSpeed = GameUtils.getSpeedInPxPerTic(InfiniteLvlConstant.POOL3_MOB_SPEED);
+            PointF[] path = PathRepo.getRandomDirectionStraightPath(mobSpeed);
+
+            GameMob result = new GameMob.MobBuilder(mobId, mob1sptsheetId, startX, startY).setSize(InfiniteLvlConstant.DEFAULT_MOB_SIZE)
+                    .setAlignement(1)
+                    .setMovePattern(path)
+                    .setHealth(15)
+                    .setScore(InfiniteLvlConstant.POOL3_MOB_SCORE)
+                    .setSpecialMove(SpecialMoveRepo.getMoveById(SpecialMoveRepo.EAT_MOVE))
+                    .build();
+            pool3.add(result);
+
+            if (!SpriteRepo.hasSprite(mob1sptsheetId)) {
+                Bitmap mobSprite = SpriteSheetFactory.getMobSpriteSheet(context, result, "line");
+                SpriteRepo.addSpritesheetIfDoesntExist(mobSprite, mob1sptsheetId, Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
+            }
+        }
+        return pool3;
     }
 
 
@@ -614,4 +645,6 @@ public class EntityRepo {
         return new GameMob.MobBuilder(id, mobsptsheetId, startPoint.x, startPoint.y).setMovePattern(path).setSpecialMove(SpecialMoveRepo.getMoveById(SpecialMoveRepo.GHOST_MOVE)).setDefaultHealth(health).build();
 
     }
+
+
 }

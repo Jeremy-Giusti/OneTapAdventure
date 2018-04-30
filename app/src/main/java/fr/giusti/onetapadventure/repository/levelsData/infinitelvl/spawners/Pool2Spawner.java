@@ -46,7 +46,7 @@ public class Pool2Spawner extends EntitySpawner<Long> {
             }
         } else {
             //mob count
-            conditionProgress = cdtProgress;
+            mConditionProgress = cdtProgress;
             groupeSize = getGroupSizeCalculatedValue(cdtProgress);
         }
         return null;

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import fr.giusti.onetapadventure.repository.levelsData.infinitelvl.spawners.Pool1Spawner;
 import fr.giusti.onetapadventure.repository.levelsData.infinitelvl.spawners.Pool2Spawner;
+import fr.giusti.onetapadventure.repository.levelsData.infinitelvl.spawners.Pool3Spawner;
 import fr.giusti.onetapengine.entity.Entity;
 import fr.giusti.onetapengine.entity.GameMob;
 import fr.giusti.onetapengine.entity.distribution.EntitySpawnerFactory;
@@ -37,8 +38,9 @@ public class EntitySpawnerRepo {
         //TODO POOL 3
         //helping mobs (zombie, eating, gravity?)
         //spawn onMobdeath
-        // chance to spawn  = count/maxmobNb
-        //result.addSpawner(new EntitySpawnerInt.EntitySpawnerBuilder(eEntityDistributionMode.ALL_AT_ONCE, 0, -1, eConditions.MOB_COUNT).setEntityList(EntityRepo.getLvl1x1LastWave(context)).build());
+        ArrayList<Entity> pool3 = EntityRepo.getInfiniteLvlPool3(context);
+        result.addSpawner(new Pool3Spawner(pool3));
+
         //TODO POOL 4
         //Avancement mobs (golden, tp, touch tp, quick, swap, ...)
         //spawn onScore

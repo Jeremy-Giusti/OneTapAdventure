@@ -31,9 +31,9 @@ public class GameMob extends Entity {
     protected PointF[] movePattern;
 
     /**
-     * alignement of the mob, used to differenciate teams
+     * mAlignement of the mob, used to differenciate teams
      */
-    private int alignement = 0;
+    private int mAlignement = 0;
     /**
      * interface conataining the special move of this mob
      */
@@ -75,7 +75,7 @@ public class GameMob extends Entity {
      */
     protected eMobState mState = eMobState.MOVING_UP;
 
-    private final int mScoreValue;
+    private int mScoreValue;
 
     /**
      * 0-10,10-20,20-30 utilisé pour selectioner les sprite en sequence (joue l'animation)
@@ -104,7 +104,7 @@ public class GameMob extends Entity {
      * @param mBitmapId   un string qui sert d'id pour aller piocher le skin du mob dans le bitmapRepo (cache bitmap)
      * @param state       l'etat du mob (inutilisé pour le moment)
      */
-    private GameMob(String idName, int x, int y, int width, int height, PointF[] movePattern, SpecialMove specialMove1, TouchedMove touchedmove, String mBitmapId, int health, eMobState state, int score) {
+    private GameMob(String idName, int x, int y, int width, int height, PointF[] movePattern, SpecialMove specialMove1, TouchedMove touchedmove, String mBitmapId, int health, eMobState state, int score, int alignement) {
         super(idName, x, y, width, height, mBitmapId);
         this.movePattern = movePattern;
         this.mSpecialMove1 = specialMove1;
@@ -113,6 +113,7 @@ public class GameMob extends Entity {
         this.mDefaultHealth = health;
         this.mState = state;
         this.mScoreValue = score;
+        this.mAlignement = alignement;
     }
 
     private GameMob(MobBuilder mobBuilder) {
@@ -124,16 +125,16 @@ public class GameMob extends Entity {
         this.mDefaultHealth = mobBuilder.mDefaultHealth;
         this.mState = mobBuilder.mState;
         this.mScoreValue = mobBuilder.scoreValue;
-        this.alignement = mobBuilder.alignement;
+        this.mAlignement = mobBuilder.alignement;
     }
 
 
-    public int getAlignement() {
-        return alignement;
+    public int getmAlignement() {
+        return mAlignement;
     }
 
-    public void setAlignement(int alignement) {
-        this.alignement = alignement;
+    public void setmAlignement(int mAlignement) {
+        this.mAlignement = mAlignement;
     }
 
 
@@ -219,6 +220,7 @@ public class GameMob extends Entity {
         this.mHealth = mHealth;
     }
 
+
     public eMobState getState() {
         return mState;
     }
@@ -229,6 +231,10 @@ public class GameMob extends Entity {
 
     public int getScoreValue() {
         return mScoreValue;
+    }
+
+    public void setScoreValue(int score) {
+        mScoreValue = score;
     }
 
     public int getAnimationState() {
@@ -484,7 +490,8 @@ public class GameMob extends Entity {
                 mBitmapId,
                 mHealth,
                 mState,
-                mScoreValue);
+                mScoreValue,
+                mAlignement);
 
         return clone;
 

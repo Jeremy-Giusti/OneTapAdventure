@@ -30,7 +30,7 @@ public abstract class EntitySpawner<T> {
      * the initial mProgress
      */
     protected final T initialProgressValue;
-    protected T conditionProgress;
+    protected T mConditionProgress;
 
 
     protected int groupeSize = 5;
@@ -54,7 +54,7 @@ public abstract class EntitySpawner<T> {
         this.distibutionMode = distibutionMode;
         this.conditionGoalValue = conditionGoalValue;
         this.initialProgressValue = initialProgressValue;
-        this.conditionProgress = initialProgressValue;
+        this.mConditionProgress = initialProgressValue;
     }
 
 
@@ -176,12 +176,18 @@ public abstract class EntitySpawner<T> {
                 case GROUPED_SEMIRANDOM:
                     mobIndex = (int) ((Math.random() * entityList.size() / groupeSize)) * groupeSize;//if group size==5 index can be 5-10-15-...
                     for (int i = 0; i < groupeSize; i++) {
-                        result.add(entityList.get(mobIndex));
-                        if (!infinitePop) entityList.remove(mobIndex);
-                        else if (mobIndex + 1 < entityList.size())
-                            mobIndex++;
-                        else
-                            mobIndex = 0;
+                        if (!infinitePop) {
+                            result.add(entityList.get(mobIndex));
+                            entityList.remove(mobIndex);
+                        } else {
+                            result.add(entityList.get(mobIndex).clone());
+                            if (mobIndex + 1 < entityList.size())
+                                mobIndex++;
+                            else
+                                mobIndex = 0;
+                        }
+
+
                     }
                     break;
             }

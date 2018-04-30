@@ -89,7 +89,7 @@ public class AttributesToSpriteMapper {
 //                Log.v(TAG, "Sprite mapping 1" + mob.getBitmapId());
                 animationLayers[0] = getMovementSpritesAssetPath(context, mobState, mobMovementhType);
 //                Log.v(TAG, "Sprite mapping 2" + mob.getBitmapId());
-                animationLayers[1] = getAlignementSpritesAsRessource(context, mobState, mob.getAlignement());
+                animationLayers[1] = getAlignementSpritesAsRessource(context, mobState, mob.getmAlignement());
 //                Log.v(TAG, "Sprite mapping 3" + mob.getBitmapId());
                 animationLayers[2] = getSpecialSpritesAsRessource(context, mobState, mob.getmSpecialMove1().getId());
 //                  Log.v(TAG, "Sprite mapping 4" + mob.getBitmapId());
@@ -99,7 +99,7 @@ public class AttributesToSpriteMapper {
                 animationLayers[4] = getHealthSpritesAsRessource(context, mobState, mob.getHealth());
 //                   Log.v(TAG, "Sprite mapping end" + mob.getBitmapId());
             } else {
-                animationLayers[0] = getAlignementSpritesAsRessource(context, mobState, mob.getAlignement());
+                animationLayers[0] = getAlignementSpritesAsRessource(context, mobState, mob.getmAlignement());
                 animationLayers[1] = getSpecialSpritesAsRessource(context, mobState, mob.getmSpecialMove1().getId());
                 animationLayers[2] = getTouchSpritesAsRessource(context, mobState, mob.getmTouchedMove().getId());
                 animationLayers[3] = getHealthSpritesAsRessource(context, mobState, mob.getHealth());

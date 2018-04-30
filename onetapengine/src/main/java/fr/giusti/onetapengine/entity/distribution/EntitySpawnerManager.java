@@ -98,7 +98,7 @@ public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListen
         EntitySpawner spawner;
         for (int i = 0; i < spawnerList.size(); i++) {
             spawner = spawnerList.get(i);
-            board.onNewEntities(spawner.onConditionProgress(1,eConditions.MOB_AWAY));
+            board.onNewEntities(spawner.onConditionProgress(1l,eConditions.MOB_AWAY));
         }
     }
 
@@ -107,7 +107,7 @@ public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListen
         EntitySpawner spawner;
         for (int i = 0; i < spawnerList.size(); i++) {
             spawner = spawnerList.get(i);
-            board.onNewEntities(spawner.onConditionProgress(1,eConditions.MOB_AWAY));
+            board.onNewEntities(spawner.onConditionProgress(1l,eConditions.MOB_AWAY));
         }
     }
 
@@ -116,7 +116,7 @@ public class EntitySpawnerManager implements OnBoardEventListener, SpawnerListen
         EntitySpawner spawner;
         for (int i = 0; i < spawnerList.size(); i++) {
             spawner = spawnerList.get(i);
-            board.onNewEntities(spawner.onConditionProgress(1,eConditions.MOB_DEATH));
+            board.onNewEntities(spawner.onConditionProgress(1l,eConditions.MOB_DEATH));
         }
     }
 

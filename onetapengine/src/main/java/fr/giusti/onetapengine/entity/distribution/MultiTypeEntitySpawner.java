@@ -17,7 +17,7 @@ import fr.giusti.onetapengine.rules.eConditions;
  *
  *     {@literal @}Override
  *     public ArrayList<Entity> onConditionProgress(Long cdtProgress,eConditions conditionType) ;
- *         conditionProgress += cdtProgress;
+ *         mConditionProgress += cdtProgress;
  *         return null;
  *     }
  *

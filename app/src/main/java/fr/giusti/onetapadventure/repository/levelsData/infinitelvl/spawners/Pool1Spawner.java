@@ -44,9 +44,9 @@ public class Pool1Spawner extends EntitySpawner<Long> {
             }
         } else {
             //MOB COUNT
-            if (conditionProgress != cdtProgress) {
+            if (mConditionProgress != cdtProgress) {
                 //intervale  tend vers LongInterval quand count tend vers maxMob
-                conditionProgress = cdtProgress;
+                mConditionProgress = cdtProgress;
                 selectedInterval =(long) (InfiniteLvlConstant.POOL1_SHORT_INTEVALE_OF_SPAWN +((cdtProgress /(double) InfiniteLvlConstant.MAX_NUMBER_OF_MOB)*(INTERVAL_DIFFERENCE_SHORT_LONG)));
             }
         }
