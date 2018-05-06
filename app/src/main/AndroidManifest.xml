@@ -11,33 +11,29 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.Light">
         <activity
-            android:name="fr.giusti.onetapadventure.UI.activity.MainActivity"
+            android:name=".UI.activity.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="fr.giusti.onetapadventure.UI.activity.GameActivity"
+            android:name=".UI.activity.GameActivity"
             android:label="@string/app_name"
             android:screenOrientation="sensorLandscape"/>
         <activity
-            android:name="fr.giusti.onetapadventure.UI.activity.LvlSelectionActivity"
+            android:name=".UI.activity.LvlSelectionActivity"
             android:label="@string/app_name"
             android:screenOrientation="sensorLandscape"
             />
         <activity
-            android:name="fr.giusti.onetapadventure.UI.activity.MobCreationActivity"
+            android:name=".UI.activity.MobCreationActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/Mob_creation"
             android:launchMode="singleInstance"
             android:screenOrientation="sensorLandscape"
             />
     </application>
-
-
-
 
 </manifest>
