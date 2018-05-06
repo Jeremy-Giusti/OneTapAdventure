@@ -1,5 +1,7 @@
 package fr.giusti.onetapengine.entity;
 
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -10,6 +12,7 @@ import android.graphics.RectF;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import fr.giusti.onetapengine.BR;
 import fr.giusti.onetapengine.GameBoard;
 import fr.giusti.onetapengine.commons.Constants;
 import fr.giusti.onetapengine.commons.GameConstant;
@@ -551,18 +554,18 @@ public class GameMob extends Entity {
     }
 
 
-    public static class MobBuilder {
-        protected String idName;
-        protected String mSpriteSheetId;
-        protected PointF[] movePattern = new PointF[]{new PointF(0, 0)};
+    public static class MobBuilder extends BaseObservable {
+        private String idName;
+        private String mSpriteSheetId;
+        private PointF[] movePattern = new PointF[]{new PointF(0, 0)};
         private int alignement = 0;
         private SpecialMove mSpecialMove1 = SpecialMoveRepo.getMoveById(SpecialMoveRepo.NO_MOVE);
         private TouchedMove mTouchedMove = TouchedMoveRepo.getMoveById(TouchedMoveRepo.DEFAULT_MOVE);
         private int mHealth = GameConstant.BASE_DAMAGE;
         private int mDefaultHealth = GameConstant.BASE_DAMAGE;
-        public RectF mPosition = new RectF();
-        public eMobState mState = eMobState.MOVING_DOWN;
-        public int scoreValue = 50;
+        private RectF mPosition = new RectF();
+        private eMobState mState = eMobState.MOVING_DOWN;
+        private int scoreValue = 50;
 
         public MobBuilder(String idName, String mSpriteSheetId, float x, float y) {
             this.idName = idName;
@@ -570,8 +573,15 @@ public class GameMob extends Entity {
             mPosition = new RectF(x - (GameConstant.DEFAULT_MOB_SIZE / 2), y - (GameConstant.DEFAULT_MOB_SIZE / 2), x + (GameConstant.DEFAULT_MOB_SIZE / 2), y + (GameConstant.DEFAULT_MOB_SIZE / 2));
         }
 
+        public MobBuilder setIdName(String idName) {
+            this.idName = idName;
+            notifyPropertyChanged(BR.movePattern);
+            return this;
+        }
+
         public MobBuilder setMovePattern(PointF[] movePattern) {
             this.movePattern = movePattern;
+            notifyPropertyChanged(BR.movePattern);
             return this;
         }
 
@@ -584,6 +594,7 @@ public class GameMob extends Entity {
         public MobBuilder setDefaultHealth(int health) {
             this.mDefaultHealth = health;
             this.mHealth = health;
+            notifyPropertyChanged(BR.defaultHealth);
             return this;
         }
 
@@ -594,16 +605,19 @@ public class GameMob extends Entity {
 
         public MobBuilder setAlignement(int alignement) {
             this.alignement = alignement;
+            notifyPropertyChanged(BR.alignement);
             return this;
         }
 
         public MobBuilder setSpecialMove(SpecialMove specialMove1) {
             this.mSpecialMove1 = specialMove1;
+            notifyPropertyChanged(BR.specialMove1Name);
             return this;
         }
 
         public MobBuilder setTouchedMove(TouchedMove touchedMove) {
             this.mTouchedMove = touchedMove;
+            notifyPropertyChanged(BR.touchedMoveName);
             return this;
         }
 
@@ -619,17 +633,77 @@ public class GameMob extends Entity {
 
         public MobBuilder setSize(int size) {
             mPosition = new RectF(mPosition.centerX() - size / 2, mPosition.centerY() - size / 2, mPosition.centerX() + size / 2, mPosition.centerY() + size / 2);
+            notifyPropertyChanged(BR.size);
             return this;
         }
 
         public MobBuilder setHeight(int height) {
             mPosition = new RectF(mPosition.left, mPosition.centerY() - height / 2, mPosition.right, mPosition.centerY() + height / 2);
+            notifyPropertyChanged(BR.size);
             return this;
         }
 
         public MobBuilder setWidth(int width) {
             mPosition = new RectF(mPosition.centerX() - width / 2, mPosition.top, mPosition.centerX() + width / 2, mPosition.bottom);
+            notifyPropertyChanged(BR.size);
             return this;
+        }
+
+        public MobBuilder setPositionXY(float x, float y){
+            mPosition = new RectF(x - (mPosition.width() / 2), y - (mPosition.height()  / 2), x + (mPosition.width() / 2), y + (mPosition.height()  / 2));
+            notifyPropertyChanged(BR.xY);
+            return this;
+        }
+
+        public MobBuilder setSpriteSheetId(String mSpriteSheetId) {
+            this.mSpriteSheetId = mSpriteSheetId;
+            notifyPropertyChanged(BR.spriteSheetId);
+            return this;
+        }
+
+        @Bindable
+        public String getIdName() {
+            return idName;
+        }
+
+        @Bindable
+        public PointF[] getMovePattern() {
+            return movePattern;
+        }
+
+        @Bindable
+        public int getAlignement() {
+            return alignement;
+        }
+
+        @Bindable
+        public String getSpecialMove1Name() {
+            return mSpecialMove1.getId();
+        }
+
+        @Bindable
+        public String getTouchedMoveName() {
+            return mTouchedMove.getId();
+        }
+
+        @Bindable
+        public int getDefaultHealth() {
+            return mDefaultHealth;
+        }
+
+        @Bindable
+        public float getSize() {
+            return mPosition.width();
+        }
+
+        @Bindable
+        public String getXY() {
+            return mPosition.centerX() + "-" + mPosition.centerY();
+        }
+
+        @Bindable
+        public String getSpriteSheetId() {
+            return mSpriteSheetId;
         }
 
         public GameMob build() {

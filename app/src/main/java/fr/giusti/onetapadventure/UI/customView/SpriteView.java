@@ -1,17 +1,20 @@
 package fr.giusti.onetapadventure.UI.customView;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.databinding.BindingAdapter;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
-import fr.giusti.onetapengine.repository.SpriteRepo;
+import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapengine.commons.Constants;
+import fr.giusti.onetapengine.repository.SpriteRepo;
 
 /**
  * Created by giusti on 31/03/2015.
  */
-public class SpriteView extends ImageView {
+public class SpriteView extends android.support.v7.widget.AppCompatImageView {
 
     private int row = 0;
     private int column = 0;
@@ -23,10 +26,25 @@ public class SpriteView extends ImageView {
 
     public SpriteView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        handleAttr(attrs, context);
     }
 
     public SpriteView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        handleAttr(attrs, context);
+    }
+
+    private void handleAttr(AttributeSet attrs, Context context) {
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.SpriteView, 0, 0);
+        String spriteSheetId;
+        try {
+            spriteSheetId = ta.getString(R.styleable.SpriteView_spriteName);
+        } finally {
+            ta.recycle();
+        }
+        if (!TextUtils.isEmpty(spriteSheetId)) {
+            setSpriteSheet(spriteSheetId);
+        }
     }
 
     public void setSpriteSheet(final String spriteId) {

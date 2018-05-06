@@ -13,5 +13,6 @@
     <string name="all_permissions_needed">All permission are needed for the game to work without error</string>
     <string name="error_board_loading">An error happened while loading board.</string>
     <string name="generating_lvl">Generating level</string>
+    <string name="set_name">Enter mob name</string>
 
 </resources>

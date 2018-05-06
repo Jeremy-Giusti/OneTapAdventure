@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/dit_text_field_et"
+        android:inputType="text"
+        android:lines="1"
+        android:imeOptions="actionDone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/small_spacing" />
+
+    <Button
+        android:id="@+id/dit_confirm_bt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@android:string/ok"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dit_text_field_et"
+        app:layout_constraintWidth_percent="0.5" />
+
+    <Button
+        android:id="@+id/dit_cancel_bt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@android:string/cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/dit_confirm_bt"
+        app:layout_constraintTop_toBottomOf="@+id/dit_text_field_et"
+        app:layout_constraintWidth_percent="0.5" />
+
+
+</android.support.constraint.ConstraintLayout>

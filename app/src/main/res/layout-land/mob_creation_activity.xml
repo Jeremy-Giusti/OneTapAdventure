@@ -1,148 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="4">
 
-        <View
-            android:id="@+id/centerPoint"
+    <data>
+
+        <variable
+            name="gameMobBuilder"
+            type="fr.giusti.onetapengine.entity.GameMob.MobBuilder" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <fr.giusti.onetapadventure.UI.customView.SpriteView
+            android:id="@+id/mc_sprite_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_centerHorizontal="true" />
-
-        <EditText
-            android:id="@+id/mca_nameEdit"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:hint="mob idName"
-            android:layout_columnWeight="2"
-            android:ems="10" />
-
-        <EditText
-            android:id="@+id/mca_healthEdit"
-            android:hint="Health"
-            android:layout_below="@+id/mca_nameEdit"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:ems="10"
-
-            android:inputType="number" />
-
-        <EditText
-            android:id="@+id/mca_positionxEdit"
-            android:hint="position x"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:ems="5"
-            android:layout_below="@+id/mca_healthEdit"
-            android:layout_toLeftOf="@+id/centerPoint"
-            android:inputType="number" />
-
-
-        <EditText
-            android:id="@+id/mca_positionyEdit"
-
-            android:hint="position y"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:inputType="number"
-            android:layout_toRightOf="@+id/centerPoint"
-            android:layout_below="@+id/mca_healthEdit" />
-
-        <EditText
-            android:id="@+id/mca_widthEdit"
-            android:hint="Width"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:ems="5"
-            android:layout_toLeftOf="@+id/centerPoint"
-
-            android:layout_below="@+id/mca_positionyEdit"
-            android:inputType="number" />
-
-        <EditText
-            android:id="@+id/mca_heightEdit"
-            android:ems="5"
-            android:layout_below="@+id/mca_positionyEdit"
-            android:layout_toRightOf="@+id/centerPoint"
-            android:hint="Height"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:inputType="number" />
-
-        <Spinner
-            android:id="@+id/mca_speMoveSpinner"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_below="@+id/mca_heightEdit"
-            android:prompt="@string/speMove_prompt" />
-
-        <Spinner
-            android:id="@+id/mca_touchMoveSpinner"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_below="@+id/mca_speMoveSpinner"
-            android:prompt="@string/touchMove_prompt" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="6">
+            android:onClick="onClickedSpriteView"
+            app:layout_constraintHeight_percent="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.25"
+            app:SpriteSheet="@{gameMobBuilder.spriteSheetId}" />
 
         <Button
-            android:id="@+id/mca_skinSelectionButton"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:text="select a skin"
-            android:layout_toLeftOf="@+id/mca_mobSkinImage"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <TextView
-            android:id="@+id/mobPatternText"
-            android:text="move pattern"
-            android:textSize="20sp"
-            android:gravity="center"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_alignBottom="@+id/mca_mobSkinImage"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/mca_skinSelectionButton"
-            android:layout_alignRight="@+id/mca_skinSelectionButton"
-            android:layout_alignEnd="@+id/mca_skinSelectionButton" />
-
-        <fr.giusti.onetapadventure.UI.CustomView.SpriteView
-            android:id="@+id/mca_mobSkinImage"
-            android:layout_height="96dp"
-            android:layout_width="96dp"
-            android:scaleType="centerInside"
-            android:background="@drawable/background_sprite_view"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:id="@+id/mc_name_bt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:onClick="onClickedNameView"
+            android:text="@{gameMobBuilder.idName}"
+            app:layout_constraintHeight_percent="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mc_sprite_view"
+            app:layout_constraintWidth_percent="0.25" />
 
 
-        <fr.giusti.onetapadventure.UI.CustomView.PathDrawingView
-            android:id="@+id/mca_mobPatternSurface"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@+id/mca_mobSkinImage" />
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:text="generate"
-            android:padding="10dp"
-            android:visibility="gone"
-            android:background="#44ffffff"
-            android:onClick="onClickGeneratePath"/>
-    </RelativeLayout>
-</LinearLayout>
+            android:id="@+id/mc_posxy_bt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:onClick="onClickedPosView"
+            android:text="@{gameMobBuilder.XY}"
+            app:layout_constraintHeight_percent="0.5"
+            app:layout_constraintStart_toEndOf="@+id/mc_sprite_view"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.25" />
+
+        <ImageView
+            android:id="@+id/mc_path_iv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:onClick="onClickedPathView"
+            app:layout_constraintHeight_percent="0.5"
+            app:layout_constraintStart_toEndOf="@+id/mc_sprite_view"
+            app:layout_constraintTop_toBottomOf="@id/mc_posxy_bt"
+            app:layout_constraintWidth_percent="0.25" />
+
+        <Button
+            android:id="@+id/mc_health_bt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:onClick="onClickedHealthView"
+            android:text="@{gameMobBuilder.defaultHealth}"
+            app:layout_constraintHeight_percent="0.5"
+            app:layout_constraintStart_toEndOf="@+id/mc_posxy_bt"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.25" />
+
+        <Button
+            android:id="@+id/mc_alignment_iv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:onClick="onClickedAlignmentView"
+            android:text="@{gameMobBuilder.alignement}"
+            app:layout_constraintHeight_percent="0.5"
+            app:layout_constraintStart_toEndOf="@+id/mc_path_iv"
+            app:layout_constraintTop_toBottomOf="@id/mc_posxy_bt"
+            app:layout_constraintWidth_percent="0.25" />
+
+        <Button
+            android:id="@+id/mc_spemove_bt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:onClick="onClickedSpeMoveView"
+            android:text="@{gameMobBuilder.specialMove1Name}"
+            app:layout_constraintHeight_percent="0.5"
+            app:layout_constraintStart_toEndOf="@+id/mc_health_bt"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.25" />
+
+        <Button
+            android:id="@+id/mc_touchmove_iv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:onClick="onClickedTouchMoveView"
+            android:text="@{gameMobBuilder.touchedMoveName}"
+            app:layout_constraintHeight_percent="0.5"
+            app:layout_constraintStart_toEndOf="@+id/mc_alignment_iv"
+            app:layout_constraintTop_toBottomOf="@id/mc_posxy_bt"
+            app:layout_constraintWidth_percent="0.25" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>
