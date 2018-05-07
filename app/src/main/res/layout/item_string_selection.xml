@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/iss_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/xs_spacing"
+    android:background="@android:color/darker_gray"
+    android:clickable="true"
+    android:focusable="true"
+    android:padding="@dimen/small_spacing">
+
+    <TextView
+        android:id="@+id/iss_string_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/medium_text_size" />
+
+</android.support.constraint.ConstraintLayout>

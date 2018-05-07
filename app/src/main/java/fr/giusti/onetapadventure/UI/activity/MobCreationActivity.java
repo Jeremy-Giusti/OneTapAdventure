@@ -9,9 +9,15 @@ import android.view.MenuItem;
 import android.view.View;
 
 import fr.giusti.onetapadventure.R;
+import fr.giusti.onetapadventure.UI.dialog.DoubleNumberInputDialog;
+import fr.giusti.onetapadventure.UI.dialog.NumberInputDialog;
+import fr.giusti.onetapadventure.UI.dialog.StringSelectionDialog;
 import fr.giusti.onetapadventure.UI.dialog.TextInputDialog;
 import fr.giusti.onetapadventure.UI.viewmodel.MobCreationViewModel;
-import fr.giusti.onetapadventure.databinding.MobCreationActivityBinding;
+import fr.giusti.onetapadventure.databinding.ActivityMobCreationBinding;
+import fr.giusti.onetapengine.commons.GameConstant;
+import fr.giusti.onetapengine.repository.SpecialMoveRepo;
+import fr.giusti.onetapengine.repository.TouchedMoveRepo;
 
 /**
  * gere une grande partie de ce qui a traité la creation de mob
@@ -27,14 +33,14 @@ public class MobCreationActivity extends AppCompatActivity {
     protected void onCreate(android.os.Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        MobCreationActivityBinding binding = DataBindingUtil.setContentView(this, R.layout.mob_creation_activity);
+        ActivityMobCreationBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_mob_creation);
         mobViewModel = ViewModelProviders.of(this).get(MobCreationViewModel.class);
         binding.setGameMobBuilder(mobViewModel.getGameMob());
     }
 
 
     public void onClickedSpriteView(View v) {
-
+        //TODO custom spritesheet ?
     }
 
     public void onClickedNameView(View v) {
@@ -42,7 +48,11 @@ public class MobCreationActivity extends AppCompatActivity {
     }
 
     public void onClickedPosView(View v) {
-
+        DoubleNumberInputDialog nbDialog = new DoubleNumberInputDialog(this, R.string.set_pos, (number1, number2) -> mobViewModel.getGameMob().setPositionXY(number1, number2));
+        //TODO magic numbers
+        nbDialog.settupNbPicker1((int) mobViewModel.getGameMob().getX(), 0, 1024);
+        nbDialog.settupNbPicker2((int) mobViewModel.getGameMob().getY(), 0, 512);
+        nbDialog.show();
     }
 
     public void onClickedPathView(View v) {
@@ -50,19 +60,32 @@ public class MobCreationActivity extends AppCompatActivity {
     }
 
     public void onClickedHealthView(View v) {
-
+        NumberInputDialog nbDialog = new NumberInputDialog(this, R.string.set_health, number -> mobViewModel.getGameMob().setDefaultHealth(number));
+        nbDialog.setValue(mobViewModel.getGameMob().getDefaultHealthValue());
+        nbDialog.setMin(1);
+        nbDialog.setMax(GameConstant.MAX_MOB_HEALTH);
+        nbDialog.show();
     }
 
     public void onClickedAlignmentView(View v) {
+        NumberInputDialog nbDialog = new NumberInputDialog(this, R.string.set_alignement, number -> mobViewModel.getGameMob().setAlignement(number));
+        nbDialog.setValue(mobViewModel.getGameMob().getDefaultHealthValue());
+        nbDialog.setMin(0);
+        nbDialog.setMax(GameConstant.MAX_MOB_ALIGNEMENT);
+        nbDialog.show();
 
     }
 
     public void onClickedSpeMoveView(View v) {
-
+        new StringSelectionDialog(this,
+                R.string.set_spe_move,
+                SpecialMoveRepo.getMoveIdList(),
+                selection -> mobViewModel.getGameMob().setSpecialMove(SpecialMoveRepo.getMoveById(selection)))
+                .show();
     }
 
     public void onClickedTouchMoveView(View v) {
-
+        new StringSelectionDialog(this, R.string.set_touch_move, TouchedMoveRepo.getMoveIdList(), selection -> mobViewModel.getGameMob().setTouchedMove(TouchedMoveRepo.getMoveById(selection))).show();
     }
 
 

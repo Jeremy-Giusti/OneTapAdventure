@@ -43,7 +43,7 @@ public class PercentLoadingDialog extends DialogFragment {
 
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        View root = inflater.inflate(R.layout.loading_dialog, null);
+        View root = inflater.inflate(R.layout.dialog_loading, null);
         mProgressBar = (ProgressBar) root.findViewById(R.id.ld_percent_progress_bar);
         builder.setTitle(title).setView(root);
         return builder.create();

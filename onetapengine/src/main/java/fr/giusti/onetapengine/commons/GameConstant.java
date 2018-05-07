@@ -22,6 +22,8 @@ public class GameConstant {
     public static final String HOLE_FRONT_SPRITE_ID = "hole front";
     public static final int BASE_DAMAGE = 10;
     public static final int TOUCH_STROKE = 25;
+    public static final int MAX_MOB_HEALTH = 200;
+    public static final int MAX_MOB_ALIGNEMENT = 8;
 
     public static final String getLevelId(int world, int lvl) {
         return "" + world + "x" + lvl;

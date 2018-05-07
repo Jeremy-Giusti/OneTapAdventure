@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/default_dialog_width"
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/dit_title_tv"
+        android:id="@+id/din_title_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/darker_gray"
@@ -15,35 +15,32 @@
         android:textColor="@android:color/black"
         android:textSize="@dimen/dialog_title_text_size" />
 
-    <EditText
-        android:id="@+id/dit_text_field_et"
+    <NumberPicker
+        android:id="@+id/din_text_nb_picker_et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/small_spacing"
-        android:imeOptions="actionDone"
-        android:inputType="text"
-        android:lines="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dit_title_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/din_title_tv" />
 
     <Button
-        android:id="@+id/dit_confirm_bt"
+        android:id="@+id/din_confirm_bt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@android:string/ok"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dit_text_field_et"
+        app:layout_constraintTop_toBottomOf="@+id/din_text_nb_picker_et"
         app:layout_constraintWidth_percent="0.5" />
 
     <Button
-        android:id="@+id/dit_cancel_bt"
+        android:id="@+id/din_cancel_bt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@android:string/cancel"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/dit_confirm_bt"
-        app:layout_constraintTop_toBottomOf="@+id/dit_text_field_et"
+        app:layout_constraintStart_toEndOf="@+id/din_confirm_bt"
+        app:layout_constraintTop_toBottomOf="@+id/din_text_nb_picker_et"
         app:layout_constraintWidth_percent="0.5" />
 
 

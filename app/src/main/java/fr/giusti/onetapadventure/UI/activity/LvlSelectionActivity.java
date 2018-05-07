@@ -23,7 +23,7 @@ public class LvlSelectionActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lvl_selection_activity);
+        setContentView(R.layout.activity_lvl_selection);
         initAreaFragment();
         initPager();
 

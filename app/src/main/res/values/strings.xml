@@ -14,5 +14,10 @@
     <string name="error_board_loading">An error happened while loading board.</string>
     <string name="generating_lvl">Generating level</string>
     <string name="set_name">Enter mob name</string>
+    <string name="set_health">Enter mob health</string>
+    <string name="set_alignement">Enter mob alignement</string>
+    <string name="set_spe_move">Select special ability</string>
+    <string name="set_touch_move">Select touched behavior</string>
+    <string name="set_pos">Set X and Y position</string>
 
 </resources>

@@ -575,7 +575,7 @@ public class GameMob extends Entity {
 
         public MobBuilder setIdName(String idName) {
             this.idName = idName;
-            notifyPropertyChanged(BR.movePattern);
+            notifyPropertyChanged(BR.idName);
             return this;
         }
 
@@ -649,8 +649,8 @@ public class GameMob extends Entity {
             return this;
         }
 
-        public MobBuilder setPositionXY(float x, float y){
-            mPosition = new RectF(x - (mPosition.width() / 2), y - (mPosition.height()  / 2), x + (mPosition.width() / 2), y + (mPosition.height()  / 2));
+        public MobBuilder setPositionXY(float x, float y) {
+            mPosition = new RectF(x - (mPosition.width() / 2), y - (mPosition.height() / 2), x + (mPosition.width() / 2), y + (mPosition.height() / 2));
             notifyPropertyChanged(BR.xY);
             return this;
         }
@@ -672,8 +672,8 @@ public class GameMob extends Entity {
         }
 
         @Bindable
-        public int getAlignement() {
-            return alignement;
+        public String getAlignement() {
+            return String.valueOf(alignement);
         }
 
         @Bindable
@@ -687,18 +687,26 @@ public class GameMob extends Entity {
         }
 
         @Bindable
-        public int getDefaultHealth() {
-            return mDefaultHealth;
+        public String getDefaultHealth() {
+            return String.valueOf(mDefaultHealth);
         }
 
         @Bindable
-        public float getSize() {
-            return mPosition.width();
+        public String getSize() {
+            return String.valueOf(mPosition.width());
         }
 
         @Bindable
         public String getXY() {
-            return mPosition.centerX() + "-" + mPosition.centerY();
+            return mPosition.centerX() + "\n" + mPosition.centerY();
+        }
+
+        public float getX(){
+            return mPosition.centerX();
+        }
+
+        public float getY(){
+            return mPosition.centerY();
         }
 
         @Bindable
@@ -710,6 +718,9 @@ public class GameMob extends Entity {
             return new GameMob(this);
         }
 
+        public int getDefaultHealthValue() {
+            return mDefaultHealth;
+        }
     }
 
     public enum eMobState {

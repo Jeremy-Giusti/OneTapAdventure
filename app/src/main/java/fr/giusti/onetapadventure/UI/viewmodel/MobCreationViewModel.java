@@ -14,7 +14,7 @@ public class MobCreationViewModel extends ViewModel {
     private GameMob.MobBuilder mGameMob;
 
     public MobCreationViewModel() {
-        mGameMob = new GameMob.MobBuilder("", "", 10f, 10f);
+        mGameMob = new GameMob.MobBuilder("name", "", 10f, 10f);
     }
 
     public GameMob.MobBuilder getGameMob() {

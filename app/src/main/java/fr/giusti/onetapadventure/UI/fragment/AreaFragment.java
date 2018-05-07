@@ -28,7 +28,7 @@ public class AreaFragment extends Fragment implements LvlButtonAdapter.onButtonC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.area_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_area, container, false);
         // Inflate the layout for this fragment
         manageArgs();
         initViews(rootView);

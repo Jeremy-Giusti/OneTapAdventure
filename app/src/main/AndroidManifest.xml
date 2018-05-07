@@ -32,7 +32,6 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/Mob_creation"
             android:launchMode="singleInstance"
-            android:screenOrientation="sensorLandscape"
             />
     </application>
 

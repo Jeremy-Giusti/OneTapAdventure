@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/default_dialog_width"
+    android:layout_height="wrap_content"
+    android:maxHeight="@dimen/default_dialog_height">
+
+    <TextView
+        android:id="@+id/dss_title_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/darker_gray"
+        android:padding="@dimen/small_spacing"
+        android:text="Title"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/dialog_title_text_size" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/dss_recycler_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:lines="1"
+        app:layout_constraintTop_toBottomOf="@+id/dss_title_tv" />
+
+
+</android.support.constraint.ConstraintLayout>

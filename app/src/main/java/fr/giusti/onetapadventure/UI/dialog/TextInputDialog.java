@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import fr.giusti.onetapadventure.R;
 
@@ -16,15 +17,18 @@ import fr.giusti.onetapadventure.R;
 public class TextInputDialog extends Dialog implements View.OnClickListener {
     private TextInputDialogListener mCallback;
     private EditText mEditText;
+    private TextView mTitleText;
 
     public TextInputDialog(@NonNull Context context, int title, TextInputDialogListener callback) {
         super(context);
         setContentView(R.layout.dialog_input_text);
-        setTitle(title);
 
+        mTitleText = findViewById(R.id.dit_title_tv);
         mEditText = findViewById(R.id.dit_text_field_et);
         Button yes = findViewById(R.id.dit_confirm_bt);
         Button no = findViewById(R.id.dit_cancel_bt);
+
+        mTitleText.setText(title);
 
         yes.setOnClickListener(this);
         no.setOnClickListener(this);

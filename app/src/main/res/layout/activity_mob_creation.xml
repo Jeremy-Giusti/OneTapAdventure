@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <data>
+
+        <variable
+            name="gameMobBuilder"
+            type="fr.giusti.onetapengine.entity.GameMob.MobBuilder" />
+    </data>
+
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <fr.giusti.onetapadventure.UI.customView.SpriteView
+            android:id="@+id/mc_sprite_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:onClick="onClickedSpriteView"
+            app:SpriteSheet="@{gameMobBuilder.spriteSheetId}"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.5" />
+
+        <Button
+            android:id="@+id/mc_name_bt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:onClick="onClickedNameView"
+            android:text="@{gameMobBuilder.idName}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toEndOf="@+id/mc_sprite_view"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <Button
+            android:id="@+id/mc_posxy_bt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:onClick="onClickedPosView"
+            android:text="@{gameMobBuilder.XY}"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mc_sprite_view"
+            app:layout_constraintWidth_percent="0.5" />
+
+        <ImageView
+            android:id="@+id/mc_path_iv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:onClick="onClickedPathView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toEndOf="@+id/mc_sprite_view"
+            app:layout_constraintTop_toBottomOf="@+id/mc_name_bt" />
+
+        <Button
+            android:id="@+id/mc_health_bt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:onClick="onClickedHealthView"
+            android:text="@{gameMobBuilder.defaultHealth}"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mc_posxy_bt"
+            app:layout_constraintWidth_percent="0.5" />
+
+        <Button
+            android:id="@+id/mc_alignment_iv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:onClick="onClickedAlignmentView"
+            android:text="@{gameMobBuilder.alignement}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toEndOf="@+id/mc_sprite_view"
+            app:layout_constraintTop_toBottomOf="@+id/mc_path_iv" />
+
+        <Button
+            android:id="@+id/mc_spemove_bt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:onClick="onClickedSpeMoveView"
+            android:text="@{gameMobBuilder.specialMove1Name}"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mc_health_bt"
+            app:layout_constraintWidth_percent="0.5" />
+
+        <Button
+            android:id="@+id/mc_touchmove_iv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:onClick="onClickedTouchMoveView"
+            android:text="@{gameMobBuilder.touchedMoveName}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintStart_toEndOf="@+id/mc_sprite_view"
+            app:layout_constraintTop_toBottomOf="@+id/mc_alignment_iv" />
+
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

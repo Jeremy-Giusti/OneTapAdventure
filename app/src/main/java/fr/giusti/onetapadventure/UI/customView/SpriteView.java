@@ -2,8 +2,8 @@ package fr.giusti.onetapadventure.UI.customView;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.databinding.BindingAdapter;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 
@@ -47,7 +47,8 @@ public class SpriteView extends android.support.v7.widget.AppCompatImageView {
         }
     }
 
-    public void setSpriteSheet(final String spriteId) {
+    public void setSpriteSheet(@NonNull final String spriteId) {
+        if (TextUtils.isEmpty(spriteId)) return;
         final Handler handler = new Handler();
         handler.post(new Runnable() {
             @Override
