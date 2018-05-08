@@ -11,6 +11,7 @@ import android.view.View;
 import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapadventure.UI.dialog.DoubleNumberInputDialog;
 import fr.giusti.onetapadventure.UI.dialog.NumberInputDialog;
+import fr.giusti.onetapadventure.UI.dialog.PathDrawingDialog;
 import fr.giusti.onetapadventure.UI.dialog.StringSelectionDialog;
 import fr.giusti.onetapadventure.UI.dialog.TextInputDialog;
 import fr.giusti.onetapadventure.UI.viewmodel.MobCreationViewModel;
@@ -60,7 +61,9 @@ public class MobCreationActivity extends AppCompatActivity {
     }
 
     public void onClickedPathView(View v) {
-
+        PathDrawingDialog pathDialog = new PathDrawingDialog(this, R.string.set_path, path -> mobViewModel.getGameMob().setMovePattern(path));
+        pathDialog.setPath(mobViewModel.getGameMob().getMovePattern());
+        pathDialog.show();
     }
 
     public void onClickedHealthView(View v) {

@@ -18,15 +18,15 @@
             android:id="@+id/mc_sprite_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@drawable/background_sprite_view"
             android:onClick="onClickedSpriteView"
             android:scaleType="fitCenter"
-            android:background="@drawable/background_sprite_view"
+            app:SpriteSheet="@{gameMobBuilder.spriteSheetId}"
+            app:SpriteSize="@{gameMobBuilder.size}"
             app:layout_constraintHeight_percent="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.25"
-            app:SpriteSheet="@{gameMobBuilder.spriteSheetId}"
-            app:SpriteSize="@{gameMobBuilder.size}"/>
+            app:layout_constraintWidth_percent="0.25" />
 
         <Button
             android:id="@+id/mc_name_bt"
@@ -52,7 +52,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.25" />
 
-        <ImageView
+        <fr.giusti.onetapadventure.UI.customView.PathDrawingView
             android:id="@+id/mc_path_iv"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -60,7 +60,10 @@
             app:layout_constraintHeight_percent="0.5"
             app:layout_constraintStart_toEndOf="@+id/mc_sprite_view"
             app:layout_constraintTop_toBottomOf="@id/mc_posxy_bt"
-            app:layout_constraintWidth_percent="0.25" />
+            app:layout_constraintWidth_percent="0.25"
+            app:readOnly="true"
+            app:path="@{gameMobBuilder.MovePattern}"
+            />
 
         <Button
             android:id="@+id/mc_health_bt"
@@ -87,10 +90,10 @@
         <Button
             android:id="@+id/mc_spemove_bt"
             android:layout_width="0dp"
-            android:textAllCaps="false"
             android:layout_height="0dp"
             android:onClick="onClickedSpeMoveView"
             android:text="@{gameMobBuilder.specialMove1Name}"
+            android:textAllCaps="false"
             app:layout_constraintHeight_percent="0.5"
             app:layout_constraintStart_toEndOf="@+id/mc_health_bt"
             app:layout_constraintTop_toTopOf="parent"
@@ -99,10 +102,10 @@
         <Button
             android:id="@+id/mc_touchmove_iv"
             android:layout_width="0dp"
-            android:textAllCaps="false"
             android:layout_height="0dp"
             android:onClick="onClickedTouchMoveView"
             android:text="@{gameMobBuilder.touchedMoveName}"
+            android:textAllCaps="false"
             app:layout_constraintHeight_percent="0.5"
             app:layout_constraintStart_toEndOf="@+id/mc_alignment_iv"
             app:layout_constraintTop_toBottomOf="@id/mc_posxy_bt"

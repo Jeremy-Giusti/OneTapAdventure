@@ -3,4 +3,7 @@
     <declare-styleable name="SpriteView">
         <attr name="spriteName" format="string"/>
     </declare-styleable>
+    <declare-styleable name="PathDrawingView">
+        <attr name="readOnly" format="boolean"/>
+    </declare-styleable>
 </resources>

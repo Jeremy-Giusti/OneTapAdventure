@@ -20,5 +20,6 @@
     <string name="set_touch_move">Select touched behavior</string>
     <string name="set_pos">Set X and Y position</string>
     <string name="set_size">Enter mob size</string>
+    <string name="set_path">Draw mob path</string>
 
 </resources>

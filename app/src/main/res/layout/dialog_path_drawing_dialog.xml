@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/default_dialog_width"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/dpdd_title_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/darker_gray"
+        android:padding="@dimen/small_spacing"
+        android:text="Title"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/dialog_title_text_size" />
+
+    <fr.giusti.onetapadventure.UI.customView.PathDrawingView
+        android:id="@+id/dpdd_path_drawing_view"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@android:color/white"
+        android:layout_margin="@dimen/small_spacing"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dpdd_title_tv" />
+
+    <Button
+        android:id="@+id/dpdd_confirm_bt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@android:string/ok"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dpdd_path_drawing_view"
+        app:layout_constraintWidth_percent="0.5" />
+
+    <Button
+        android:id="@+id/dpdd_cancel_bt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@android:string/cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/dpdd_confirm_bt"
+        app:layout_constraintTop_toBottomOf="@+id/dpdd_path_drawing_view"
+        app:layout_constraintWidth_percent="0.5" />
+
+
+</android.support.constraint.ConstraintLayout>
