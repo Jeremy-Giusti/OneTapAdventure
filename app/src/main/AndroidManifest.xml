@@ -29,7 +29,6 @@
             />
         <activity
             android:name=".UI.activity.MobCreationActivity"
-            android:configChanges="orientation|screenSize"
             android:label="@string/Mob_creation"
             android:launchMode="singleInstance"
             />

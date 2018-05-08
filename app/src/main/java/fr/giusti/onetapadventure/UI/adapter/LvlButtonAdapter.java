@@ -1,4 +1,4 @@
-package fr.giusti.onetapadventure.UI;
+package fr.giusti.onetapadventure.UI.adapter;
 
 import android.content.Context;
 import android.graphics.Color;

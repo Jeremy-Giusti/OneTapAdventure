@@ -44,12 +44,7 @@ public class GameRepo {
 
 
     public void getBoardByLvlIdAsync(final Context context, final String lvlId, final OnGameEndListener endListener, final IRuleProgressListener ruleProgressListener, final BoardGenerationCallback callback) {
-
-        new Thread(new Runnable() {
-            public void run() {
-                getBoardByLvlId(context, callback, lvlId, endListener, ruleProgressListener);
-            }
-        }).start();
+        new Thread(() -> getBoardByLvlId(context, callback, lvlId, endListener, ruleProgressListener)).start();
 
     }
 

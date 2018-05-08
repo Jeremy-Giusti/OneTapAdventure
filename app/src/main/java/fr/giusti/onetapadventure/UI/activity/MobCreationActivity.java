@@ -40,7 +40,11 @@ public class MobCreationActivity extends AppCompatActivity {
 
 
     public void onClickedSpriteView(View v) {
-        //TODO custom spritesheet ?
+        NumberInputDialog nbDialog = new NumberInputDialog(this, R.string.set_size, number -> mobViewModel.getGameMob().setSize(number));
+        nbDialog.setMin(32);
+        nbDialog.setMax(256);
+        nbDialog.setValue(mobViewModel.getGameMob().getSize());
+        nbDialog.show();
     }
 
     public void onClickedNameView(View v) {
@@ -61,17 +65,17 @@ public class MobCreationActivity extends AppCompatActivity {
 
     public void onClickedHealthView(View v) {
         NumberInputDialog nbDialog = new NumberInputDialog(this, R.string.set_health, number -> mobViewModel.getGameMob().setDefaultHealth(number));
-        nbDialog.setValue(mobViewModel.getGameMob().getDefaultHealthValue());
         nbDialog.setMin(1);
         nbDialog.setMax(GameConstant.MAX_MOB_HEALTH);
+        nbDialog.setValue(mobViewModel.getGameMob().getDefaultHealthValue());
         nbDialog.show();
     }
 
     public void onClickedAlignmentView(View v) {
         NumberInputDialog nbDialog = new NumberInputDialog(this, R.string.set_alignement, number -> mobViewModel.getGameMob().setAlignement(number));
-        nbDialog.setValue(mobViewModel.getGameMob().getDefaultHealthValue());
         nbDialog.setMin(0);
         nbDialog.setMax(GameConstant.MAX_MOB_ALIGNEMENT);
+        nbDialog.setValue(mobViewModel.getGameMob().getAlignementValue());
         nbDialog.show();
 
     }

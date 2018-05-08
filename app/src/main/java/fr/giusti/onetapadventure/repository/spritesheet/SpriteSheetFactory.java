@@ -2,9 +2,10 @@ package fr.giusti.onetapadventure.repository.spritesheet;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.util.Log;
-import android.util.Pair;
 
 import com.sqli.spritesheetgenerator.SpriteGenerator;
 import com.sqli.spritesheetgenerator.model.SpriteSheetTemplate;
@@ -22,6 +23,17 @@ public class SpriteSheetFactory {
 
 
     private static final String TAG = SpriteSheetFactory.class.getSimpleName();
+    private static SpriteSheetFactory instance;
+
+    private SpriteSheetFactory() {
+    }
+
+    public static SpriteSheetFactory getInstance() {
+        if (instance == null) {
+            instance = new SpriteSheetFactory();
+        }
+        return instance;
+    }
 
     /**
      * generate a spritesheet using mob features
@@ -32,7 +44,7 @@ public class SpriteSheetFactory {
      * @return the desired spritsheet
      * @throws IOException
      */
-    public static Bitmap getMobSpriteSheet(Context context, GameMob mob, String mobMovementType) throws IOException {
+    public Bitmap generateMobSpriteSheet(Context context, GameMob mob, String mobMovementType) throws IOException {
 
         Log.v(TAG, "Sprite generation for " + mob.getBitmapId());
         SpriteSheetTemplate spriteSheetTemplate = AttributesToSpriteMapper.getInstance().getMobMap(context, mob, mobMovementType);
@@ -44,53 +56,36 @@ public class SpriteSheetFactory {
         return spriteSheetResult;
     }
 
-    public static void getMobListSpriteSheetAsync(final Context context, final SpriteSheetGenerationListener listener, final Pair<GameMob, String>... mobAndMovementType) throws IOException {
-        new AsyncSpriteGeneratorTask(context, listener).execute(mobAndMovementType);
-    }
+    private long ongoingGenerationTimestamp;
 
+    public void generateAsyncAndIgnorePrevious(final Context context, final SpriteSheetGenerationListener listener, @NonNull final GameMob mob, final String mobMovementType) {
+        long generationTimestamp = System.currentTimeMillis();
+        ongoingGenerationTimestamp = generationTimestamp;
 
-    interface SpriteSheetGenerationListener {
-        public void onSpriteSheetDone(Pair<GameMob, Bitmap>... spritedMob);
-
-        public void onSpriteSheetProgress(int progress);
-
-        public void onError(Exception error);
-
-    }
-
-    private static class AsyncSpriteGeneratorTask extends AsyncTask<Pair<GameMob, String>, Integer, Pair<GameMob, Bitmap>[]> {
-
-        private Context context;
-        private SpriteSheetGenerationListener listener;
-
-        AsyncSpriteGeneratorTask(final Context context, final SpriteSheetGenerationListener listener) {
-            this.context = context;
-            this.listener = listener;
-        }
-
-        @Override
-        protected Pair<GameMob, Bitmap>[] doInBackground(Pair<GameMob, String>... mobAndMovementType) {
-            Pair<GameMob, Bitmap>[] result = new Pair[mobAndMovementType.length];
+        new Thread(() -> {
             try {
-                for (int i = 0; i < mobAndMovementType.length; i++) {
-                    Bitmap sprisheet = getMobSpriteSheet(context, mobAndMovementType[i].first, mobAndMovementType[i].second);
-                    result[i] = new Pair<GameMob, Bitmap>(mobAndMovementType[i].first, sprisheet);
-                }
+                Bitmap result = generateMobSpriteSheet(context, mob, mobMovementType);
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    if (generationTimestamp == ongoingGenerationTimestamp)
+                        listener.onSpriteSheetDone(result);
+                    else
+                        listener.onCancelled();
+                });
+
             } catch (IOException e) {
+                Log.e(TAG, "error generating spritesheet asyn", e);
                 listener.onError(e);
             }
-            return result;
-        }
+        }).start();
+    }
 
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            listener.onSpriteSheetProgress(values[0]);
-        }
 
-        @Override
-        protected void onPostExecute(Pair<GameMob, Bitmap>[] result) {
-            listener.onSpriteSheetDone(result);
-        }
+    public interface SpriteSheetGenerationListener {
+        void onSpriteSheetDone(Bitmap spriteSheet);
+
+        void onError(IOException error);
+
+        void onCancelled();
     }
 
 

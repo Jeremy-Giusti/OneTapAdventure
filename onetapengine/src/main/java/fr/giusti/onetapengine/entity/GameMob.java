@@ -676,6 +676,11 @@ public class GameMob extends Entity {
             return String.valueOf(alignement);
         }
 
+        public int getAlignementValue() {
+            return alignement;
+        }
+
+
         @Bindable
         public String getSpecialMove1Name() {
             return mSpecialMove1.getId();
@@ -692,8 +697,8 @@ public class GameMob extends Entity {
         }
 
         @Bindable
-        public String getSize() {
-            return String.valueOf(mPosition.width());
+        public int getSize() {
+            return (int) mPosition.width();
         }
 
         @Bindable
@@ -701,11 +706,11 @@ public class GameMob extends Entity {
             return mPosition.centerX() + "\n" + mPosition.centerY();
         }
 
-        public float getX(){
+        public float getX() {
             return mPosition.centerX();
         }
 
-        public float getY(){
+        public float getY() {
             return mPosition.centerY();
         }
 

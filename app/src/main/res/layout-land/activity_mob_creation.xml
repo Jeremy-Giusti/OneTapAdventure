@@ -19,11 +19,14 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:onClick="onClickedSpriteView"
+            android:scaleType="fitCenter"
+            android:background="@drawable/background_sprite_view"
             app:layout_constraintHeight_percent="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.25"
-            app:SpriteSheet="@{gameMobBuilder.spriteSheetId}" />
+            app:SpriteSheet="@{gameMobBuilder.spriteSheetId}"
+            app:SpriteSize="@{gameMobBuilder.size}"/>
 
         <Button
             android:id="@+id/mc_name_bt"
@@ -31,6 +34,7 @@
             android:layout_height="0dp"
             android:onClick="onClickedNameView"
             android:text="@{gameMobBuilder.idName}"
+            android:textAllCaps="false"
             app:layout_constraintHeight_percent="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/mc_sprite_view"
@@ -83,6 +87,7 @@
         <Button
             android:id="@+id/mc_spemove_bt"
             android:layout_width="0dp"
+            android:textAllCaps="false"
             android:layout_height="0dp"
             android:onClick="onClickedSpeMoveView"
             android:text="@{gameMobBuilder.specialMove1Name}"
@@ -94,6 +99,7 @@
         <Button
             android:id="@+id/mc_touchmove_iv"
             android:layout_width="0dp"
+            android:textAllCaps="false"
             android:layout_height="0dp"
             android:onClick="onClickedTouchMoveView"
             android:text="@{gameMobBuilder.touchedMoveName}"

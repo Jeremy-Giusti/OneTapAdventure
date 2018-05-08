@@ -13,15 +13,16 @@ public class PathRepo {
 
     /**
      * return a path going into a random direction
+     *
      * @param speed
      * @return
      */
-    public static PointF[] getRandomDirectionStraightPath(int speed){
+    public static PointF[] getRandomDirectionStraightPath(int speed) {
         Random r = new Random(System.currentTimeMillis());
         //always full
         int fullValue = r.nextBoolean() ? speed : -speed;
         //range from -5 to 5
-        int randomValue = r.nextInt((speed*2)+1) - speed;
+        int randomValue = r.nextInt((speed * 2) + 1) - speed;
         //full value is either x or y
         PointF step = r.nextBoolean() ? new PointF(fullValue, randomValue) : new PointF(randomValue, fullValue);
         return new PointF[]{step};
@@ -204,8 +205,8 @@ public class PathRepo {
      */
     public static Pair<PointF, PointF[]> generateCirclePath(int pathLength, PointF center, int rayon, int startingPositionDegres) {
         PointF[] result = new PointF[pathLength];
-        double progress = (Math.PI*2) * (startingPositionDegres/360);
-        double progressLeap = (Math.PI*2) / pathLength;
+        double progress = (Math.PI * 2) * (startingPositionDegres / 360);
+        double progressLeap = (Math.PI * 2) / pathLength;
 
         float xpos = (float) (center.x + (rayon * Math.cos(progress)));
         float ypos = (float) (center.y + (rayon * Math.sin(progress)));
@@ -216,7 +217,7 @@ public class PathRepo {
             float newXpos = (float) (center.x + (rayon * Math.cos(progress)));
             float newYpos = (float) (center.y + (rayon * Math.sin(progress)));
 
-            result[postion] = new PointF(newXpos - xpos , newYpos - ypos );
+            result[postion] = new PointF(newXpos - xpos, newYpos - ypos);
             xpos = newXpos;
             ypos = newYpos;
         }
@@ -225,8 +226,8 @@ public class PathRepo {
 
     public static Pair<PointF, PointF[]> generateSpiralePath(int pathLength, PointF center, int rayon, int startingPositionDegres, int iteration) {
         PointF[] result = new PointF[pathLength];
-        double progress = (Math.PI*2) * (startingPositionDegres/360);
-        double progressLeap = (Math.PI*2) / (pathLength/(float)iteration);
+        double progress = (Math.PI * 2) * (startingPositionDegres / 360);
+        double progressLeap = (Math.PI * 2) / (pathLength / (float) iteration);
 
         float xpos = (float) (center.x + (rayon * Math.cos(progress)));
         float ypos = (float) (center.y + (rayon * Math.sin(progress)));
@@ -234,16 +235,15 @@ public class PathRepo {
 
         for (int postion = 0; postion < pathLength; postion++) {
             progress += progressLeap;
-            float newXpos = (float) (center.x + ((rayon*(1-(postion/(float)pathLength))) * Math.cos(progress)));
-            float newYpos = (float) (center.y + ((rayon*(1-(postion/(float)pathLength)))* Math.sin(progress)));
+            float newXpos = (float) (center.x + ((rayon * (1 - (postion / (float) pathLength))) * Math.cos(progress)));
+            float newYpos = (float) (center.y + ((rayon * (1 - (postion / (float) pathLength))) * Math.sin(progress)));
 
-            result[postion] = new PointF(newXpos - xpos , newYpos - ypos );
+            result[postion] = new PointF(newXpos - xpos, newYpos - ypos);
             xpos = newXpos;
             ypos = newYpos;
         }
         return new Pair<>(initialPos, result);
     }
-
 
 
     /**
@@ -388,5 +388,20 @@ public class PathRepo {
         result[0] = roughtPath[0];
         result[roughtPath.length - 1] = roughtPath[roughtPath.length - 1];
         return result;
+    }
+
+    public enum ePathType {
+        lINE("line"),
+        CIRCLE("circle"),
+        CURVE("curve"),
+        LOOP("loop"),
+        RANDOM("random"),
+        SPIRAL("spiral");
+
+        public String name;
+
+        ePathType(String name) {
+            this.name = name;
+        }
     }
 }

@@ -14,7 +14,8 @@ public class GameMobSpriteHolder {
     public float frameHeight;
 
     public void resizeAllFrame(int frameWidth, int frameHeight) {
-        if(frameWidth>this.frameWidth && frameHeight>this.frameHeight) return;//don't scale up, it will only increase memory consumption
+        if (frameWidth > this.frameWidth && frameHeight > this.frameHeight)
+            return;//don't scale up, it will only increase memory consumption
 
         for (int x = 0; x < sprites.length; x++) {
             for (int y = 0; y < sprites[0].length; y++) {
@@ -32,7 +33,7 @@ public class GameMobSpriteHolder {
 
         for (int x = 0; x < nbFrame; x++) {
             for (int y = 0; y < nbAnim; y++) {
-                sprites[x][y] = Bitmap.createBitmap(spriteSheet, (int) (x * frameWidth), (int) (y * frameHeight),(int)frameWidth,(int) frameHeight);
+                sprites[x][y] = Bitmap.createBitmap(spriteSheet, (int) (x * frameWidth), (int) (y * frameHeight), (int) frameWidth, (int) frameHeight);
             }
         }
     }
@@ -41,6 +42,9 @@ public class GameMobSpriteHolder {
         return new Point((int) frameWidth, (int) frameHeight);
     }
 
+    /**
+     * recycle all bitmaps in this holder
+     */
     public void flush() {
         for (int x = 0; x < sprites.length; x++) {
             for (int y = 0; y < sprites[0].length; y++) {

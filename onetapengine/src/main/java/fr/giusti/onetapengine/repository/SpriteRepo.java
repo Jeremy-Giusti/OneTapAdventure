@@ -3,6 +3,7 @@ package fr.giusti.onetapengine.repository;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.support.annotation.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,20 +38,46 @@ public class SpriteRepo {
     }
 
 
+    /**
+     * @param bitmapId spriteSheet used
+     * @param column   desired sprite column in spritesheet
+     * @param line     desired sprite line in spritesheet
+     * @return sprite or crash if don't exist
+     */
     public static Bitmap getSpriteBitmap(String bitmapId, int column, int line) {
         return mMobSpriteList.get(bitmapId).sprites[column][line];
     }
 
     /**
-     * excplicite
+     * @param bitmapId spriteSheet used
+     * @param column   desired sprite column in spritesheet
+     * @param line     desired sprite line in spritesheet
+     * @return sprite or null
+     */
+    public static @Nullable
+    Bitmap getSpriteBitmapWithNullCheck(String bitmapId, int column, int line) {
+        if (mMobSpriteList.get(bitmapId) == null) return null;
+        return mMobSpriteList.get(bitmapId).sprites[column][line];
+    }
+
+    /**
+     * replace if already exist
      *
      * @param bmp
      * @param bitmapId
      */
     public static void addSpriteSheet(Bitmap bmp, String bitmapId, int nbColumn, int nbLine) {
-            GameMobSpriteHolder newHolder = new GameMobSpriteHolder(bmp, nbColumn, nbLine);
-            mMobSpriteList.put(bitmapId, newHolder);
+        GameMobSpriteHolder newHolder = new GameMobSpriteHolder(bmp, nbColumn, nbLine);
+        mMobSpriteList.put(bitmapId, newHolder);
 
+    }
+
+    public static void removeSpriteSheet(String spriteSheetId) {
+        GameMobSpriteHolder holder = mMobSpriteList.get(spriteSheetId);
+        if (holder != null) {
+            mMobSpriteList.remove(spriteSheetId);
+            holder.flush();
+        }
     }
 
     /**
@@ -79,7 +106,7 @@ public class SpriteRepo {
      * @param bitmapId
      * @return true if the id is found on the spriteSheet list
      */
-    public static boolean addSpritesheetIfDoesntExist( Bitmap bmp,String bitmapId, int nbColumn, int nbLine) {
+    public static boolean addSpritesheetIfDoesntExist(Bitmap bmp, String bitmapId, int nbColumn, int nbLine) {
         if (!mMobSpriteList.containsKey(bitmapId)) {
             addSpriteSheet(bmp, bitmapId, nbColumn, nbLine);
             return true;
@@ -142,7 +169,7 @@ public class SpriteRepo {
         if (!destFile.exists()) {
             FileUtils.copyFile(pictureUrl, destFile.getAbsolutePath());
         }
-        addSpritesheetIfDoesntExist( FileUtils.fileToBitmap(pictureUrl),id, nbColumn, nbLine);
+        addSpritesheetIfDoesntExist(FileUtils.fileToBitmap(pictureUrl), id, nbColumn, nbLine);
 
         return mMobSpriteList.get(id).getFrameDimens();
 
@@ -162,7 +189,7 @@ public class SpriteRepo {
             FileUtils.copyFile(pictureUrl, destFile.getAbsolutePath());
         }
         Bitmap picture = FileUtils.fileToBitmap(pictureUrl);
-        addSpritesheetIfDoesntExist(picture,id, nbColumn, nbLine);
+        addSpritesheetIfDoesntExist(picture, id, nbColumn, nbLine);
         if (alsoPutOnPictureList) addPicture(id, picture);
         return mMobSpriteList.get(id).getFrameDimens();
     }
@@ -178,7 +205,7 @@ public class SpriteRepo {
      */
     public static Point loadSpriteSheetFromId(Context context, String id, int nbColumn, int nbLine) throws IOException {
         File pictureFile = new File(Constants.getSpriteRepoFolder(context), id);
-        addSpritesheetIfDoesntExist( FileUtils.fileToBitmap(pictureFile.getAbsolutePath()),id, nbColumn, nbLine);
+        addSpritesheetIfDoesntExist(FileUtils.fileToBitmap(pictureFile.getAbsolutePath()), id, nbColumn, nbLine);
         return mMobSpriteList.get(id).getFrameDimens();
     }
 
@@ -195,4 +222,5 @@ public class SpriteRepo {
     public static boolean hasSprite(String spriteId) {
         return mMobSpriteList.containsKey(spriteId);
     }
+
 }

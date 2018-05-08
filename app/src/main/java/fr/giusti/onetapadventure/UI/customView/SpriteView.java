@@ -2,10 +2,12 @@ package fr.giusti.onetapadventure.UI.customView;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.ViewTreeObserver;
 
 import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapengine.commons.Constants;
@@ -20,18 +22,23 @@ public class SpriteView extends android.support.v7.widget.AppCompatImageView {
     private int column = 0;
     private int timeShowed = 0;
 
-    public SpriteView(Context context) {
-        super(context);
-    }
+    private int spriteSize = -1;
+
+    private final Handler handler = new Handler();
+    private Runnable currentRunnable;
 
     public SpriteView(Context context, AttributeSet attrs) {
         super(context, attrs);
         handleAttr(attrs, context);
-    }
 
-    public SpriteView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        handleAttr(attrs, context);
+        //update size when view is loaded
+        this.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                setSpriteSize(spriteSize);
+                getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
     }
 
     private void handleAttr(AttributeSet attrs, Context context) {
@@ -47,10 +54,33 @@ public class SpriteView extends android.support.v7.widget.AppCompatImageView {
         }
     }
 
+    /**
+     * set padding depending en sprite desired size
+     *
+     * @param spriteSize
+     */
+    public void setSpriteSize(int spriteSize) {
+        this.spriteSize = spriteSize;
+        int viewSize = this.getMeasuredHeight();
+        if (viewSize > this.getMeasuredWidth())
+            viewSize = this.getMeasuredWidth();
+
+        int padding = viewSize / 2 - (spriteSize);
+
+        if (padding > 0) {
+            setPadding(padding, padding, padding, padding);
+        } else {
+            setPadding(0, 0, 0, 0);
+        }
+    }
+
     public void setSpriteSheet(@NonNull final String spriteId) {
         if (TextUtils.isEmpty(spriteId)) return;
-        final Handler handler = new Handler();
-        handler.post(new Runnable() {
+        if (currentRunnable != null) {
+            handler.removeCallbacks(currentRunnable);
+        }
+
+        currentRunnable = new Runnable() {
             @Override
             public void run() {
                 if (timeShowed == 1) {
@@ -73,9 +103,11 @@ public class SpriteView extends android.support.v7.widget.AppCompatImageView {
                         }
                     }
                 }
-                setImageBitmap(SpriteRepo.getSpriteBitmap(spriteId, column, row));
+                Bitmap sprite = SpriteRepo.getSpriteBitmapWithNullCheck(spriteId, column, row);
+                if (sprite != null) setImageBitmap(sprite);
                 handler.postDelayed(this, Constants.FRAME_DURATION * 20);
             }
-        });
+        };
+        handler.post(currentRunnable);
     }
 }
