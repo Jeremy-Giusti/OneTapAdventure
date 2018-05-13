@@ -62,8 +62,8 @@
             app:layout_constraintHeight_percent="0.25"
             app:layout_constraintStart_toEndOf="@+id/mc_sprite_view"
             app:layout_constraintTop_toBottomOf="@+id/mc_name_bt"
-            app:readOnly="true"
-            app:path="@{gameMobBuilder.MovePattern}" />
+            app:path="@{gameMobBuilder.MovePattern}"
+            app:readOnly="true" />
 
         <Button
             android:id="@+id/mc_health_bt"

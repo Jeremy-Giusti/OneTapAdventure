@@ -15,11 +15,6 @@ import java.util.Random;
 
 import fr.giusti.onetapadventure.R;
 import fr.giusti.onetapadventure.commons.GameUtils;
-import fr.giusti.onetapadventure.repository.DB.ModelConverter;
-import fr.giusti.onetapadventure.repository.DB.model.MobDB;
-import fr.giusti.onetapadventure.repository.DB.model.PathDB;
-import fr.giusti.onetapadventure.repository.DB.persister.MobPersister;
-import fr.giusti.onetapadventure.repository.DB.persister.PathPersister;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl1Constant;
 import fr.giusti.onetapadventure.repository.levelsData.Lvl2Constant;
 import fr.giusti.onetapadventure.repository.levelsData.infinitelvl.InfiniteLvlConstant;
@@ -123,76 +118,10 @@ public class EntityRepo {
         returnList.add(ghostMob);
         GameMob holeMob = getHoleMakerMob("holemob", mContext, new Point(1000, 16), new Point(0, 250), Constants.FRAME_PER_SEC * 5, 10);
         returnList.add(holeMob);
-        try {
-            returnList.addAll(LoadMobsFromDb(mContext));
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e(TAG, "Error while loading mob from db");
-        }
 
         return returnList;
 
     }
-
-
-    //////////////////////////---DB----////////////////////////
-    ///////////////////////////////////////////////////////////
-
-    /**
-     * save the mob to make it independant of the application execution
-     *
-     * @param context
-     * @param mob
-     * @param BoardId
-     * @return
-     */
-    public static boolean saveGameMob(Context context, GameMob mob, String BoardId) {
-        boolean result = true;
-        MobDB mobDb = ModelConverter.mobToMobDB(mob, BoardId);
-        PathDB pathDb = ModelConverter.mobToPathDB(mob);
-
-        if (new MobPersister(context).saveMob(mobDb)) {
-            result = new PathPersister(context).savePath(pathDb);
-        } else {
-            result = false;
-        }
-        return result;
-    }
-
-    /**
-     * load a mob from the db (with it path)
-     *
-     * @param context
-     * @param MobId
-     * @return
-     */
-    public static GameMob LoadGameMob(Context context, String MobId) throws IOException {
-        MobDB mobDb = new MobPersister(context).loadMobFromId(MobId);
-        PathDB pathDb = new PathPersister(context).loadPathForMob(MobId);
-
-        GameMob loadedMob = ModelConverter.mobDBToMob(mobDb);
-        loadedMob.setMovePattern(ModelConverter.pathDBtoPath(pathDb));
-
-        SpriteRepo.loadSpriteSheetFromId(context, loadedMob.getBitmapId(), Constants.SPRITESHEETWIDTH, Constants.SPRITESHEETHEIGHT);
-        return loadedMob;
-    }
-
-    /**
-     * add all mob found on db to the unscaled cache
-     *
-     * @param context
-     * @return
-     */
-    public static ArrayList<GameMob> LoadMobsFromDb(Context context) throws IOException {
-        ArrayList<GameMob> returnList = new ArrayList<>();
-        ArrayList<String> mobIds = new MobPersister(context).getAllMobsId();
-        for (String mobId : mobIds) {
-            GameMob mob = LoadGameMob(context, mobId);
-            returnList.add(mob);
-        }
-        return returnList;
-    }
-
 
     public static ArrayList<Entity> getLvl1x1InitList(Context context) throws IOException {
         ArrayList<Entity> entityList = new ArrayList<>();
